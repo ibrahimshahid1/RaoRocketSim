@@ -1,0 +1,379 @@
+\chapter{Stage S07: Regenerative Cooling and Wall Structures}\label{ch:s07}
+
+\lead{Stage S07 takes the fixed thrust-chamber contour from S05 and attaches a regeneratively cooled wall to it: a construction material, a channel layout, a station-wise hot-wall (liner) and closeout-jacket thickness, and the thermal, hydraulic and structural margins that follow from them.}
+
+The stage consists of six library modules, \code{raosim/coolants.py}, \code{raosim/materials.py}, \code{raosim/physics.py}, \code{raosim/regen_profile.py}, \code{raosim/thermal_design.py} and \code{raosim/thermofluids.py} (5,214 lines together), and three flag-guarded blocks inside \code{raosim/run_nozzle.py}. Every model in it is a preliminary-design screen. The \code{physics.py} module header states that its models are ``suitable for design review triage, not hardware qualification'', and the model registry (\code{raosim/model_registry.py}) records the S07 thermal and structural models at validation levels \code{software_verified_not_cht_validated}, \code{software_verified_not_fea_validated}, \code{screening_not_material_qualified} and \code{conservative_reference_not_design_correlation}. No result of this stage has been compared against hot-fire data or a validated conjugate heat-transfer (CHT) or finite-element (FEA) analysis.
+
+\section{Regenerative wall sizing, cooling analysis and wall structural screens}\label{sec:s07}
+
+\stagetag{S07}\quad Pipeline slug \code{regen-cooling-and-wall-structures}; subsystem folder \code{docs/subsystems/S07-regen-cooling-and-wall-structures/}.
+
+\subsection{Role in the data flow and call site}\label{sec:s07-role}
+
+\begin{figure}[!tp]
+\centering
+\begin{tikzpicture}[
+  font=\footnotesize\sffamily,
+  box/.style={draw=ink, rounded corners=2pt, fill=white, align=center, inner sep=3pt, text width=#1},
+  box/.default=4.6cm,
+  opt/.style={draw=teal, dashed, rounded corners=2pt, fill=pale, align=center, inner sep=3pt, text width=#1},
+  opt/.default=4.6cm,
+  arr/.style={-{Stealth[length=2mm]}, draw=ink},
+  node distance=5mm and 6mm]
+\node[box=7.4cm] (in) {\textbf{Upstream}: contour (S05); \texttt{Propellant} $\gamma$, $T_c$, $c^*$, $R$, $M_w$ (S03);\\ $P_c$, O/F; coolant outlet pressure boundary (split injector $\Delta p$)};
+\node[box=7.0cm, right=of in] (mat) {\textbf{Material} \texttt{get\_material} (run\_nozzle :4096): $k_w$, $T_{\max}$, $E$, $\alpha$, $\nu$, $S_y$, fatigue and cyclic curves};
+\node[opt, below=7mm of in.south west, anchor=north west] (jd) {\textbf{\texttt{-{}-size-wall}}\\ \texttt{joint\_wall\_channel\_design}\\ grid $t_{\mathrm{hot}}, N, w, h$; thermal, eq.\ 4-31, fatigue, $\Delta p$, fit};
+\node[opt, below=of jd] (swp) {\texttt{size\_wall\_profile}\\ $t_{\mathrm{hot}}(x)$, $h(x)$, $t_{\mathrm{jacket}}(x)$; buckling screens\\ $\rightarrow$ \texttt{RegenWallProfile}};
+\node[opt, right=of jd] (as) {\textbf{\texttt{-{}-auto-size}} (no \texttt{-{}-size-wall})\\ \texttt{size\_cooling\_channels}\\ grid $N, w$ at fixed $t$, $h$};
+\node[opt=4.2cm, right=of as] (none) {\textbf{neither}\\ user $N$, $w$, $h$, $t$ and\\ \texttt{-{}-coolant-mdot} (10 kg/s)};
+\node[box=11.6cm, below=6mm of swp.south west, anchor=north west] (th) {\textbf{\texttt{-{}-thermal}}: \texttt{bartz\_heat\_flux} ($T_{wg}$ seed 900 K) $\rightarrow$ \texttt{regenerative\_cooling\_analysis} (Bartz + Sieder-Tate march, fin, Darcy $\Delta p$, coolant pressure march; \texttt{thermofluids}: CoolProp, network, radiation, CHF) $\rightarrow$ \texttt{coaxial\_shell\_wall\_stress\_profile} (SP-125 eq.\ 4-31)};
+\node[box=7.4cm, below=of th.south west, anchor=north west] (out) {\textbf{summary.json}: \texttt{wall\_sizing}, \texttt{wall\_profile}, \texttt{channel\_sizing}, \texttt{cooling}, \texttt{structural}; PNGs via S12 plot functions};
+\node[box=7.0cm, right=of out] (down) {\textbf{Downstream}: S08 fuel feed state; S10 composite wall and mass ledger; S11 \texttt{jacket.stl/step}, \texttt{regen.step}, \texttt{regen.stl}};
+\coordinate (bus) at ($(in.south)!0.5!(jd.north)$);
+\draw[draw=ink] (in.south) -- (in.south |- bus);
+\draw[draw=ink] (mat.south) -- (mat.south |- bus);
+\draw[draw=ink] (jd.north |- bus) -- (none.north |- bus);
+\draw[arr] (jd.north |- bus) -- (jd.north);
+\draw[arr] (as.north |- bus) -- (as.north);
+\draw[arr] (none.north |- bus) -- (none.north);
+\draw[arr] (jd) -- (swp);
+\draw[arr] (swp.south) -- (swp.south |- th.north);
+\draw[arr] (as.south) -- (as.south |- th.north);
+\draw[arr] (none.south) -- (none.south |- th.north);
+\draw[arr] (th.south) ++(-3.5,0) -- ++(0,-5mm);
+\draw[arr] (out.east) -- (down.west);
+\end{tikzpicture}
+\caption{Internal flow of S07 in the traditional pipeline (run\_nozzle.py:4096-5616). Dashed boxes are mutually exclusive sizing branches; the upstream inputs and the material feed all of them and the analysis block.}
+\label{fig:s07-flow}
+\end{figure}
+
+S07 has no driver function of its own. In the traditional pipeline (\code{raosim.run_nozzle.main}, the target of \code{lrekit}, \code{raosim} and \code{RaoRocketSim}) it runs inline after the S05 chamber gates and the early S12 plots, and before the S08 pintle injector. The injector runs after cooling so that, when the coolant is the cycle fuel, its feed state comes from the jacket outlet (\code{run_nozzle.py:5618-5622}). The stage runs only with \code{--regen}. Its inputs are prepared during S02 argument handling:
+
+\begin{itemize}
+\item \code{_apply_wall_sizing_mode} (\code{:920}, called at \code{:3842}) turns \code{--wall-sizing}~\code{regen} or \code{--size-wall} into \code{args.regen} and \code{args.size_wall}. \code{--regen-manifolds} forces \code{--regen-brep} and \code{--hydraulic-network} (\code{:3888-3890}).
+\item \code{args._cooling_options} (\code{:4013-4028}) collects the property-backend, network, port, radiation and boiling/critical-heat-flux (CHF) switches; every cooling specification the stage builds receives them.
+\item The coolant inlet temperature defaults to 120\,K for methane, 25\,K for hydrogen and 300\,K otherwise (\code{:4079-4090}).
+\item \code{materials.get_material} (\code{:4096-4113}) sets \code{args.wall_k} and \code{args.wall_temp_limit} unless \code{--wall-k} or \code{--wall-temp-limit} are given; without a material they are 350\,W/(m\,K) and 1100\,K. \code{--size-wall} without \code{--material} exits with code 2.
+\item \code{_apply_split_injector_pressure_model} (\code{:680}, called at \code{:4339}) sets the jacket outlet boundary to $P_c + \Delta p_{\mathrm{inj,f}}$, where $\Delta p_{\mathrm{inj,f}} = 0.2\,P_c$ by default, when the canonical coolant and fuel names match and \code{--coolant-outlet-pressure} is absent. A user-supplied \code{--coolant-outlet-pressure} takes precedence over the match; with neither the boundary is $P_c$.
+\end{itemize}
+
+The stage body is three sequential blocks:
+
+\begin{enumerate}
+\item \textbf{Joint wall and channel sizing} (\code{:5177-5359}, needs \code{--regen} and \code{--size-wall}). \code{thermal_design.joint_wall_channel_design} (\code{thermal_design.py:534}) grid-searches $(t_{\mathrm{hot}}, N, w, h)$. \code{size_wall_profile} (\code{:947}) then refines the chosen channels into a station-wise \code{RegenWallProfile}, which is stored as \code{args._wall_profile}. The block overwrites the channel, wall-thickness and coolant-flow arguments and forces \code{args.thermal}. Only ``no channel geometry fits the throat'' returns code 2; an infeasible design prints its diagnosis and the run continues with the best-effort candidate.
+\item \textbf{Channel auto-sizing} (\code{:5362-5405}, needs \code{--regen} and \code{--auto-size}, without \code{--size-wall}). \code{size_cooling_channels} (\code{:106}) chooses $N$ and $w$ at fixed thickness and depth and forces \code{args.thermal}. Infeasibility is again reported but not fatal.
+\item \textbf{Cooling and structural analysis} (\code{:5409-5616}, needs \code{--regen} and \code{--thermal}). \code{physics.bartz_heat_flux} (\code{physics.py:234}) is seeded at 900\,K. \code{regenerative_cooling_analysis} (\code{:624}) then solves the coupled march, on the sized profile when one exists. When the material carries an elastic modulus, \code{coaxial_shell_wall_stress_profile} (\code{:1960}) evaluates the liner stress. The block also calls \code{wall_cross_section_field} (\code{:1488}) and the S12 plot functions.
+\end{enumerate}
+
+Two further paths reach S07 code. With \code{--spray-cstar-coupling}, \code{evaluate_cli_cooling} (\code{run_nozzle.py:5871-5901}) re-runs the Bartz and coolant-march solves at every S08 fixed-point iterate, and the final iterate overwrites \code{summary["cooling"]} and \code{summary["structural"]} (\code{:6017-6156}). \code{design.design_nozzle_v2}, which serves legacy \code{main.py}, the \code{--mdo-export} re-evaluation and every \code{lrekit}~\code{run}, calls \code{physics.regenerative_cooling_screen} (\code{design.py:736}) and \code{structural_screen} (\code{:898}) on a uniform wall and never calls \code{thermal_design}. Figure~\ref{fig:s07-flow} shows the traditional-pipeline flow.
+
+
+
+\subsection{Inputs and outputs}\label{sec:s07-io}
+
+\lead{Inputs.} Besides the upstream objects in Figure~\ref{fig:s07-flow}, the stage takes its controls from the flags in Table~\ref{tab:s07-flags} (parser at \code{run_nozzle.py:2987-3021}, \code{:3439-3523}, \code{:3546-3571}). The sizing paths derive the coolant flow from the cycle with \code{coolant_flow_from_cycle} (\code{thermal_design.py:85}): $\dot m_{\mathrm{cool}} = \phi_c\,(P_cA_t/c^*)/(1+\mathrm{O/F})$, where $\phi_c$ is \code{--cooling-fraction}. The plain \code{--regen}~\code{--thermal} path uses \code{--coolant-mdot} as given.
+
+{\footnotesize
+\begin{longtable}{P{5.0cm}P{2.6cm}P{8.1cm}}
+\caption{S07 command-line controls and parser defaults.}\label{tab:s07-flags}\\
+\toprule
+Flag & Default & Effect\\
+\midrule
+\endfirsthead
+\toprule
+Flag & Default & Effect\\
+\midrule
+\endhead
+\code{--regen} & off & enables the stage and the S11 regenerative geometry\\
+\code{--size-wall} or \code{--wall-sizing}~\code{regen}; \code{--auto-size}; \code{--thermal} & off & joint sizing plus profile (needs \code{--material}); channel $N$, $w$ only; coupled analysis (forced on by both sizing modes)\\
+\code{--material}, \code{--jacket-material}; \code{--wall-k}, \code{--wall-temp-limit} & none; from material, else 350, 1100\,K & catalog liner and jacket alloy (jacket defaults to liner); overrides of $k_w$ and $T_{\max}$\\
+\code{--channels}, \code{--channel-width}, \code{--channel-height}, \code{--wall-thickness} & 80, 0.8\,mm, 2.5\,mm, 1\,mm & channel geometry and uniform reference thickness (seeds, replaced when sizing)\\
+\code{--coolant}, \code{--coolant-mdot}, \code{--cooling-fraction} & \code{rp1}, 10\,kg/s, 1.0 & coolant identity (no choices list); flow used only without sizing; fuel fraction through the jacket when sizing\\
+\code{--coolant-inlet-temperature}, \code{--coolant-outlet-pressure} & by coolant; derived & inlet temperature; absolute jacket outlet pressure\\
+\code{--margin-target}, \code{--dp-budget} & 1.2, 200\,bar & thermal margin $T_{\max}/T_{wg,\mathrm{peak}}$; coolant $\Delta p$ budget\\
+\code{--structural-fos}, \code{--buckling-fos}, \code{--required-cycles}, \code{--life-fos} & 1.0, 1.0, 100, 4.0 & yield and buckling factors of safety; fatigue requirement $N_f \geq N_{\mathrm{req}}\cdot\mathrm{FoS}$\\
+\code{--t-hot-min}, \code{--t-hot-max}; \code{--channel-height-min}, \code{-max}, \code{-steps} & 0.5, 3\,mm; $0.6h$, $1.8h$, 3 & liner bounds (the floor ``must come from the selected construction process''); depth search\\
+\code{--size-objective}, \code{--helix-turns}, \code{--channel-roughness} & \code{min_dp}, 0, 0 & sizing objective (see D8); helical winding; roughness $>0$ selects Swamee-Jain\\
+\code{--curvature-correction}, \code{--gate-coolant-chemistry}, \code{--gate-sp125-tube-buckling}, \code{--buckling-tangent-modulus-fraction} & off, off, off, 0.10 & opt-in curvature credit; let the 700\,K RP-1 coking screen or the eq.\ 4-29 screen gate sizing; $E_t/E$ fallback for eq.\ 4-29\\
+\code{--coolant-property-backend}, \code{--hydraulic-network}, \code{--radiation-model}, \code{--boiling-chf}, \code{--gate-chf} & \code{auto}, off, \code{none}, off, off & CoolProp methane and hydrogen; manifold graph (with \code{--plenum-area-ratio} 2.0, \code{--port-loss-coefficient} 1.5); Leccese gray or multiband radiation; Zuber CHF screen and its gate\\
+\bottomrule
+\end{longtable}
+}
+
+\lead{Outputs.} S07 writes no files itself. Its results reach disk through \code{summary.json} (always written, \code{:6957}) and four figures drawn by S12 functions; downstream stages read the mutated \code{args}, \code{cooling_result} and \code{args._wall_profile}.
+
+{\footnotesize
+\begin{longtable}{P{3.8cm}P{2.9cm}P{9.0cm}}
+\caption{S07 outputs and their consumers.}\label{tab:s07-out}\\
+\toprule
+Output & Written at & Content\\
+\midrule
+\endfirsthead
+\toprule
+Output & Written at & Content\\
+\midrule
+\endhead
+\code{summary["wall_sizing"]} & \code{run_nozzle.py:5276} & joint design: material, $t_{\mathrm{hot}}$, $N$, $w$, $h$, thermal and structural margins, fatigue cycles and status, $\Delta p$, mass, feasibility band, diagnosis\\
+\code{summary["wall_profile"]} & \code{:5335} & profile ranges of $t_{\mathrm{hot}}$, $t_{\mathrm{jacket}}$ and $h$; jacket, eq.\ 4-29 and rib-buckling margins; buckling data status; liner and jacket masses\\
+\code{summary["channel_sizing"]} & \code{:5399} & auto-sizer flow, $N$, $w$, margin, $\Delta p$, diagnosis\\
+\code{summary["cooling"]} & \code{:5447} (overwritten at \code{:6020} with spray coupling) & peak wall temperature, margin, coolant temperatures and pressures, coking margin, correlation and backend status strings\\
+\code{summary["structural"]} & \code{:5593} & eq.\ 4-31 combined, thermal and pressure stress, yield, stress margin, governing station\\
+\code{cooling_profile.png}, \code{channel_march.png}, \code{cross_section.png}, \code{structural_life.png} & \code{:5494-5530}, \code{:5606-5616} & S12 functions \code{plot_cooling_profile}, \code{plot_coolant_channel_march}, \code{plot_channel_cross_section} (fed by \code{physics.wall_cross_section_field}), \code{plot_structural_life_dashboard}\\
+\code{args._wall_profile} & \code{:5326} & used by S10 (\code{screen_composite_regen_wall}, mass ledger) and S11 (jacket and regen CAD)\\
+\code{cooling_result} & \code{:5439} & S08 fuel feed state; S10 interface screen\\
+\bottomrule
+\end{longtable}
+}
+
+Table~\ref{tab:s07-ref} lists the S07 summary values of an archived reference run. It is the most complete S07 output on disk. The run is dated 2026-07-08, before later corrections such as the 2026-07-31 rewrite of \code{thermal_design._wall_mass}, so its numbers illustrate the output contract; they are not a regression baseline for the current code.
+
+\begin{table}[H]
+\centering\small
+\caption{S07 values from builds/\_archive\_2026-11-05/tests/13kn\_sl\_fast/summary.json (13 kN LOX/RP-1, GRCop-84 liner, Inconel 718 jacket, 194 helical channels, 1.0 turn).}\label{tab:s07-ref}
+\begin{tabularx}{\linewidth}{P{5.2cm}Y}
+\toprule
+Quantity & Value\\
+\midrule
+Joint sizing (\code{wall_sizing}) & $t_{\mathrm{hot}} = 0.6$\,mm, $N = 194$, $w = 0.5$\,mm, $h = 3.3$\,mm; thermal margin 1.051, structural margin 2.04; $N_f \approx 9.85\times10^{5}$ (\code{sourced_screening_gate}) vs.\ 25 required; feasible\\
+Profile (\code{wall_profile}) & $t_{\mathrm{hot}} = 0.6$\,mm and $t_{\mathrm{jacket}} = 0.5$\,mm at every station; $h$ from 1.98 to 2.42\,mm; min.\ jacket margin 1.81; eq.\ 4-29 margin 145 (not gating); rib-buckling margin 1088\\
+Cooling (\code{cooling}) & peak $T_{wg} = 945.9$\,K, margin 1.057; coolant 293\,K $\rightarrow$ 812\,K; $\Delta p = 5.56$\,bar; peak velocity 10.0\,m/s; coking margin 0.755; radiation \code{not_included}; constant-property backend\\
+Structure (\code{structural}) & combined 93.1\,MPa = thermal 92.1 + pressure 0.97\,MPa against $S_y = 186$\,MPa; stress margin 2.0\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+In this run both thicknesses sit on their floors (\code{--t-hot-min}~\code{0.0006} and the 0.5\,mm \code{t_jacket_min} default), so the ``variable'' wall varied only in depth. The thermal term carries 99\,\% of the eq.\ 4-31 stress. The design counted as feasible with the coolant-side wall above the RP-1 coking screen, which gates only with \code{--gate-coolant-chemistry}.
+
+\begin{figure}[!htb]
+\centering
+\begin{minipage}[t]{0.45\linewidth}\centering
+\includegraphics[width=\linewidth,keepaspectratio]{figures/builds/10_regen_heatflux_temperatures.png}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.43\linewidth}\centering
+\includegraphics[width=\linewidth,keepaspectratio]{figures/builds/13_structural_life.png}
+\end{minipage}
+\caption{Archived 13kn\_sl\_fast run. Left, cooling\_profile.png: Bartz convective heat flux, gas-side and coolant-side wall temperature and coolant bulk temperature along the wall, with the 1000 K GRCop-84 limit and the 700 K RP-1 coking screen; peak gas-side wall 946 K (margin 1.057), coolant-side wall above the coking screen (margin 0.755, warning only). Right, structural\_life.png: SP-125 eq. 4-31 pressure, thermal and combined liner stress against the 186 MPa yield strength, the stress margin, and the strain-life cycles-to-failure profile against the 25-cycle requirement. The same run also wrote channel\_march.png and cross\_section.png (figures/builds/11 and 12).}
+\label{fig:s07-run}
+\end{figure}
+
+\subsection{Modules}\label{sec:s07-modules}
+
+\begin{table}[!htb]
+\centering\footnotesize
+\caption{S07 modules (line counts from the working tree on 2026-11-05).}\label{tab:s07-modules}
+\begin{tabularx}{\linewidth}{P{3.7cm}P{0.9cm}Y}
+\toprule
+File & Lines & Role and entry points\\
+\midrule
+\code{raosim/coolants.py} & 24 & Canonical coolant names through \code{canonical_coolant_name} (\code{:21}); used by \code{physics}, \code{thermofluids}, the split injector boundary and the MDO.\\
+\code{raosim/materials.py} & 374 & Eight-entry construction-material catalog \code{_CATALOG} (\code{:142}) of \code{MaterialProperties} (\code{:75}); \code{get_material} (\code{:284}), \code{cyclic_tangent_modulus} (\code{:301}), \code{material_table} (\code{:355}, \code{--list-materials}).\\
+\code{raosim/physics.py} & 2357 & Bartz (\code{:161-337}); coolant table and correlations (\code{:349-621}); 1-D march \code{regenerative_cooling_analysis} (\code{:624}); 2-D/3-D conduction (\code{:1319-1775}); \code{regenerative_cooling_screen} (\code{:1778}); eq.\ 4-31, 4-29, rib-plate and strain-life (\code{:1889-2229}); \code{structural_screen} (\code{:2232}). Also \code{boundary_layer_displacement} (\code{:32}, S04/S05).\\
+\code{raosim/regen_profile.py} & 430 & \code{normal_offset_contour} (\code{:49}), trapezoidal path weights (\code{:82}), helix path lengths and stretch (\code{:103}, \code{:145}), the \code{RegenWallProfile} dataclass (\code{:175}) with \code{uniform}, \code{tapered}, \code{channels_fit} and a cooling bridge.\\
+\code{raosim/thermal_design.py} & 1460 & \code{coolant_flow_from_cycle} (\code{:85}), \code{size_cooling_channels} (\code{:106}), \code{cooling_coupled_contour} (\code{:303}, test-only), \code{_wall_mass} (\code{:419}), \code{wall_feasibility_band} (\code{:486}), \code{joint_wall_channel_design} (\code{:534}), \code{size_wall_profile} (\code{:947}).\\
+\code{raosim/thermofluids.py} & 569 & CoolProp real-fluid state (\code{:27}), multiband and Leccese radiation (\code{:102}, \code{:170}), Zuber CHF and boiling screen (\code{:216}, \code{:244}), annular manifold network (\code{:357}).\\
+\midrule
+\code{raosim/thermal_correlations.py} & 100 & Related but outside the stage (group X08): source-scoped correlation choices and Bartz applicability bounds. No Python module imports it.\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{What the header comments establish}\label{sec:s07-headers}
+
+This subsection condenses the verbatim module headers and, where noted, the docstrings of functions on the CLI path. Where the code differs from the text, the difference is stated.
+
+\subsubsection*{coolants.py: one coolant identity}
+
+The one-line header, ``Canonical coolant identities shared by every thermofluid path'', is the whole contract. \code{canonical_coolant_name} maps \code{rp-1}/\code{kerosene} to \code{rp1}, \code{ch4}/\code{lch4} to \code{methane} and \code{lh2}/\code{h2} to \code{hydrogen}, keeps \code{ethanol} and \code{water}, and maps a missing name to \code{rp1}. Unknown names pass through unchanged and without error (consequence: D4).
+
+\subsubsection*{materials.py: the material sets the whole problem}
+
+The header argues that the wall metal enters every concept the tool screens, and grounds each in NASA SP-125 (Huzel and Huang, \code{propulsion_texts/19710019929.pdf}):
+
+\begin{itemize}
+\item \emph{Channel sizing.} The gas-side wall temperature follows from $q = (k/t)(T_{wg}-T_{wc})$ and $H = 1/(1/h_{gc} + t/k + 1/h_c)$ (SP-125 eqs.\ 4-19, 4-22, printed p.\,104), so \code{wall_k} ``must come from the chosen material, not a disconnected flag''; the CLI complies unless \code{--wall-k} is given.
+\item \emph{Service limit.} SP-125 (printed p.\,105) gives 1500 to 1800\,\textdegree F (1089 to 1255\,K) for stainless steel, nickel and Inconel; copper alloys are limited by creep and strength, so the limit is per material and the margin is limit over peak wall temperature.
+\item \emph{Structure.} SP-125 eq.\ 4-31 (printed p.\,109), $S_c = (p_{co}-p_g)R/t + E\alpha q t/[2(1-\nu)k]$, needs $E$, $\alpha$, $\nu$ and $k$; the longitudinal thermal stress $S_l = E\alpha\Delta T$ (eq.\ 4-28) and the jacket hoop use the same properties.
+\end{itemize}
+
+On provenance, the relations are SP-125-grounded, and SP-125 names stainless steel, nickel and Inconel (Inconel X in sample calculation 4-4). NARloy-Z, GRCop-84 and CuCrZr postdate SP-125; their values are ``representative handbook / NASA-Glenn values ... screening-grade, not a heat of certified material''. All values are single points near service temperature; $k(T)$ and $S_y(T)$ tables are ``a documented future extension''.
+
+Each catalog entry (Table~\ref{tab:s07-materials}) carries a \code{source} string. The dataclass comment says there are ``deliberately NO generic defaults'' for strain-life data, because SP-125 names thermal low-cycle fatigue as governing but gives no coefficients. NARloy-Z carries Coffin-Manson-Basquin coefficients reconstructed from NASA CR-134627 (Table 2 and Fig.\ 10, 538\,\textdegree C) and one cyclic Ramberg-Osgood curve. GRCop-84 carries direct total-strain regressions $\Delta\varepsilon_t = A N_f^{\,b}$ ($A = 0.21$, $b = -0.35$ at 20 to 400\,\textdegree C; $A = 0.57$, $b = -0.47$ at 600\,\textdegree C) and cyclic curves at 20, 400 and 600\,\textdegree C from NASA 20060005216 (Lerch and Ellis). Both set \code{fatigue_screening_gate}~\code{=}~\code{True}; none sets \code{fatigue_design_qualified}. \code{cyclic_tangent_modulus} turns the cyclic curves into $E_t = [1/E + (1/n')(\Delta\sigma/K')^{1/n'-1}/K']^{-1}$ with $\Delta\sigma = 2|\sigma|$. Its docstring calls this ``a cyclic screening tangent, not a monotonic compression-curve qualification value''.
+
+\begin{table}[!htb]
+\centering\small
+\caption{materials.py catalog values (single representative points).}\label{tab:s07-materials}
+\begin{tabularx}{\linewidth}{P{2.6cm}P{2.0cm}rrrY}
+\toprule
+Material & Category & $k$ [W/(m\,K)] & $S_y$ [MPa] & $T_{\max}$ [K] & Strain-life / cyclic data\\
+\midrule
+OFHC Copper & copper liner & 365 & 70 & 700 & none\\
+NARloy-Z & copper liner & 320 & 125 & 810 & Coffin-Manson-Basquin; 1 cyclic curve (CR-134627)\\
+GRCop-84 & copper liner & 285 & 186 & 1000 & direct total-strain; 3 cyclic curves (20060005216)\\
+CuCrZr & copper liner & 320 & 300 & 770 & none\\
+Inconel 718 & superalloy & 15 & 1035 & 1255 & none (room-temperature yield)\\
+Inconel X-750 & superalloy & 12 & 815 & 1200 & none\\
+Stainless 316L & steel & 16.3 & 290 & 1100 & none\\
+Nickel 200 & nickel & 70 & 148 & 870 & none\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsubsection*{physics.py: screening physics}
+
+The module header is a one-line title and two sentences: the models are ``intentionally conservative early-design checks'' that are ``suitable for design review triage, not hardware qualification''. The function docstrings on the S07 path carry the substance.
+
+\emph{Gas side.} \code{bartz_heat_transfer_coefficient} implements the full Bartz (1957) correlation (\emph{Jet Propulsion} 27(1), with Huzel and Huang SP-125 \S4) in SI form, where $g_c = 1$:
+\begin{gather*}
+h_g = \frac{0.026}{D_t^{0.2}}\left(\frac{\mu^{0.2}c_p}{\mathrm{Pr}^{0.6}}\right)\left(\frac{P_c}{c^*}\right)^{0.8}\left(\frac{D_t}{r_c}\right)^{0.1}\left(\frac{A_t}{A}\right)^{0.9}\sigma,\\
+\sigma = \Big[\tfrac12\tfrac{T_{wg}}{T_c}\big(1+\tfrac{\gamma-1}{2}M^2\big)+\tfrac12\Big]^{-(0.8-\omega/5)}\Big[1+\tfrac{\gamma-1}{2}M^2\Big]^{-\omega/5},
+\end{gather*}
+with $\omega = 0.6$ and $r_c$ defaulting to the contour's \code{Rd}, else $0.382R_t$. Transport properties default to $c_p = \gamma R/(\gamma-1)$, the Eucken $\mathrm{Pr} = 4\gamma/(9\gamma-5)$ and the Huzel-Huang power law in SI, $\mu = 1.1929\times10^{-7}M_w^{0.5}T^{0.6}$\,Pa\,s; CEA or measured values can replace each one. \code{bartz_heat_flux} takes the local Mach number from the area ratio (subsonic branch upstream of the throat index, supersonic downstream) and the recovery temperature $T_{aw} = T_c[1 + r\tfrac{\gamma-1}{2}M^2]/[1+\tfrac{\gamma-1}{2}M^2]$ with $r = \mathrm{Pr}^{1/3}$. It returns $q = h_g(T_{aw}-T_{wg})$ with radiation set to zero and labelled \code{not_included_requires_spectral_model_or_user_supplied_heat_load}.
+
+\emph{Coolant side.} \code{COOLANT_PROPERTIES} holds single-point values, with no per-entry source, for RP-1, ethanol, methane, water and hydrogen. Viscosity follows an Andrade law $\mu = \mu_{\mathrm{ref}}\exp[B(1/T-1/T_{\mathrm{ref}})]$, and only RP-1 carries a coolant-wall limit (700\,K). \code{sieder_tate_coefficient} applies $\mathrm{Nu} = 0.027\,\mathrm{Re}^{0.8}\mathrm{Pr}^{1/3}(\mu_b/\mu_w)^{0.14}$ (Sieder and Tate 1936). Below $\mathrm{Re} = 2300$, rectangular calls switch to the Shah-London fully developed, all-walls-uniform-heat-flux polynomial $\mathrm{Nu} = 8.235(1-2.0421\alpha+3.0853\alpha^2-2.4765\alpha^3+1.0578\alpha^4-0.1861\alpha^5)$ with $\alpha = \min(w,h)/\max(w,h)$. Lands are treated as fins, $\eta_f = \tanh(mH)/(mH)$ with $m = \sqrt{2h_c/(k_w t_{\mathrm{land}})}$, and the effective coefficient is $h_c^{\mathrm{eff}} = h_{c,\mathrm{film}}(w + 2\eta_f h)/p$. The curvature multiplier $[\mathrm{Re}(D_h/2R_c)^2]^{\pm0.05}$ (Niino-Kumakawa/Taylor, via Pizzarelli et al.\ 2011 and Torres et al.\ 2009) is ``opt-in screening physics'' because SP-8087 cautions against crediting liquid enhancement without calibration. Friction is $64/\mathrm{Re}$ (laminar), Blasius $0.316\,\mathrm{Re}^{-0.25}$ (smooth) or Swamee-Jain $0.25/[\log_{10}(\varepsilon/3.7D_h + 5.74/\mathrm{Re}^{0.9})]^2$ (rough; Atefi and Naraghi 2019); the transition interval is ``a screening discontinuity''.
+
+\emph{Coupled march.} \code{regenerative_cooling_analysis} solves the SP-125 series circuit station by station:
+\[
+q = \frac{h_g(T_{aw}-T_c) + q_{\mathrm{rad}}}{1 + h_g\,(t/k_w + 1/h_c)},\qquad T_{wg} = T_c + q\,(t/k_w + 1/h_c),\qquad \Delta T_c = \frac{q\,\mathrm{d}A_{\mathrm{wall}}}{\dot m\,c_p},
+\]
+with $h_g$ re-evaluated at the current $T_{wg}$ so that $\sigma$ is self-consistent. The coolant is marched counter-current from the nozzle exit by default (\code{flow_from="exit"}), and $\mathrm{d}A_{\mathrm{wall}} = 2\pi r\,\mathrm{d}s$ uses wall arc length rather than axial spacing. The loop runs a fixed number of passes with 0.5 under-relaxation. The pressure drop $\Delta p = \sum f(\Delta l/D_h)\rho V^2/2$ uses the helical path length. The absolute coolant pressure is recovered from the outlet boundary by \code{coolant_pressure_profile}, which centres each station's loss on the cell. The liner load is $p_{\mathrm{cool}}(x) - p_{\mathrm{gas}}(x)$, with $p_{\mathrm{gas}}$ isentropic, ``without inventing a fixed fraction of chamber pressure''. Explicit warnings cover $h/w > 12$ (thermal stratification), channels that do not fit, $\mathrm{Re} < 10^4$ (below the usual Sieder-Tate range), $2300 \leq \mathrm{Re} < 4000$ on the turbulent branch, Blasius above $10^5$, velocity above the SP-8087 61\,m/s recommendation, an RP-1 coolant-side wall above 700\,K, and network maldistribution above 10\,\%. Status strings for radiation, real-fluid, network, CHF and curvature go into the summary.
+
+\emph{Higher-fidelity conduction.} \code{regenerative_cooling_2d} and \code{wall_cross_section_field} solve steady 2-D finite-volume conduction over the L-shaped half-pitch cell (liner slab plus land), with Robin conditions on the gas and coolant faces and adiabatic symmetry planes; the docstrings call the land-centre gas-side node ``the real hot spot''. \code{regenerative_cooling_3d} adds axial conduction over a channel sector and states its ``honest scope'': conduction only, with the coolant entering ``through the validated convective BC''. Of the three, only \code{wall_cross_section_field} is reached from the CLI.
+
+\emph{Structure and life.} \code{coaxial_shell_wall_stress} and its station-wise variant implement SP-125 eq.\ 4-31. \code{channel_pressure_hoop_radius} sets the hoop radius to $w/2$ and explains why: SP-125 eq.\ 4-27 defines $r$ as the tube radius, and passing the shell radius ``overstates the pressure stress by O(1000x)''. \code{sp125_inelastic_buckling_critical_stress} implements eq.\ 4-29,
+\[
+S_c = \frac{4E_tE_c}{(\sqrt{E_t}+\sqrt{E_c})^2}\,\frac{t}{\sqrt{3(1-\nu^2)}\,r},
+\]
+and warns that $E_t$ and $E_c$ ``are not the elastic modulus''. \code{rib_supported_liner_buckling_profile} is ``deliberately separate from SP-125 equation 4-29''. It is a long-plate screen $\sigma_{cr} = k_d\,k\pi^2E/[12(1-\nu^2)](t/b)^2$ with $k = 4$, knockdown $k_d = 0.65$ and span $b = w$, labelled \code{screening_only_requires_shell_panel_fea_with_imperfections}. \code{thermal_fatigue_strain} returns $\alpha\Delta T$ plus an optional mechanical strain. Its docstring stresses that SP-125 eq.\ 4-28 gives $\alpha\Delta T$, ``not $\alpha\Delta T/(1-\nu)$'', and that the value is only an elastic proxy for the stabilised hysteresis range. \code{coffin_manson_cycles} inverts $\Delta\varepsilon/2 = (\sigma_f'/E)(2N_f)^b + \varepsilon_f'(2N_f)^c$ by bisection as ``an order-of-magnitude screen ... NOT a certified life prediction''. \code{total_strain_life_cycles} inverts the direct regressions and flags temperature extrapolation.
+
+\emph{Legacy screens.} \code{regenerative_cooling_screen} runs the coupled march when given \code{prop} and \code{Pc}, which is how \code{design_nozzle_v2} calls it, and otherwise falls back to a peak-flux estimate. \code{structural_screen} adds the thin-wall hoop $P_cR/t$ and temperature, heat-flux and separation margins.
+
+\subsubsection*{regen\_profile.py: the wall is not one thickness}
+
+Following SP-125 coaxial-shell and tube-and-jacket design (printed pp.\,108-110), the header gives the wall five separately sized station-wise dimensions: $t_{\mathrm{hot}}(x)$, $h(x)$, $w(x)$, land width $b(x)$ and $t_{\mathrm{jacket}}(x)$. Passage area ``should vary along the chamber to hold an appropriate coolant velocity'', and the throat is the critical region (sample calculation 4-4). For helical channels the header gives the RaoRocketSim parameterisation $\theta(x) = \theta_0 + 2\pi\,\mathrm{turns}\,(x-x_0)/L_{\mathrm{axial}}$ and the path element $\mathrm{d}l = \sqrt{\mathrm{d}s_{\mathrm{meridian}}^2 + (r_{\mathrm{mid}}\,\mathrm{d}\theta)^2}$. This is ``exactly the arc the STL coils trace, so the modeled $\Delta p$ is consistent with the exported geometry (previously the helix changed only the STL)''. Channel and land widths are transverse to the path, so their circumferential footprint is multiplied by $\mathrm{d}l/\mathrm{d}s$. \code{normal_offset_contour} offsets along the outward normal because ``adding thickness only to the radius is not a uniform wall on a sloped convergent or bell'', and \code{_nodal_weights_from_segments} uses trapezoidal weights so that arc lengths are not over-counted by one interval. The header writes $r_{\mathrm{mid}} = r_{\mathrm{inner}} + t_{\mathrm{hot}} + h/2$; the solvers use the normal offset, and only the \code{channel_mid_radius} property uses the radial form.
+
+\subsubsection*{thermal\_design.py: cooling-coupled design}
+
+The header describes inverting the screening order. The default flow fixes the chart-B\'ezier contour first and treats heat flux as a later pass/fail gate; this module computes ``the cooling physics before the contour is fixed and lets it shape the geometry''. It names two levers. Throat curvature \code{Rd_factor} is weak, about 20\,\% flux relief from $0.382$ to $3.0R_t$ through the $(D^*/r_c)^{0.1}$ term (consistent with $(3.0/0.382)^{0.1} \approx 1.23$), and ``geometry alone cannot cool a throat''. Channel mass flux $G$ is the strong lever through $h_c \propto G^{0.8}$. The header calls the module ``the NumPy feedback precursor to the rigorous differentiable constrained design (the J-series gradient loop)'' that uses a heuristic search instead of exact gradients.
+
+The header describes \code{cooling_coupled_contour}, which is reached only from \code{tests/test_thermal_design.py}. The three functions the CLI does call size the wall and channels on the already fixed S05 contour:
+
+\begin{itemize}
+\item \code{size_cooling_channels}: cycle-derived flow, a $(N, w)$ grid bounded by $w_{\min}$, $w_{\max}$, the land floor and the throat circumference. The feasibility test is margin $\geq$ target, $\Delta p \leq$ budget and channels fit. Objectives are \code{min_dp}, \code{max_margin} or \code{min_channels}. Heat flux is precomputed at a fixed 900\,K wall.
+\item \code{joint_wall_channel_design}: a $(h, w, N, t_{\mathrm{hot}})$ grid with four screens (thermal margin, eq.\ 4-31 yield margin, $\Delta p$, fit), the manufacturing floor, and optional coking, CHF and fatigue gates. Its docstring defends the default \code{structural_fos}~\code{=}~\code{1.0}: at about 50\,MW/m$^2$ the eq.\ 4-31 thermal stress alone approaches copper yield, and ``real regen liners are designed to low-cycle fatigue life, running near or above yield''. Fatigue strain is $\alpha(T_{wg}-T_{wc}) + \sigma_p/E$ at the worst station, inverted by Coffin-Manson-Basquin or the direct regression. \code{wall_feasibility_band} reports the SP-125 thickness ``squeeze'', $\max(t_{\mathrm{pressure}}, t_{\mathrm{fatigue}}, t_{\mathrm{mfg}}) \leq t_{\mathrm{hot}} \leq t_{\mathrm{thermal}}$ (printed pp.\,108-110).
+\item \code{size_wall_profile}: fixed $(N, w)$ with a heat-shaped depth $h(x) = h_{\mathrm{throat}}[1 + (\rho-1)\sqrt{1 - q/q_{\max}}]$, clipped to $[h_{\min}, h_{\max}]$, searched over throat depth and relief ratio $\rho \in [1.25, 2.0]$. The liner $t_{\mathrm{hot}}(x)$ is the thin root of $a/t + bt = S_y/\mathrm{FoS}$ with $a = |\Delta p|\,w/2$ and $b = E\alpha q/[2(1-\nu)k]$, raised to the rib-buckling, floor and (when gated) eq.\ 4-29 bounds and iterated to a fixed point because $q$ depends on $t$. The jacket is $t_{\mathrm{jacket}} = \max(p_{\mathrm{cool}}R_{\mathrm{jacket}}\mathrm{FoS}_j/S_{y,j},\ t_{\mathrm{jacket,min}})$, interpreting SP-125's statement that ``the outer shell is subjected only to the hoop stress induced by the coolant pressure''. Equation 4-29 uses the equivalent-tube radius $h/2$ and is reported but not gated by default. Masses come from \code{regen_volumes.integrate_regen_volumes}; no post-build CAD mass exists.
+\end{itemize}
+
+The \code{_wall_mass} docstring records a 2026-07-31 fix of three defects in the mass objective: end-node over-counting, the gas-side instead of the mid-surface radius, and missing land metal (about a third of the 13\,kN chamber mass). It notes that SP-125 eq.\ 8-32 is a tank-shell relation that ``corroborates the geometry but is not a thrust-chamber mass model''.
+
+\subsubsection*{thermofluids.py: higher fidelity, with validity exposed}
+
+The header says these models ``deliberately expose their validity and data source'' and ``do not turn [the preliminary regen solver] into a qualification CFD/CHT analysis''. \code{real_fluid_coolant_state} evaluates CoolProp HEOS properties (Bell et al.\ 2014) for methane and hydrogen only. It returns an explicit unavailable status instead of inventing constants (``the caller owns any screening fallback''), and \code{physics} raises when \code{--coolant-property-backend}~\code{coolprop} is requested and CoolProp is missing. \code{spectral_band_radiative_heat_flux} is the homogeneous non-scattering multiband solution $q_b = \varepsilon_wFw_b\sigma(T_g^4-T_w^4)[1-\exp(-\kappa_bL)]$ (Leccese et al., eqs.\ 3-7) and ``does not ray-trace an inhomogeneous chamber''. The Leccese gray preset scales the 10\,bar absorption coefficients (2.4 and 1.9\,m$^{-1}$ for O$_2$/CH$_4$ and O$_2$/H$_2$) with pressure. \code{zuber_critical_heat_flux}, $q_{\mathrm{CHF}} = 0.131\,h_{fg}\sqrt{\rho_v}\,[\sigma g(\rho_l-\rho_v)]^{1/4}$, is ``a conservative pool-boiling reference, not a forced-flow rocket channel correlation''. \code{boiling_chf_screen} marks supercritical stations as having no liquid-vapour CHF and the heat-transfer-deterioration regime as unresolved. \code{solve_annular_manifold_network} solves a damped-Newton square-law graph over every channel, two annular header rings and the discrete ports, and labels itself \code{one_dimensional_network_requires_3d_manifold_validation}.
+
+\subsubsection*{Header claims checked against the code}
+
+\begin{table}[!htb]
+\centering\small
+\caption{Header and docstring claims that the code does not bear out.}\label{tab:s07-claims}
+\begin{tabularx}{\linewidth}{P{5.0cm}Y}
+\toprule
+Claim & What the code does\\
+\midrule
+thermal\_design header: cooling ``shape[s] the geometry'' before the contour is fixed & Only the test-only \code{cooling_coupled_contour} changes the contour; the CLI sizes the wall on the fixed S05 contour.\\
+\code{joint_wall_channel_design} docstring and the \code{MaterialProperties} comment: fatigue gates only design-qualified data & \code{thermal_design.py:648-654} also gates when \code{fatigue_screening_gate} is set, which is true for NARloy-Z and GRCop-84; \code{tests/test_fatigue.py} pins this behaviour.\\
+Status \code{disabled_by_default_for_liquid_sizing}; \code{regen_wall_model.md}: liquid sizing leaves curvature off & True on the CLI path only; the function default is on and the \code{design_nozzle_v2} path inherits it (D1).\\
+\code{physics.py} docstrings: Pr is ``SP-125 Eq.\ 4-18'', viscosity ``Eq.\ 4-23'' & The knowledge-graph equation audit (\code{knowledge/reports/EQUATION_FIDELITY_AUDIT.json}) records SP-125 eq.\ 4-15 (Pr), 4-16 (viscosity) and 4-23 (coolant $\mathrm{Nu} = C_1\mathrm{Re}^{0.8}\mathrm{Pr}^{0.4}(\mu/\mu_w)^{0.14}$), and marks the implemented Sieder-Tate as \code{DIFFERENT_FORMULA} from eq.\ 4-23.\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Governing documents}\label{sec:s07-docs}
+
+{\footnotesize
+\begin{longtable}{P{5.8cm}P{2.0cm}P{1.5cm}P{6.2cm}}
+\caption{Documents governing or recording S07.}\label{tab:s07-docs}\\
+\toprule
+Document & Type & Status & Relevance\\
+\midrule
+\endfirsthead
+\toprule
+Document & Type & Status & Relevance\\
+\midrule
+\endhead
+\code{docs/subsystems/S07-regen-cooling-and-wall-structures/regen_wall_model.md} & subsystem basis & active & Literature inventory, implemented equations, input-to-thickness table, CAD status, qualification limits. Its curvature statement does not hold on the \code{design_nozzle_v2} path (D1).\\
+\code{docs/literature/thermofluid_literature_provenance.md} & provenance & active & Equation-to-code map with status per thermofluid element, corpus audit (54 PDFs, 46 unique), six remaining-physics items; a registry \code{local_source}.\\
+\code{docs/architecture/MODEL_REGISTRY.md} & architecture & active & Registry entries \code{thermal.*}, \code{structure.*}, \code{materials.*}.\\
+\code{docs/subsystems/S10-interface-and-mass-ledger/injector_interface_model.md} & subsystem basis & active & Consumer: composite regen-wall hoop at the injector face.\\
+\code{docs/subsystems/S10-interface-and-mass-ledger/HARDWARE_MASS_LEDGER.md} & subsystem basis & active & Closeout FoS 1.32 (SP-8087); \code{_wall_mass} fix; profile masses.\\
+\code{docs/program/PHYSICS_FIDELITY_ROADMAP.md} & roadmap & active & Sec.\ 4: conjugate post-solve check, buckling enforcement, width floors.\\
+\code{docs/program/COMPLETION_PLAN.md} & roadmap & active & D1: \code{regenerative_cooling_2d} post-optimum check; G2: CAD mass. Stale after 2026-08-26.\\
+\code{docs/audits/REPO_PHYSICS_AUDIT_2026-07-02.md} & audit & historical & Verbatim check of SP-125 eqs.\ 4-28, 4-29, 4-31 and the Bartz constant.\\
+\code{docs/audits/PROJECT_AUDIT_2026-08-25.md} & audit & historical & Notes that \code{regenerative_cooling_2d} exists but is not wired in.\\
+\bottomrule
+\end{longtable}
+}
+
+\subsection{Verification}\label{sec:s07-tests}
+
+The ten unit-test files below exercise the S07 modules directly; on 2026-11-05 all 135 collected tests (parametrised cases counted individually) passed in 53\,s under \code{.venv-jax} with CoolProp available (no skips).
+
+{\footnotesize
+\begin{longtable}{P{4.4cm}P{0.8cm}P{10.4cm}}
+\caption{Tests covering S07.}\label{tab:s07-tests}\\
+\toprule
+Test file & Tests & What it pins\\
+\midrule
+\endfirsthead
+\toprule
+Test file & Tests & What it pins\\
+\midrule
+\endhead
+\code{tests/test_bartz_heat_flux.py} & 12 & Pr, $c_p$, $\mu$; exact $\sigma$; $h_g \propto P_c^{0.8}$, $(A_t/A)^{0.9}$; throat flux 10 to 160\,MW/m$^2$ at 7\,MPa; $r = \mathrm{Pr}^{1/3}$; Mach branches.\\
+\code{tests/test_regen_cooling.py} & 37 & Exact Sieder-Tate Nu, property overrides, series-circuit consistency, flow and channel-size trends, Shah-London branch, curvature sign, Blasius and Swamee-Jain, $\Delta p$ and roughness, coking and radiation-omission status, absolute pressure march, fit warning, 2-D hot spot, 3-D relief, dispatcher.\\
+\code{tests/test_regen_profile.py} & 11 & Uniform and tapered profiles, fit detection, helix length against $\sqrt{1+(2\pi nR/L)^2}$ on a cylinder, $\Delta p$ proportional to path, energy balance under helix, profile versus scalar parity.\\
+\code{tests/test_thermal_design.py} & 9 & \code{cooling_coupled_contour} levers and binding limit; cycle flow; auto-sizer feasibility, diagnosis and objective dependence.\\
+\code{tests/test_joint_design.py} & 8 & Feasibility band, required material properties, thicker wall runs hotter, high-$P_c$ copper throat stress-limited, split injector $\Delta p$ boundary.\\
+\code{tests/test_wall_profile.py} & 6 & Variable $h(x)$, hoop radius $w/2$, floor, mass split, no post-build mass, jacket margin $\geq 1.5$, eq.\ 4-29 not gating, jacket scaling.\\
+\code{tests/test_materials.py} & 27 & Properties present, unique aliases, lookup, \code{MaterialSpec.from_catalog} fields, eq.\ 4-31 closed form and trends.\\
+\code{tests/test_wall_physics.py} & 7 & Hoop radius is the channel scale; eq.\ 4-29 reduces to elastic cylinder buckling; rib screen distinct; heat over arc length.\\
+\code{tests/test_fatigue.py} & 8 & Coffin-Manson monotonicity, equation satisfaction, run-out bounds; GRCop-84 direct strain-life gate active; unqualified data do not gate; qualified data do.\\
+\code{tests/test_advanced_thermofluids.py} & 10 & Cyclic tangent, radiation bounds, network conservation, no silent real-fluid fallback, aliases, Zuber trend, radiation and network in the march.\\
+\bottomrule
+\end{longtable}
+}
+
+At CLI level, \code{tests/test_run_nozzle.py} rejects \code{--size-wall} without \code{--material} and the \code{--wall-sizing}~\code{scalar} conflict. Its smoke test of \code{examples/cli/lox_rp1_13kn_copper_316l_full_engine.args} asserts the OFHC copper liner, the 316L jacket, the \code{regen_thermostructural} mode and the files \code{wall.stl}, \code{jacket.stl}, \code{wall.step}, \code{jacket.step} and \code{regen.stl}. A spray-regen test asserts that the loop's final coolant flow equals the fuel flow. \code{tests/test_mdo_cooling.py} holds the NumPy parity test for the differentiable cooling block. Not covered: unknown coolant names, the curvature default on the \code{design_nozzle_v2} path, a 3-D versus 1-D energy balance, convergence of the fixed-pass march, and \code{--cooling-fraction} in the spray loop.
+
+\subsection{Maturity, limitations and known defects}\label{sec:s07-defects}
+
+\lead{Maturity.} All S07 results are preliminary screens. The registry levels are \code{software_verified_not_cht_validated} (Bartz, Sieder-Tate, fin), \code{software_verified_local_secondary_source} (Shah-London), \code{software_verified_not_fea_validated} (eq.\ 4-31), \code{screening_not_material_qualified} (strain-life, NARloy-Z and GRCop data), \code{screening_not_spectral_validated} (radiation) and \code{conservative_reference_not_design_correlation} (CHF). Material values are single points, fatigue data are isothermal coupon fits, and every structural relation is elastic.
+
+\lead{Limitations.} The thermofluid provenance note lists six items of missing physics. They are: supercritical heat-transfer deterioration with an enthalpy-coupled march; composition-driven radiation bands, ray tracing and soot; calibrated port and header losses; configurable turbulent correlations (Petukhov-Gnielinski, Niino, Dipprey-Sabersky); forced-flow cryogenic CHF; and validation of the 1-D, 2-D and 3-D paths against the Carlile, Wadel and NASA datasets. \code{regen_wall_model.md} also excludes jacket buckling, creep, plasticity, weld and braze efficiency, stress concentration and conjugate CFD/FEA. In the code, radiation defaults to \code{not_included}, the channel count cannot change along the axis, and the thermal solve uses the mean branch flow even when the network predicts maldistribution.
+
+\lead{Known defects.} Each item below was checked against the code while preparing this chapter, and D3 was reproduced numerically.
+
+\begin{enumerate}[label=D\arabic*.]
+\item \textbf{Curvature credit on the re-evaluation path.} \code{regenerative_cooling_analysis} defaults to \code{curvature_correction=True} (\code{physics.py:637}). \code{regenerative_cooling_screen} (\code{:1811}) passes no flag, so \code{design_nozzle_v2}, and with it the MDO \code{--mdo-export} re-check and \code{lrekit}~\code{run}, applies the Niino-Kumakawa enhancement that SP-8087 says not to credit without calibration. The traditional CLI path does not.
+\item \textbf{No convergence test in the coupled march.} The loop at \code{physics.py:808-992} runs exactly \code{n_iter} relaxed passes: 30 on the CLI analysis, 12 in joint sizing, 15 in auto-sizing and 20 in the profile sizer. No residual is computed or reported.
+\item \textbf{3-D solver halves the coolant temperature rise.} \code{regenerative_cooling_3d} divides half-pitch-sector heat by the full per-channel flow (\code{physics.py:1746-1748}). On the \code{tests/test_wall_physics.py} geometry ($R_t = 50$\,mm, $\varepsilon = 10$, 120 channels, 12\,kg/s RP-1) its coolant rise was 65.6\,K against 135.7\,K from the 1-D march (ratio 0.48). The function is test-only; \code{test_3d_axial_conduction_relieves_peak_vs_2d} may pass partly because of it.
+\item \textbf{Unknown coolants become RP-1.} \code{--coolant} has no choices (\code{run_nozzle.py:3016}), and \code{resolve_coolant_properties} falls back to the RP-1 row (\code{physics.py:395}). \code{n2o}, \code{lox} and \code{jet-a} all silently receive RP-1 density and $c_p$, the 700\,K coking limit and a 300\,K inlet.
+\item \textbf{Spray loop ignores the cooling fraction.} \code{evaluate_cli_cooling} sets the coolant flow to $\dot m/(1+\mathrm{O/F})$ (\code{run_nozzle.py:5880}), while the sizing blocks multiply by \code{--cooling-fraction}.
+\item \textbf{The cross-section figure ignores the sized depth profile.} \code{wall_cross_section_field} takes the scalar \code{cooling.channel_height} and a pitch on the gas-side radius (\code{physics.py:1519-1534}) even when a \code{RegenWallProfile} drove the analysis. In the archived run the scalar was 3.3\,mm while the profile spanned 1.98 to 2.42\,mm.
+\item \textbf{Inconsistent jacket treatment.} \code{size_wall_profile} uses \code{jacket_fos}~\code{=}~\code{1.5} with no CLI flag, whereas \code{design.py} uses \code{closeout_structural_fos}~\code{=}~\code{1.32} (SP-8087) and a thin-shell check the S07 sizer lacks. The joint-design mass objective assumes $t_{\mathrm{jacket}} = t_{\mathrm{hot}}$ (\code{thermal_design.py:786-789}).
+\item \textbf{Objective silently remapped.} With \code{--size-wall}, any \code{--size-objective} other than \code{min_dp} becomes \code{min_mass} (\code{run_nozzle.py:5187}); \code{max_margin} and \code{min_channels} are never honoured there.
+\item \textbf{Hard-coded viscosity in the network.} The header-ring Reynolds number uses $\mu = 10^{-3}$\,Pa\,s for every coolant (\code{thermofluids.py:423}); liquid hydrogen in the table is $1.3\times10^{-5}$\,Pa\,s.
+\item \textbf{Equation 4-29 loose ends.} Its margin and bound use $0.9\,S_c$ with no source comment (\code{thermal_design.py:1176}, \code{:1240}), and the dashboard never plots it because \code{run_nozzle.py:5608-5611} passes no \code{buckling_profile}.
+\item \textbf{Mislabelled equations and dangling references.} These are the SP-125 equation numbers in \code{physics.py} and \code{thermofluid_literature_provenance.md} (Table~\ref{tab:s07-claims}); the materials header reference to \code{JAX_DIFFERENTIABLE_PLAN.md}; the registry entry \code{materials.narloy_grcop}, which says ``interpolated'' conductivity and strength although both are single points; and \code{structure.sp125_liner_stress}, which cites eq.\ 4-32 (Darcy loss) as a stress equation. The X08 module \code{thermal_correlations.py} cites \code{knowledge/reports/THERMAL_VERIFICATION_IMPLEMENTATION_2026-10-17.md}, which is not in the repository.
+\end{enumerate}
+
+\caution{A feasible S07 result means only that the enabled screens passed at their default gates. In the reference run that meant an RP-1 coolant-side wall above the coking screen, both thicknesses at their floors, an unchecked fixed-pass thermal solve and single-temperature properties. It is not hardware qualification.}
+
+\subsection{Developer notes}\label{sec:s07-dev}
+
+\begin{itemize}
+\item \textbf{Material:} add a \code{MaterialProperties} entry with a \code{source} string and unique aliases to \code{_CATALOG} in \code{raosim/materials.py} (enforced by \code{tests/test_materials.py}). Strain-life data need a \code{fatigue_source} before they can gate. New fields must also be copied by \code{MaterialSpec.from_catalog} (\code{raosim/design.py}) and mapped by \code{raosim/mdo/material_map.py}.
+\item \textbf{Coolant:} aliases in \code{raosim/coolants.py}; a sourced row in \code{physics.COOLANT_PROPERTIES}; an inlet default in \code{default_coolant_inlet_temperature}; \code{thermofluids._COOLPROP_NAMES} for real-fluid support; MDO coverage in \code{raosim/mdo/coolant_htd.py}. Rejecting unknown names would close D4.
+\item \textbf{Correlations:} \code{physics.bartz_*}, \code{sieder_tate_coefficient}, \code{darcy_friction_factor}. The differentiable mirrors in \code{raosim/jax/thermal.py} and \code{raosim/mdo/cooling.py} must change with them (parity test in \code{tests/test_mdo_cooling.py}; the MDO uses $\mu_w = \mu_b$). Register new models in \code{raosim/model_registry.py}.
+\item \textbf{Coupled march} (convergence, radiation, real-fluid, pressure boundary): \code{physics.regenerative_cooling_analysis}, called by every sizer and by the spray loop. \textbf{Sizing and gates:} \code{raosim/thermal_design.py}, plus the parser (\code{run_nozzle.py:2987-3021}, \code{:3439-3523}), the call sites (\code{:5191}, \code{:5302}, \code{:5367}) and the summary blocks (\code{:5276}, \code{:5335}, \code{:5399}).
+\item \textbf{Geometry} (offsets, helix, lands, fit): \code{raosim/regen_profile.py}, which S11 (\code{export.py}, \code{regen_cad.py}, \code{regen_geometry.py}) and S10 (\code{mass_ledger.py}, \code{regen_volumes.py}, \code{interface.py}) import, so analysis and CAD share one geometry.
+\item \textbf{Structural screens:} eq.\ 4-31, 4-29, rib-plate and strain-life functions in \code{physics.py}, composed per station in \code{size_wall_profile}; the MDO's own screen is in \code{raosim/mdo/structures.py}. \textbf{Manifold, radiation, CHF:} \code{raosim/thermofluids.py}, switched through \code{args._cooling_options}. \textbf{Figures:} \code{raosim/plotting.py}; the \code{run_nozzle.py} calls that draw them are wrapped in \code{try/except} and print a ``skipped'' line on failure.
+\end{itemize}

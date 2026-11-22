@@ -23,7 +23,7 @@
    "equations": 67
   },
   "documents_with_extracted_objects": 30,
-  "canonical_documents_without_extracted_objects": 218
+  "canonical_documents_without_extracted_objects": 237
  },
  "model_reviews": [
   {
@@ -827,7 +827,7 @@
    "target": "MODEL_THERMAL_CHF",
    "registry_id": "thermal.chf",
    "subsystem": "thermal",
-   "doc_id": "RDOC_DOCS_THERMOFLUID_LITERATURE_PROVENANCE_MD",
+   "doc_id": "RDOC_DOCS_LITERATURE_THERMOFLUID_LITERATURE_PROVENANCE_MD",
    "equation_ref": "repository provenance note and declared forced-flow limitation",
    "relation": "conservative Zuber-class boiling reference with optional property backend",
    "basis_class": "LITERATURE_DERIVED",
@@ -835,7 +835,7 @@
    "source_review_note": "",
    "prior_declared_support": "NOT_CHECKED",
    "state": "REPOSITORY_BASIS_REVIEW",
-   "local_source": "docs/thermofluid_literature_provenance.md"
+   "local_source": "docs/literature/thermofluid_literature_provenance.md"
   }
  ],
  "verification": [

@@ -1,0 +1,201 @@
+{
+ "packet": "V-RAD21-p007",
+ "kind": "verification",
+ "document_id": "DOC_DOI_10_1080_13647830_2021_1937702",
+ "source_pdf": "propulsion_texts/pintle_injector/radhakrishnan2021.pdf",
+ "source_sha256": "b2550805f9cd9837fcfac67243812665a3a3be832fb32d018638722c63c2c784",
+ "pages": [
+  7,
+  7
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 7,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1080_13647830_2021_1937702/p0007.png",
+   "sha256": "67efc7a278ebac39ab62ca77629b1b8c29f67c8961cbba0df3f37bd0396a8d7d",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_a1b72e82b322da78b6b529bd"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_0d9aa9b635e02bc13b153ac8",
+   "kind": "table",
+   "pages": [
+    7
+   ],
+   "table_grid": [
+    [
+     "Annular gap thickness (tann), mm",
+     "1.5"
+    ],
+    [
+     "Centre gas diameter (Dcg), mm",
+     "4.55"
+    ],
+    [
+     "Pintle opening distance (Lopen), mm",
+     "0.05-0.20"
+    ],
+    [
+     "Pintle rod diameter (Dpr), mm",
+     "3.0"
+    ],
+    [
+     "Post diameter (Dpost), mm",
+     "11.2"
+    ],
+    [
+     "Pintle tip diameter (Dpt), mm",
+     "11.2"
+    ],
+    [
+     "Post angle (θpost), degree",
+     "30°"
+    ],
+    [
+     "Pintle tip angle (θpt), degree",
+     "0°, 20°, 40°"
+    ],
+    [
+     "Pintle tip thickness (tpt), mm",
+     "1.0"
+    ],
+    [
+     "Post recess length (Ls), mm",
+     "11.2"
+    ],
+    [
+     "Post thickness (tpost), mm",
+     "1.0"
+    ]
+   ],
+   "json_pointer": "/tables/0",
+   "caption_text": [
+    "Table 2. Pintle injector dimensions."
+   ],
+   "bbox": [
+    {
+     "l": 141.97926649567762,
+     "t": 616.7654269311072,
+     "r": 350.74169935490534,
+     "b": 486.10114239719,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "TABLE 11x2 (see table_grid; full cells in raw item /tables/0)",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_a1b72e82b322da78b6b529bd",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_13647830_2021_1937702/b2550805f9cd-p7-7-1fa1949978e9a4c7c96ce45024230bf9530130874b6788989c19d5db3f532d0b.json",
+   "raw_sha256": "f87c983342873f4e15fcd689e56cf0dae0bbd85b5bf15c31bfb392af82f6ffc4",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [
+  {
+   "id": "CLM_DOI_10_1080_13647830_2021_1937702_2B74BED1",
+   "store": "claims",
+   "type": "Claim",
+   "page": 7,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The spray combustion (and therefore the droplet evaporation modelling) was carried out under subcritical conditions for a 500 N thrust at a fixed O/F ratio of 3.5, with maximum chamber pressure and nozzle expansion ratio assumed to be 2.0 MPa and 40.43.",
+   "quote": "spray combustion under subcritical condition was taken into account to obtain a 500 N",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_D2_EVAPORATION"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 7
+    }
+   ]
+  },
+  {
+   "id": "VAL_DOI_10_1080_13647830_2021_1937702_5CF339A2",
+   "store": "validity",
+   "type": "ValidityEnvelope",
+   "page": 7,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The evaporation model (Eq. 16) is applied within a LOX/GCH4 spray-combustion simulation under subcritical conditions with maximum chamber pressure assumed 2.0 MPa; the document states no explicit validity range for the evaporation expression itself.",
+   "quote": "were assumed to be 2.0 MPa and 40.43, respectively. The specific impulse and coefficient",
+   "confidence": null,
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 7
+    }
+   ]
+  }
+ ],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_DOI_10_1080_13647830_2021_1937702#c00010",
+   "page_start": 6,
+   "page_end": 7,
+   "section": "**A detailed modelling on spray atomisation and** **combustion of LOX/GCH4 in variable area pintle** **injector rocket engines** > Nomenclature",
+   "text": "correlation\n\n3D, Unsteady\nsimulation\n\nEulerian–Eulerian Modelled by coupling\n\nSPIREE and\nCHARME solver [53]\n\nModelled by SPIREE\n\nsolver [53]\n\nEddy breakup model [54]\n\n6 _K. Radhakrishnan_ et al.\n\nTable 2. Pintle injector dimensions.\n\nAnnular gap thickness ( _t_ ann), mm 1.5\nCentre gas diameter ( _Dcg_ ), mm 4.55\nPintle opening distance ( _L_ open), mm 0.05–0.20\nPintle rod diameter ( _Dpr_ ), mm 3.0\nPost diameter ( _D_ post), mm 11.2\nPintle tip diameter ( _Dpt_ ), mm 11.2\nPost angle ( _θ_ post), degree 30°\nPintle tip angle ( _θpt_ ), degree 0°, 20°, 40°\nPintle tip thickness ( _tpt_ ), mm 1.0\nPost recess length ( _Ls_ ), mm 11.2\nPost thickness ( _t_ post), mm 1.0\n\nin a commercial CFD tools are considered separately. The first model delivers the initial\nsheet thickness and breakup length using the VOF simulation. The second model delivers\nthe SMD measurement using the Lagrangian simulation. Finally, the third model delivers\nthe spray combustion using a steady flamelet diffusion model to study the spray and combustion characteristics of LOX/GCH4 by considering various parameters such as pintle\nopening distance and pintle tip angle with the combustion performance calculation.\n\n**2.** **Numerical methodology**"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1080_13647830_2021_1937702#c00011",
+   "page_start": 7,
+   "page_end": 7,
+   "section": "**A detailed modelling on spray atomisation and** **combustion of LOX/GCH4 in variable area pintle** **injector rocket engines** > Nomenclature",
+   "text": "The schematic of the pintle injector, and their spray formation and breakups are shown\nin Figure 1. Because of axisymmetric configuration, therefore, a 2D-axisymmetric model\nwas used in this simulation to reduce the computing time. And also, the three-dimensional\ninfluence was presumed to be negligible the dimensions of pintle injector is provided in\nTable 2. The VOF approach was employed to simulate the sheet formation and primary\nbreakup, while the Lagrangian approach was employed to simulate the secondary breakup.\nThese simulations were performed separately to reduce computational expenditure. The\nspray combustion under subcritical condition was taken into account to obtain a 500 N\nthrust using a fixed oxidiser to fuel ratio (O/F ratio) of 3.5. Therefore, to calculate the\nmass flow boundary condition, the maximum chamber pressure and nozzle expansion ratio\nwere assumed to be 2.0 MPa and 40.43, respectively. The specific impulse and coefficient\nof thrust were calculated using NASA computer program CEA (Chemical Equilibrium\nwith Applications), which was used to calculate the total mass flow rate of the propellants\nfor the maximum chamber pressure condition (assumed as maximum throttling condition\nof 100%). For 25, 50, 75% throttling condition, the mass flow rate for GCH4 and LOX\nwas calculated using the fixed O/F ratio = 3.5 and is provided in Table 3 for all cases in\nwhich Cases 1–4 were considered for the conditions of four different pintle openings at a\nfixed pintle tip angle ( _θpt_ = 20°). The chamber pressure increased with the pintle opening\ndistance because the fuel mass flow rate was increased. Similarly, Case 5 and Case 6 were\nfor the condition of the pintle opening of 0.2 mm at _θpt_ = 0° and 40°."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1080_13647830_2021_1937702#c00012",
+   "page_start": 7,
+   "page_end": 7,
+   "section": "**A detailed modelling on spray atomisation and** **combustion of LOX/GCH4 in variable area pintle** **injector rocket engines** > Nomenclature",
+   "text": "**2.1.** **_Volume of fluid simulation_**\n\nAs a schematic of the pintle injector in Figure 1 shows the LOX sheet formation and its\nprimary breakup and secondary breakup by the impingement of GCH4. The formation"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "table": 1
+  },
+  "flagged_candidates": 0,
+  "target_objects": 1,
+  "objects_with_anchor_problems": 0
+ }
+}

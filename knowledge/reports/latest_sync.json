@@ -1,7 +1,7 @@
 {
- "generated_at": "2026-10-17T17:57:57.168727+00:00",
- "pdf_count": 286,
- "manifest_rows": 286,
+ "generated_at": "2026-11-21T23:24:25.186641+00:00",
+ "pdf_count": 305,
+ "manifest_rows": 305,
  "synchronized": [
   {
    "pdf": "propulsion_texts/10.1002_fld.1650130505.pdf",
@@ -466,6 +466,12 @@
    "evidence": "manifest_sha256"
   },
   {
+   "pdf": "propulsion_texts/Shock Fitting _ Classical Techniques, Recent Developments, -- Marcello Onofri,Renato Paciorri (eds_) -- Shock Wave and High Pressure Phenomena, Shock -- isbn13 9783319684260 -- cac1acb5efe01602bc13ea2c7aca4465 -- Anna\u2019s Archive.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/Shock Fitting _ Classical Techniques, Recent Developments, -- Marcello Onofri,Renato Paciorri (eds_) -- Shock Wave and High Pressure Phenomena, Shock -- isbn13 9783319684260 -- cac1acb5efe01602bc13ea2c7aca4465 -- Anna\u2019s Archive.md",
+   "sha256": "0705765da55172c9aab6a1868c690a396c0a2a34f637a13ba9148b3d6dacfa2d",
+   "evidence": "manifest_sha256"
+  },
+  {
    "pdf": "propulsion_texts/Statement+of+the+problem+of+designing+a+liquid+rocket+engine+dual+bell+nozzle+of+the+maximum+thrust+using+the+direct+method+of+the+calculus+of+variations.pdf",
    "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/Statement+of+the+problem+of+designing+a+liquid+rocket+engine+dual+bell+nozzle+of+the+maximum+thrust+using+the+direct+method+of+the+calculus+of+variations.md",
    "sha256": "d1b2f5780bec47b05b80c48458c7debf0833e74ec8cf98507e066edd86956a27",
@@ -514,6 +520,12 @@
    "evidence": "manifest_sha256"
   },
   {
+   "pdf": "propulsion_texts/broer1958.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/broer1958.md",
+   "sha256": "05c7aa566aba78fce3baf010cb4d526a8b529ac8a9fa782d4277b2837beda245",
+   "evidence": "manifest_sha256"
+  },
+  {
    "pdf": "propulsion_texts/carlile1992.pdf",
    "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/carlile1992.md",
    "sha256": "1532427b372b06dd4213e1082a10fea9b0a84e3db01910b4a44e041fb2ba2576",
@@ -523,6 +535,66 @@
    "pdf": "propulsion_texts/eucass1p171.pdf",
    "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/eucass1p171.md",
    "sha256": "2fe936408ed941e265a1fb5b7ad105c2e557a39bcbfe59aa2283a9d530786258",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/experimental_validation/19650010083.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/experimental_validation/19650010083.md",
+   "sha256": "bf8d2961b2aecc53f08920e86a5b7dfc2d7efbde19d26599693fd48fffc6a198",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/experimental_validation/19690063911.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/experimental_validation/19690063911.md",
+   "sha256": "345e01f255444400a9615df4c6f9f85e0bc8d023255fb74d2340dd611fa85f33",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/experimental_validation/19710011726.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/experimental_validation/19710011726.md",
+   "sha256": "62d165ed0710e515c56ed993eed3871deb5b96662d141d180b0cb93d697904df",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/experimental_validation/19780012674.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/experimental_validation/19780012674.md",
+   "sha256": "ecf34dcf69b40422d2bc4f96b16365606af4bf79958c812d6d2c5f2be6e417e0",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/experimental_validation/19870015990.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/experimental_validation/19870015990.md",
+   "sha256": "dfaef22c8ca4e57bae0d5b26ad553699ccf7a2d71011dd87954d2bcee18a914f",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/experimental_validation/19870015991.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/experimental_validation/19870015991.md",
+   "sha256": "ac7ee3fc4c1ff8ecf3a1ae690a6048c698aa51d2cceb498dcd3b50c9a2f0f861",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/experimental_validation/19950024435.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/experimental_validation/19950024435.md",
+   "sha256": "27faeb942205ac5860c294c5a325aa6c99c63d70a49a0b1abb0ab67720b2f47b",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/experimental_validation/19960042495.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/experimental_validation/19960042495.md",
+   "sha256": "993cc9f55e8c53c890d4101ff364796571c038b8a84e786111f2d30c8ac196fc",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/experimental_validation/19990025912.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/experimental_validation/19990025912.md",
+   "sha256": "a4e27fc725d95034c8479082f9a4e0a296d3f1fed4e28b5622a79425c15f959b",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/experimental_validation/20190030431.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/experimental_validation/20190030431.md",
+   "sha256": "68fbcd719667de12717169d1402c3a6ea2b0502c61337b3ae72c44b701955bb1",
    "evidence": "manifest_sha256"
   },
   {
@@ -826,6 +898,18 @@
    "evidence": "manifest_sha256"
   },
   {
+   "pdf": "propulsion_texts/giles2001.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/giles2001.md",
+   "sha256": "7f16e97e4a513e2440917b2457e51a10fec8665a300f750dab2500e708331d12",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/giles2010.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/giles2010.md",
+   "sha256": "7cda4a2de71cd21cba92be7c01d8588544cba2951d54c188d4b48eb42ec29e1b",
+   "evidence": "manifest_sha256"
+  },
+  {
    "pdf": "propulsion_texts/gradl2016.pdf",
    "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/gradl2016.md",
    "sha256": "81f6b2ed0770c40d8fb821464d808bcb6df49946d688bcfaea1c38f9a46d1c64",
@@ -880,6 +964,12 @@
    "evidence": "manifest_sha256"
   },
   {
+   "pdf": "propulsion_texts/hall1962.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/hall1962.md",
+   "sha256": "848c4398c6d48ee5c788361fbb4531b6a8ff34298e28007779b456b255f830ab",
+   "evidence": "manifest_sha256"
+  },
+  {
    "pdf": "propulsion_texts/handout4.1.pdf",
    "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/handout4.1.md",
    "sha256": "eb0d80b61099f6291dac9b83ac1873f98ee2283d1bd3ee01f6250eec1e917c44",
@@ -910,6 +1000,12 @@
    "evidence": "manifest_sha256"
   },
   {
+   "pdf": "propulsion_texts/kliegel1969.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/kliegel1969.md",
+   "sha256": "1c4f875e3c112a166808dbc5f0149b0b3f62fd143acfb42c7274140ec09d68d9",
+   "evidence": "manifest_sha256"
+  },
+  {
    "pdf": "propulsion_texts/kuhl1998.pdf",
    "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/kuhl1998.md",
    "sha256": "4be181a431b6637495b0f06a39a90f7f34ba9fe94ae1a067b1215e1bd96d1975",
@@ -931,6 +1027,12 @@
    "pdf": "propulsion_texts/liquid-film-cooling-in-rocket-engines-r5yu3j35ky.pdf",
    "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/liquid-film-cooling-in-rocket-engines-r5yu3j35ky.md",
    "sha256": "cb4c4da541bf92c015080b31e66ac084a5e7e62015ea761ab3fe7c21cf29b34b",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/lovely1999.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/lovely1999.md",
+   "sha256": "6fb10b57afb0e59a9a5cd0acb828d25292af289d6a7cda1e35fa256e570c70bf",
    "evidence": "manifest_sha256"
   },
   {
@@ -1624,6 +1726,12 @@
    "evidence": "manifest_sha256"
   },
   {
+   "pdf": "propulsion_texts/procedure-for-estimation-and-reporting-of-uncertainty-due-to-dis-2008.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/procedure-for-estimation-and-reporting-of-uncertainty-due-to-dis-2008.md",
+   "sha256": "023580bbe990d03ffc827d3be3b26bc89f238b5c30844a00495c137d372616fa",
+   "evidence": "manifest_sha256"
+  },
+  {
    "pdf": "propulsion_texts/rao1958.pdf",
    "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/rao1958.md",
    "sha256": "3f23f43a0960f74f6ddc14aebbc9e0e49a2a337c1d1d8657ae49910523076ed3",
@@ -1639,6 +1747,12 @@
    "pdf": "propulsion_texts/s12666-010-0089-7.pdf",
    "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/s12666-010-0089-7.md",
    "sha256": "55e33a14ade64532ac04f76868d53822b02f1c6a2e126416e4bf33b25a346a99",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/salas1976.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/salas1976.md",
+   "sha256": "44b9e0752e287f6e598e3e5c750b022a52570ed10ee8478cd694e732325d2399",
    "evidence": "manifest_sha256"
   },
   {

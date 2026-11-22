@@ -1,0 +1,37 @@
+\chapter{Verification of the Cleanup}\label{ch:verification}
+
+\lead{Did the reorganization break anything, and what does the test suite say about the tree as it stands today?}
+
+\section{Test runs}
+
+Two runs were made on 9 November 2026 with the full environment (\code{.venv-jax}, JAX 0.6.2, Matplotlib on the Agg backend).
+
+\begin{center}
+\begin{tabular}{p{5.2cm}p{7.6cm}}
+\toprule
+Run & Result \\
+\midrule
+Main suite on the working tree, \code{-m "not slow"} & 2832 passed, 24 failed, 1 skipped, 27 deselected (41 min 51 s) \\
+The same 24 failing tests on a clean export of commit \code{d636d85} & 24 passed (47 s) \\
+Knowledge suite, \code{knowledge/tests} & 467 passed, 1 skipped \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Where the 24 failures come from}
+
+The 24 tests pass on a clean export of the last commit and fail on the working tree. The working tree differs from the commit in two ways: the documentation moves and archive of this cleanup, and the owner's uncommitted edits to Python code (\code{git status} lists modifications in \code{raosim/nozzle\_geometry.py}, \code{raosim/moc.py}, \code{raosim/mdo/*} and others). The cleanup moved no Python module and changed code only in comments, docstrings and path constants. The failing tests concern chart-domain behaviour: the uncommitted \code{raosim/nozzle\_geometry.py} now makes \code{lookup\_angles} raise outside the Rao chart domain (expansion ratio 5 to 50, length fraction 60 to 100 percent). The failures cluster in \code{test\_nozzle\_geometry}, \code{test\_rao\_chart\_benchmark}, \code{test\_mdo\_engine} (chart-domain corners), \code{test\_mdo\_nlp\_robustness}, \code{test\_moc\_bounded\_net}, \code{test\_design\_v2}, \code{test\_benchmarks}, \code{test\_phase6\_coupled\_wall}, \code{test\_mdo\_bounds} and \code{test\_run\_nozzle}.
+
+\caution{These failures belong to the owner's uncommitted work, not to the cleanup. They should be triaged before that work is committed: either the tests are updated to the new gate, or the gate is relaxed. The example file \code{examples/cli/test\_13kn\_sealevel\_regen\_allstl.args} (expansion ratio 4.524) fails on the default Bezier path for the same reason, and the \code{--allow-chart-extrapolation} flag is inert because \code{lookup\_angles} raises before the flag is read (Chapter~\ref{ch:s01-s02}).}
+
+\section{What the cleanup itself changed}
+
+\begin{itemize}
+  \item 73 documents moved into \code{docs/} subfolders by data-flow stage; every internal link, and every \code{docs/} path in code comments, docstrings and scripts, was rewritten. Two broken links found afterwards were fixed by hand.
+  \item \code{requirements.txt} moved to the repository root; \code{builds/} now holds one archive folder and a counter marker so build numbering continues; scratch folders moved to the git-ignored \code{archive/}.
+  \item The knowledge-graph JSON stores are generated files and were not hand-edited. They still key the moved documents by their old paths until \code{knowledge/kg.sh rebuild} is run. The knowledge tests pass without it.
+\end{itemize}
+
+\section{What was not verified}
+
+The 27 tests marked slow were not run. The one-hour rebuild of the knowledge graph was not run. The 125 of 161 modules reachable from \code{lrekit.cli} was established by static import analysis, not by execution.

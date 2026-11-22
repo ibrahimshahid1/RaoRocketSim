@@ -1,0 +1,50 @@
+\section{CFD decision}
+\label{sec:cfd}
+No CFD solver or container is installed. The repository's OpenFOAM writer produces
+an incompressible pintle case and never runs a process.
+\begingroup\footnotesize
+\par\addvspace{\LTpre}{\centering\begin{tabular}{@{}P{0.20\linewidth}P{0.60\linewidth}P{0.13\linewidth}@{}}
+\toprule\textbf{Option} & \textbf{Assessment} & \textbf{Verdict}\\\midrule
+(a) OpenFOAM v13 shockFluid writer & Independent central schemes \cite{greenshields2010,openfoam13}; axisymmetric wedge; covers the convergent and transonic region; follows the repository's writer and handoff pattern; the user runs it & \textbf{recommended}\\
+(b) SU2 & A later adjoint could provide gradient references \cite{economon2016}; a second toolchain & defer\\
+(c) In-repo Euler FV & Would verify MOC with a code written by the same team; large effort & reject\\
+(d) No CFD & Oracles and data still work; full-field and shock-location references stay open & fallback\\
+\bottomrule
+\end{tabular}\par}\addvspace{\LTpost}
+\endgroup
+
+\textbf{Prototype (E13, pending D1).} shockFluid with the Kurganov flux and vanLeer
+reconstruction. The case is inviscid because shockFluid omits viscous terms when the
+transport model gives $\mu=0$ (Sutherland with $A_s=0$) \cite{openfoam13src}. The
+geometry is the accepted Nozzle-B wall plus a $45^\circ$ convergent (a repository
+convention). The mesh is a $5^\circ$ wedge, as in an open nozzle study
+\cite{vandenberghe2024}, plus a coarse $0.2^\circ$ case at the tutorial value; three
+meshes (31{,}456, 125{,}824 and 503{,}296 cells) refine uniformly by a factor of 2.
+Boundary conditions are total pressure and temperature at the inlet, waveTransmissive at
+the outlet and slip at the wall. Twelve manifest entries stay UNVERIFIED until the user returns a checkMesh log and a dry
+run.
+
+\textbf{What CFD serves.} MOC-15, with an independent Nozzle-B field. S1, with the TOP
+internal-shock location via $|M_n|=|\mathbf{M}\cdot\nabla p/|\nabla p||=1$
+\cite[PDF pp.~17--19]{haimes1998}; the detected region is thicker than the shock and
+understates its pressure ratio. T1, with a JANAF variable-$c_p$ field. Later, V1, with a
+RANS separation case. Agreement is pre-registered as
+$|\mathrm{MOC}-\mathrm{CFD}|\le\sqrt{U_{\mathrm{CFD}}^2+U_{\mathrm{MOC}}^2}$, where
+$U_{\mathrm{CFD}}$ is the fine-grid GCI on functionals and smooth samples
+\cite{celik2008,nparcspatial2021} and $U_{\mathrm{MOC}}$ is the t19 delta of the same
+quantity. NPARC's CDV case is a quasi-one-dimensional verification page only
+\cite{nparc2021,slater2001}.
+
+\textbf{What CFD cannot establish:} physical validation (an Euler or RANS result is
+another model, so agreement is code-to-code benchmark agreement); the KL coefficients
+themselves; RSS hysteresis or side loads; MDO derivatives; or a shock position finer than
+the captured thickness.
+
+\begingroup\footnotesize
+\par\addvspace{\LTpre}{\centering\begin{tabular}{@{}P{0.09\linewidth}P{0.36\linewidth}P{0.30\linewidth}P{0.17\linewidth}@{}}
+\toprule\textbf{ID} & \textbf{Numerical verification} & \textbf{Benchmark agreement} & \textbf{Physical validation}\\\midrule
+CFD0 & Static checks and determinism (prototype done) & n/a & n/a\\
+CFD1 & GCI asymptotic ratio near 1; mass imbalance and $C_F$ drift below declared thresholds & MOC against CFD under the rule above; TOP shock location against S1 & none\\
+\bottomrule
+\end{tabular}\par}\addvspace{\LTpost}
+\endgroup

@@ -1,0 +1,69 @@
+{
+  "source_id": "ntrs_19750021165",
+  "acquired_at_utc": "2026-11-04T00:33:45.463896+00:00",
+  "evidence_kind": "published_experimental_report",
+  "status": "ACQUIRED",
+  "files": [
+    {
+      "path": "raw/ntrs_19750021165/ntrs_metadata.json",
+      "bytes": 3543,
+      "sha256": "f1a0e52d8663ccc8d58475363a684ded0f6d64a7be3be2058e9c6be94dc9e15e",
+      "origin": "publisher_metadata",
+      "requested_url": "https://ntrs.nasa.gov/api/citations/19750021165",
+      "resolved_url": "https://ntrs.nasa.gov/api/citations/19750021165",
+      "headers": {
+        "Content-Type": "application/json; charset=utf-8",
+        "ETag": "W/\"dd7-pkiWSB17uu5lE/gDcF6Js81DTrM\"",
+        "Last-Modified": null
+      }
+    },
+    {
+      "path": "raw/ntrs_19750021165/source.pdf",
+      "bytes": 1122526,
+      "sha256": "7ab916d7d5b7095bacde4fb41265db62d9103e300fe261d5cd35cf4eb5815f70",
+      "origin": "publisher_report_pdf",
+      "requested_url": "https://ntrs.nasa.gov/api/citations/19750021165/downloads/19750021165.pdf",
+      "resolved_url": "https://ntrs.nasa.gov/api/citations/19750021165/downloads/19750021165.pdf",
+      "headers": {
+        "Content-Type": "application/pdf",
+        "ETag": "\"3f6d8892b2b9759a4be95d8e1e536d57\"",
+        "Last-Modified": "Thu, 06 Aug 2020 19:31:19 GMT"
+      }
+    },
+    {
+      "path": "derived/ntrs_19750021165/source.txt",
+      "bytes": 109425,
+      "sha256": "5272522c79ba49bc3015c969ee6c7362eebfbf39f73fbc9168f9db6560f9cc30",
+      "origin": "unreviewed_pdf_text_derivative"
+    }
+  ],
+  "review_state": "NOT_REVIEWED_FOR_TRAINING",
+  "training_eligible": false,
+  "hardware_qualified": false,
+  "limitations": [
+    "Retain alloy, processing, temperature, and test mode; separate isothermal coupon fits from thermomechanical life."
+  ],
+  "publisher_title": "Thrust chamber life prediction.  Volume 1:  Mechanical and physical properties of high performance rocket nozzle materials",
+  "publisher_copyright": {
+    "thirdPartyPermissionsProduced": false,
+    "disclosedToPublic": false,
+    "containsIndication": false,
+    "publisherPermissionOrRightsToDistribute": false,
+    "belongsToUsGov": false,
+    "determinationType": "GOV_PUBLIC_USE_PERMITTED",
+    "thirdPartyContentCondition": "NOT_SET",
+    "belongsToContractor": false,
+    "disclosedInvention": false,
+    "submissionId": 19750021165,
+    "containsThirdPartyMaterial": false,
+    "belongsToPublisher": false,
+    "id": "d9873d47715d465f9581151a82006fbf",
+    "belongsToAuthors": false
+  },
+  "publisher_distribution": "PUBLIC",
+  "pdf_info": "Title:           \nSubject:         \nKeywords:        \nAuthor:          \nProducer:        Pdf.Capture version 5.2\nCreationDate:    D:00000101000000Z\nModDate:         Wed Dec 18 12:49:29 2002 EST\nCustom Metadata: no\nMetadata Stream: yes\nTagged:          no\nUserProperties:  no\nSuspects:        no\nForm:            none\nJavaScript:      no\nPages:           54\nEncrypted:       no\nPage size:       610 x 792 pts\nPage rot:        0\nFile size:       1122526 bytes\nOptimized:       yes\nPDF version:     1.4\n",
+  "text_extraction": {
+    "status": "DERIVATIVE_TEXT_UNREVIEWED",
+    "warning_excerpt": ""
+  }
+}

@@ -1,0 +1,233 @@
+{
+ "packet": "V-WHITE-p846",
+ "kind": "verification",
+ "document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+ "source_pdf": "propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf",
+ "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+ "pages": [
+  846,
+  846
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 846,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/p0846.png",
+   "sha256": "e76ab4c200f16983c9d72ee7133ea390b222fb1223dc28f22d893c9235e362da",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_0ca796dcfabce119b9bad19c"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_4b9323196f0b00ede93a8ad4",
+   "kind": "formula",
+   "pages": [
+    846
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/8",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 195.9984000000004,
+     "t": 364.1940000000001,
+     "r": 437.59124639999754,
+     "b": 346.2782939481268,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "C _ { D } = ( 1 . 8 9 + 1 . 6 2 \\log 3 0 0 0 ) ^ { - 2 . 5 } = 0 . 0 0 6 4 4",
+   "original_text": "CD = (1.89 + 1.62 log 3000) -2.5 = 0.00644",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_0ca796dcfabce119b9bad19c",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p846-846-c3d555b6cc6923916a353eaf554a8f86ba293f41f8936f640064a1cf87e9a459.json",
+   "raw_sha256": "1786acecf3e19325086aeeed9295942adac9bb8b59b5af67a46f21c5dc8da4d9",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_5929d3042b093af24c24535e",
+   "kind": "formula",
+   "pages": [
+    846
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/10",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 189.33333333333334,
+     "t": 299.6666666666667,
+     "r": 444.6666666666667,
+     "b": 287.6666666666667,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "D = 2 C _ { D } ( \\frac { 1 } { 2 } \\rho U ^ { 2 } ) b L = 1 4 8 \\, \\mathrm { \\mathrm { b f } } \\quad A n s . \\, ( d )",
+   "original_text": "D = 2CphpU?)bL = 148 Ibt Ans. (d)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_0ca796dcfabce119b9bad19c",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p846-846-c3d555b6cc6923916a353eaf554a8f86ba293f41f8936f640064a1cf87e9a459.json",
+   "raw_sha256": "1786acecf3e19325086aeeed9295942adac9bb8b59b5af67a46f21c5dc8da4d9",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_8b2bd804e53e0422c6750ffa",
+   "kind": "formula",
+   "pages": [
+    846
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/3",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 190.66666666666666,
+     "t": 600.6666666666666,
+     "r": 443.0,
+     "b": 588.3333333333334,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "D = 2 C _ { D } ( \\frac { 1 } { 2 } \\rho U ^ { 2 } ) b L = 7 2 \\, \\i f \\quad A n s . \\, ( c )",
+   "original_text": "D = 2CpGpU*)bL = 72 Ibf Ans. (c)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_0ca796dcfabce119b9bad19c",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p846-846-c3d555b6cc6923916a353eaf554a8f86ba293f41f8936f640064a1cf87e9a459.json",
+   "raw_sha256": "1786acecf3e19325086aeeed9295942adac9bb8b59b5af67a46f21c5dc8da4d9",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_bb453d2375eb861fc1915a5d",
+   "kind": "formula",
+   "pages": [
+    846
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/6",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 268.8679504394531,
+     "t": 470.9702453613281,
+     "r": 364.7690734863281,
+     "b": 447.141845703125,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\frac { L } { \\epsilon } = \\frac { 1 . 2 \\, \\text {ft} } { 0 . 0 0 0 4 \\, \\text {ft} } = 3 0 0 0",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_0ca796dcfabce119b9bad19c",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p846-846-c3d555b6cc6923916a353eaf554a8f86ba293f41f8936f640064a1cf87e9a459.json",
+   "raw_sha256": "1786acecf3e19325086aeeed9295942adac9bb8b59b5af67a46f21c5dc8da4d9",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_f0a977ae6be72160c794d153",
+   "kind": "formula",
+   "pages": [
+    846
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/1",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 231.66666666666666,
+     "t": 683.3333333333334,
+     "r": 402.0,
+     "b": 658.3333333333334,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "C _ { D } = 0 . 0 0 3 4 9 - \\frac { 1 4 4 0 } { 4 . 3 6 \\times 1 0 ^ { 6 } } = 0 . 0 0 3 1 6",
+   "original_text": "1440 = 0.00349 - —————. = Cy = 0.00349 — FE 10° 0.003 16",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_0ca796dcfabce119b9bad19c",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p846-846-c3d555b6cc6923916a353eaf554a8f86ba293f41f8936f640064a1cf87e9a459.json",
+   "raw_sha256": "1786acecf3e19325086aeeed9295942adac9bb8b59b5af67a46f21c5dc8da4d9",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [
+  {
+   "id": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_881B0630",
+   "store": "claims",
+   "type": "Claim",
+   "page": 846,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The flat-plate analysis describes laminar and turbulent boundary layers except for one important effect, flow separation caused by an adverse pressure gradient.",
+   "quote": "The flat-plate analysis of the previous section should give us a good feeling",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 846
+    }
+   ]
+  }
+ ],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01130",
+   "page_start": 846,
+   "page_end": 846,
+   "section": "**Part (c)**",
+   "text": "With a laminar leading edge and Retrans = 5 × 10 <sup>5</sup>, Eq. (7.49a) applies:\n\nThe drag can be recomputed for this lower drag coefficient:"
+  },
+  {
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01131",
+   "page_start": 846,
+   "page_end": 846,
+   "section": "**Part (d)**",
+   "text": "Finally, for the rough wall, we calculate\n\nFrom Fig. 7.6 at Re _L_ = 4.36 × 10 <sup>6</sup>, this condition is just inside the fully rough\nregime. Equation (7.48 _b_ ) applies:\n\n_CD_ = (1.89 + 1.62 log 3000) <sup>-2.5</sup> = 0.00644\n\nand the drag estimate is\n\nThis small roughness nearly doubles the drag. It is probable that the total\nhydrofoil drag is still another factor of 2 larger because of trailing-edge flow\nseparation effects."
+  },
+  {
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01132",
+   "page_start": 846,
+   "page_end": 846,
+   "section": "**7.5 Boundary Layers with Pressure Gradient3**",
+   "text": "The flat-plate analysis of the previous section should give us a good feeling\nfor the behavior of both laminar and turbulent boundary layers, except for one\nimportant effect: flow separation. Prandtl showed that separation like that in Fig."
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "formula": 5
+  },
+  "flagged_candidates": 0,
+  "target_objects": 1,
+  "objects_with_anchor_problems": 0
+ }
+}

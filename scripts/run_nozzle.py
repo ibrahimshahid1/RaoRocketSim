@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Compatibility wrapper for the packaged RaoRocketSim runner.
 
-The maintained implementation lives in :mod:`raosim.run_nozzle` so editable
+The maintained implementation lives in :mod:`lrekit.application.runner` so editable
 installs, console scripts, ``python -m raosim``, and this historical script path
 all execute the same CLI.
 """
@@ -13,9 +13,10 @@ from pathlib import Path
 
 
 if __package__ is None:
-    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    # A checkout without an editable install still runs this script directly.
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from raosim import run_nozzle as _runner  # noqa: E402
+from lrekit.application import runner as _runner  # noqa: E402
 
 
 main = _runner.main

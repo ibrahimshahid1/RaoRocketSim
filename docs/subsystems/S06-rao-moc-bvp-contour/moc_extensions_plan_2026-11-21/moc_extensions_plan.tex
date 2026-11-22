@@ -1,0 +1,90 @@
+\documentclass[11pt,letterpaper]{article}
+\input{preamble.tex}
+\hypersetup{pdftitle={MOC Solver Extensions},pdfsubject={Variable gas, shock fitting, viscous interaction and a differentiable forward net: plan and evidence}}
+\usepackage{multicol}
+\renewcommand{\bibfont}{\scriptsize}
+\setlength{\bibsep}{0pt}
+\setlength{\parskip}{3.5pt plus 1pt}
+\setlist{itemsep=1pt,topsep=2pt,parsep=0pt,partopsep=0pt}
+\titlespacing*{\section}{0pt}{11pt plus 2pt}{4pt}
+\titlespacing*{\subsection}{0pt}{8pt plus 2pt}{3pt}
+\setcounter{tocdepth}{1}
+\newcounter{ltplain}
+\renewcommand{\LTcaptype}{ltplain}
+\newcommand{\keep}[1]{\par\needspace{#1\baselineskip}}
+\begin{document}
+\thispagestyle{empty}
+{\huge\sffamily\bfseries\color{ink}MOC Solver Extensions\par}
+\vspace{0.15cm}
+{\large\sffamily\color{teal}Variable gas, shock fitting, viscous interaction and a differentiable forward net\par}
+\vspace{0.15cm}
+{\small RaoRocketSim / LREKit, subsystem S06 \hfill 21 November 2026\par}
+\vspace{0.25cm}
+\textbf{Purpose.} This plan extends and supersedes the draft roadmap
+\emph{From MOC Verification to an Engine Solver Suite} (same date), revising its
+milestone graph with page-checked literature and fourteen experiments plus follow-ups.
+
+\textbf{Principal findings.}
+\begin{itemize}
+\item \textbf{Start line.} The third-order Kliegel--Levine (KL) start line carries a
+sign error in one axisymmetric term, confirmed by three independent checks; the
+production coefficients were not changed. A \emph{diagnostic} forward replay of the
+accepted Nozzle-B wall, which was optimised with the uncorrected series, changes $C_F$
+by $-1.22$\,\% with the corrected start line (307 times the t19 refinement band),
+mostly through a $-1.25$\,\% change in mass flow. This is not a corrected design: the
+corrected-series re-solve has not been run or approved (D10).
+\item \textbf{Variable gas.} A thermodynamically consistent variable-gas MOC can keep
+the existing unit processes: along one isentrope the turning function, Mach angle
+and state are one-dimensional tables. In a manufactured test, a local $\gamma(T)$
+in the constant-$\gamma$ Prandtl--Meyer function gives 7.3--8.9\,deg errors over
+$M=1.05$--4, and a fixed chamber, throat or exit $\gamma$ gives 3.95--13.10\,deg (E03).
+\item \textbf{Forward net.} A diagnostic exit-limited harness of the forward net
+reproduces the BVP to $|\Delta C_F|/C_F=8.7\times10^{-6}$ (code-to-code, shared KL
+start line). The production march stops at a fold outside the nozzle (E07); folds at
+weak coalescences still block shock fitting and viscous coupling.
+\item \textbf{LEA/TOP.} The two LEA/TOP length failures come from an undeclared split
+between bell-length conventions. The repository's LEA case also uses a $0.382R_t$
+throat arc where the source shows $0.5y_t$, and the source's $15.0r_t$ is most likely
+$x_E-x_N$ (inferred), so the $15\pm0.02$ check was circular.
+\item \textbf{Optimiser.} The engine optimiser closes thrust with a fixed efficiency on a
+one-dimensional $C_F$. For Nozzle-B the MOC value is $0.9672$ of it with the production
+start line ($C_D=1.0075$) and about $0.955$ in the corrected-start-line replay.
+\end{itemize}
+\textbf{Evidence classes.} \emph{Numerical verification}: an exact solution, a limit,
+or code-to-code agreement between two repository algorithms on the same model.
+\emph{Benchmark agreement}: agreement with published or digitised data, or with an
+independent external code such as CFD. \emph{Physical validation}: agreement with
+matched measurements of the physical system; this plan claims none.
+
+Every new capability except the C0 result contract (typing and refusal of invalid
+results) is opt-in; promotion to a default (D0) needs a user decision. No default,
+tolerance, gate or coefficient was changed.
+
+\vspace{0.3em}
+\section*{\contentsname}
+\makeatletter
+{\footnotesize\setlength{\parskip}{0pt}\renewcommand{\addvspace}[1]{\vspace{0.5pt}}%
+\setlength{\columnsep}{18pt}\begin{multicols}{2}\@starttoc{toc}\end{multicols}}
+\makeatother
+\input{sections/01_scope}
+\input{sections/02_current_state}
+\input{sections/03_g1}
+\input{sections/04_kl}
+\input{sections/05_g2}
+\input{sections/06_g3}
+\input{sections/07_g4}
+\input{sections/08_verification}
+\input{sections/09_geometry_arch}
+\input{sections/10_cfd}
+\input{sections/11_experiments}
+\input{sections/12_roadmap}
+\input{sections/13_acquisitions}
+\input{sections/14_decisions}
+\bibliographystyle{unsrtnat-short}
+\needspace{8\baselineskip}
+\section*{References}\addcontentsline{toc}{section}{References}
+\renewcommand{\bibsection}{}
+\begin{multicols}{3}
+\bibliography{references}
+\end{multicols}
+\end{document}

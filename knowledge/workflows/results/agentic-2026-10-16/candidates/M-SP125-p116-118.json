@@ -1,0 +1,563 @@
+{
+ "packet": "M-SP125-p116-118",
+ "kind": "model_review",
+ "document_id": "DOC_NTRS_19710019929",
+ "source_pdf": "propulsion_texts/19710019929.pdf",
+ "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+ "pages": [
+  116,
+  118
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 116,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19710019929/p0116.png",
+   "sha256": "c77f30669170a3de3eb6108caf72878a71abaf47e47ee0c9b0d867afbfbc721f",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 117,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19710019929/p0117.png",
+   "sha256": "eb231e7efb1b1b182ddc54297947d090701166c4548aea8b885343823f1f00a8",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 118,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19710019929/p0118.png",
+   "sha256": "bcecc1977fe8d2aab4478cbce9ca68794731d603a69bd7cee1dccf1b99112f0c",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_83848d86594a3b16fcfc71ef",
+  "ENR_9302c4c1c3dab53cb71f10d3",
+  "ENR_e11d33d6c6d935f3c440a943"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_2b4d17432f28bd6ee9b835c9",
+   "kind": "figure",
+   "pages": [
+    116
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/1",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 358.9946160016741,
+     "t": 132.31150319417316,
+     "r": 570.5342265625,
+     "b": 102.7999277411567,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_83848d86594a3b16fcfc71ef",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p116-116-c82c940360cf0527f343266bc0d0a1b03f8f4d2fdd51101e13cafc2c6822dc87.json",
+   "raw_sha256": "eeacbbc26362d649cba08ce2bffa51080a05e1df1137603246b6d874962e1c2a",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_2bec2f3cfec5f40f47282cfa",
+   "kind": "figure",
+   "pages": [
+    116
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [
+    "Figure 4-28.—Coaxial shell tarust chamber cutaway. Note overheated and burnt-through spot on chamber wall."
+   ],
+   "bbox": [
+    {
+     "l": 46.54368925258091,
+     "t": 776.4894334962632,
+     "r": 291.02800844029014,
+     "b": 467.44799811469187,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/2\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_83848d86594a3b16fcfc71ef",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p116-116-c82c940360cf0527f343266bc0d0a1b03f8f4d2fdd51101e13cafc2c6822dc87.json",
+   "raw_sha256": "eeacbbc26362d649cba08ce2bffa51080a05e1df1137603246b6d874962e1c2a",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_8729d060375f5347a93519ce",
+   "kind": "formula",
+   "pages": [
+    116
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/16",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 361.0,
+     "t": 129.76,
+     "r": 569.6586000000001,
+     "b": 102.75999999999999,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "_(Peo~Pg)t, Eagt 6Ma ae he t (4-27)",
+   "original_text": "_(Peo~Pg)t, Eagt 6Ma ae he t (4-27)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_83848d86594a3b16fcfc71ef",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p116-116-c82c940360cf0527f343266bc0d0a1b03f8f4d2fdd51101e13cafc2c6822dc87.json",
+   "raw_sha256": "eeacbbc26362d649cba08ce2bffa51080a05e1df1137603246b6d874962e1c2a",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_16e74320d55e929a72e52770",
+   "kind": "figure",
+   "pages": [
+    117
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/1",
+   "caption_text": [
+    "Figure 4-29,.—Circular tube wall of regeneratively cooled thrust chamber."
+   ],
+   "bbox": [
+    {
+     "l": 284.5737317633746,
+     "t": 623.0920026307235,
+     "r": 494.45279100283864,
+     "b": 409.01858004070203,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/26\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_e11d33d6c6d935f3c440a943",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p117-117-c1b32bec42fa90ef4c892c001bb7e64711a0ffab4777bac1da003a1b133024bf.json",
+   "raw_sha256": "d5687cfc19384e18fe5bd7148637dbf0eb2486677ae1344324a80561e2195623",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_73e342bf3870b1e9e4ca7c24",
+   "kind": "figure",
+   "pages": [
+    117
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/2",
+   "caption_text": [
+    "Figure 4-30.-Elongated tube wall of regeneratively cooled thrust chamber."
+   ],
+   "bbox": [
+    {
+     "l": 291.92763232341963,
+     "t": 355.5369828155841,
+     "r": 500.60918709562964,
+     "b": 136.40325755508036,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/37\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_e11d33d6c6d935f3c440a943",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p117-117-c1b32bec42fa90ef4c892c001bb7e64711a0ffab4777bac1da003a1b133024bf.json",
+   "raw_sha256": "d5687cfc19384e18fe5bd7148637dbf0eb2486677ae1344324a80561e2195623",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_ce73a5327503281656b657ec",
+   "kind": "figure",
+   "pages": [
+    117
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 218.76830319468598,
+     "t": 767.7495363572181,
+     "r": 353.8451250671287,
+     "b": 741.9270879527903,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_e11d33d6c6d935f3c440a943",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p117-117-c1b32bec42fa90ef4c892c001bb7e64711a0ffab4777bac1da003a1b133024bf.json",
+   "raw_sha256": "d5687cfc19384e18fe5bd7148637dbf0eb2486677ae1344324a80561e2195623",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_d45b71129f09864c299638fb",
+   "kind": "figure",
+   "pages": [
+    117
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/3",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 221.8608076699315,
+     "t": 79.28503317861384,
+     "r": 350.228203892185,
+     "b": 57.65637134232804,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_e11d33d6c6d935f3c440a943",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p117-117-c1b32bec42fa90ef4c892c001bb7e64711a0ffab4777bac1da003a1b133024bf.json",
+   "raw_sha256": "d5687cfc19384e18fe5bd7148637dbf0eb2486677ae1344324a80561e2195623",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_0930fdea5cf7c02e0820a39f",
+   "kind": "formula",
+   "pages": [
+    117
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/14",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 147.66666666666669,
+     "t": 386.33332333333334,
+     "r": 275.0,
+     "b": 376.99999,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "S _ { 1 } = E a \\, \\Delta T",
+   "original_text": "S, =EaAT (4-28)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_e11d33d6c6d935f3c440a943",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p117-117-c1b32bec42fa90ef4c892c001bb7e64711a0ffab4777bac1da003a1b133024bf.json",
+   "raw_sha256": "d5687cfc19384e18fe5bd7148637dbf0eb2486677ae1344324a80561e2195623",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_115da9f25e183e60e258ee96",
+   "kind": "formula",
+   "pages": [
+    117
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/20",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 109.66666666666666,
+     "t": 254.99999000000003,
+     "r": 275.0,
+     "b": 232.66665666666677,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "S _ { c } = \\frac { 4 \\, E _ { t } E _ { c } t } { ( \\sqrt { E _ { t } } \\, \\sqrt { E _ { c } } ) ^ { 2 } \\, \\sqrt { 3 \\, ( 1 - v ^ { 2 } ) } \\, \\tau } \\quad ( 4 \\cdot 2 9 )",
+   "original_text": "_ 4E:Ect . Se\" OR Ee)? B00) (#29)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_e11d33d6c6d935f3c440a943",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p117-117-c1b32bec42fa90ef4c892c001bb7e64711a0ffab4777bac1da003a1b133024bf.json",
+   "raw_sha256": "d5687cfc19384e18fe5bd7148637dbf0eb2486677ae1344324a80561e2195623",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_0d943487a01a0f496e02855c",
+   "kind": "figure",
+   "pages": [
+    118
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 262.88716628254144,
+     "t": 760.7143306732178,
+     "r": 395.2610634302118,
+     "b": 738.0953521728516,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_9302c4c1c3dab53cb71f10d3",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p118-118-fee81b58075645b9a7a72a13c739a98e228b7bae404bc64174197da8a8229689.json",
+   "raw_sha256": "0bd079af5b3737ab53f6b451849a56b3080a184479a8b022dcb0d24e9c2b1c09",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_cc0607c443b9c1e431493d49",
+   "kind": "figure",
+   "pages": [
+    118
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/1",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 259.4937240196016,
+     "t": 76.66302490234375,
+     "r": 398.2659619779946,
+     "b": 49.4642333984375,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_9302c4c1c3dab53cb71f10d3",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p118-118-fee81b58075645b9a7a72a13c739a98e228b7bae404bc64174197da8a8229689.json",
+   "raw_sha256": "0bd079af5b3737ab53f6b451849a56b3080a184479a8b022dcb0d24e9c2b1c09",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_66b6c735fb1326434dbf131a",
+   "kind": "formula",
+   "pages": [
+    118
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/28",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 410.6666666666667,
+     "t": 514.3333333333334,
+     "r": 547.3333333333333,
+     "b": 491.33333333333337,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\Delta p = t \\, \\frac { L } { d } \\, \\frac { \\rho V _ { \\text {co} } \\, ^ { 2 } } { 2 \\, g }",
+   "original_text": "L pVeo Ap=ta 2g (4-32)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_9302c4c1c3dab53cb71f10d3",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p118-118-fee81b58075645b9a7a72a13c739a98e228b7bae404bc64174197da8a8229689.json",
+   "raw_sha256": "0bd079af5b3737ab53f6b451849a56b3080a184479a8b022dcb0d24e9c2b1c09",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_d460ac9127200487d1332a63",
+   "kind": "formula",
+   "pages": [
+    118
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/2",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 175.66666666666669,
+     "t": 691.3333333333334,
+     "r": 317.33333333333337,
+     "b": 669.3333333333334,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "M _ { A } ^ { \\prime } = M _ { A } + K _ { A } \\frac { I \\Delta _ { P } } { 2 }",
+   "original_text": "; IAp M4=Ma +Ka-z(4-30)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_9302c4c1c3dab53cb71f10d3",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p118-118-fee81b58075645b9a7a72a13c739a98e228b7bae404bc64174197da8a8229689.json",
+   "raw_sha256": "0bd079af5b3737ab53f6b451849a56b3080a184479a8b022dcb0d24e9c2b1c09",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_fa887292cbd88bece2d9ccd9",
+   "kind": "formula",
+   "pages": [
+    118
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/8",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 155.33333333333334,
+     "t": 274.66666666666674,
+     "r": 316.0,
+     "b": 253.33333333333326,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "S _ { c } = \\frac { ( p _ { c o } - p _ { g } ) \\, R } { t } + \\frac { E a q t } { 2 \\, ( 1 - v ) \\, k } \\quad ( 4 - 3 1 )",
+   "original_text": "(Peo-Pg)R Eaqt Sex] taq-we (8D",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_9302c4c1c3dab53cb71f10d3",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p118-118-fee81b58075645b9a7a72a13c739a98e228b7bae404bc64174197da8a8229689.json",
+   "raw_sha256": "0bd079af5b3737ab53f6b451849a56b3080a184479a8b022dcb0d24e9c2b1c09",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [
+  {
+   "id": "VAL_NTRS_19710019929_7CA8B647",
+   "store": "validity",
+   "type": "ValidityEnvelope",
+   "page": 116,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "SP-125 exempts hydrogen coolant from this below-critical-temperature capacity limitation, because hydrogen retains effective heat transfer at supercritical pressure and temperature.",
+   "quote": "However there is no buch limitation for h drogen when u ed as a coolant.",
+   "confidence": null,
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 116
+    }
+   ]
+  },
+  {
+   "id": "VAL_NTRS_19710019929_F8B11D11",
+   "store": "validity",
+   "type": "ValidityEnvelope",
+   "page": 116,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "For the Eq.4-26 liquid-state coolant capacity estimate, the total chamber-wall gas heat-transfer rate Q should be below Q_c by a safe margin; no numerical margin is specified.",
+   "quote": "heat-transfel rate Q should be kept below _Qc_ by a afe filar in",
+   "confidence": null,
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 116
+    }
+   ]
+  }
+ ],
+ "missing_targets": [],
+ "model_targets": [
+  "MODEL_STRUCTURE_SP125_LINER_STRESS"
+ ],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_NTRS_19710019929#c00273",
+   "page_start": 115,
+   "page_end": 116,
+   "section": "MAIN PROPELLANT",
+   "text": "coolants)\n_Nu_ = Nusselt _number=hedlk_\n_Re_ = Reynolds _number=pVeodlJI_\nP r = Prandtl number = _JIC pi k_\n\n_JI_ = coolant viscosity at bulk temperature\n\nDESIGN OF THRUST CHAMBERS :\\ND OrHER COMBUSTION DEVICES 107\n\ntransfer calculatIOn. Ther3 are several basic\ndesign approaches for regenerative-cooled thrust\nchambers. Axial-flow cooling jackets, made up\nof tubes, are us\"'d in the design of large thrust\nchambers (3000 pounds of thrust and up); coa:.ial\nshells separated by helical ribs or wires are\ntypical of the smaller thrust chamber designs.\n\nFigure 4-1 shows a lal'ee regenerative cooled\ntubular wall thrusc chamber. Figure 4-28 represents a typif'al co!txial shell desir,D for a smaller\nthrust chamber.\n\nIn thi design, the coolant p ssage is defined\nas the rectan 'ul ar area between inner and outer\nsh('ll and two a,iacent ribs, wh ' h are wrapped\nhelically around the inner shell or liner .\n\nTubular Wall Thrust Cbamoer Desig]1.\n\n_Figure_ _4-2B.-Coaxial_ _::;hell_ _t.'lrust chamber cuta-_\n\nway. _Note overheated and burnt.-throllgh_ _spot_\n_nn_ _clianJber_ w~. l1 .\n\nwhere\n\n_Q_ c = coolant capacity, E:u/ sec\nwe = cool a. t mas now rate, lb/ sec\n\nC p = C00lant .~gecific i1eat at 00nstant pres\n\nsure. Btu/ lb-deg F\nTee = c )olant critical temperature, deg R\n_'T_ ci = coolant inlet temperature, deg R\nThe allowed value of the total charr;ber wall gas\nheat-transfel rate Q should be kept below _Qc_ by\na afe filar in _(Q_ _Qc)·_"
+  },
+  {
+   "chunk_id": "DOC_NTRS_19710019929#c00274",
+   "page_start": 116,
+   "page_end": 116,
+   "section": "MAIN PROPELLANT",
+   "text": "However there is no buch limitation for h drogen when u ed as a coolant. Hydro en has\nexcellent heat-tran fer characteristics with a\nrea onabl ltigh heat-tran fer co ffic .. e t even in\nthe supercritical pr s ure and temperature region.\nUsually liquid hydrogen enters the cham r 0001nt pa sa under superc:-ritical pressur and\nreacltcls up r ritical t mp rature a short dis\ntance fro'll the inlet.\n\nTh~ 001 Dt pas ... 0 area at various points\nalon the chamber walls are designed to waintain\nthe proper oolant velocity dictated by the heattran fer 0 fficients determined by the heat\n\nIn the design of tubular wall thrust ch mbers,\nthe number of coolant tubes required :s a fU!~c­\ntion of the chamber geometry, the coolant weight\nflow rate per unit tube :....ea, the maximum allowable tube wall stress, and fabrication eonsiderations, The critical cooling region i near the\nthroat where the heat flux is 'lighest. I is this\nregicn,,hen, which determines the Gumhel' of\ntubf;s required for a given coc1ant flow rate . For\neasier fabrication and lower st\\'es~ . tuoo cross\nsections of cir 'ular shape re vreferred. However, other shapes are often u;3t!d to meet certain\nfl0'w-area requjrements . The Ell ss analysis of\nthe tubes is based upon three primary (;ons'derations: the hoop stress caused by coolant pressure, the thermal tress caused by temperatur9\ngradient across the tube section and the wall,\nand the bendmg stre s caus d by Jistortion ind ced by the pressure differe tial between adjacent tulJes (if any) or by other effects such as\ndiscontinuities. The tube desi n tress is based\non the combined strt3SS from tile above three con\nsiderations. It has ~ en found that the maximum\ncombined stress will 0 'cur at the throat region."
+  },
+  {
+   "chunk_id": "DOC_NTRS_19710019929#c00275",
+   "page_start": 116,
+   "page_end": 116,
+   "section": "MAIN PROPELLANT",
+   "text": "As ohown in figure 4-29, the m~ximum combined tdngential stresses of the clrcular-tube\nwill be at ection A-A and can be expressed by\n\ntance fro'll the inlet.\n\n<sup>_Pg)_</sup> <sup>r</sup>\nS t - <sup>_ (Pco -</sup> _t_ (4-27)\n\nwhere\n\nSt = comt\"ned angential tensile ' res, Ib/ in 2"
+  },
+  {
+   "chunk_id": "DOC_NTRS_19710019929#c00276",
+   "page_start": 117,
+   "page_end": 117,
+   "section": "MAIN PROPELLANT",
+   "text": "108 DESIGN OF LIQUID PROPELLANT ROCKET ENGINES\n\n_q_ = heat nux, Btulin <sup>2</sup> -sec\nr =tube radius. in\n=tube wall thickness, in\nPeo = coolant pressure, lblin 2\n_Pg_ =combustion gas pressure, lb/in <sup>2</sup>\n_E_ = modulus of elasticity of tube wall mate\n\nrial, lb/in 2\na = thermal expansion coefficient of tube wall\n\nmaterial. inlin-deg F\n_k_ = thermal conductivity of tube wall material,\n\nand (4-29) can be also applied to calculate the\nstresses for this design. Here again the maximum combined stress is at section A. The bending moment at section A, _M_ _A,_ should take into\nconsideration the pressure differential (if any)\nbetween adjacent tubes.\n\nBtulin 2- sec-deg F lin\n_v_ = Poisson's ratio of tube wall material\n_M A_ = bending moment caused by discontinuity,\n\nin-lblin (no effect of pressure differential between adjacent tubes for circular\ntube design)\nSince the combustion-gas-side portion of the tube\n(zone I) has a much higher mean temperature than\nthat of the back side tube portion and chamber\nouter shell (zone II), the thermal expansion of\n\nzone I will be restrained by zone II. Because of\nthe considerably greater mass of zone II, thermal\ninelastic buckling is induced under certain conditions, in zone I, in the longitudinal direction.\nThe longitudinal thermal stress can be estimated\nby\n\nIt\n\nTHRUST CHAMBER\n\nEQU/V. CHAMBER\nINTERNAL / RAD.\n\n(4-28)\n\n_Figure_ 4-29. _-Circular tube wall_ of _regeneratively_"
+  },
+  {
+   "chunk_id": "DOC_NTRS_19710019929#c00277",
+   "page_start": 117,
+   "page_end": 117,
+   "section": "MAIN PROPELLANT",
+   "text": "_cooled thrust chamber._\n\nCHAMBER\nJACKET\n\nwhere\n\nSI = longitudinal thermal stress, Iblin <sup>2</sup>\n\n_t\\_ _T_ = mean temperature difference between zone\n\nI and zone II, deg F\nS I should be kept at a level not higher than\n\n_0.9 Sc,_ below.\nThe critical stress for longitudinal inelastic\nbuckling on zone I can be estimated by\n\nS - _4Er_ <sup>_E_</sup> _c_ <sup>_t_</sup> ( 4-29)\nc - (VEt ..,,; _E_ c ) 2 \\/3 (1 - _V_ 2) r\n\nEQUIVALENT CHAMBER\n_Y_ INTERNAL RADIUS\n\n_t_\nTHRUST CHAMBER\n\nwhere\n\nSc = critical stress for longitudinal inelastiC\n\nbuckling in zone I, lblin <sup>2</sup>\n\n_Er_ = tangential modulus of elasticity at wall\n\nbuckling in zone I, lblin <sup>2</sup>\n\ntemperature, Iblin 2\n_E_ c = t.angential modulus of elasticity from com\n\npression stress-strain curve, at wall\ntemperature, lb/in 2\nAn elongated cross section tube design is\nshown in figure 4-30. Equations (4-27), (4-28),\n\n_Figure_ _4-30.-Elongated_ _tube_ _wall_ of _regenera-_\n\n_tively_ _cooled thrust chamber._"
+  },
+  {
+   "chunk_id": "DOC_NTRS_19710019929#c00278",
+   "page_start": 118,
+   "page_end": 118,
+   "section": "MAIN PROPELLANT",
+   "text": "DESIGN OF THRUST CHAMBERS AND OTHER COMBUSTION DEVICES 109\n\n_k_ = thermal conductivity of inner shell mate\nrial, Btulin 2-sec-deg F lin\n_v_ = Poisson's ratio of inner shell material\n\nPressure Drop in Cooling Passages\n\nIt is desirable to design a cooling passage\nwith minimum pressure drop. Abrupt change of\nnow direction and sudden expansion or contraction of now areas should be avoided. The inner\nsurface of cooling passages should be smooth\nand clean. The pressure drop in a cooling pas\nsage can be treated as that in a hydraulic conduit and be calculated accordingly.\n\nv: 2\nt'.\\ =[!::.~ ( 4-32)\np d _2g_\n\nwhere\n\n_MA_ = combined bending moment at section A,\n\nin-Iblin\n_MA_ = bending moment due to discontinuity\n_KA_ = dimensionless design constant based on\n\ntest results (range 0.3-0.5)\n= length of nat portion on tube wall, in\nt'.\\ p = pressure differential between adjacent\n\ntubes,lblin <sup>2</sup>\n\nSubstituting equation (4-30) into equation (4-27),\nthe maximum stress of the elongated tube can be\ncalculated.\n\nThe working loads induced in a regenerative\ntubular wall chamber by the chamber pressure are\ndesigned to be absorbed by a chamber jacket or\ntension bands wrapped around the tube bundle.\n\nwhere\n\nCoaxial Shell Thrust Chamber Design\n\nIn a coaxial-sheIl-type thrust chamber as\nshown in figure 4-28, the outer shell is subjected only to the hoop stress induced by the\ncoolant pressure. The inner shell, however, is\nsubjected to the combination of compressive\nstress caused by the pressure differential between the coolant and combustion gases, and of\nthe thermal stress caused by the temperature\ngradient across the wall. The maximum stress\noccurs at the inner-wall surface of the inner\nshell and can be calculated from the following\nequation."
+  },
+  {
+   "chunk_id": "DOC_NTRS_19710019929#c00279",
+   "page_start": 118,
+   "page_end": 118,
+   "section": "MAIN PROPELLANT",
+   "text": "(Pea - _Pg) R_ _Eaqt_\n( 4-31)\nSc = _t_ + 2 (1       - _v) k_\n\n_Sample Calculation_ (4-4)\n\nDetermine the cooling passage and the tube\ndesign at the throat for the thrust chambers of\nthe A-1 and A-2 stage engi-nes.\n\n_Solution_\n\n(!) _A-l_ _Stage Engine_\nThe fuel, RP-l, is used as the coolant. Since\nthe cooling requirement is most stringent at the\nthroat, the tube design for this station will serve\nas the starting point for the entire chamber. For\nhigh strength, Inconel X is chosen as the tube\n\nt'.\\p = coolant pressure drop through the portion\n\nof cooling passage under consideration,\nlb/in 2\nL = length of that portion, in\nd = equi valent average diameter of that por\n\ntion, in\n_p_ = average density of the coolant, lblin 3\n_Vea_ = average coolant now velocity, in/sec\n_g_ =mass conversion factor, equal to gravita\ntional constant, 32.2x 12 in/sec <sup>2</sup>\n\n[ = friction loss coefficient, which is a func\n\ntion of the Reynolds number, and of\ncooling passage conditions such as\nsurface smoothness, geometric shape,\netc. This can be determined only experimentally (also see fig. 7-20 and\ntable 7-3)\n\nwhere\n\nSc = combined maximum compressive stress,\n\nlb/in 2\n_q_ =heat nux, Btulin <sup>2</sup> -sec\n_R_ = radius of the inner shell, in\n\n= thickness of the inner shell, in\nPea = coolant pressure, lblin 2\n_Pg_ = combustion gas pressure, Ib/in <sup>2</sup>\n\n_E_ = modulus of elasticity of inner shell mate"
+  },
+  {
+   "chunk_id": "DOC_NTRS_19710019929#c00280",
+   "page_start": 118,
+   "page_end": 119,
+   "section": "MAIN PROPELLANT",
+   "text": "rial, lb/in 2\na =thermal expansion coefficient of inner\n\nshell material, inlin-deg F\n\n**WI.**\n\n110 **DESIGN OF** LIQUID **PROPELLANT** **a-_** **ROCKET ENGINES**\n\nmaterial. Based on experimental test results\nwhich showed good solid carbon deposits, design\nvalues not exceeding 1000 <sup>0</sup> For 1460 <sup>0</sup> R may be\npermitted for gas-side tube-wall temperature.\nSpecifically for the throat region, a _T_ wg value of\n\n1188 <sup>0</sup> R is taken. Using the results of sample\ncalculation 4-3, the value for the adiabatic wall\ntemperature _Taw_ can be calculated by multiplying _(T_ ch s by the estimated stagnation recovery\nfactor of 0.923, (. Taw =6140 x O.923=5667°R.\n\nFrom the same caleulation, the overall gas-side\nthermal conductance at the throat region is\n_hgc_ =0.00067 Btulin <sup>2</sup> -sec-deg F. Substitute into\nequation (4-10), to obtain the heat nux at the\nthroat:\n\n_q_ = (5667 - 11 88) x 0.00067 = 3.00 Btulin 2-sec\n\nFrom supplier's specifications, the following\naverage data are obtained for Inconel X at 1000 <sup>0</sup>\n\n1200 <sup>0</sup> R: Coefficient for thermal expansion,\na = 8 x 10- <sup>6</sup> in/in-deg F; modulus of elasticity,\n_E=28x10_ <sup>_6_</sup> psi; thermal conductivity, _k=3.19_\nx 10- <sup>4</sup> Btulin <sup>2</sup> -deg F/in; Poisson's ratio,\n_v=0.35._\n\nA circular tube configuration with an internal\ndiameter _d_ and a wall thickness _t_ of 0.020 inch\nis used. The assumption for thickness is to be\nverified by heat transfer and stress calculations.\nFrom equation (4-19), the coolant side wall temperature then is;"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "figure": 8,
+   "formula": 6
+  },
+  "flagged_candidates": 0,
+  "target_objects": 0,
+  "objects_with_anchor_problems": 0
+ }
+}

@@ -1,0 +1,45 @@
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern,microtype}
+\usepackage[margin=0.85in,headheight=15pt,headsep=18pt,footskip=25pt]{geometry}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{booktabs,longtable,array,tabularx}
+\usepackage{xcolor,graphicx,float}
+\usepackage[font=small,labelfont={bf,sf},labelsep=period]{caption}
+\usepackage{xurl}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,fit,calc,shapes.geometric,decorations.pathmorphing}
+\usepackage{enumitem,needspace}
+\usepackage{titlesec,fancyhdr,lastpage}
+\usepackage{listings}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage[colorlinks=true,linkcolor=teal,citecolor=teal,urlcolor=teal]{hyperref}
+\definecolor{ink}{HTML}{19333C}
+\definecolor{teal}{HTML}{176D76}
+\definecolor{muted}{HTML}{51616B}
+\definecolor{pale}{HTML}{EEF4F5}
+\definecolor{accent}{HTML}{C26A2E}
+\definecolor{warnpale}{HTML}{FBF1EA}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\footnotesize\sffamily\color{muted}RaoRocketSim / MOC solver extensions plan}
+\fancyhead[R]{\footnotesize\sffamily\color{muted}21 November 2026}
+\fancyfoot[R]{\footnotesize\sffamily\color{muted}\thepage\ / \pageref*{LastPage}}
+\renewcommand{\headrulewidth}{0.3pt}
+\titleformat{\section}{\Large\sffamily\bfseries\color{ink}}{\thesection}{0.7em}{}
+\titleformat{\subsection}{\large\sffamily\bfseries\color{teal}}{\thesubsection}{0.6em}{}
+\titleformat{\subsubsection}{\normalsize\sffamily\bfseries\color{ink}}{\thesubsubsection}{0.6em}{}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\setlength{\emergencystretch}{2em}
+\renewcommand{\arraystretch}{1.15}
+\setlist{itemsep=3pt,topsep=4pt,leftmargin=1.6em}
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcommand{\code}[1]{{\small\path{#1}}}
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\Rt}{R_t}
+\newcommand{\decision}[1]{\par\medskip\noindent\begingroup\setlength{\fboxsep}{9pt}\colorbox{pale}{\parbox{\dimexpr\linewidth-18pt\relax}{#1}}\endgroup\par\medskip}
+\newcommand{\caution}[1]{\par\medskip\noindent\begingroup\setlength{\fboxsep}{9pt}\colorbox{warnpale}{\parbox{\dimexpr\linewidth-18pt\relax}{\sffamily\bfseries\color{accent}Caution. \normalfont\rmfamily\color{black}#1}}\endgroup\par\medskip}
+\newcommand{\buildfig}[4]{\begin{figure}[htbp]\centering\includegraphics[width=#3\linewidth,keepaspectratio]{#1}\caption{#2}\label{#4}\end{figure}}
+\lstset{basicstyle=\ttfamily\footnotesize,breaklines=true,columns=fullflexible,keepspaces=true,showstringspaces=false,backgroundcolor=\color{pale},frame=none,xleftmargin=6pt,xrightmargin=6pt}
+\numberwithin{equation}{section}

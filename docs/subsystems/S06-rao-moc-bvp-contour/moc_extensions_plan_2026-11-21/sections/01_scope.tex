@@ -1,0 +1,86 @@
+\section{Scope and terms}
+\label{sec:scope}
+The plan covers four primary gaps: G1, variable-gas thermodynamics; G2, shock fitting;
+G3, viscous interaction and separation; and G4, a general differentiable forward-wall
+net. It also covers the items the MOC audit logbook left open: the transonic start
+line (MOC-08/09), the exact-axis limit (MOC-14), an independent reference and accuracy
+envelope (MOC-15), the Young source-term discrepancy, the LEA/TOP length failures and
+the optimiser architecture (ARCH). Each gap section gives equations with page sources,
+compares approaches, chooses one and lists milestones with three acceptance columns;
+Section~\ref{sec:experiments} reports the experiments.
+
+\begingroup\footnotesize
+\setlength{\parskip}{1.5pt}\setlength{\columnsep}{14pt}
+\begin{multicols}{2}\raggedright
+\textbf{Flow and geometry.}
+\begin{itemize}
+\item \textbf{Q1D:} quasi-one-dimensional isentropic relations, which the engine
+optimiser (MDO) uses to close thrust and throat size.
+\item \textbf{TOP/B\'ezier:} the default bell, a $0.382R_t$ throat arc ending at the
+inflection point N at $\theta_N$, then a quadratic B\'ezier to the exit E at
+$\theta_E$, with angles from the SP-125 chart.
+\item \textbf{LEA:} the LEA\_TOP benchmark case of Schomberg et al.\ \cite{schomberg2019}.
+\item \textbf{Nozzle-B:} Rao's example, with $\gamma=1.23$, $\epsilon=4.973$ and length
+$2.94R_t$ \cite[PDF pp.~2--5, printed pp.~378--381]{rao1958}. Rao used a $0.45R_t$
+arc and a Sauer start; the repository variant uses $R_u=1.5R_t$, $R_d=0.382R_t$ and
+a KL start line.
+\end{itemize}
+
+\textbf{Characteristic net.}
+\begin{itemize}
+\item \textbf{RRC, LRC:} right-running ($C^-$) and left-running ($C^+$)
+characteristics. The forward net marches RRC rows from the wall to the axis.
+\item \textbf{Kernel, B, BD:} the expansion region between the start line and BD, the
+last RRC leaving the end B of the throat arc.
+\item \textbf{Raw and special rows:} a raw kernel row places its wall point where a
+$C^+$ meets the arc; a special row inserts one at a limited turning step.
+\item \textbf{Kernel capacity:} the maximum number of kernel rows.
+\item \textbf{BDE, BVP:} Rao's inverse construction, a control surface DE (a $C^+$ from
+D on BD to the exit lip E) with the wall built backward, solved as a boundary-value
+problem.
+\item \textbf{D/E attachment:} the opt-in exact elimination of the D state and of E
+from the BVP unknowns.
+\item \textbf{Seed controls:} the kernel-angle search that seeds the BVP.
+\item \textbf{Fold:} a reversed characteristic cell, i.e.\ same-family characteristics
+crossing; the march stops.
+\end{itemize}
+
+\textbf{Start line.}
+\begin{itemize}
+\item \textbf{Start line, KL:} transonic initial data from the Kliegel--Levine
+third-order series in $1/(1+R_c/R_t)$.
+\item \textbf{$M_{\min}$ push:} moving a start-line point downstream until it reaches
+$M\ge1.05$.
+\item \textbf{Spacelike margin:} the angle between the start line and the nearest
+local characteristic.
+\item \textbf{KL-V0 to KL-V3:} the start-line variants of Section~\ref{sec:kl}.
+\item \textbf{D-K0-BVP:} the deferred corrected-start-line Nozzle-B re-solve (D10).
+\end{itemize}
+
+\textbf{Experiments and benchmarks.}
+\begin{itemize}
+\item \textbf{t19 pair, band:} the accepted 32/48 versus 48/64 Nozzle-B refinement
+pair (logbook Iteration 19) and its differences.
+\item \textbf{Gates:} the logbook's eleven physical and topology checks of a BVP
+solution, such as $C^\pm$ compatibility, no crossings, wall tangency, the axis and
+seams, and mass closure.
+\item \textbf{Field coverage:} the fraction of one mesh's nodes inside the other's
+hull.
+\item \textbf{t01:} the logbook Iteration-01 fold runs on the $\epsilon=10$, 80\,\% TOP
+bell.
+\item \textbf{$J_1$--$J_3$:} the E12 outputs, namely the BD mass flow, the Mach number
+at B and the axial station of the BD axis point.
+\end{itemize}
+
+\textbf{Tools and acronyms.}
+\begin{itemize}
+\item \textbf{TDK:} NASA's Two-Dimensional Kinetics nozzle program \cite{nickerson1985}.
+\item \textbf{BLM:} TDK's boundary-layer module.
+\item \textbf{$\eta_{\mathrm{DER}}$:} TDK's empirical efficiency factor in delivered
+$I_{sp}$.
+\item \textbf{FSS, RSS:} free and restricted shock separation.
+\item \textbf{NPR:} the nozzle pressure ratio $p_0/p_a$.
+\item \textbf{GCI:} the grid convergence index \cite{celik2008}.
+\end{itemize}
+\end{multicols}
+\endgroup

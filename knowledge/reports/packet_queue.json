@@ -1066,10 +1066,17 @@
    "priority": 90,
    "reason": "independent original-page verification of pending September extraction objects: altitude/flow adaptation claims",
    "dependencies": [],
-   "state": "QUEUED",
-   "attempts": 0,
+   "state": "CANDIDATES_PREPARED",
+   "attempts": 1,
    "created_at": "2026-10-16T18:46:25.460616+00:00",
-   "evidence": {},
+   "evidence": {
+    "docling_run_ids": [
+     "ENR_070919b32e000c5e4b45a0fb"
+    ],
+    "candidate_bundles": {
+     "knowledge/workflows/results/agentic-2026-10-16/candidates/V-HAG-p001.json": "a8a081c15cdbe48622357dcae7edbfde12b3709e7d3b68b00711bcfaf81dc9ce"
+    }
+   },
    "history": [
     {
      "from": null,
@@ -1078,8 +1085,45 @@
      "model": "claude-opus-5-5 (Opus F, main session)",
      "at": "2026-10-16T18:46:25.460619+00:00",
      "note": "independent original-page verification of pending September extraction objects: altitude/flow adaptation claims"
+    },
+    {
+     "from": "QUEUED",
+     "to": "DOCLING_RUNNING",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T18:34:13.241972+00:00",
+     "note": "S1 start",
+     "evidence": {},
+     "attempt": 1
+    },
+    {
+     "from": "DOCLING_RUNNING",
+     "to": "RAW_CAPTURED",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T18:34:27.444586+00:00",
+     "note": "Docling whole-page runs cover pages 1-1",
+     "evidence": {},
+     "run_ids": [
+      "ENR_070919b32e000c5e4b45a0fb"
+     ],
+     "observed_pages": [
+      1
+     ]
+    },
+    {
+     "from": "RAW_CAPTURED",
+     "to": "CANDIDATES_PREPARED",
+     "role": "S2",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T18:34:29.537645+00:00",
+     "note": "{\"candidates_by_kind\": {}, \"flagged_candidates\": 0, \"target_objects\": 2, \"objects_with_anchor_problems\": 0}",
+     "evidence": {
+      "knowledge/workflows/results/agentic-2026-10-16/candidates/V-HAG-p001.json": "a8a081c15cdbe48622357dcae7edbfde12b3709e7d3b68b00711bcfaf81dc9ce"
+     }
     }
-   ]
+   ],
+   "updated_at": "2026-10-17T18:34:29.537645+00:00"
   },
   "V-HAG-p003-005": {
    "id": "V-HAG-p003-005",
@@ -1115,10 +1159,19 @@
    "priority": 89,
    "reason": "independent original-page verification of pending September extraction objects: separation/side-load/dual-bell claims",
    "dependencies": [],
-   "state": "QUEUED",
-   "attempts": 0,
+   "state": "CANDIDATES_PREPARED",
+   "attempts": 1,
    "created_at": "2026-10-16T18:46:25.466277+00:00",
-   "evidence": {},
+   "evidence": {
+    "docling_run_ids": [
+     "ENR_2b3d3efac8aac784df77ebd7",
+     "ENR_657275d10f37b6b6d51721b6",
+     "ENR_8026d5d1c782534408225ec8"
+    ],
+    "candidate_bundles": {
+     "knowledge/workflows/results/agentic-2026-10-16/candidates/V-HAG-p003-005.json": "3f6d5bfdecaac84d87c587f138072e461dfc76557a377ef852979400634be5aa"
+    }
+   },
    "history": [
     {
      "from": null,
@@ -1127,8 +1180,49 @@
      "model": "claude-opus-5-5 (Opus F, main session)",
      "at": "2026-10-16T18:46:25.466283+00:00",
      "note": "independent original-page verification of pending September extraction objects: separation/side-load/dual-bell claims"
+    },
+    {
+     "from": "QUEUED",
+     "to": "DOCLING_RUNNING",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T18:34:57.389070+00:00",
+     "note": "S1 start",
+     "evidence": {},
+     "attempt": 1
+    },
+    {
+     "from": "DOCLING_RUNNING",
+     "to": "RAW_CAPTURED",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T18:36:07.477980+00:00",
+     "note": "Docling whole-page runs cover pages 3-5",
+     "evidence": {},
+     "run_ids": [
+      "ENR_2b3d3efac8aac784df77ebd7",
+      "ENR_657275d10f37b6b6d51721b6",
+      "ENR_8026d5d1c782534408225ec8"
+     ],
+     "observed_pages": [
+      3,
+      4,
+      5
+     ]
+    },
+    {
+     "from": "RAW_CAPTURED",
+     "to": "CANDIDATES_PREPARED",
+     "role": "S2",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T18:36:10.455980+00:00",
+     "note": "{\"candidates_by_kind\": {\"figure\": 6}, \"flagged_candidates\": 0, \"target_objects\": 19, \"objects_with_anchor_problems\": 0}",
+     "evidence": {
+      "knowledge/workflows/results/agentic-2026-10-16/candidates/V-HAG-p003-005.json": "3f6d5bfdecaac84d87c587f138072e461dfc76557a377ef852979400634be5aa"
+     }
     }
-   ]
+   ],
+   "updated_at": "2026-10-17T18:36:10.455980+00:00"
   },
   "V-WHITE-p822": {
    "id": "V-WHITE-p822",
@@ -1147,10 +1241,17 @@
    "priority": 80,
    "reason": "independent original-page verification of pending September extraction objects: boundary-layer thickness claims",
    "dependencies": [],
-   "state": "QUEUED",
-   "attempts": 0,
+   "state": "CANDIDATES_PREPARED",
+   "attempts": 1,
    "created_at": "2026-10-16T18:46:25.471719+00:00",
-   "evidence": {},
+   "evidence": {
+    "docling_run_ids": [
+     "ENR_92dedf165cb3d85f32832b79"
+    ],
+    "candidate_bundles": {
+     "knowledge/workflows/results/agentic-2026-10-16/candidates/V-WHITE-p822.json": "457d9aeab34c67485bdae825a8ae639592056bf9d8db696a06f1d7dcba5010a1"
+    }
+   },
    "history": [
     {
      "from": null,
@@ -1159,8 +1260,45 @@
      "model": "claude-opus-5-5 (Opus F, main session)",
      "at": "2026-10-16T18:46:25.471722+00:00",
      "note": "independent original-page verification of pending September extraction objects: boundary-layer thickness claims"
+    },
+    {
+     "from": "QUEUED",
+     "to": "DOCLING_RUNNING",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T18:43:43.768298+00:00",
+     "note": "S1 start",
+     "evidence": {},
+     "attempt": 1
+    },
+    {
+     "from": "DOCLING_RUNNING",
+     "to": "RAW_CAPTURED",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T18:43:59.672628+00:00",
+     "note": "Docling whole-page runs cover pages 822-822",
+     "evidence": {},
+     "run_ids": [
+      "ENR_92dedf165cb3d85f32832b79"
+     ],
+     "observed_pages": [
+      822
+     ]
+    },
+    {
+     "from": "RAW_CAPTURED",
+     "to": "CANDIDATES_PREPARED",
+     "role": "S2",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T18:44:02.755367+00:00",
+     "note": "{\"candidates_by_kind\": {\"figure\": 2}, \"flagged_candidates\": 0, \"target_objects\": 2, \"objects_with_anchor_problems\": 0}",
+     "evidence": {
+      "knowledge/workflows/results/agentic-2026-10-16/candidates/V-WHITE-p822.json": "457d9aeab34c67485bdae825a8ae639592056bf9d8db696a06f1d7dcba5010a1"
+     }
     }
-   ]
+   ],
+   "updated_at": "2026-10-17T18:44:02.755367+00:00"
   },
   "V-WHITE-p826-829": {
    "id": "V-WHITE-p826-829",
@@ -1185,10 +1323,20 @@
    "priority": 79,
    "reason": "independent original-page verification of pending September extraction objects: momentum integral and displacement-thickness claims",
    "dependencies": [],
-   "state": "QUEUED",
-   "attempts": 0,
+   "state": "CANDIDATES_PREPARED",
+   "attempts": 1,
    "created_at": "2026-10-16T18:46:25.477627+00:00",
-   "evidence": {},
+   "evidence": {
+    "docling_run_ids": [
+     "ENR_249c26a5c8619a7be8359916",
+     "ENR_55fe16b04e8f36d6954bf085",
+     "ENR_90345549297146439162a09e",
+     "ENR_bc5f860c657231530f31e644"
+    ],
+    "candidate_bundles": {
+     "knowledge/workflows/results/agentic-2026-10-16/candidates/V-WHITE-p826-829.json": "5d57d8d5b9ccc2f5fca56398e37e838f8bc7fb3e176bfe570bba6ac6ff891eca"
+    }
+   },
    "history": [
     {
      "from": null,
@@ -1197,8 +1345,51 @@
      "model": "claude-opus-5-5 (Opus F, main session)",
      "at": "2026-10-16T18:46:25.477631+00:00",
      "note": "independent original-page verification of pending September extraction objects: momentum integral and displacement-thickness claims"
+    },
+    {
+     "from": "QUEUED",
+     "to": "DOCLING_RUNNING",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T18:44:21.794047+00:00",
+     "note": "S1 start",
+     "evidence": {},
+     "attempt": 1
+    },
+    {
+     "from": "DOCLING_RUNNING",
+     "to": "RAW_CAPTURED",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T18:55:05.853391+00:00",
+     "note": "Docling whole-page runs cover pages 826-829",
+     "evidence": {},
+     "run_ids": [
+      "ENR_249c26a5c8619a7be8359916",
+      "ENR_55fe16b04e8f36d6954bf085",
+      "ENR_90345549297146439162a09e",
+      "ENR_bc5f860c657231530f31e644"
+     ],
+     "observed_pages": [
+      826,
+      827,
+      828,
+      829
+     ]
+    },
+    {
+     "from": "RAW_CAPTURED",
+     "to": "CANDIDATES_PREPARED",
+     "role": "S2",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T18:55:09.725449+00:00",
+     "note": "{\"candidates_by_kind\": {\"figure\": 2, \"formula\": 13}, \"flagged_candidates\": 0, \"target_objects\": 8, \"objects_with_anchor_problems\": 0}",
+     "evidence": {
+      "knowledge/workflows/results/agentic-2026-10-16/candidates/V-WHITE-p826-829.json": "5d57d8d5b9ccc2f5fca56398e37e838f8bc7fb3e176bfe570bba6ac6ff891eca"
+     }
     }
-   ]
+   ],
+   "updated_at": "2026-10-17T18:55:09.725449+00:00"
   },
   "V-WHITE-p837-839": {
    "id": "V-WHITE-p837-839",
@@ -1217,10 +1408,19 @@
    "priority": 78,
    "reason": "independent original-page verification of pending September extraction objects: transition and turbulent flat-plate claims",
    "dependencies": [],
-   "state": "QUEUED",
-   "attempts": 0,
+   "state": "CANDIDATES_PREPARED",
+   "attempts": 1,
    "created_at": "2026-10-16T18:46:25.483820+00:00",
-   "evidence": {},
+   "evidence": {
+    "docling_run_ids": [
+     "ENR_7930506e96e818ed6c7b77c5",
+     "ENR_7d26ccf7e77082518b1cf1e2",
+     "ENR_a659d20b2dbecc53eb3d9963"
+    ],
+    "candidate_bundles": {
+     "knowledge/workflows/results/agentic-2026-10-16/candidates/V-WHITE-p837-839.json": "81a48c869f4e861fb5bf09017ebb11464bce702ae328919703a57b7e7da4a4fa"
+    }
+   },
    "history": [
     {
      "from": null,
@@ -1229,8 +1429,49 @@
      "model": "claude-opus-5-5 (Opus F, main session)",
      "at": "2026-10-16T18:46:25.483827+00:00",
      "note": "independent original-page verification of pending September extraction objects: transition and turbulent flat-plate claims"
+    },
+    {
+     "from": "QUEUED",
+     "to": "DOCLING_RUNNING",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T18:55:35.980214+00:00",
+     "note": "S1 start",
+     "evidence": {},
+     "attempt": 1
+    },
+    {
+     "from": "DOCLING_RUNNING",
+     "to": "RAW_CAPTURED",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T19:01:45.905603+00:00",
+     "note": "Docling whole-page runs cover pages 837-839",
+     "evidence": {},
+     "run_ids": [
+      "ENR_7930506e96e818ed6c7b77c5",
+      "ENR_7d26ccf7e77082518b1cf1e2",
+      "ENR_a659d20b2dbecc53eb3d9963"
+     ],
+     "observed_pages": [
+      837,
+      838,
+      839
+     ]
+    },
+    {
+     "from": "RAW_CAPTURED",
+     "to": "CANDIDATES_PREPARED",
+     "role": "S2",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T19:01:48.336620+00:00",
+     "note": "{\"candidates_by_kind\": {\"figure\": 3, \"formula\": 10}, \"flagged_candidates\": 2, \"target_objects\": 2, \"objects_with_anchor_problems\": 0}",
+     "evidence": {
+      "knowledge/workflows/results/agentic-2026-10-16/candidates/V-WHITE-p837-839.json": "81a48c869f4e861fb5bf09017ebb11464bce702ae328919703a57b7e7da4a4fa"
+     }
     }
-   ]
+   ],
+   "updated_at": "2026-10-17T19:01:48.336620+00:00"
   },
   "V-WHITE-p841-843": {
    "id": "V-WHITE-p841-843",
@@ -1254,10 +1495,18 @@
    "priority": 77,
    "reason": "independent original-page verification of pending September extraction objects: one-seventh-power law and drag claims",
    "dependencies": [],
-   "state": "QUEUED",
-   "attempts": 0,
+   "state": "CANDIDATES_PREPARED",
+   "attempts": 1,
    "created_at": "2026-10-16T18:46:25.489426+00:00",
-   "evidence": {},
+   "evidence": {
+    "docling_run_ids": [
+     "ENR_da82899ecd87eda6b2a58731",
+     "ENR_e86e8a556fd5853c8cfc36d3"
+    ],
+    "candidate_bundles": {
+     "knowledge/workflows/results/agentic-2026-10-16/candidates/V-WHITE-p841-843.json": "1e06e160cad7759b3175d59c5a503d7d3219cc49f0115232c5a8df33aef009b9"
+    }
+   },
    "history": [
     {
      "from": null,
@@ -1266,8 +1515,51 @@
      "model": "claude-opus-5-5 (Opus F, main session)",
      "at": "2026-10-16T18:46:25.489430+00:00",
      "note": "independent original-page verification of pending September extraction objects: one-seventh-power law and drag claims"
+    },
+    {
+     "from": "QUEUED",
+     "to": "DOCLING_RUNNING",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T19:02:06.568089+00:00",
+     "note": "S1 start",
+     "evidence": {},
+     "attempt": 1
+    },
+    {
+     "from": "DOCLING_RUNNING",
+     "to": "RAW_CAPTURED",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T19:03:28.880341+00:00",
+     "note": "Docling whole-page runs cover pages 841-843; pages [841, 842] have only previously REJECTED parser output (raw evidence, not transcription)",
+     "evidence": {},
+     "rejected_parser_runs": [
+      "ENR_da82899ecd87eda6b2a58731"
+     ],
+     "run_ids": [
+      "ENR_da82899ecd87eda6b2a58731",
+      "ENR_e86e8a556fd5853c8cfc36d3"
+     ],
+     "observed_pages": [
+      841,
+      842,
+      843
+     ]
+    },
+    {
+     "from": "RAW_CAPTURED",
+     "to": "CANDIDATES_PREPARED",
+     "role": "S2",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T19:03:31.173775+00:00",
+     "note": "{\"candidates_by_kind\": {\"formula\": 17, \"figure\": 3}, \"flagged_candidates\": 0, \"target_objects\": 7, \"objects_with_anchor_problems\": 0}",
+     "evidence": {
+      "knowledge/workflows/results/agentic-2026-10-16/candidates/V-WHITE-p841-843.json": "1e06e160cad7759b3175d59c5a503d7d3219cc49f0115232c5a8df33aef009b9"
+     }
     }
-   ]
+   ],
+   "updated_at": "2026-10-17T19:03:31.173775+00:00"
   },
   "V-WHITE-p846": {
    "id": "V-WHITE-p846",
@@ -1285,10 +1577,17 @@
    "priority": 76,
    "reason": "independent original-page verification of pending September extraction objects: flat-plate summary claim",
    "dependencies": [],
-   "state": "QUEUED",
-   "attempts": 0,
+   "state": "CANDIDATES_PREPARED",
+   "attempts": 1,
    "created_at": "2026-10-16T18:46:25.495086+00:00",
-   "evidence": {},
+   "evidence": {
+    "docling_run_ids": [
+     "ENR_0ca796dcfabce119b9bad19c"
+    ],
+    "candidate_bundles": {
+     "knowledge/workflows/results/agentic-2026-10-16/candidates/V-WHITE-p846.json": "33bfaa492b649461d4ddb24e87c76e866342fcd460d447ca698daf9e19026fda"
+    }
+   },
    "history": [
     {
      "from": null,
@@ -1297,8 +1596,45 @@
      "model": "claude-opus-5-5 (Opus F, main session)",
      "at": "2026-10-16T18:46:25.495089+00:00",
      "note": "independent original-page verification of pending September extraction objects: flat-plate summary claim"
+    },
+    {
+     "from": "QUEUED",
+     "to": "DOCLING_RUNNING",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T19:03:49.792133+00:00",
+     "note": "S1 start",
+     "evidence": {},
+     "attempt": 1
+    },
+    {
+     "from": "DOCLING_RUNNING",
+     "to": "RAW_CAPTURED",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T19:06:42.617174+00:00",
+     "note": "Docling whole-page runs cover pages 846-846",
+     "evidence": {},
+     "run_ids": [
+      "ENR_0ca796dcfabce119b9bad19c"
+     ],
+     "observed_pages": [
+      846
+     ]
+    },
+    {
+     "from": "RAW_CAPTURED",
+     "to": "CANDIDATES_PREPARED",
+     "role": "S2",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:11:18.457873+00:00",
+     "note": "{\"candidates_by_kind\": {\"formula\": 5}, \"flagged_candidates\": 0, \"target_objects\": 1, \"objects_with_anchor_problems\": 0}",
+     "evidence": {
+      "knowledge/workflows/results/agentic-2026-10-16/candidates/V-WHITE-p846.json": "33bfaa492b649461d4ddb24e87c76e866342fcd460d447ca698daf9e19026fda"
+     }
     }
-   ]
+   ],
+   "updated_at": "2026-10-17T23:11:18.457873+00:00"
   },
   "V-WHITE-p905": {
    "id": "V-WHITE-p905",
@@ -1316,10 +1652,17 @@
    "priority": 75,
    "reason": "independent original-page verification of pending September extraction objects: alternate Prandtl relations claim",
    "dependencies": [],
-   "state": "QUEUED",
-   "attempts": 0,
+   "state": "CANDIDATES_PREPARED",
+   "attempts": 1,
    "created_at": "2026-10-16T18:46:25.500868+00:00",
-   "evidence": {},
+   "evidence": {
+    "docling_run_ids": [
+     "ENR_59693e6282dce33d0d1ee39d"
+    ],
+    "candidate_bundles": {
+     "knowledge/workflows/results/agentic-2026-10-16/candidates/V-WHITE-p905.json": "540fe51f0b95bf9c73f09af6296fd32ddd3b3a6f906ca4b4b9388d8c9ac276b1"
+    }
+   },
    "history": [
     {
      "from": null,
@@ -1328,8 +1671,45 @@
      "model": "claude-opus-5-5 (Opus F, main session)",
      "at": "2026-10-16T18:46:25.500871+00:00",
      "note": "independent original-page verification of pending September extraction objects: alternate Prandtl relations claim"
+    },
+    {
+     "from": "QUEUED",
+     "to": "DOCLING_RUNNING",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:11:37.898933+00:00",
+     "note": "S1 start",
+     "evidence": {},
+     "attempt": 1
+    },
+    {
+     "from": "DOCLING_RUNNING",
+     "to": "RAW_CAPTURED",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:12:47.098421+00:00",
+     "note": "Docling whole-page runs cover pages 905-905",
+     "evidence": {},
+     "run_ids": [
+      "ENR_59693e6282dce33d0d1ee39d"
+     ],
+     "observed_pages": [
+      905
+     ]
+    },
+    {
+     "from": "RAW_CAPTURED",
+     "to": "CANDIDATES_PREPARED",
+     "role": "S2",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:12:49.356472+00:00",
+     "note": "{\"candidates_by_kind\": {\"figure\": 1, \"formula\": 2}, \"flagged_candidates\": 0, \"target_objects\": 1, \"objects_with_anchor_problems\": 0}",
+     "evidence": {
+      "knowledge/workflows/results/agentic-2026-10-16/candidates/V-WHITE-p905.json": "540fe51f0b95bf9c73f09af6296fd32ddd3b3a6f906ca4b4b9388d8c9ac276b1"
+     }
     }
-   ]
+   ],
+   "updated_at": "2026-10-17T23:12:49.356472+00:00"
   },
   "V-SP8089-p017-018": {
    "id": "V-SP8089-p017-018",
@@ -1348,10 +1728,18 @@
    "priority": 70,
    "reason": "independent original-page verification of pending September extraction objects: stability sensitivity claims",
    "dependencies": [],
-   "state": "QUEUED",
-   "attempts": 0,
+   "state": "CANDIDATES_PREPARED",
+   "attempts": 1,
    "created_at": "2026-10-16T18:46:25.506152+00:00",
-   "evidence": {},
+   "evidence": {
+    "docling_run_ids": [
+     "ENR_22c80cdca5b9dc9c9d854014",
+     "ENR_694b13a88e1403eb2acc1778"
+    ],
+    "candidate_bundles": {
+     "knowledge/workflows/results/agentic-2026-10-16/candidates/V-SP8089-p017-018.json": "30816e65ce72935b00ade4f10901531522d45e6f8385c1521a1531ccf2121c16"
+    }
+   },
    "history": [
     {
      "from": null,
@@ -1360,8 +1748,47 @@
      "model": "claude-opus-5-5 (Opus F, main session)",
      "at": "2026-10-16T18:46:25.506153+00:00",
      "note": "independent original-page verification of pending September extraction objects: stability sensitivity claims"
+    },
+    {
+     "from": "QUEUED",
+     "to": "DOCLING_RUNNING",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:13:04.585948+00:00",
+     "note": "S1 start",
+     "evidence": {},
+     "attempt": 1
+    },
+    {
+     "from": "DOCLING_RUNNING",
+     "to": "RAW_CAPTURED",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:13:30.837273+00:00",
+     "note": "Docling whole-page runs cover pages 17-18",
+     "evidence": {},
+     "run_ids": [
+      "ENR_22c80cdca5b9dc9c9d854014",
+      "ENR_694b13a88e1403eb2acc1778"
+     ],
+     "observed_pages": [
+      17,
+      18
+     ]
+    },
+    {
+     "from": "RAW_CAPTURED",
+     "to": "CANDIDATES_PREPARED",
+     "role": "S2",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:13:32.864197+00:00",
+     "note": "{\"candidates_by_kind\": {}, \"flagged_candidates\": 0, \"target_objects\": 2, \"objects_with_anchor_problems\": 0}",
+     "evidence": {
+      "knowledge/workflows/results/agentic-2026-10-16/candidates/V-SP8089-p017-018.json": "30816e65ce72935b00ade4f10901531522d45e6f8385c1521a1531ccf2121c16"
+     }
     }
-   ]
+   ],
+   "updated_at": "2026-10-17T23:13:32.864197+00:00"
   },
   "V-SP8089-p022-023": {
    "id": "V-SP8089-p022-023",
@@ -1381,10 +1808,18 @@
    "priority": 69,
    "reason": "independent original-page verification of pending September extraction objects: unlike-impinging element claims",
    "dependencies": [],
-   "state": "QUEUED",
-   "attempts": 0,
+   "state": "CANDIDATES_PREPARED",
+   "attempts": 1,
    "created_at": "2026-10-16T18:46:25.512651+00:00",
-   "evidence": {},
+   "evidence": {
+    "docling_run_ids": [
+     "ENR_36dfd1e7a73ed032c802dee8",
+     "ENR_e6547d414faef1ebf9464db9"
+    ],
+    "candidate_bundles": {
+     "knowledge/workflows/results/agentic-2026-10-16/candidates/V-SP8089-p022-023.json": "15667f0e71a7a44cd00e41be60ef397e3c71aa4d355a7f95822a2b1225226937"
+    }
+   },
    "history": [
     {
      "from": null,
@@ -1393,8 +1828,47 @@
      "model": "claude-opus-5-5 (Opus F, main session)",
      "at": "2026-10-16T18:46:25.512660+00:00",
      "note": "independent original-page verification of pending September extraction objects: unlike-impinging element claims"
+    },
+    {
+     "from": "QUEUED",
+     "to": "DOCLING_RUNNING",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:13:48.892126+00:00",
+     "note": "S1 start",
+     "evidence": {},
+     "attempt": 1
+    },
+    {
+     "from": "DOCLING_RUNNING",
+     "to": "RAW_CAPTURED",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:14:16.078271+00:00",
+     "note": "Docling whole-page runs cover pages 22-23",
+     "evidence": {},
+     "run_ids": [
+      "ENR_36dfd1e7a73ed032c802dee8",
+      "ENR_e6547d414faef1ebf9464db9"
+     ],
+     "observed_pages": [
+      22,
+      23
+     ]
+    },
+    {
+     "from": "RAW_CAPTURED",
+     "to": "CANDIDATES_PREPARED",
+     "role": "S2",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:14:18.382426+00:00",
+     "note": "{\"candidates_by_kind\": {}, \"flagged_candidates\": 0, \"target_objects\": 3, \"objects_with_anchor_problems\": 0}",
+     "evidence": {
+      "knowledge/workflows/results/agentic-2026-10-16/candidates/V-SP8089-p022-023.json": "15667f0e71a7a44cd00e41be60ef397e3c71aa4d355a7f95822a2b1225226937"
+     }
     }
-   ]
+   ],
+   "updated_at": "2026-10-17T23:14:18.382426+00:00"
   },
   "V-SP8089-p032-034": {
    "id": "V-SP8089-p032-034",
@@ -1417,10 +1891,18 @@
    "priority": 68,
    "reason": "independent original-page verification of pending September extraction objects: pintle element claims",
    "dependencies": [],
-   "state": "QUEUED",
-   "attempts": 0,
+   "state": "CANDIDATES_PREPARED",
+   "attempts": 1,
    "created_at": "2026-10-16T18:46:25.519016+00:00",
-   "evidence": {},
+   "evidence": {
+    "docling_run_ids": [
+     "ENR_5fe100e44a8c1a53a0195a1c",
+     "ENR_7f2d995ee5d097190775e05e"
+    ],
+    "candidate_bundles": {
+     "knowledge/workflows/results/agentic-2026-10-16/candidates/V-SP8089-p032-034.json": "22008ad7673df44fab1b7769bfcf265f2f0c07a6a3fafd538e046ec72acdc9b1"
+    }
+   },
    "history": [
     {
      "from": null,
@@ -1429,8 +1911,51 @@
      "model": "claude-opus-5-5 (Opus F, main session)",
      "at": "2026-10-16T18:46:25.519022+00:00",
      "note": "independent original-page verification of pending September extraction objects: pintle element claims"
+    },
+    {
+     "from": "QUEUED",
+     "to": "DOCLING_RUNNING",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:14:34.074275+00:00",
+     "note": "S1 start",
+     "evidence": {},
+     "attempt": 1
+    },
+    {
+     "from": "DOCLING_RUNNING",
+     "to": "RAW_CAPTURED",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:14:46.593319+00:00",
+     "note": "Docling whole-page runs cover pages 32-34; pages [33, 34] have only previously REJECTED parser output (raw evidence, not transcription)",
+     "evidence": {},
+     "rejected_parser_runs": [
+      "ENR_7f2d995ee5d097190775e05e"
+     ],
+     "run_ids": [
+      "ENR_5fe100e44a8c1a53a0195a1c",
+      "ENR_7f2d995ee5d097190775e05e"
+     ],
+     "observed_pages": [
+      32,
+      33,
+      34
+     ]
+    },
+    {
+     "from": "RAW_CAPTURED",
+     "to": "CANDIDATES_PREPARED",
+     "role": "S2",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:14:48.962976+00:00",
+     "note": "{\"candidates_by_kind\": {\"figure\": 2, \"formula\": 3}, \"flagged_candidates\": 0, \"target_objects\": 6, \"objects_with_anchor_problems\": 0}",
+     "evidence": {
+      "knowledge/workflows/results/agentic-2026-10-16/candidates/V-SP8089-p032-034.json": "22008ad7673df44fab1b7769bfcf265f2f0c07a6a3fafd538e046ec72acdc9b1"
+     }
     }
-   ]
+   ],
+   "updated_at": "2026-10-17T23:14:48.962976+00:00"
   },
   "V-SP8089-p036": {
    "id": "V-SP8089-p036",
@@ -1452,10 +1977,17 @@
    "priority": 67,
    "reason": "independent original-page verification of pending September extraction objects: slot pintle claims",
    "dependencies": [],
-   "state": "QUEUED",
-   "attempts": 0,
+   "state": "CANDIDATES_PREPARED",
+   "attempts": 1,
    "created_at": "2026-10-16T18:46:25.525784+00:00",
-   "evidence": {},
+   "evidence": {
+    "docling_run_ids": [
+     "ENR_91bcaf6fd38613f8db2c88cb"
+    ],
+    "candidate_bundles": {
+     "knowledge/workflows/results/agentic-2026-10-16/candidates/V-SP8089-p036.json": "0c853e228bf1ee89f92436ab39d1b84157bac6d05ae9942b854279ff6115c9a3"
+    }
+   },
    "history": [
     {
      "from": null,
@@ -1464,8 +1996,45 @@
      "model": "claude-opus-5-5 (Opus F, main session)",
      "at": "2026-10-16T18:46:25.525789+00:00",
      "note": "independent original-page verification of pending September extraction objects: slot pintle claims"
+    },
+    {
+     "from": "QUEUED",
+     "to": "DOCLING_RUNNING",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:15:06.216472+00:00",
+     "note": "S1 start",
+     "evidence": {},
+     "attempt": 1
+    },
+    {
+     "from": "DOCLING_RUNNING",
+     "to": "RAW_CAPTURED",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:15:19.783219+00:00",
+     "note": "Docling whole-page runs cover pages 36-36",
+     "evidence": {},
+     "run_ids": [
+      "ENR_91bcaf6fd38613f8db2c88cb"
+     ],
+     "observed_pages": [
+      36
+     ]
+    },
+    {
+     "from": "RAW_CAPTURED",
+     "to": "CANDIDATES_PREPARED",
+     "role": "S2",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:15:21.862658+00:00",
+     "note": "{\"candidates_by_kind\": {\"figure\": 2}, \"flagged_candidates\": 0, \"target_objects\": 5, \"objects_with_anchor_problems\": 0}",
+     "evidence": {
+      "knowledge/workflows/results/agentic-2026-10-16/candidates/V-SP8089-p036.json": "0c853e228bf1ee89f92436ab39d1b84157bac6d05ae9942b854279ff6115c9a3"
+     }
     }
-   ]
+   ],
+   "updated_at": "2026-10-17T23:15:21.862658+00:00"
   },
   "V-SP8089-p039": {
    "id": "V-SP8089-p039",
@@ -1484,10 +2053,17 @@
    "priority": 66,
    "reason": "independent original-page verification of pending September extraction objects: triplet/doublet wall compatibility claims",
    "dependencies": [],
-   "state": "QUEUED",
-   "attempts": 0,
+   "state": "CANDIDATES_PREPARED",
+   "attempts": 1,
    "created_at": "2026-10-16T18:46:25.532174+00:00",
-   "evidence": {},
+   "evidence": {
+    "docling_run_ids": [
+     "ENR_64721e1e7d291ad0717e20c7"
+    ],
+    "candidate_bundles": {
+     "knowledge/workflows/results/agentic-2026-10-16/candidates/V-SP8089-p039.json": "02485be964ed5a9a46515f459394c856710a98bdc49cc267c7cc6e00f4ca3feb"
+    }
+   },
    "history": [
     {
      "from": null,
@@ -1496,8 +2072,45 @@
      "model": "claude-opus-5-5 (Opus F, main session)",
      "at": "2026-10-16T18:46:25.532179+00:00",
      "note": "independent original-page verification of pending September extraction objects: triplet/doublet wall compatibility claims"
+    },
+    {
+     "from": "QUEUED",
+     "to": "DOCLING_RUNNING",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:15:37.525606+00:00",
+     "note": "S1 start",
+     "evidence": {},
+     "attempt": 1
+    },
+    {
+     "from": "DOCLING_RUNNING",
+     "to": "RAW_CAPTURED",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:15:49.477333+00:00",
+     "note": "Docling whole-page runs cover pages 39-39",
+     "evidence": {},
+     "run_ids": [
+      "ENR_64721e1e7d291ad0717e20c7"
+     ],
+     "observed_pages": [
+      39
+     ]
+    },
+    {
+     "from": "RAW_CAPTURED",
+     "to": "CANDIDATES_PREPARED",
+     "role": "S2",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:15:51.550334+00:00",
+     "note": "{\"candidates_by_kind\": {}, \"flagged_candidates\": 0, \"target_objects\": 2, \"objects_with_anchor_problems\": 0}",
+     "evidence": {
+      "knowledge/workflows/results/agentic-2026-10-16/candidates/V-SP8089-p039.json": "02485be964ed5a9a46515f459394c856710a98bdc49cc267c7cc6e00f4ca3feb"
+     }
     }
-   ]
+   ],
+   "updated_at": "2026-10-17T23:15:51.550334+00:00"
   },
   "V-SP8089-p043-045": {
    "id": "V-SP8089-p043-045",
@@ -1538,10 +2151,19 @@
    "priority": 65,
    "reason": "independent original-page verification of pending September extraction objects: instability classes and pressure-drop limits",
    "dependencies": [],
-   "state": "QUEUED",
-   "attempts": 0,
+   "state": "CANDIDATES_PREPARED",
+   "attempts": 1,
    "created_at": "2026-10-16T18:46:25.538016+00:00",
-   "evidence": {},
+   "evidence": {
+    "docling_run_ids": [
+     "ENR_20c17cd2c644301f5e1f367d",
+     "ENR_b658bc2709092340ce99f7ac",
+     "ENR_ca4ad30e63f9c518ca5b1dfa"
+    ],
+    "candidate_bundles": {
+     "knowledge/workflows/results/agentic-2026-10-16/candidates/V-SP8089-p043-045.json": "e23d53c162f8ca6cff3a0a5d55b6f9ff9dcbd3d7c29c4280e53665525ed7e22c"
+    }
+   },
    "history": [
     {
      "from": null,
@@ -1550,8 +2172,49 @@
      "model": "claude-opus-5-5 (Opus F, main session)",
      "at": "2026-10-16T18:46:25.538020+00:00",
      "note": "independent original-page verification of pending September extraction objects: instability classes and pressure-drop limits"
+    },
+    {
+     "from": "QUEUED",
+     "to": "DOCLING_RUNNING",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:16:06.181974+00:00",
+     "note": "S1 start",
+     "evidence": {},
+     "attempt": 1
+    },
+    {
+     "from": "DOCLING_RUNNING",
+     "to": "RAW_CAPTURED",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:16:45.330414+00:00",
+     "note": "Docling whole-page runs cover pages 43-45",
+     "evidence": {},
+     "run_ids": [
+      "ENR_20c17cd2c644301f5e1f367d",
+      "ENR_b658bc2709092340ce99f7ac",
+      "ENR_ca4ad30e63f9c518ca5b1dfa"
+     ],
+     "observed_pages": [
+      43,
+      44,
+      45
+     ]
+    },
+    {
+     "from": "RAW_CAPTURED",
+     "to": "CANDIDATES_PREPARED",
+     "role": "S2",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:16:47.838958+00:00",
+     "note": "{\"candidates_by_kind\": {}, \"flagged_candidates\": 0, \"target_objects\": 24, \"objects_with_anchor_problems\": 0}",
+     "evidence": {
+      "knowledge/workflows/results/agentic-2026-10-16/candidates/V-SP8089-p043-045.json": "e23d53c162f8ca6cff3a0a5d55b6f9ff9dcbd3d7c29c4280e53665525ed7e22c"
+     }
     }
-   ]
+   ],
+   "updated_at": "2026-10-17T23:16:47.838958+00:00"
   },
   "V-SP8089-p046-048": {
    "id": "V-SP8089-p046-048",
@@ -1576,10 +2239,19 @@
    "priority": 64,
    "reason": "independent original-page verification of pending September extraction objects: orifice discharge coefficient claims (optimizer-coupled orifice model)",
    "dependencies": [],
-   "state": "QUEUED",
-   "attempts": 0,
+   "state": "CANDIDATES_PREPARED",
+   "attempts": 1,
    "created_at": "2026-10-16T18:46:25.543991+00:00",
-   "evidence": {},
+   "evidence": {
+    "docling_run_ids": [
+     "ENR_b2fcdf8a7319c9e809675f18",
+     "ENR_c18365c97039bd97275f64c6",
+     "ENR_f4b0d131d385fbcdec2238af"
+    ],
+    "candidate_bundles": {
+     "knowledge/workflows/results/agentic-2026-10-16/candidates/V-SP8089-p046-048.json": "f0504fa55730defc26e1b48c238287b0b51a6968cf358cbebf8b40e44b7c3a92"
+    }
+   },
    "history": [
     {
      "from": null,
@@ -1588,8 +2260,49 @@
      "model": "claude-opus-5-5 (Opus F, main session)",
      "at": "2026-10-16T18:46:25.543998+00:00",
      "note": "independent original-page verification of pending September extraction objects: orifice discharge coefficient claims (optimizer-coupled orifice model)"
+    },
+    {
+     "from": "QUEUED",
+     "to": "DOCLING_RUNNING",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:17:01.745799+00:00",
+     "note": "S1 start",
+     "evidence": {},
+     "attempt": 1
+    },
+    {
+     "from": "DOCLING_RUNNING",
+     "to": "RAW_CAPTURED",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:17:59.447951+00:00",
+     "note": "Docling whole-page runs cover pages 46-48",
+     "evidence": {},
+     "run_ids": [
+      "ENR_b2fcdf8a7319c9e809675f18",
+      "ENR_c18365c97039bd97275f64c6",
+      "ENR_f4b0d131d385fbcdec2238af"
+     ],
+     "observed_pages": [
+      46,
+      47,
+      48
+     ]
+    },
+    {
+     "from": "RAW_CAPTURED",
+     "to": "CANDIDATES_PREPARED",
+     "role": "S2",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:18:02.209770+00:00",
+     "note": "{\"candidates_by_kind\": {\"figure\": 1}, \"flagged_candidates\": 0, \"target_objects\": 8, \"objects_with_anchor_problems\": 0}",
+     "evidence": {
+      "knowledge/workflows/results/agentic-2026-10-16/candidates/V-SP8089-p046-048.json": "f0504fa55730defc26e1b48c238287b0b51a6968cf358cbebf8b40e44b7c3a92"
+     }
     }
-   ]
+   ],
+   "updated_at": "2026-10-17T23:18:02.209770+00:00"
   },
   "V-SP8089-p049-050": {
    "id": "V-SP8089-p049-050",
@@ -1612,10 +2325,18 @@
    "priority": 63,
    "reason": "independent original-page verification of pending September extraction objects: orifice flow separation and L/d claims",
    "dependencies": [],
-   "state": "QUEUED",
-   "attempts": 0,
+   "state": "CANDIDATES_PREPARED",
+   "attempts": 1,
    "created_at": "2026-10-16T18:46:25.549993+00:00",
-   "evidence": {},
+   "evidence": {
+    "docling_run_ids": [
+     "ENR_4379ee5bbb5c01b91cce8db7",
+     "ENR_8c05cfd1579826622846a435"
+    ],
+    "candidate_bundles": {
+     "knowledge/workflows/results/agentic-2026-10-16/candidates/V-SP8089-p049-050.json": "945bc4449264b9bf04c2d8fb6488bc0b3d43ee5db936f033c16dcdf4dcf9d4ff"
+    }
+   },
    "history": [
     {
      "from": null,
@@ -1624,8 +2345,47 @@
      "model": "claude-opus-5-5 (Opus F, main session)",
      "at": "2026-10-16T18:46:25.549996+00:00",
      "note": "independent original-page verification of pending September extraction objects: orifice flow separation and L/d claims"
+    },
+    {
+     "from": "QUEUED",
+     "to": "DOCLING_RUNNING",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:18:17.707588+00:00",
+     "note": "S1 start",
+     "evidence": {},
+     "attempt": 1
+    },
+    {
+     "from": "DOCLING_RUNNING",
+     "to": "RAW_CAPTURED",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:18:48.255782+00:00",
+     "note": "Docling whole-page runs cover pages 49-50",
+     "evidence": {},
+     "run_ids": [
+      "ENR_4379ee5bbb5c01b91cce8db7",
+      "ENR_8c05cfd1579826622846a435"
+     ],
+     "observed_pages": [
+      49,
+      50
+     ]
+    },
+    {
+     "from": "RAW_CAPTURED",
+     "to": "CANDIDATES_PREPARED",
+     "role": "S2",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:18:50.848752+00:00",
+     "note": "{\"candidates_by_kind\": {}, \"flagged_candidates\": 0, \"target_objects\": 6, \"objects_with_anchor_problems\": 0}",
+     "evidence": {
+      "knowledge/workflows/results/agentic-2026-10-16/candidates/V-SP8089-p049-050.json": "945bc4449264b9bf04c2d8fb6488bc0b3d43ee5db936f033c16dcdf4dcf9d4ff"
+     }
     }
-   ]
+   ],
+   "updated_at": "2026-10-17T23:18:50.848752+00:00"
   },
   "V-SP8089-p053": {
    "id": "V-SP8089-p053",
@@ -1643,10 +2403,17 @@
    "priority": 62,
    "reason": "independent original-page verification of pending September extraction objects: orifice drilling tolerance claim",
    "dependencies": [],
-   "state": "QUEUED",
-   "attempts": 0,
+   "state": "CANDIDATES_PREPARED",
+   "attempts": 1,
    "created_at": "2026-10-16T18:46:25.555921+00:00",
-   "evidence": {},
+   "evidence": {
+    "docling_run_ids": [
+     "ENR_d36c4a3406fccd69a2d624c7"
+    ],
+    "candidate_bundles": {
+     "knowledge/workflows/results/agentic-2026-10-16/candidates/V-SP8089-p053.json": "215199619e019b3fe3b6e9175b156a2e8fcc9fe2ccc748465b89459bf00d2285"
+    }
+   },
    "history": [
     {
      "from": null,
@@ -1655,8 +2422,45 @@
      "model": "claude-opus-5-5 (Opus F, main session)",
      "at": "2026-10-16T18:46:25.555923+00:00",
      "note": "independent original-page verification of pending September extraction objects: orifice drilling tolerance claim"
+    },
+    {
+     "from": "QUEUED",
+     "to": "DOCLING_RUNNING",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:19:05.473299+00:00",
+     "note": "S1 start",
+     "evidence": {},
+     "attempt": 1
+    },
+    {
+     "from": "DOCLING_RUNNING",
+     "to": "RAW_CAPTURED",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:19:29.064291+00:00",
+     "note": "Docling whole-page runs cover pages 53-53",
+     "evidence": {},
+     "run_ids": [
+      "ENR_d36c4a3406fccd69a2d624c7"
+     ],
+     "observed_pages": [
+      53
+     ]
+    },
+    {
+     "from": "RAW_CAPTURED",
+     "to": "CANDIDATES_PREPARED",
+     "role": "S2",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:19:31.376177+00:00",
+     "note": "{\"candidates_by_kind\": {}, \"flagged_candidates\": 0, \"target_objects\": 1, \"objects_with_anchor_problems\": 0}",
+     "evidence": {
+      "knowledge/workflows/results/agentic-2026-10-16/candidates/V-SP8089-p053.json": "215199619e019b3fe3b6e9175b156a2e8fcc9fe2ccc748465b89459bf00d2285"
+     }
     }
-   ]
+   ],
+   "updated_at": "2026-10-17T23:19:31.376177+00:00"
   },
   "V-SP8089-p087": {
    "id": "V-SP8089-p087",
@@ -1677,10 +2481,17 @@
    "priority": 61,
    "reason": "independent original-page verification of pending September extraction objects: impingement-angle design criteria",
    "dependencies": [],
-   "state": "QUEUED",
-   "attempts": 0,
+   "state": "CANDIDATES_PREPARED",
+   "attempts": 1,
    "created_at": "2026-10-16T18:46:25.561540+00:00",
-   "evidence": {},
+   "evidence": {
+    "docling_run_ids": [
+     "ENR_cdfd465819028228b1243593"
+    ],
+    "candidate_bundles": {
+     "knowledge/workflows/results/agentic-2026-10-16/candidates/V-SP8089-p087.json": "9ad767a4b3ee852edf48d3209669dc6ef9b15b8a8e4d97e76f74f7527689dc07"
+    }
+   },
    "history": [
     {
      "from": null,
@@ -1689,8 +2500,45 @@
      "model": "claude-opus-5-5 (Opus F, main session)",
      "at": "2026-10-16T18:46:25.561543+00:00",
      "note": "independent original-page verification of pending September extraction objects: impingement-angle design criteria"
+    },
+    {
+     "from": "QUEUED",
+     "to": "DOCLING_RUNNING",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:19:46.008692+00:00",
+     "note": "S1 start",
+     "evidence": {},
+     "attempt": 1
+    },
+    {
+     "from": "DOCLING_RUNNING",
+     "to": "RAW_CAPTURED",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:22:03.520337+00:00",
+     "note": "Docling whole-page runs cover pages 87-87",
+     "evidence": {},
+     "run_ids": [
+      "ENR_cdfd465819028228b1243593"
+     ],
+     "observed_pages": [
+      87
+     ]
+    },
+    {
+     "from": "RAW_CAPTURED",
+     "to": "CANDIDATES_PREPARED",
+     "role": "S2",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:22:06.638316+00:00",
+     "note": "{\"candidates_by_kind\": {}, \"flagged_candidates\": 0, \"target_objects\": 4, \"objects_with_anchor_problems\": 0}",
+     "evidence": {
+      "knowledge/workflows/results/agentic-2026-10-16/candidates/V-SP8089-p087.json": "9ad767a4b3ee852edf48d3209669dc6ef9b15b8a8e4d97e76f74f7527689dc07"
+     }
     }
-   ]
+   ],
+   "updated_at": "2026-10-17T23:22:06.638316+00:00"
   },
   "V-SP8089-p089": {
    "id": "V-SP8089-p089",
@@ -1708,10 +2556,17 @@
    "priority": 60,
    "reason": "independent original-page verification of pending September extraction objects: pintle equivalent impingement angle",
    "dependencies": [],
-   "state": "QUEUED",
-   "attempts": 0,
+   "state": "CANDIDATES_PREPARED",
+   "attempts": 1,
    "created_at": "2026-10-16T18:46:25.568001+00:00",
-   "evidence": {},
+   "evidence": {
+    "docling_run_ids": [
+     "ENR_0fd4e7fbe22bfb52cff85857"
+    ],
+    "candidate_bundles": {
+     "knowledge/workflows/results/agentic-2026-10-16/candidates/V-SP8089-p089.json": "82764dfa0135ba61ae394c3b7b810bd1b5a6af6e2d01b311b5927250a669d7ad"
+    }
+   },
    "history": [
     {
      "from": null,
@@ -1720,8 +2575,45 @@
      "model": "claude-opus-5-5 (Opus F, main session)",
      "at": "2026-10-16T18:46:25.568007+00:00",
      "note": "independent original-page verification of pending September extraction objects: pintle equivalent impingement angle"
+    },
+    {
+     "from": "QUEUED",
+     "to": "DOCLING_RUNNING",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:22:21.102768+00:00",
+     "note": "S1 start",
+     "evidence": {},
+     "attempt": 1
+    },
+    {
+     "from": "DOCLING_RUNNING",
+     "to": "RAW_CAPTURED",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:22:38.670698+00:00",
+     "note": "Docling whole-page runs cover pages 89-89",
+     "evidence": {},
+     "run_ids": [
+      "ENR_0fd4e7fbe22bfb52cff85857"
+     ],
+     "observed_pages": [
+      89
+     ]
+    },
+    {
+     "from": "RAW_CAPTURED",
+     "to": "CANDIDATES_PREPARED",
+     "role": "S2",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:22:40.765927+00:00",
+     "note": "{\"candidates_by_kind\": {}, \"flagged_candidates\": 0, \"target_objects\": 1, \"objects_with_anchor_problems\": 0}",
+     "evidence": {
+      "knowledge/workflows/results/agentic-2026-10-16/candidates/V-SP8089-p089.json": "82764dfa0135ba61ae394c3b7b810bd1b5a6af6e2d01b311b5927250a669d7ad"
+     }
     }
-   ]
+   ],
+   "updated_at": "2026-10-17T23:22:40.765927+00:00"
   },
   "V-SP8089-p091-093": {
    "id": "V-SP8089-p091-093",
@@ -1751,10 +2643,19 @@
    "priority": 59,
    "reason": "independent original-page verification of pending September extraction objects: pressure-drop/stability design criteria and hydraulic flip",
    "dependencies": [],
-   "state": "QUEUED",
-   "attempts": 0,
+   "state": "CANDIDATES_PREPARED",
+   "attempts": 1,
    "created_at": "2026-10-16T18:46:25.574628+00:00",
-   "evidence": {},
+   "evidence": {
+    "docling_run_ids": [
+     "ENR_2d9bf939dfd814c5425ed013",
+     "ENR_52117a5feb6ab57a9ead8fd7",
+     "ENR_8ff021765d2346aaf2c8cfed"
+    ],
+    "candidate_bundles": {
+     "knowledge/workflows/results/agentic-2026-10-16/candidates/V-SP8089-p091-093.json": "5b24db0d802501e12684f8f2e9160f99fe91521f5bd4194e9a0be629cfbe61ef"
+    }
+   },
    "history": [
     {
      "from": null,
@@ -1763,8 +2664,49 @@
      "model": "claude-opus-5-5 (Opus F, main session)",
      "at": "2026-10-16T18:46:25.574633+00:00",
      "note": "independent original-page verification of pending September extraction objects: pressure-drop/stability design criteria and hydraulic flip"
+    },
+    {
+     "from": "QUEUED",
+     "to": "DOCLING_RUNNING",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:22:55.714775+00:00",
+     "note": "S1 start",
+     "evidence": {},
+     "attempt": 1
+    },
+    {
+     "from": "DOCLING_RUNNING",
+     "to": "RAW_CAPTURED",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:24:51.790377+00:00",
+     "note": "Docling whole-page runs cover pages 91-93",
+     "evidence": {},
+     "run_ids": [
+      "ENR_2d9bf939dfd814c5425ed013",
+      "ENR_52117a5feb6ab57a9ead8fd7",
+      "ENR_8ff021765d2346aaf2c8cfed"
+     ],
+     "observed_pages": [
+      91,
+      92,
+      93
+     ]
+    },
+    {
+     "from": "RAW_CAPTURED",
+     "to": "CANDIDATES_PREPARED",
+     "role": "S2",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:24:54.073045+00:00",
+     "note": "{\"candidates_by_kind\": {}, \"flagged_candidates\": 0, \"target_objects\": 13, \"objects_with_anchor_problems\": 0}",
+     "evidence": {
+      "knowledge/workflows/results/agentic-2026-10-16/candidates/V-SP8089-p091-093.json": "5b24db0d802501e12684f8f2e9160f99fe91521f5bd4194e9a0be629cfbe61ef"
+     }
     }
-   ]
+   ],
+   "updated_at": "2026-10-17T23:24:54.073045+00:00"
   },
   "V-SP8089-p099": {
    "id": "V-SP8089-p099",
@@ -1782,10 +2724,17 @@
    "priority": 58,
    "reason": "independent original-page verification of pending September extraction objects: flow-distribution claim",
    "dependencies": [],
-   "state": "QUEUED",
-   "attempts": 0,
+   "state": "CANDIDATES_PREPARED",
+   "attempts": 1,
    "created_at": "2026-10-16T18:46:25.581477+00:00",
-   "evidence": {},
+   "evidence": {
+    "docling_run_ids": [
+     "ENR_cf55e5f25abd03fd94d1901e"
+    ],
+    "candidate_bundles": {
+     "knowledge/workflows/results/agentic-2026-10-16/candidates/V-SP8089-p099.json": "cfd0f020ba6c7bb0ef3da63735dc7428349ca94118a9f4f54b8f668876481010"
+    }
+   },
    "history": [
     {
      "from": null,
@@ -1794,8 +2743,45 @@
      "model": "claude-opus-5-5 (Opus F, main session)",
      "at": "2026-10-16T18:46:25.581483+00:00",
      "note": "independent original-page verification of pending September extraction objects: flow-distribution claim"
+    },
+    {
+     "from": "QUEUED",
+     "to": "DOCLING_RUNNING",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:25:10.880471+00:00",
+     "note": "S1 start",
+     "evidence": {},
+     "attempt": 1
+    },
+    {
+     "from": "DOCLING_RUNNING",
+     "to": "RAW_CAPTURED",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:25:33.534627+00:00",
+     "note": "Docling whole-page runs cover pages 99-99",
+     "evidence": {},
+     "run_ids": [
+      "ENR_cf55e5f25abd03fd94d1901e"
+     ],
+     "observed_pages": [
+      99
+     ]
+    },
+    {
+     "from": "RAW_CAPTURED",
+     "to": "CANDIDATES_PREPARED",
+     "role": "S2",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:25:36.355433+00:00",
+     "note": "{\"candidates_by_kind\": {}, \"flagged_candidates\": 0, \"target_objects\": 1, \"objects_with_anchor_problems\": 0}",
+     "evidence": {
+      "knowledge/workflows/results/agentic-2026-10-16/candidates/V-SP8089-p099.json": "cfd0f020ba6c7bb0ef3da63735dc7428349ca94118a9f4f54b8f668876481010"
+     }
     }
-   ]
+   ],
+   "updated_at": "2026-10-17T23:25:36.355433+00:00"
   },
   "V-SP8089-p102": {
    "id": "V-SP8089-p102",
@@ -1813,10 +2799,17 @@
    "priority": 57,
    "reason": "independent original-page verification of pending September extraction objects: injector structural natural frequency claim",
    "dependencies": [],
-   "state": "QUEUED",
-   "attempts": 0,
+   "state": "CANDIDATES_PREPARED",
+   "attempts": 1,
    "created_at": "2026-10-16T18:46:25.587269+00:00",
-   "evidence": {},
+   "evidence": {
+    "docling_run_ids": [
+     "ENR_72137ba1b82b7240243f972c"
+    ],
+    "candidate_bundles": {
+     "knowledge/workflows/results/agentic-2026-10-16/candidates/V-SP8089-p102.json": "2b8f1e38d6fcc0a962037a4aafdcdfcc7c22d8632f05a603cbb366ee1c331ffa"
+    }
+   },
    "history": [
     {
      "from": null,
@@ -1825,8 +2818,45 @@
      "model": "claude-opus-5-5 (Opus F, main session)",
      "at": "2026-10-16T18:46:25.587272+00:00",
      "note": "independent original-page verification of pending September extraction objects: injector structural natural frequency claim"
+    },
+    {
+     "from": "QUEUED",
+     "to": "DOCLING_RUNNING",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:25:51.187203+00:00",
+     "note": "S1 start",
+     "evidence": {},
+     "attempt": 1
+    },
+    {
+     "from": "DOCLING_RUNNING",
+     "to": "RAW_CAPTURED",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:26:11.110622+00:00",
+     "note": "Docling whole-page runs cover pages 102-102",
+     "evidence": {},
+     "run_ids": [
+      "ENR_72137ba1b82b7240243f972c"
+     ],
+     "observed_pages": [
+      102
+     ]
+    },
+    {
+     "from": "RAW_CAPTURED",
+     "to": "CANDIDATES_PREPARED",
+     "role": "S2",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:26:13.579751+00:00",
+     "note": "{\"candidates_by_kind\": {}, \"flagged_candidates\": 0, \"target_objects\": 1, \"objects_with_anchor_problems\": 0}",
+     "evidence": {
+      "knowledge/workflows/results/agentic-2026-10-16/candidates/V-SP8089-p102.json": "2b8f1e38d6fcc0a962037a4aafdcdfcc7c22d8632f05a603cbb366ee1c331ffa"
+     }
     }
-   ]
+   ],
+   "updated_at": "2026-10-17T23:26:13.579751+00:00"
   },
   "V-WHITE-p750": {
    "id": "V-WHITE-p750",
@@ -1844,10 +2874,17 @@
    "priority": 56,
    "reason": "independent original-page verification of pending September extraction objects: incompressible orifice formula assumption",
    "dependencies": [],
-   "state": "QUEUED",
-   "attempts": 0,
+   "state": "CANDIDATES_PREPARED",
+   "attempts": 1,
    "created_at": "2026-10-16T18:46:25.593335+00:00",
-   "evidence": {},
+   "evidence": {
+    "docling_run_ids": [
+     "ENR_878ea95e76e8b79a4695ee5d"
+    ],
+    "candidate_bundles": {
+     "knowledge/workflows/results/agentic-2026-10-16/candidates/V-WHITE-p750.json": "c2ef717440f843f5910a5e2e7ae850bcda250af0d39edb5d993834333b281ad9"
+    }
+   },
    "history": [
     {
      "from": null,
@@ -1856,8 +2893,45 @@
      "model": "claude-opus-5-5 (Opus F, main session)",
      "at": "2026-10-16T18:46:25.593339+00:00",
      "note": "independent original-page verification of pending September extraction objects: incompressible orifice formula assumption"
+    },
+    {
+     "from": "QUEUED",
+     "to": "DOCLING_RUNNING",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:26:27.460380+00:00",
+     "note": "S1 start",
+     "evidence": {},
+     "attempt": 1
+    },
+    {
+     "from": "DOCLING_RUNNING",
+     "to": "RAW_CAPTURED",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:28:04.841501+00:00",
+     "note": "Docling whole-page runs cover pages 750-750",
+     "evidence": {},
+     "run_ids": [
+      "ENR_878ea95e76e8b79a4695ee5d"
+     ],
+     "observed_pages": [
+      750
+     ]
+    },
+    {
+     "from": "RAW_CAPTURED",
+     "to": "CANDIDATES_PREPARED",
+     "role": "S2",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:28:06.880607+00:00",
+     "note": "{\"candidates_by_kind\": {\"figure\": 1, \"formula\": 1}, \"flagged_candidates\": 0, \"target_objects\": 1, \"objects_with_anchor_problems\": 0}",
+     "evidence": {
+      "knowledge/workflows/results/agentic-2026-10-16/candidates/V-WHITE-p750.json": "c2ef717440f843f5910a5e2e7ae850bcda250af0d39edb5d993834333b281ad9"
+     }
     }
-   ]
+   ],
+   "updated_at": "2026-10-17T23:28:06.880607+00:00"
   },
   "V-WHITE-p1077-1079": {
    "id": "V-WHITE-p1077-1079",
@@ -1876,10 +2950,19 @@
    "priority": 55,
    "reason": "independent original-page verification of pending September extraction objects: sonic flow pressure ratio and k claims",
    "dependencies": [],
-   "state": "QUEUED",
-   "attempts": 0,
+   "state": "CANDIDATES_PREPARED",
+   "attempts": 1,
    "created_at": "2026-10-16T18:46:25.599119+00:00",
-   "evidence": {},
+   "evidence": {
+    "docling_run_ids": [
+     "ENR_dbf39b33fb58f3492eb67f17",
+     "ENR_df1d7021f3571ed7284c08e2",
+     "ENR_ea8f2475252a965e5969d7e7"
+    ],
+    "candidate_bundles": {
+     "knowledge/workflows/results/agentic-2026-10-16/candidates/V-WHITE-p1077-1079.json": "60f95ae9a8d58a1a44f8f3edb67d9248146be6e62c529d3a775ac8112585509f"
+    }
+   },
    "history": [
     {
      "from": null,
@@ -1888,8 +2971,49 @@
      "model": "claude-opus-5-5 (Opus F, main session)",
      "at": "2026-10-16T18:46:25.599122+00:00",
      "note": "independent original-page verification of pending September extraction objects: sonic flow pressure ratio and k claims"
+    },
+    {
+     "from": "QUEUED",
+     "to": "DOCLING_RUNNING",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:28:26.471225+00:00",
+     "note": "S1 start",
+     "evidence": {},
+     "attempt": 1
+    },
+    {
+     "from": "DOCLING_RUNNING",
+     "to": "RAW_CAPTURED",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:34:31.085476+00:00",
+     "note": "Docling whole-page runs cover pages 1077-1079",
+     "evidence": {},
+     "run_ids": [
+      "ENR_dbf39b33fb58f3492eb67f17",
+      "ENR_df1d7021f3571ed7284c08e2",
+      "ENR_ea8f2475252a965e5969d7e7"
+     ],
+     "observed_pages": [
+      1077,
+      1078,
+      1079
+     ]
+    },
+    {
+     "from": "RAW_CAPTURED",
+     "to": "CANDIDATES_PREPARED",
+     "role": "S2",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:34:34.793540+00:00",
+     "note": "{\"candidates_by_kind\": {\"formula\": 2}, \"flagged_candidates\": 0, \"target_objects\": 2, \"objects_with_anchor_problems\": 0}",
+     "evidence": {
+      "knowledge/workflows/results/agentic-2026-10-16/candidates/V-WHITE-p1077-1079.json": "60f95ae9a8d58a1a44f8f3edb67d9248146be6e62c529d3a775ac8112585509f"
+     }
     }
-   ]
+   ],
+   "updated_at": "2026-10-17T23:34:34.793540+00:00"
   },
   "V-WHITE-p1091-1092": {
    "id": "V-WHITE-p1091-1092",
@@ -1909,10 +3033,18 @@
    "priority": 54,
    "reason": "independent original-page verification of pending September extraction objects: adiabatic/isentropic critical-property claims",
    "dependencies": [],
-   "state": "QUEUED",
-   "attempts": 0,
+   "state": "CANDIDATES_PREPARED",
+   "attempts": 1,
    "created_at": "2026-10-16T18:46:25.605124+00:00",
-   "evidence": {},
+   "evidence": {
+    "docling_run_ids": [
+     "ENR_531cae1201f58933bf2f97ec",
+     "ENR_fcdc16fe7183fcbdfa010106"
+    ],
+    "candidate_bundles": {
+     "knowledge/workflows/results/agentic-2026-10-16/candidates/V-WHITE-p1091-1092.json": "b9a67f110c870c3f23e511ce9e82b6085a69ca49493c93ee651678a821608754"
+    }
+   },
    "history": [
     {
      "from": null,
@@ -1921,8 +3053,47 @@
      "model": "claude-opus-5-5 (Opus F, main session)",
      "at": "2026-10-16T18:46:25.605126+00:00",
      "note": "independent original-page verification of pending September extraction objects: adiabatic/isentropic critical-property claims"
+    },
+    {
+     "from": "QUEUED",
+     "to": "DOCLING_RUNNING",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:34:52.561418+00:00",
+     "note": "S1 start",
+     "evidence": {},
+     "attempt": 1
+    },
+    {
+     "from": "DOCLING_RUNNING",
+     "to": "RAW_CAPTURED",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:38:05.139903+00:00",
+     "note": "Docling whole-page runs cover pages 1091-1092",
+     "evidence": {},
+     "run_ids": [
+      "ENR_531cae1201f58933bf2f97ec",
+      "ENR_fcdc16fe7183fcbdfa010106"
+     ],
+     "observed_pages": [
+      1091,
+      1092
+     ]
+    },
+    {
+     "from": "RAW_CAPTURED",
+     "to": "CANDIDATES_PREPARED",
+     "role": "S2",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:38:07.507877+00:00",
+     "note": "{\"candidates_by_kind\": {\"figure\": 1, \"formula\": 4}, \"flagged_candidates\": 1, \"target_objects\": 3, \"objects_with_anchor_problems\": 0}",
+     "evidence": {
+      "knowledge/workflows/results/agentic-2026-10-16/candidates/V-WHITE-p1091-1092.json": "b9a67f110c870c3f23e511ce9e82b6085a69ca49493c93ee651678a821608754"
+     }
     }
-   ]
+   ],
+   "updated_at": "2026-10-17T23:38:07.507877+00:00"
   },
   "V-WHITE-p1098": {
    "id": "V-WHITE-p1098",
@@ -1940,10 +3111,17 @@
    "priority": 53,
    "reason": "independent original-page verification of pending September extraction objects: sonic throat claim",
    "dependencies": [],
-   "state": "QUEUED",
-   "attempts": 0,
+   "state": "CANDIDATES_PREPARED",
+   "attempts": 1,
    "created_at": "2026-10-16T18:46:25.610890+00:00",
-   "evidence": {},
+   "evidence": {
+    "docling_run_ids": [
+     "ENR_cdf579905110e190358da281"
+    ],
+    "candidate_bundles": {
+     "knowledge/workflows/results/agentic-2026-10-16/candidates/V-WHITE-p1098.json": "3902fdf298106db2756642262fdb8c8d23601cf7a4409a6e205cf3e96ee1b06c"
+    }
+   },
    "history": [
     {
      "from": null,
@@ -1952,8 +3130,45 @@
      "model": "claude-opus-5-5 (Opus F, main session)",
      "at": "2026-10-16T18:46:25.610892+00:00",
      "note": "independent original-page verification of pending September extraction objects: sonic throat claim"
+    },
+    {
+     "from": "QUEUED",
+     "to": "DOCLING_RUNNING",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:38:25.625137+00:00",
+     "note": "S1 start",
+     "evidence": {},
+     "attempt": 1
+    },
+    {
+     "from": "DOCLING_RUNNING",
+     "to": "RAW_CAPTURED",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:39:01.560043+00:00",
+     "note": "Docling whole-page runs cover pages 1098-1098",
+     "evidence": {},
+     "run_ids": [
+      "ENR_cdf579905110e190358da281"
+     ],
+     "observed_pages": [
+      1098
+     ]
+    },
+    {
+     "from": "RAW_CAPTURED",
+     "to": "CANDIDATES_PREPARED",
+     "role": "S2",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:39:04.042561+00:00",
+     "note": "{\"candidates_by_kind\": {\"figure\": 1, \"formula\": 1}, \"flagged_candidates\": 0, \"target_objects\": 1, \"objects_with_anchor_problems\": 0}",
+     "evidence": {
+      "knowledge/workflows/results/agentic-2026-10-16/candidates/V-WHITE-p1098.json": "3902fdf298106db2756642262fdb8c8d23601cf7a4409a6e205cf3e96ee1b06c"
+     }
     }
-   ]
+   ],
+   "updated_at": "2026-10-17T23:39:04.042561+00:00"
   },
   "V-WHITE-p1100-1102": {
    "id": "V-WHITE-p1100-1102",
@@ -1976,10 +3191,19 @@
    "priority": 52,
    "reason": "independent original-page verification of pending September extraction objects: maximum mass flow and area-ratio claims",
    "dependencies": [],
-   "state": "QUEUED",
-   "attempts": 0,
+   "state": "CANDIDATES_PREPARED",
+   "attempts": 1,
    "created_at": "2026-10-16T18:46:25.616876+00:00",
-   "evidence": {},
+   "evidence": {
+    "docling_run_ids": [
+     "ENR_ab9ec19c7998d856ca1894e3",
+     "ENR_e5ee3dc388f100d1ebbdc12f",
+     "ENR_ee18580923e2d995b76052ad"
+    ],
+    "candidate_bundles": {
+     "knowledge/workflows/results/agentic-2026-10-16/candidates/V-WHITE-p1100-1102.json": "7269358548ab5fa2a5d43b59aa18f2aaa077da2b369a9c39b2511d36afff1b74"
+    }
+   },
    "history": [
     {
      "from": null,
@@ -1988,8 +3212,49 @@
      "model": "claude-opus-5-5 (Opus F, main session)",
      "at": "2026-10-16T18:46:25.616878+00:00",
      "note": "independent original-page verification of pending September extraction objects: maximum mass flow and area-ratio claims"
+    },
+    {
+     "from": "QUEUED",
+     "to": "DOCLING_RUNNING",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:39:22.303091+00:00",
+     "note": "S1 start",
+     "evidence": {},
+     "attempt": 1
+    },
+    {
+     "from": "DOCLING_RUNNING",
+     "to": "RAW_CAPTURED",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:40:40.565640+00:00",
+     "note": "Docling whole-page runs cover pages 1100-1102",
+     "evidence": {},
+     "run_ids": [
+      "ENR_ab9ec19c7998d856ca1894e3",
+      "ENR_e5ee3dc388f100d1ebbdc12f",
+      "ENR_ee18580923e2d995b76052ad"
+     ],
+     "observed_pages": [
+      1100,
+      1101,
+      1102
+     ]
+    },
+    {
+     "from": "RAW_CAPTURED",
+     "to": "CANDIDATES_PREPARED",
+     "role": "S2",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:40:43.089517+00:00",
+     "note": "{\"candidates_by_kind\": {\"figure\": 5, \"formula\": 1}, \"flagged_candidates\": 0, \"target_objects\": 6, \"objects_with_anchor_problems\": 0}",
+     "evidence": {
+      "knowledge/workflows/results/agentic-2026-10-16/candidates/V-WHITE-p1100-1102.json": "7269358548ab5fa2a5d43b59aa18f2aaa077da2b369a9c39b2511d36afff1b74"
+     }
     }
-   ]
+   ],
+   "updated_at": "2026-10-17T23:40:43.089517+00:00"
   },
   "V-WHITE-p1120-1122": {
    "id": "V-WHITE-p1120-1122",
@@ -2011,10 +3276,19 @@
    "priority": 51,
    "reason": "independent original-page verification of pending September extraction objects: converging nozzle example claims",
    "dependencies": [],
-   "state": "QUEUED",
-   "attempts": 0,
+   "state": "CANDIDATES_PREPARED",
+   "attempts": 1,
    "created_at": "2026-10-16T18:46:25.622748+00:00",
-   "evidence": {},
+   "evidence": {
+    "docling_run_ids": [
+     "ENR_17f0c33f11d39a5b6b8cdcfe",
+     "ENR_dd7e82128f34bff74fb35b83",
+     "ENR_fb5dd156eb3fdb94c7c3a7ee"
+    ],
+    "candidate_bundles": {
+     "knowledge/workflows/results/agentic-2026-10-16/candidates/V-WHITE-p1120-1122.json": "bd5c58b0eb0a62f70683549e5a9d0e5e98abc702376acfc633f0d917f7f6aa25"
+    }
+   },
    "history": [
     {
      "from": null,
@@ -2023,8 +3297,49 @@
      "model": "claude-opus-5-5 (Opus F, main session)",
      "at": "2026-10-16T18:46:25.622749+00:00",
      "note": "independent original-page verification of pending September extraction objects: converging nozzle example claims"
+    },
+    {
+     "from": "QUEUED",
+     "to": "DOCLING_RUNNING",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:40:58.787105+00:00",
+     "note": "S1 start",
+     "evidence": {},
+     "attempt": 1
+    },
+    {
+     "from": "DOCLING_RUNNING",
+     "to": "RAW_CAPTURED",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:45:06.067306+00:00",
+     "note": "Docling whole-page runs cover pages 1120-1122",
+     "evidence": {},
+     "run_ids": [
+      "ENR_17f0c33f11d39a5b6b8cdcfe",
+      "ENR_dd7e82128f34bff74fb35b83",
+      "ENR_fb5dd156eb3fdb94c7c3a7ee"
+     ],
+     "observed_pages": [
+      1120,
+      1121,
+      1122
+     ]
+    },
+    {
+     "from": "RAW_CAPTURED",
+     "to": "CANDIDATES_PREPARED",
+     "role": "S2",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:45:08.846105+00:00",
+     "note": "{\"candidates_by_kind\": {\"formula\": 5, \"figure\": 1}, \"flagged_candidates\": 1, \"target_objects\": 5, \"objects_with_anchor_problems\": 0}",
+     "evidence": {
+      "knowledge/workflows/results/agentic-2026-10-16/candidates/V-WHITE-p1120-1122.json": "bd5c58b0eb0a62f70683549e5a9d0e5e98abc702376acfc633f0d917f7f6aa25"
+     }
     }
-   ]
+   ],
+   "updated_at": "2026-10-17T23:45:08.846105+00:00"
   },
   "V-RAD21-p007": {
    "id": "V-RAD21-p007",
@@ -2042,10 +3357,17 @@
    "priority": 49,
    "reason": "independent original-page verification of pending September extraction objects: spray-combustion evaporation claim",
    "dependencies": [],
-   "state": "QUEUED",
-   "attempts": 0,
+   "state": "CANDIDATES_PREPARED",
+   "attempts": 1,
    "created_at": "2026-10-16T18:46:25.628384+00:00",
-   "evidence": {},
+   "evidence": {
+    "docling_run_ids": [
+     "ENR_a1b72e82b322da78b6b529bd"
+    ],
+    "candidate_bundles": {
+     "knowledge/workflows/results/agentic-2026-10-16/candidates/V-RAD21-p007.json": "aaf7381f304e6e14068e32f3f1677dde826bd5ba2b35ac4b45913b793436cb55"
+    }
+   },
    "history": [
     {
      "from": null,
@@ -2054,8 +3376,45 @@
      "model": "claude-opus-5-5 (Opus F, main session)",
      "at": "2026-10-16T18:46:25.628385+00:00",
      "note": "independent original-page verification of pending September extraction objects: spray-combustion evaporation claim"
+    },
+    {
+     "from": "QUEUED",
+     "to": "DOCLING_RUNNING",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:45:27.968003+00:00",
+     "note": "S1 start",
+     "evidence": {},
+     "attempt": 1
+    },
+    {
+     "from": "DOCLING_RUNNING",
+     "to": "RAW_CAPTURED",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:45:39.114900+00:00",
+     "note": "Docling whole-page runs cover pages 7-7",
+     "evidence": {},
+     "run_ids": [
+      "ENR_a1b72e82b322da78b6b529bd"
+     ],
+     "observed_pages": [
+      7
+     ]
+    },
+    {
+     "from": "RAW_CAPTURED",
+     "to": "CANDIDATES_PREPARED",
+     "role": "S2",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:45:41.196450+00:00",
+     "note": "{\"candidates_by_kind\": {\"table\": 1}, \"flagged_candidates\": 0, \"target_objects\": 1, \"objects_with_anchor_problems\": 0}",
+     "evidence": {
+      "knowledge/workflows/results/agentic-2026-10-16/candidates/V-RAD21-p007.json": "aaf7381f304e6e14068e32f3f1677dde826bd5ba2b35ac4b45913b793436cb55"
+     }
     }
-   ]
+   ],
+   "updated_at": "2026-10-17T23:45:41.196450+00:00"
   },
   "V-RAD21-p013": {
    "id": "V-RAD21-p013",
@@ -2076,10 +3435,17 @@
    "priority": 48,
    "reason": "independent original-page verification of pending September extraction objects: Eq. 16 LOX droplet evaporation and claims",
    "dependencies": [],
-   "state": "QUEUED",
-   "attempts": 0,
+   "state": "CANDIDATES_PREPARED",
+   "attempts": 1,
    "created_at": "2026-10-16T18:46:25.634214+00:00",
-   "evidence": {},
+   "evidence": {
+    "docling_run_ids": [
+     "ENR_ecb5ab22de378007e7410cdd"
+    ],
+    "candidate_bundles": {
+     "knowledge/workflows/results/agentic-2026-10-16/candidates/V-RAD21-p013.json": "2c71dce569497049f2f40c7eaa827e4cc27da8ae3eb6f1e05f60742a32880a2d"
+    }
+   },
    "history": [
     {
      "from": null,
@@ -2088,8 +3454,45 @@
      "model": "claude-opus-5-5 (Opus F, main session)",
      "at": "2026-10-16T18:46:25.634216+00:00",
      "note": "independent original-page verification of pending September extraction objects: Eq. 16 LOX droplet evaporation and claims"
+    },
+    {
+     "from": "QUEUED",
+     "to": "DOCLING_RUNNING",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:45:54.734958+00:00",
+     "note": "S1 start",
+     "evidence": {},
+     "attempt": 1
+    },
+    {
+     "from": "DOCLING_RUNNING",
+     "to": "RAW_CAPTURED",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:50:57.175087+00:00",
+     "note": "Docling whole-page runs cover pages 13-13",
+     "evidence": {},
+     "run_ids": [
+      "ENR_ecb5ab22de378007e7410cdd"
+     ],
+     "observed_pages": [
+      13
+     ]
+    },
+    {
+     "from": "RAW_CAPTURED",
+     "to": "CANDIDATES_PREPARED",
+     "role": "S2",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:50:59.739836+00:00",
+     "note": "{\"candidates_by_kind\": {\"formula\": 7}, \"flagged_candidates\": 0, \"target_objects\": 4, \"objects_with_anchor_problems\": 0}",
+     "evidence": {
+      "knowledge/workflows/results/agentic-2026-10-16/candidates/V-RAD21-p013.json": "2c71dce569497049f2f40c7eaa827e4cc27da8ae3eb6f1e05f60742a32880a2d"
+     }
     }
-   ]
+   ],
+   "updated_at": "2026-10-17T23:50:59.739836+00:00"
   },
   "V-RAD21-p027-029": {
    "id": "V-RAD21-p027-029",
@@ -2110,10 +3513,19 @@
    "priority": 47,
    "reason": "independent original-page verification of pending September extraction objects: evaporation result claims",
    "dependencies": [],
-   "state": "QUEUED",
-   "attempts": 0,
+   "state": "CANDIDATES_PREPARED",
+   "attempts": 1,
    "created_at": "2026-10-16T18:46:25.640186+00:00",
-   "evidence": {},
+   "evidence": {
+    "docling_run_ids": [
+     "ENR_25650f93a40c0f65542fae86",
+     "ENR_d2ebb2aae68eb9be63661379",
+     "ENR_db06855f101b5184d70c480b"
+    ],
+    "candidate_bundles": {
+     "knowledge/workflows/results/agentic-2026-10-16/candidates/V-RAD21-p027-029.json": "cf11a9bc301fd2a511f19809b006b53c83876557bfb259d8962a4e1c5458f841"
+    }
+   },
    "history": [
     {
      "from": null,
@@ -2122,8 +3534,49 @@
      "model": "claude-opus-5-5 (Opus F, main session)",
      "at": "2026-10-16T18:46:25.640190+00:00",
      "note": "independent original-page verification of pending September extraction objects: evaporation result claims"
+    },
+    {
+     "from": "QUEUED",
+     "to": "DOCLING_RUNNING",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:51:18.256423+00:00",
+     "note": "S1 start",
+     "evidence": {},
+     "attempt": 1
+    },
+    {
+     "from": "DOCLING_RUNNING",
+     "to": "RAW_CAPTURED",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:52:14.046449+00:00",
+     "note": "Docling whole-page runs cover pages 27-29",
+     "evidence": {},
+     "run_ids": [
+      "ENR_25650f93a40c0f65542fae86",
+      "ENR_d2ebb2aae68eb9be63661379",
+      "ENR_db06855f101b5184d70c480b"
+     ],
+     "observed_pages": [
+      27,
+      28,
+      29
+     ]
+    },
+    {
+     "from": "RAW_CAPTURED",
+     "to": "CANDIDATES_PREPARED",
+     "role": "S2",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:52:16.682766+00:00",
+     "note": "{\"candidates_by_kind\": {\"figure\": 4}, \"flagged_candidates\": 0, \"target_objects\": 4, \"objects_with_anchor_problems\": 0}",
+     "evidence": {
+      "knowledge/workflows/results/agentic-2026-10-16/candidates/V-RAD21-p027-029.json": "cf11a9bc301fd2a511f19809b006b53c83876557bfb259d8962a4e1c5458f841"
+     }
     }
-   ]
+   ],
+   "updated_at": "2026-10-17T23:52:16.682766+00:00"
   },
   "V-LEE-p006-008": {
    "id": "V-LEE-p006-008",
@@ -2331,10 +3784,17 @@
    "priority": 44,
    "reason": "independent original-page verification of pending September extraction objects: validation-scope claim",
    "dependencies": [],
-   "state": "QUEUED",
-   "attempts": 0,
+   "state": "CANDIDATES_PREPARED",
+   "attempts": 1,
    "created_at": "2026-10-16T18:46:25.653140+00:00",
-   "evidence": {},
+   "evidence": {
+    "docling_run_ids": [
+     "ENR_ce87700cc254fc34cbc5453d"
+    ],
+    "candidate_bundles": {
+     "knowledge/workflows/results/agentic-2026-10-16/candidates/V-LEE-p010.json": "89253fc920bf855553fe941c53a1a9810848df6b61a27d664c0ad1dfcc08be03"
+    }
+   },
    "history": [
     {
      "from": null,
@@ -2343,8 +3803,45 @@
      "model": "claude-opus-5-5 (Opus F, main session)",
      "at": "2026-10-16T18:46:25.653144+00:00",
      "note": "independent original-page verification of pending September extraction objects: validation-scope claim"
+    },
+    {
+     "from": "QUEUED",
+     "to": "DOCLING_RUNNING",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:52:33.298478+00:00",
+     "note": "S1 start",
+     "evidence": {},
+     "attempt": 1
+    },
+    {
+     "from": "DOCLING_RUNNING",
+     "to": "RAW_CAPTURED",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:52:33.462320+00:00",
+     "note": "Docling whole-page runs cover pages 10-10",
+     "evidence": {},
+     "run_ids": [
+      "ENR_ce87700cc254fc34cbc5453d"
+     ],
+     "observed_pages": [
+      10
+     ]
+    },
+    {
+     "from": "RAW_CAPTURED",
+     "to": "CANDIDATES_PREPARED",
+     "role": "S2",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:52:35.382720+00:00",
+     "note": "{\"candidates_by_kind\": {\"figure\": 1, \"formula\": 1, \"table\": 1}, \"flagged_candidates\": 0, \"target_objects\": 1, \"objects_with_anchor_problems\": 0}",
+     "evidence": {
+      "knowledge/workflows/results/agentic-2026-10-16/candidates/V-LEE-p010.json": "89253fc920bf855553fe941c53a1a9810848df6b61a27d664c0ad1dfcc08be03"
+     }
     }
-   ]
+   ],
+   "updated_at": "2026-10-17T23:52:35.382720+00:00"
   },
   "V-LEE-p012-013": {
    "id": "V-LEE-p012-013",
@@ -2363,10 +3860,18 @@
    "priority": 43,
    "reason": "independent original-page verification of pending September extraction objects: Table 4 mass and future-work claims",
    "dependencies": [],
-   "state": "QUEUED",
-   "attempts": 0,
+   "state": "CANDIDATES_PREPARED",
+   "attempts": 1,
    "created_at": "2026-10-16T18:46:25.660267+00:00",
-   "evidence": {},
+   "evidence": {
+    "docling_run_ids": [
+     "ENR_ce0be4243e137e910315d7d4",
+     "ENR_fa03616da86f4e50f265fad0"
+    ],
+    "candidate_bundles": {
+     "knowledge/workflows/results/agentic-2026-10-16/candidates/V-LEE-p012-013.json": "0e5836a56dca5aebaf514c74d7c5df45ccddf03c0a8df4e05608587ec3d2f89a"
+    }
+   },
    "history": [
     {
      "from": null,
@@ -2375,8 +3880,47 @@
      "model": "claude-opus-5-5 (Opus F, main session)",
      "at": "2026-10-16T18:46:25.660270+00:00",
      "note": "independent original-page verification of pending September extraction objects: Table 4 mass and future-work claims"
+    },
+    {
+     "from": "QUEUED",
+     "to": "DOCLING_RUNNING",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:52:51.924968+00:00",
+     "note": "S1 start",
+     "evidence": {},
+     "attempt": 1
+    },
+    {
+     "from": "DOCLING_RUNNING",
+     "to": "RAW_CAPTURED",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:54:01.732342+00:00",
+     "note": "Docling whole-page runs cover pages 12-13",
+     "evidence": {},
+     "run_ids": [
+      "ENR_ce0be4243e137e910315d7d4",
+      "ENR_fa03616da86f4e50f265fad0"
+     ],
+     "observed_pages": [
+      12,
+      13
+     ]
+    },
+    {
+     "from": "RAW_CAPTURED",
+     "to": "CANDIDATES_PREPARED",
+     "role": "S2",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:54:04.707926+00:00",
+     "note": "{\"candidates_by_kind\": {\"figure\": 4, \"table\": 2, \"formula\": 1}, \"flagged_candidates\": 0, \"target_objects\": 2, \"objects_with_anchor_problems\": 0}",
+     "evidence": {
+      "knowledge/workflows/results/agentic-2026-10-16/candidates/V-LEE-p012-013.json": "0e5836a56dca5aebaf514c74d7c5df45ccddf03c0a8df4e05608587ec3d2f89a"
+     }
     }
-   ]
+   ],
+   "updated_at": "2026-10-17T23:54:04.707926+00:00"
   },
   "V-CAD-p004": {
    "id": "V-CAD-p004",
@@ -2395,10 +3939,17 @@
    "priority": 40,
    "reason": "independent original-page verification of pending September extraction objects: Bezier/B-spline continuity claims",
    "dependencies": [],
-   "state": "QUEUED",
-   "attempts": 0,
+   "state": "CANDIDATES_PREPARED",
+   "attempts": 1,
    "created_at": "2026-10-16T18:46:25.666779+00:00",
-   "evidence": {},
+   "evidence": {
+    "docling_run_ids": [
+     "ENR_9502383b198b6bf098db3890"
+    ],
+    "candidate_bundles": {
+     "knowledge/workflows/results/agentic-2026-10-16/candidates/V-CAD-p004.json": "d64d6e446b1c3c1daf28f78a4f5d93dc8d0f7c66491538e813f020af61cc13ac"
+    }
+   },
    "history": [
     {
      "from": null,
@@ -2407,8 +3958,45 @@
      "model": "claude-opus-5-5 (Opus F, main session)",
      "at": "2026-10-16T18:46:25.666783+00:00",
      "note": "independent original-page verification of pending September extraction objects: Bezier/B-spline continuity claims"
+    },
+    {
+     "from": "QUEUED",
+     "to": "DOCLING_RUNNING",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:54:23.156503+00:00",
+     "note": "S1 start",
+     "evidence": {},
+     "attempt": 1
+    },
+    {
+     "from": "DOCLING_RUNNING",
+     "to": "RAW_CAPTURED",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:54:36.914812+00:00",
+     "note": "Docling whole-page runs cover pages 4-4",
+     "evidence": {},
+     "run_ids": [
+      "ENR_9502383b198b6bf098db3890"
+     ],
+     "observed_pages": [
+      4
+     ]
+    },
+    {
+     "from": "RAW_CAPTURED",
+     "to": "CANDIDATES_PREPARED",
+     "role": "S2",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:54:39.431047+00:00",
+     "note": "{\"candidates_by_kind\": {\"figure\": 2}, \"flagged_candidates\": 0, \"target_objects\": 2, \"objects_with_anchor_problems\": 0}",
+     "evidence": {
+      "knowledge/workflows/results/agentic-2026-10-16/candidates/V-CAD-p004.json": "d64d6e446b1c3c1daf28f78a4f5d93dc8d0f7c66491538e813f020af61cc13ac"
+     }
     }
-   ]
+   ],
+   "updated_at": "2026-10-17T23:54:39.431047+00:00"
   },
   "V-CAD-p026": {
    "id": "V-CAD-p026",
@@ -2426,10 +4014,14 @@
    "priority": 39,
    "reason": "independent original-page verification of pending September extraction objects: clamped knot sequence claim",
    "dependencies": [],
-   "state": "QUEUED",
-   "attempts": 0,
+   "state": "RAW_CAPTURED",
+   "attempts": 1,
    "created_at": "2026-10-16T18:46:25.672853+00:00",
-   "evidence": {},
+   "evidence": {
+    "docling_run_ids": [
+     "ENR_eb95c0121bf0071bc4f68f95"
+    ]
+   },
    "history": [
     {
      "from": null,
@@ -2438,8 +4030,34 @@
      "model": "claude-opus-5-5 (Opus F, main session)",
      "at": "2026-10-16T18:46:25.672859+00:00",
      "note": "independent original-page verification of pending September extraction objects: clamped knot sequence claim"
+    },
+    {
+     "from": "QUEUED",
+     "to": "DOCLING_RUNNING",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:55:04.962287+00:00",
+     "note": "S1 start",
+     "evidence": {},
+     "attempt": 1
+    },
+    {
+     "from": "DOCLING_RUNNING",
+     "to": "RAW_CAPTURED",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T23:57:15.885449+00:00",
+     "note": "Docling whole-page runs cover pages 26-26",
+     "evidence": {},
+     "run_ids": [
+      "ENR_eb95c0121bf0071bc4f68f95"
+     ],
+     "observed_pages": [
+      26
+     ]
     }
-   ]
+   ],
+   "updated_at": "2026-10-17T23:57:15.885449+00:00"
   },
   "V-CAD-p040-042": {
    "id": "V-CAD-p040-042",
@@ -3097,10 +4715,19 @@
    "priority": 84,
    "reason": "Section 17 model audit: SP-125 Eqs. 4-27..4-32 tube/liner stress and cooling-passage pressure drop for MODEL_STRUCTURE_SP125_LINER_STRESS",
    "dependencies": [],
-   "state": "QUEUED",
-   "attempts": 0,
+   "state": "CANDIDATES_PREPARED",
+   "attempts": 1,
    "created_at": "2026-10-16T18:52:46.629049+00:00",
-   "evidence": {},
+   "evidence": {
+    "docling_run_ids": [
+     "ENR_83848d86594a3b16fcfc71ef",
+     "ENR_9302c4c1c3dab53cb71f10d3",
+     "ENR_e11d33d6c6d935f3c440a943"
+    ],
+    "candidate_bundles": {
+     "knowledge/workflows/results/agentic-2026-10-16/candidates/M-SP125-p116-118.json": "4b2e5916d1c32127a307dceb91e1dd5aa773d6b2b2a31234412d72c91cde01c7"
+    }
+   },
    "history": [
     {
      "from": null,
@@ -3109,8 +4736,49 @@
      "model": "claude-opus-5-5 (Opus F, main session)",
      "at": "2026-10-16T18:52:46.629054+00:00",
      "note": "Section 17 model audit: SP-125 Eqs. 4-27..4-32 tube/liner stress and cooling-passage pressure drop for MODEL_STRUCTURE_SP125_LINER_STRESS"
+    },
+    {
+     "from": "QUEUED",
+     "to": "DOCLING_RUNNING",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T18:36:33.516180+00:00",
+     "note": "S1 start",
+     "evidence": {},
+     "attempt": 1
+    },
+    {
+     "from": "DOCLING_RUNNING",
+     "to": "RAW_CAPTURED",
+     "role": "S1",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T18:43:17.956971+00:00",
+     "note": "Docling whole-page runs cover pages 116-118",
+     "evidence": {},
+     "run_ids": [
+      "ENR_83848d86594a3b16fcfc71ef",
+      "ENR_9302c4c1c3dab53cb71f10d3",
+      "ENR_e11d33d6c6d935f3c440a943"
+     ],
+     "observed_pages": [
+      116,
+      117,
+      118
+     ]
+    },
+    {
+     "from": "RAW_CAPTURED",
+     "to": "CANDIDATES_PREPARED",
+     "role": "S2",
+     "model": "claude-sonnet-5-5",
+     "at": "2026-10-17T18:43:21.241576+00:00",
+     "note": "{\"candidates_by_kind\": {\"figure\": 8, \"formula\": 6}, \"flagged_candidates\": 0, \"target_objects\": 0, \"objects_with_anchor_problems\": 0}",
+     "evidence": {
+      "knowledge/workflows/results/agentic-2026-10-16/candidates/M-SP125-p116-118.json": "4b2e5916d1c32127a307dceb91e1dd5aa773d6b2b2a31234412d72c91cde01c7"
+     }
     }
-   ]
+   ],
+   "updated_at": "2026-10-17T18:43:21.241576+00:00"
   },
   "P1-SP125-p100": {
    "id": "P1-SP125-p100",

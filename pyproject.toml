@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "lrekit"
-version = "0.1.1"
+dynamic = ["version"]
 description = "Research and preliminary-design toolkit for liquid rocket engine simulation and CAD export."
 readme = "README.md"
 requires-python = ">=3.10,<3.14"
@@ -61,19 +61,25 @@ Issues = "https://github.com/ibrahimshahid1/RaoRocketSim/issues"
 
 [project.scripts]
 lrekit = "lrekit.cli:main"
-raosim = "raosim.cli:main"
-RaoRocketSim = "raosim.cli:main"
-RaoRocketSimLegacy = "raosim.cli:legacy_main"
+raosim = "lrekit.application.cli:main"
+RaoRocketSim = "lrekit.application.cli:main"
+RaoRocketSimLegacy = "lrekit.application.cli:legacy_main"
 
 [tool.setuptools]
-py-modules = ["main"]
+package-dir = {"" = "src"}
 include-package-data = true
 
 [tool.setuptools.packages.find]
-include = ["raosim*", "lrekit*"]
+where = ["src"]
+# raosim is the compatibility package for the former name (aliases only).
+include = ["lrekit*", "raosim*"]
+
+[tool.setuptools.dynamic]
+version = {attr = "lrekit.__version__"}
 
 [tool.setuptools.package-data]
-raosim = [
+lrekit = [
+    "benchmark_data/*.json",
     "benchmark_data/cases/*.json",
     "benchmark_data/curves/*.csv",
     "data/cea_tables/catalog_v1.json",

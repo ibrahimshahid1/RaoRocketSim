@@ -1,0 +1,32 @@
+{
+  "source_id": "radhakrishnan2021",
+  "acquired_at_utc": "2026-11-04T00:34:47.717861+00:00",
+  "evidence_kind": "mixed_experiment_simulation_or_method_report",
+  "status": "ACQUIRED",
+  "files": [
+    {
+      "path": "raw/radhakrishnan2021/source.pdf",
+      "bytes": 4487837,
+      "sha256": "b2550805f9cd9837fcfac67243812665a3a3be832fb32d018638722c63c2c784",
+      "origin": "existing_local_literature_copy",
+      "original_path": "propulsion_texts/pintle_injector/radhakrishnan2021.pdf"
+    },
+    {
+      "path": "derived/radhakrishnan2021/source.txt",
+      "bytes": 82173,
+      "sha256": "6542ca21f11e4227f9a378013c189d6e35809638f29159c467814f742ee0a194",
+      "origin": "unreviewed_pdf_text_derivative"
+    }
+  ],
+  "review_state": "NOT_REVIEWED_FOR_TRAINING",
+  "training_eligible": false,
+  "hardware_qualified": false,
+  "limitations": [
+    "2021 water-air validation revision must remain separate from 2018; Tables 7 and 8 are simulations."
+  ],
+  "pdf_info": "Title:           A detailed modelling on spray atomisation and combustion of LOX/GCH4 in variable area pintle injecto\nSubject:         Combustion Theory and Modelling, 2021. doi: 10.1080/13647830.2021.1937702\nKeywords:        sheet formation and breakup; volume of fluid approach; Lagrangian approach; spray and combustion characteristics; pintle injector\nAuthor:          Kanmaniraja Radhakrishnan; Keonwoong Lee; Jaye Koo\nCreator:         LaTeX with hyperref package\nProducer:        Acrobat Distiller 8.1.0 (Windows); modified using iTextSharp™ 5.5.8 ©2000-2015 iText Group NV (AGPL-version)\nCreationDate:    Fri Jun 11 00:29:23 2021 EDT\nModDate:         Fri Jun 11 01:43:33 2021 EDT\nCustom Metadata: no\nMetadata Stream: yes\nTagged:          no\nUserProperties:  no\nSuspects:        no\nForm:            none\nJavaScript:      no\nPages:           34\nEncrypted:       no\nPage size:       634.32 x 833.04 pts\nPage rot:        0\nFile size:       4487837 bytes\nOptimized:       no\nPDF version:     1.3\n",
+  "text_extraction": {
+    "status": "DERIVATIVE_TEXT_UNREVIEWED",
+    "warning_excerpt": ""
+  }
+}

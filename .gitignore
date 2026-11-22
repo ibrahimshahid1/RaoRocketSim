@@ -22,6 +22,7 @@ test_failures.log
 # Local reference material and temporary files
 /propulsion_texts/
 /tmp/
+/archive/
 pdfs/
 
 # Packaging

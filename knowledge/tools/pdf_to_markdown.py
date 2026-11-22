@@ -33,7 +33,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 CONVERTER_NAME = "lrekit-kg-pdf2md"
-CONVERTER_VERSION = "1.0.1"
+CONVERTER_VERSION = "1.0.2"
 
 # Characters that signal displayed mathematics in raw PDF text.
 _EQ_CHARS = "=≈≅≡≤≥∂∫∑∏√∞±∓·×÷αβγδεζηθκλμνξπρστφχψωΓΔΘΛΞΠΣΦΨΩ∇⋅"
@@ -295,8 +295,11 @@ def convert_pdf(pdf_path: Path, out_path: Path, *, allow_ocr: bool = True,
             if page.native_chars >= ocr_char_threshold:
                 continue
             try:
-                tp = doc[page.number - 1].get_textpage_ocr(flags=0, dpi=220, full=True)
-                text = doc[page.number - 1].get_text("text", textpage=tp)
+                # TextPage weakly references its Page; keep the same wrapper
+                # alive through both OCR and extraction.
+                source_page = doc[page.number - 1]
+                tp = source_page.get_textpage_ocr(flags=0, dpi=220, full=True)
+                text = source_page.get_text("text", textpage=tp)
                 if len(text.strip()) > max(page.native_chars, 20):
                     page.markdown = text
                     page.ocr_used = True

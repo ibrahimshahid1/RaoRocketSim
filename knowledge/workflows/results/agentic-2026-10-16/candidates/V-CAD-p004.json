@@ -1,0 +1,165 @@
+{
+ "packet": "V-CAD-p004",
+ "kind": "verification",
+ "document_id": "DOC_CAD_04",
+ "source_pdf": "propulsion_texts/CAD_04.pdf",
+ "source_sha256": "db9187f977b3ad31d05cf23b6a76f17fa7743f0019ced2e919a7048aac843ecb",
+ "pages": [
+  4,
+  4
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 4,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_CAD_04/p0004.png",
+   "sha256": "b920787bbd6ed19e325e9ad00dcb9be2117628a53df74eae93d4bf6fa873b297",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_9502383b198b6bf098db3890"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_7d6a601e5c4b3ee7479bcc9a",
+   "kind": "figure",
+   "pages": [
+    4
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/1",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 605.8116584621639,
+     "t": 537.1855406292841,
+     "r": 706.6099969963012,
+     "b": 485.1753014750242,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_9502383b198b6bf098db3890",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_CAD_04/db9187f977b3-p4-4-d64e693ca50be0b9da6d23e851609b2980e268c21359e2663136876769d00083.json",
+   "raw_sha256": "4dd385726a843a42be1bf3901a1aed9702e5be7c0e59ed820224af892d490b39",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_de5c888e8d1380033e535a97",
+   "kind": "figure",
+   "pages": [
+    4
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 17.96999180245587,
+     "t": 528.200094762787,
+     "r": 150.446728644784,
+     "b": 470.41761138435413,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_9502383b198b6bf098db3890",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_CAD_04/db9187f977b3-p4-4-d64e693ca50be0b9da6d23e851609b2980e268c21359e2663136876769d00083.json",
+   "raw_sha256": "4dd385726a843a42be1bf3901a1aed9702e5be7c0e59ed820224af892d490b39",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [
+  {
+   "id": "CLM_CAD_04_150F4CC9",
+   "store": "claims",
+   "type": "Claim",
+   "page": 4,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Controlling continuity between separate Bézier curves is not trivial, which motivates B-splines whose degree does not depend on the number of control points.",
+   "quote": "The control of the continuity between Bézier curves is not trivial",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 4
+    }
+   ]
+  },
+  {
+   "id": "CLM_CAD_04_FC1271F8",
+   "store": "claims",
+   "type": "Claim",
+   "page": 4,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "B-splines are polynomial curves by pieces, whereas a Bézier curve has a unique polynomial representation along its interval of definition.",
+   "quote": "They are polynomial curves, by pieces (Bézier curves have a unique",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 4
+    }
+   ]
+  }
+ ],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_CAD_04#c00001",
+   "page_start": 3,
+   "page_end": 4,
+   "section": "",
+   "text": "**B-Splines**\n\n\nIsaac J. Schoenberg (1946)\n\n\nCarl De Boor (1972-76)\n\n\nMaurice G. Cox (1972)\n\n\nRichard Riesenfeld (1973)\n\n\nWolfgang Boehm (1980)\n\n**B-Splines**\n\n\nFor Bézier curves, the polynomial degree is directly\n\nrelated to the number of control points.\n\n\nThe control of the continuity between Bézier curves is not trivial\n\n\nB-Splines are a generalization in the sense that the\n\ndegree doesn't depend on the number of control\npoints\n\n\nOne can impose every continuity at any point of the curve (we will\n\nsee later how to do that)\n\n\nThey are polynomial curves, by pieces (Bézier curves have a unique\n\npolynomial representation along the interval of definition)\n\n\nThey may provide local control\n\n\nThe parametrization can be freely chosen (with Bézier, it is fixed,\n\nusually 0< _u_ <1. )"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "figure": 2
+  },
+  "flagged_candidates": 0,
+  "target_objects": 2,
+  "objects_with_anchor_problems": 0
+ }
+}

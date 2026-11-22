@@ -9,10 +9,10 @@ analysis (the throat hot spot painted onto the 3-D model).
 Examples
 --------
     # 80 axial channels, copper, coloured by wall temperature
-    PYTHONPATH=. python scripts/generate_regen_nozzle.py --channels 80 --thermal
+    python scripts/generate_regen_nozzle.py --channels 80 --thermal
 
     # 24 helical coils, 3 turns
-    PYTHONPATH=. python scripts/generate_regen_nozzle.py \
+    python scripts/generate_regen_nozzle.py \
         --channels 24 --channel-width 0.0018 --helix-turns 3 --out builds/coil
 """
 from __future__ import annotations
@@ -21,18 +21,19 @@ import argparse
 import sys
 from pathlib import Path
 
+# A checkout without an editable install still runs this script directly.
 REPO_ROOT = Path(__file__).resolve().parents[1]
-if str(REPO_ROOT) not in sys.path:
-    sys.path.insert(0, str(REPO_ROOT))
+if str(REPO_ROOT / "src") not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT / "src"))
 
 import matplotlib
 matplotlib.use("Agg")
 
-from raosim.design import CoolingSpec, MaterialSpec
-from raosim.nozzle_geometry import bell_nozzle_contour
-from raosim.physics import bartz_heat_flux, regenerative_cooling_analysis
-from raosim.propellants import custom_propellant
-from raosim.regen_geometry import generate_regen_nozzle
+from lrekit.application.design import CoolingSpec, MaterialSpec
+from lrekit.components.nozzle.geometry import bell_nozzle_contour
+from lrekit.components.cooling.screens import bartz_heat_flux, regenerative_cooling_analysis
+from lrekit.thermochemistry.propellants import custom_propellant
+from lrekit.components.cooling.geometry import generate_regen_nozzle
 
 
 def main() -> int:

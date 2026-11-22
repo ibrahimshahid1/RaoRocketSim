@@ -1,0 +1,486 @@
+\chapter{CLI Surface and End-to-End Data Flow}\label{ch:cli-dataflow}
+
+% Local helpers for TikZ node text, where \code (url's \path) cannot be used
+% because TikZ redefines \path inside a tikzpicture.
+\providecommand{\dftt}[1]{\texttt{#1}}
+
+\lead{What this chapter covers}
+This chapter follows a command line from the console script to the last file it writes. The stage chapters that follow (Chapters~\ref{ch:s01-s02} to \ref{ch:s13-s14}) hang on this map. It fixes the stage identifiers \leavevmode\stagetag{S01} to \leavevmode\stagetag{S14} in execution order. It names the function that runs at each step, with its line in the working tree of 5 November 2026, and lists the files each step writes. It also records where the README and other documents describe a different program from the one the code runs. The markdown twin of this chapter is \code{docs/architecture/DATAFLOW.md}.
+
+\lead{Basis and notation}
+Everything below comes from a code-derived trace of the working tree. The trace combines an abstract-syntax-tree (AST) import closure with a read of the dispatch code, and it was spot-checked line by line against \code{raosim/run_nozzle.py}. That file has 6,981 lines, and its \code{main()} alone spans lines 2817 to 6977. A bare line reference such as \code{:4452} means a line of \code{raosim/run_nozzle.py}; references into other files name the file. Where a document and the code disagree, the code is authoritative and the disagreement is listed in Section~\ref{sec:df-drift}.
+
+\caution{Every path in this chapter produces a preliminary, screening-level design product. The runner sets \code{summary["hardware_qualified"]=False} unconditionally (\code{:4968}) and ends every successful run by printing that numerical design and CAD output is never hardware-qualified by LREKit (\code{:6976}). The job run record writes \code{"hardware_release":False} into its manifest (\code{raosim/mdo/run_record.py:46}). Nothing in this data flow is physically validated.}
+
+% ==============================================================================
+\section{Entry points}\label{sec:df-entry}
+
+\code{pyproject.toml} declares four console scripts (lines 62 to 66) and packages the top-level \code{main.py} as a module (line 69). Together with \code{python}~\code{-m} and two compatibility wrappers, these reach three dispatch functions.
+
+{\small
+\begin{longtable}{P{3.5cm}P{4.2cm}P{7.8cm}}
+\toprule
+Entry & Target & What runs \\
+\midrule
+\endhead
+\code{lrekit} & \code{lrekit.cli:main} (\code{lrekit/cli.py:18}) & If \code{argv[1]} is one of the \code{JOB_VERBS} \code{guided}, \code{run}, \code{validate} or \code{catalog} (\code{lrekit/job_cli.py:29}), control passes to \code{lrekit.job_cli.main} (\code{job_cli.py:398}). Otherwise control passes to \code{raosim.cli.main}. \\
+\code{raosim}, \code{RaoRocketSim} & \code{raosim.cli:main} (\code{raosim/cli.py:9}) & If \code{argv[1]} is \code{export-openfoam-spray} (\code{raosim/cli.py:11}), control passes to \code{raosim.openfoam.case.cli_main} (\code{openfoam/case.py:1611}). Otherwise the runner \code{raosim.run_nozzle.main} (\code{:2817}) is imported lazily and run. \\
+\code{RaoRocketSimLegacy} & \code{raosim.cli:legacy_main} (\code{raosim/cli.py:21}) & \code{import_module("main").main()}, which is the old top-level \code{main.py} toolbox (cross-cutting group X03). \\
+\code{python}~\code{-m}~\code{lrekit}, \code{python}~\code{-m}~\code{raosim} & \code{lrekit/__main__.py}, \code{raosim/__main__.py} & Same as \code{lrekit} and \code{raosim}. \\
+\code{scripts/run_nozzle.py}, \code{raosim/run.sh} & compatibility wrappers & \code{raosim.run_nozzle.main}. \\
+\bottomrule
+\end{longtable}}
+
+The two package names are tied together by one line. \code{lrekit/__init__.py:16} sets \code{__path__} to the \code{lrekit/} directory followed by \code{raosim.__path__}, so \code{lrekit.<x>} resolves to \code{raosim/<x>.py}. There is no second copy of any engineering module.
+
+Dispatch is lazy. Eagerly, \code{lrekit.cli} imports only four modules: \code{lrekit/__init__.py}, \code{lrekit/cli.py}, \code{raosim/__init__.py} and \code{raosim/cli.py}. Everything else loads inside functions. Importing \code{raosim/run_nozzle.py} eagerly pulls in 19 modules: \code{chamber_geometry}, \code{coolants}, \code{export}, \code{gas_dynamics}, \code{materials}, \code{moc}, \code{nasa_moc}, \code{physics}, \code{rao_residuals}, \code{rao_variational}, \code{regen_geometry}, \code{regen_profile}, \code{separation}, \code{thermofluids}, \code{throat_geometry}, \code{validation}, \code{wall_model}, the \code{raosim} package itself and the runner. The disciplines that only some flags need, such as injector, pumps, CAD and MDO, load on first use.
+
+% ==============================================================================
+\section{CLI surface}\label{sec:df-surface}
+
+\subsection{Job verbs and the OpenFOAM export verb}\label{sec:df-verbs}
+
+Five verbs bypass the flag runner. Four of them belong to the job dialect: YAML or JSON job documents with unit-bearing values, compiled into the versioned \code{EngineJobSpec} of \code{raosim/mdo/job.py}. The fifth writes an OpenFOAM case.
+
+{\small
+\begin{longtable}{P{4.6cm}P{6.0cm}P{4.9cm}}
+\toprule
+Invocation & Handler chain & Writes \\
+\midrule
+\endhead
+\code{lrekit}~\code{guided} \code{[--save}~\code{FILE]} \code{[--run]} & \code{job_cli._cmd_guided} (\code{:274}) $\to$ \code{lrekit.guided.run_guided} (\code{guided.py:271}). That calls \code{GuidedSession.run}, an interview that re-prompts through \code{units.parse_quantity}. Then \code{job_cli._build_spec}, \code{mdo.job.resolve_engine_job} (\code{job.py:889}) and a coverage preview through \code{mdo.coolant_htd.htd_availability}. With \code{--run}, \code{_cmd_run} follows. & Job YAML or JSON with \code{--save}. \\
+\code{lrekit}~\code{validate}~\code{JOB.yaml} \code{[--resolved-out}~\code{FILE]} & \code{_cmd_validate} (\code{job_cli.py:181}): \code{_load_job_document} (rejects duplicate keys), \code{_build_spec} (rejects unknown keys), \code{mdo.execute.expand_architectures} (\code{execute.py:814}) and \code{resolve_engine_job}. Nothing is solved. & Resolved job JSON with \code{--resolved-out}. \\
+\code{lrekit}~\code{run}~\code{JOB.yaml} \code{[--out}~\code{FILE]} & \code{_cmd_run} (\code{job_cli.py:209}). Section~\ref{sec:df-job} gives the full path. & Run record under \code{output_policy.output_dir}; result JSON with \code{--out}. The exit code is the verdict. \\
+\code{lrekit}~\code{catalog}~\code{TOPIC} & \code{_cmd_catalog} (\code{job_cli.py:320}). The eight topics (\code{job_cli.py:31-34}) are \code{variables}, \code{targets}, \code{objectives}, \code{constraints}, \code{propellants}, \code{materials}, \code{unavailable} and \code{capabilities}. They read \code{mdo.job.VARIABLE_DIMENSIONS}, \code{mdo.metrics}, \code{mdo.constraints.CONSTRAINT_MANIFEST}, \code{mdo.propellants.PROPELLANTS}, \code{materials.material_names} and \code{mdo.capabilities.JOB_CAPABILITIES}. & Console only. \\
+\code{lrekit}~\code{export-openfoam-spray} \code{OUTPUT} \code{[--case-row}~\code{case_1..case_4]} \code{[--wedge-angle-deg]} \code{[--opening-cells]} \code{[--radial-cells]} & \code{raosim/cli.py:11-13} $\to$ \code{openfoam.case.cli_main} (\code{case.py:1611}) $\to$ \code{build_radhakrishnan2018_sheet_vof_case} (\code{:456}) $\to$ \code{write_openfoam_case} (\code{:1520}). The defaults are \code{case_1}, $5.0^\circ$, 6 and 240 (\code{case.py:1622-1627}). & A version-pinned OpenFOAM volume-of-fluid (VOF) case plus \code{raosim_openfoam_manifest.json} (\code{case.py:47}). OpenFOAM itself is never run. \\
+\bottomrule
+\end{longtable}}
+
+\subsection{The flag runner: 330 flags by family}\label{sec:df-flags}
+
+\code{raosim.run_nozzle.main} builds one flat \code{argparse.ArgumentParser} with 330 \code{add_argument} calls (lines 2819 to 3782). It uses no argument groups. The grouped list that \code{--tags} prints comes from \code{print_tags} (\code{:139}). That list is maintained by hand, separately from the parser, and shows only a subset of the flags. Table~\ref{tab:df-flag-families} sorts all 330 flags into families by the stage that consumes them. The grouping is this guide's own. The counts come from an AST walk of \code{main()} and sum to 330.
+
+{\small
+\begin{longtable}{P{3.3cm}P{0.6cm}P{8.2cm}P{2.6cm}}
+\caption{Runner flag families (AST count of \texttt{add\_argument} calls in \texttt{run\_nozzle.main}, working tree 2026-11-05).}\label{tab:df-flag-families}\\
+\toprule
+Family & $n$ & Representative flags & Consumed by \\
+\midrule
+\endfirsthead
+\toprule
+Family & $n$ & Representative flags & Consumed by \\
+\midrule
+\endhead
+Operating point and nozzle & 9 & \code{--pc} \code{--pa-over-p0} \code{--target-thrust} \code{--rt} \code{--epsilon} \code{--length-pct} \code{--gamma} \code{--contour-method} \code{--allow-chart-extrapolation} & \leavevmode\stagetag{S04}, \leavevmode\stagetag{S05} \\
+Propellant and thermochemistry & 15 & \code{--propellant} \code{--oxidizer} \code{--fuel} \code{--thermo-mode} \code{--mixture-ratio} \code{--eta-cstar} \code{--eta-cf} \code{--nozzle-expansion-model} \code{--frozen-gas-table}, plus the per-stream inlet temperature, pressure and phase flags & \leavevmode\stagetag{S03}; inlet states \leavevmode\stagetag{S08} \\
+Chamber and throat geometry & 11 & \code{--l-star} \code{--contraction-ratio} \code{--shoulder-radius-factor} \code{--shoulder-sizing} \code{--minimum-cylindrical-length} \code{--convergent-angle} \code{--ru-factor} \code{--rd-factor} \code{--cd-target} & \leavevmode\stagetag{S05} \\
+Rao BVP solver & 8 & \code{--backend} \code{--max-nfev} \code{--n-control} \code{--n-kernel} \code{--theta-b-guess} \code{--kernel-dtheta-limit-deg} \code{--kernel-massflow-rel-tol} \code{--allow-unconverged} & \leavevmode\stagetag{S06} only \\
+Release evidence & 3 & \code{--release-evidence-manifest} \code{--configuration-id} \code{--require-release-evidence} & \leavevmode\stagetag{S14} \\
+Regen channels, cooling, thermofluids, wall sizing and structure & 47 & \code{--regen} \code{--channels} \code{--channel-*} \code{--helix-turns} \code{--wall-thickness} \code{--wall-sizing} \code{--size-wall} \code{--auto-size} \code{--thermal} \code{--material} \code{--jacket-material} \code{--coolant*} \code{--coolant-property-backend} \code{--hydraulic-network} \code{--radiation-*} \code{--boiling-chf} \code{--structural-fos} \code{--required-cycles} \code{--t-hot-*} \code{--buckling-*} & \leavevmode\stagetag{S07}; regen geometry \leavevmode\stagetag{S11} \\
+Fixed pintle injector, feed ports, manifolds and throttle map & 47 & \code{--injector} \code{--injector-architecture} \code{--injector-sizing} \code{--fuel-injector-dp-fraction} \code{--oxidizer-injector-dp-fraction} \code{--pintle-*} \code{--*-discharge-coefficient} \code{--*-inlet-count/diameter/angle/fitting} \code{--*-manifold-width/depth} \code{--allow-infeasible-injector} \code{--throttle-map}. Also the hidden \code{--injector-pressure-drop}, whose help is suppressed and which is rejected at parse time (\code{:661}) & \leavevmode\stagetag{S08}, \leavevmode\stagetag{S10} \\
+Movable (Son) pintle evidence & 54 & \code{--movable-post-*} \code{--movable-center-gap-*} \code{--movable-cd-*} (calibration map, provenance and validity ranges) \code{--movable-position-*} \code{--movable-actuator-*} \code{--movable-stem-*} \code{--movable-sheet-*} & \leavevmode\stagetag{S08} \\
+Spray/$c^*$ coupling & 7 & \code{--spray-cstar-coupling} \code{--spray-eta-mixing} \code{--spray-eta-combustion} \code{--spray-coupling-*} \code{--spray-evaporation-constant} & \leavevmode\stagetag{S08} \\
+Feed-pressure ledger & 23 & \code{--feed-architecture} \code{--*-tank-pressure} \code{--*-supply-pressure} \code{--*-flow-capacity} \code{--*-line-loss[-fraction]} \code{--*-manifold-loss[-fraction]} \code{--*-control-margin[-fraction]} \code{--*-npsh-required} \code{--pump-efficiency-*} & \leavevmode\stagetag{S08} feed spec, \leavevmode\stagetag{S09} \\
+Electric pump, motor, inverter and battery & 27 & \code{--electric-pump} (with \code{--no-electric-pump}) \code{--electric-technology} \code{--pump-rpm} \code{--burn-time} \code{--motor-*} \code{--inverter-*} \code{--battery-*} \code{--vehicle-mass} \code{--pump-head-coefficient} \code{--pump-tip-speed-limit} \code{--allow-infeasible-pump} & \leavevmode\stagetag{S09} \\
+Interface, seals and manufacturing limits & 19 & \code{--flange-od} \code{--flange-length} \code{--bolt-*} \code{--joint-separation-factor} \code{--injector-face-od} \code{--injector-face-thickness} \code{--seal-type} \code{--o-ring-groove-*} \code{--min-tool-diameter} \code{--injector-tolerance} \code{--igniter-port-*} & \leavevmode\stagetag{S08}, \leavevmode\stagetag{S10}, \leavevmode\stagetag{S11} \\
+CAD export & 16 & \code{--cad} \code{--require-brep} \code{--regen-brep} \code{--regen-manifolds} \code{--regen-release-mode} \code{--regen-port-*} \code{--engine-assembly} \code{--injector-cad} \code{--injector-cad-format} \code{--pintle-sleeve} \code{--pump-cad} \code{--pump-cad-format} \code{--allow-open-pump-mesh} & \leavevmode\stagetag{S11} \\
+Visualisation & 5 & \code{--flowfield} \code{--animate} \code{--chamber-temp} \code{--pump-visualize} \code{--show} & \leavevmode\stagetag{S12} \\
+Modes and output & 6 & \code{-i/--interactive} \code{--complete-package} \code{--tags} \code{--list-materials} \code{--no-banner} \code{--out} & \leavevmode\stagetag{S01} \\
+Whole-engine MDO & 23 & \code{--engine-mdo} \code{--engine-mdo-optimize} \code{--engine-mdo-couple-cstar} \code{--isp-min} \code{--isp-sweep} \code{--mdo-multistart} \code{--mdo-station-study} \code{--mdo-propellant} \code{--mdo-of-mode} \code{--mdo-export} \code{--design-margins} \code{--film-frac} \code{--t-wall} \code{--allow-incomplete-physics} & \leavevmode\stagetag{S13}, \leavevmode\stagetag{S14} \\
+Requirement-driven design & 10 & \code{--requirements} \code{--thrust-condition} \code{--isp-basis} \code{--flight-duration} \code{--qualification-duration} \code{--envelope-diameter-max} \code{--envelope-length-max} \code{--burnout-mass-max} \code{--throttle-range} \code{--reusable-cycles} & \leavevmode\stagetag{S13} \\
+\midrule
+Total & 330 & & \\
+\bottomrule
+\end{longtable}}
+
+Three behaviours of the parser matter for every run:
+\begin{itemize}
+  \item \textbf{Argument files.} \code{_expand_arg_files} (\code{:562}, called at \code{:3785}) expands \code{@file.args} tokens before parsing. Each file is read as shell-style tokens with comments, nested includes resolve relative to the including file, and expansion is positional, so a later flag overrides an earlier one. The four shipped files live in \code{examples/cli/}.
+  \item \textbf{Units.} Every runner flag is an \code{argparse} number read as SI by convention (Pa, m, N, kg/s). The runner never calls \code{raosim/units.py}; only the job dialect parses unit-bearing strings.
+  \item \textbf{Defaults that decide the path.} \code{--contour-method} defaults to \code{bezier} (\code{:2827-2831}), \code{--out} to \code{builds/nozzle_run} (\code{:3534}), \code{--cad} to \code{none} (\code{:3535}) and \code{--require-brep} to true (\code{:3538-3545}). \code{--backend} defaults to \code{jax} (\code{:2953}), but that default only matters on the \code{rao-bvp} path.
+\end{itemize}
+
+\caution{The eight Rao BVP solver flags act only when \code{--contour-method}~\code{rao-bvp} is given. On the default B\'ezier path, \code{_solve} (\code{:1464-1487}) calls \code{nozzle_geometry.bell_nozzle_contour} with none of them, so \code{--backend}, \code{--max-nfev}, \code{--n-control} and \code{--n-kernel} have no effect. Three of the four shipped argument files pass these flags without selecting \code{rao-bvp} (Section~\ref{sec:df-drift}, item 9).}
+
+% ==============================================================================
+\section{Dispatch inside the runner}\label{sec:df-dispatch}
+
+Before any physics runs, \code{run_nozzle.main} applies these steps in this order:
+\begin{enumerate}
+  \item It builds the parser (\code{:2819-3782}), expands argument files (\code{:3785}) and parses (\code{:3790}).
+  \item \code{_reject_legacy_injector_pressure_drop} (\code{:661}, called at \code{:3791}) exits through \code{argparse} if the deprecated \code{--injector-pressure-drop} appears.
+  \item \code{_apply_electric_technology} (\code{:522}, called at \code{:3792}) resolves \code{raosim.electric_technology.get_electric_technology} and fills the eight motor, inverter and battery flags.
+  \item \textbf{Front door} (\code{:3797-3811}). This step runs on a bare invocation or with \code{-i}, unless \code{--engine-mdo} or \code{--engine-mdo-optimize} is set. \code{_select_mode_interactively} (\code{:1850}) prints \code{_MODE_MENU} (\code{:1756}). Choice~1 continues on the traditional path with the starter defaults. Choice~2 runs \code{_interactive_engine_mdo} (\code{:1778}) and then \code{_run_engine_mdo}. Choice~3 runs the same interview with \code{optimise=True} and then \code{_run_engine_mdo_optimize}. End of input returns 130.
+  \item \code{_validate_common_engine_args} (\code{:719}, called at \code{:3812}) calls \code{raosim.input_validation.validate_engine_inputs}. This is the shared domain check, and it runs before every branch.
+  \item \code{--mdo-multistart}, \code{--mdo-multistart-seed} and \code{--mdo-station-study} are refused unless \code{--engine-mdo-optimize} is set (\code{:3813-3829}).
+  \item \textbf{Branch, first match wins:} \code{--requirements} goes to \code{_run_requirements} (\code{:3830}). \code{--engine-mdo-optimize} goes to \code{_run_engine_mdo_optimize} (\code{:3832}). \code{--engine-mdo} goes to \code{_run_engine_mdo} (\code{:3834}). Anything else runs the traditional pipeline of Section~\ref{sec:df-pipeline}.
+\end{enumerate}
+
+Figure~\ref{fig:df-pipeline} shows the whole tree: the three entry dispatchers, the job path on the left, the traditional pipeline in the centre in execution order, and the MDO branch on the right. The cross-cutting groups X01 to X08 sit beside the pipeline. They are not steps in it.
+
+\begin{figure}[p]
+\centering
+\resizebox{\linewidth}{!}{%
+\begin{tikzpicture}[
+  font=\sffamily\scriptsize,
+  >={Stealth[length=1.8mm]},
+  bx/.style={draw=#1, rounded corners=2pt, align=center, inner sep=2.5pt, minimum height=7mm},
+  side/.style={bx=teal, fill=white, text width=44mm},
+  entry/.style={bx=ink, fill=ink!8, text width=44mm},
+  stage/.style={bx=teal, fill=pale, text width=50mm},
+  mdo/.style={bx=teal, fill=teal!12, text width=44mm},
+  xc/.style={bx=muted, dashed, fill=white, text width=44mm, minimum height=6mm},
+  note/.style={bx=warn, fill=warnpale, text width=44mm, align=left},
+  decision/.style={diamond, aspect=3.2, draw=warn, fill=warnpale, align=center, inner sep=0pt, font=\sffamily\tiny},
+  flow/.style={->, draw=ink, thick},
+  opt/.style={->, draw=teal, thick, dashed},
+  lbl/.style={font=\sffamily\tiny, text=muted, align=center},
+  hdr/.style={font=\sffamily\scriptsize\bfseries, text=ink},
+  ex/.style={text=warn},
+]
+% ---------------- column headers
+\node[hdr] at (0,1.0) {Job path (\dftt{lrekit} verbs)};
+\node[hdr] at (6.0,1.0) {Flag runner (\dftt{run\_nozzle.main})};
+\node[hdr] at (12.0,1.0) {Export verb, legacy, MDO};
+% ---------------- entry row
+\node[entry] (E1) at (0,0) {\textbf{lrekit} $\to$ \dftt{lrekit.cli.main}};
+\node[entry, text width=50mm] (E2) at (6.0,0) {\textbf{raosim}, \textbf{RaoRocketSim}, \dftt{python -m}\\$\to$ \dftt{raosim.cli.main}};
+\node[entry] (E3) at (12.0,0) {\textbf{RaoRocketSimLegacy} $\to$ \dftt{main.py} (X03): sweeps, benchmarks; \dftt{builds/vNNN\_*/}};
+% ---------------- left: job path
+\node[side] (J0) at (0,-1.5) {\dftt{lrekit.job\_cli.main};\\\dftt{catalog} prints and exits};
+\node[side] (J1) at (0,-3.0) {\textbf{S02} load and resolve the job (\dftt{mdo.job}; \dftt{expand\_architectures} in S14 \dftt{mdo.execute})};
+\node[side] (J2) at (0,-4.5) {\textbf{S13} ANALYZE or OPTIMIZE (\dftt{solve\_min\_mass}); engine state};
+\node[side] (J3) at (0,-5.85) {\textbf{S14} \dftt{reevaluate} $\to$ \dftt{design\_nozzle\_v2}; Rao contour check; verdict};
+\node[side] (J4) at (0,-7.5) {\textbf{S14} run record \dftt{output\_dir/}$\langle$uuid$\rangle$\dftt{/}: \dftt{manifest.json} (SHA-256), \dftt{job.json}, \dftt{summary.json}, \dftt{parts/}};
+% ---------------- centre: runner
+\node[stage] (R0) at (6.0,-1.5) {\textbf{S01} \dftt{run\_nozzle.main}: 330 flags, \dftt{@}argfiles, menu, shared input validation};
+\node[decision] (D) at (6.0,-3.0) {MDO or requirements\\flag, or menu 2/3?};
+\node[stage] (T1) at (6.0,-4.5) {\textbf{S01/S02 set-up}: defaults, flag cross-checks, release evidence, interview, wall material};
+\node[stage] (T2) at (6.0,-5.9) {\textbf{S03} thermochemistry: \dftt{cea.resolve\_thermochemistry}};
+\node[stage] (T3) at (6.0,-7.3) {\textbf{S04} throat sizing and performance; \dftt{-{}-out} created};
+\node[stage] (T4) at (6.0,-8.7) {\textbf{S05} B\'ezier/TOP contour (default), chamber, gates $\to$ \dftt{contour.csv}, \dftt{profile.png} {\color{warn}(gate fails: exit 2)}};
+\node[stage] (T5) at (6.0,-10.1) {\textbf{S12} early figures: separation, BDE diagrams, flow field, GIFs};
+\node[stage] (T6) at (6.0,-11.5) {\textbf{S07} regen wall sizing, Bartz/Sieder--Tate cooling, wall stress};
+\node[stage] (T7) at (6.0,-12.9) {\textbf{S08} pintle injector, optional spray/$c^*$ loop $\to$ \dftt{pintle.json} {\color{warn}(rejected: exit 2)}};
+\node[stage] (T8) at (6.0,-14.3) {\textbf{S09} electric pumps $\to$ \dftt{pump*.json}; S11 pump CAD; S12 GIF {\color{warn}(gates fail: exit 2)}};
+\node[stage] (T9) at (6.0,-15.7) {\textbf{S10} interface sync, throttle map; \textbf{S11} \dftt{pintle/}; \textbf{S12} injector figures};
+\node[stage] (T10) at (6.0,-17.1) {\textbf{S11} core CAD: wall/jacket STL and STEP, regen, assembly};
+\node[stage] (T11) at (6.0,-18.5) {\textbf{S14} \dftt{summary.json} (\dftt{hardware\_qualified} False); exit 0};
+% ---------------- right: export, MDO, S06
+\node[side] (OF) at (12.0,-1.75) {\textbf{X02} OpenFOAM VOF case + manifest; OpenFOAM never run};
+\node[mdo] (M1) at (12.0,-3.0) {\textbf{S13} requirements, MDO evaluate or MDO optimize (\dftt{mdo.engine}, \dftt{mdo.nlp}; JAX x64)};
+\node[mdo] (M2) at (12.0,-4.6) {\textbf{S14} \dftt{reevaluate} $\to$ \dftt{design\_nozzle\_v2} $\to$ v2 files in \dftt{-{}-out}};
+\node[mdo] (M3) at (12.0,-6.1) {Console tables; exit code = verdict (0 to 4)};
+\node[mdo] (S6) at (12.0,-8.7) {\textbf{S06} (opt-in) \dftt{solve\_rao\_bvp}: MOC/BDE net; \dftt{-{}-backend jax} uses X01};
+\node[note] (N1) at (12.0,-12.2) {\textbf{Early returns, traditional path}\\[1pt]
+\textbullet\ set-up: tags and material list exit 0; parser errors exit 2\\
+\textbullet\ S05: contour or chamber gate fails; no files, exit 2\\
+\textbullet\ S08: injector rejected; \dftt{summary.json}, exit 2\\
+\textbullet\ S09 to S11: pump or injector gates, a requested pump or pintle CAD package, or the throttle map fail; \dftt{summary.json}, exit 2\\
+\textbullet\ B\'ezier chart lookup with $\varepsilon\notin[5,50]$ or length $\notin[60,100]\,\%$: uncaught \dftt{ValueError}};
+\node[note, draw=ink, fill=white] (N2) at (12.0,-16.65) {\textbf{Legend}\\[1pt]
+solid arrow: default flow\\
+dashed arrow: flag-gated branch\\
+shaded box: stage, in execution order\\
+dashed grey box: cross-cutting group\\
+S12 figures and S11 pump CAD run inside the block they follow};
+% ---------------- left: cross-cutting panel
+\node[hdr] at (0,-8.7) {Cross-cutting groups (not steps)};
+\node[xc] (X1) at (0,-9.3) {\textbf{X01} JAX core: LM solve for S06; primitives for S13};
+\node[xc] (X2) at (0,-10.62) {\textbf{X02} spray parcels, OpenFOAM export; S08 uses handoff types only};
+\node[xc] (X3) at (0,-11.94) {\textbf{X03} legacy toolbox CLI (\dftt{main.py})};
+\node[xc] (X4) at (0,-13.26) {\textbf{X04} vendored NASA/JHU MOC reference (test oracle)};
+\node[xc] (X5) at (0,-14.58) {\textbf{X05} 15 standalone research scripts};
+\node[xc] (X6) at (0,-15.9) {\textbf{X06} knowledge graph, sources, packaged data};
+\node[xc] (X7) at (0,-17.22) {\textbf{X07} tests and \dftt{examples/cli/*.args}};
+\node[xc] (X8) at (0,-18.54) {\textbf{X08} 8 modules reachable only from tests or nothing};
+% ---------------- arrows
+\draw[flow] (E1) -- node[lbl, above] {other} node[lbl, below] {argv} (E2);
+\draw[flow] (E1) -- node[lbl, right, align=left] {guided $|$ validate $|$\\run $|$ catalog} (J0);
+\draw[flow] (J0) -- (J1);
+\draw[flow] (J1) -- (J2);
+\draw[flow] (J2) -- (J3);
+\draw[flow] (J3) -- (J4);
+\draw[flow] (E2) -- (R0);
+\draw[opt] (E2.east) -- ++(0.45,0) |- (OF.west);
+\node[lbl, anchor=west] at (9.15,-0.92) {\dftt{export-openfoam-spray}};
+\draw[flow] (R0) -- (D);
+\draw[flow] (D) -- node[lbl, above] {yes} (M1);
+\draw[flow] (D) -- node[lbl, right] {no: traditional} (T1);
+\draw[opt] (M1) -- node[lbl, left] {\dftt{-{}-mdo-export}} (M2);
+\draw[flow] (M2) -- (M3);
+\draw[flow] (M1.east) -- ++(0.3,0) |- (M3.east);
+\draw[flow] (T1) -- (T2);
+\draw[flow] (T2) -- (T3);
+\draw[flow] (T3) -- (T4);
+\draw[opt, <->] (T4) -- node[lbl, above] {\dftt{rao-bvp}} (S6);
+\draw[flow] (T4) -- (T5);
+\draw[flow] (T5) -- (T6);
+\draw[flow] (T6) -- (T7);
+\draw[flow] (T7) -- (T8);
+\draw[flow] (T8) -- (T9);
+\draw[flow] (T9) -- (T10);
+\draw[flow] (T10) -- (T11);
+\end{tikzpicture}}
+\caption{Execution order of the LREKit command line (working tree, 5 November 2026). Centre: the traditional pipeline of run\_nozzle.main, S01 to S14 top to bottom. Right: the export verb, the legacy toolbox and the early-exit MDO branch. Left: the job path of lrekit run with its run record, and the cross-cutting groups.}\label{fig:df-pipeline}
+\end{figure}
+
+% ==============================================================================
+\section{The traditional pipeline, stage by stage}\label{sec:df-pipeline}
+
+This is the path for \code{lrekit}~\code{[flags]}, for bare runs that choose menu item~1, and for the shipped \code{@examples/cli/*.args} files. The stages run strictly in the order below. Figures (\leavevmode\stagetag{S12}) and some CAD (\leavevmode\stagetag{S11}) are interleaved with the stage blocks they depend on.
+
+\subsection{S01 and S02: defaults, cross-checks, release evidence and interview}\label{sec:df-s01s02}
+\begin{itemize}
+  \item \code{--complete-package}, or a bare run, calls \code{_apply_complete_package_defaults} (\code{:607}, called at \code{:3836}). It sets LOX/RP-1, \code{--injector}~\code{pintle}, \code{--electric-pump} and the starter tank pressures, and records what it filled in \code{args._complete_package_default_notes}.
+  \item \code{_apply_wall_sizing_mode} (\code{:920}, called at \code{:3842}) maps \code{--wall-sizing} and \code{--size-wall} onto \code{args.regen} and \code{args.size_wall}.
+  \item The mutual-exclusion and domain checks run at \code{:3843-4005}. For example, frozen variable-$c_p$ expansion is B\'ezier-only and excludes regen and thermal runs, \code{--regen-brep} requires \code{--regen} and \code{--cad}, \code{--flowfield} and \code{--animate} require \code{rao-bvp}, and the spray flags require \code{--spray-cstar-coupling}. Bounds checks cover $\gamma$, $L^*$, contraction ratio, shoulder and throat radii, flange and bolts, wall thickness and liner thickness.
+  \item The cooling options (coolant property backend, hydraulic network, ports, radiation, boiling and critical heat flux) are collected into \code{args._cooling_options} (\code{:4013-4028}).
+  \item \code{--tags} (\code{print_tags}, \code{:139}) and \code{--list-materials} (\code{materials.material_table}, \code{:4038-4042}) print and exit 0.
+  \item \textbf{Release evidence} (\code{:4044-4062}). With \code{--release-evidence-manifest}, the runner calls \code{release_readiness.load_evidence_manifest}. Otherwise it calls \code{evaluate_release_readiness(target="engine")}. The report is stored as \code{args._release_readiness}, and \code{--require-release-evidence} turns an incomplete report into a parser error.
+  \item The interactive interview \code{_interactive} (\code{:957}, called at \code{:4073}) runs when the run is bare or uses \code{-i}. The wall-sizing mode and the common validation are then applied again.
+  \item \code{_ensure_pyplot} (\code{:324}, called at \code{:4077}) imports Matplotlib lazily. It uses the Agg backend unless \code{--show}, a terminal or an interactive run asks for windows.
+  \item The coolant inlet temperature defaults by fluid (\code{:4079-4090}). \code{materials.get_material(--material)} sets the wall conductivity and temperature limit (\code{:4096-4113}). \code{--size-wall} without \code{--material} returns 2.
+\end{itemize}
+
+\subsection{S03: propellant and thermochemistry}\label{sec:df-s03}
+\begin{itemize}
+  \item The propellant comes from \code{--propellant} or from \code{--oxidizer} and \code{--fuel}. The oxidizer and fuel names for the injector feeds are split at \code{:4138-4147}. With \code{--regen}, \code{--spray-cstar-coupling} is refused unless the coolant is the cycle fuel (\code{:4148-4157}).
+  \item \code{--mixture-ratio} defaults to the propellant table's nominal O/F (\code{:4165-4182}).
+  \item \code{cea.resolve_thermochemistry} (\code{cea.py:211}, called at \code{:4202}) returns the \code{Propellant} record ($\gamma$, molecular weight, chamber temperature, $c^*$, $\eta_{c^*}$, $\eta_{C_F}$). With \code{--thermo-mode}~\code{constant-gamma} it uses the built-in table in \code{propellants.py}. With \code{--thermo-mode}~\code{cea} it uses a RocketCEA frozen chamber snapshot. Without a named propellant, \code{propellants.custom_propellant} builds a placeholder gas (\code{:4184-4199}). Efficiency or $\gamma$ overrides rebuild a custom propellant (\code{:4213-4245}).
+  \item \code{--nozzle-expansion-model}~\code{frozen-variable-cp} loads a provenance-bound $c_p(T)$ table through \code{frozen_flow.load_frozen_gas_table} (called at \code{:4257}) and takes $\gamma$ from it.
+  \item \code{--cd-target} sets \code{args.ru_factor} through \code{throat_geometry.upstream_radius_ratio_for_discharge_coefficient} (called at \code{:4292}).
+\end{itemize}
+
+\subsection{S04: throat sizing and performance}\label{sec:df-s04}
+\begin{itemize}
+  \item The ambient pressure is $p_a = (p_a/p_0)\,p_c$. \code{--target-thrust} sets \code{args.rt} through \code{design.throat_radius_for_target_thrust} (\code{design.py:1222}, called at \code{:4311}).
+  \item \code{engine.compute_engine_performance} (\code{engine.py:69}, called at \code{:4319}) returns $C_F$, $c^*$, $I_{sp}$, $\dot m$, the exit Mach number and the exit pressure. The total mass flow is split into fuel and oxidizer flows by O/F (\code{:4330-4333}).
+  \item \code{_apply_split_injector_pressure_model} (\code{:680}, called at \code{:4339}) sets the fuel and oxidizer injector $\Delta p$ as fractions of $p_c$. When the coolant is the cycle fuel, it also sets the regen jacket outlet boundary. \code{_validate_pump_args} (\code{:796}, called at \code{:4340}) follows.
+  \item The output directory is created only now (\code{args.out.mkdir}, \code{:4342}). The build plan and the performance panel print at \code{:4345-4440}.
+\end{itemize}
+
+\subsection{S05 and S06: nozzle contour and chamber}\label{sec:df-s05s06}
+\begin{itemize}
+  \item \code{_solve(args)} (\code{:1464}, called at \code{:4452}) selects the contour method. With the default \code{bezier}, it calls \code{nozzle_geometry.bell_nozzle_contour} with angles from the SP-125 Figure~4-14 chart held in \code{rao_top_chart.py}, adds reliability metadata when frozen flow is active, and wraps the result in \code{_TrustedTopSolution} (\code{:1403}).
+  \item With \code{rao-bvp}, it builds a \code{RaoSolverConfig} with \code{wall_method="bde"} and calls \code{rao_variational.solve_rao_bvp} (\code{rao_variational.py:5901}). This path uses the MOC unit processes (\code{moc.py}, \code{moc_bounded.py}), the NASA/JHU BDE port (\code{nasa_moc.py}), the transonic kernel, the residuals, the topology checks and the wall splines. \code{--backend}~\code{jax} uses \code{raosim.jax.api.least_squares_jax} (called at \code{rao_variational.py:6069}) and \code{jax.theta_b_solve.least_squares_jax_theta_b} (called at \code{:6029} of the same file). \code{--backend}~\code{numpy} uses SciPy \code{least_squares}.
+  \item The reliability gates run at \code{:4456-4840}: the $2\times10^{-3}$ residual gate, mass and length closure, MOC compatibility, the valid region and thrust sanity. If the export gate fails, the run returns 2 with no artifacts (\code{:4834}). The overrides are \code{--allow-unconverged} on \code{rao-bvp} and \code{--allow-chart-extrapolation} on B\'ezier (\code{:4817-4820}).
+  \item Chamber (\code{:4841-4896}): \code{ThroatGeometrySpec}, \code{chamber_geometry.auto_shoulder_factor} (called at \code{:4861}) when \code{--shoulder-sizing}~\code{auto}, \code{chamber_contour} with $L^*$-exact volume closure (\code{:4868}), \code{full_engine_contour} (\code{:4876}) and \code{failed_thrust_chamber_geometry_checks} (\code{:4880}). A failed check returns 2 with no artifacts.
+  \item The \code{summary} dictionary is assembled at \code{:4899-5040}, including \code{model_registry.audit_model_registry} and \code{model_provenance_dict} (\code{:4967-4974}).
+  \item Artifacts: \code{contour.csv} and \code{profile.png} (\code{:5042-5052}), plus \code{contour_moc_crossings.csv} when crossings were sampled (\code{:5053-5062}).
+\end{itemize}
+
+\caution{In the working tree, \code{raosim/nozzle_geometry.py} (modified, uncommitted) and the new, untracked \code{raosim/rao_top_chart.py} add a strict chart-domain gate. \code{lookup_angles} (\code{nozzle_geometry.py:47}) raises \code{ValueError} when $\varepsilon$ lies outside $[5,50]$ or the bell length outside $[60,100]\,\%$. \code{_solve} passes no explicit angles, so the exception propagates out of \code{main} as a traceback. It is raised before the \code{--allow-chart-extrapolation} override at \code{:4817-4820} is reached, so that flag cannot rescue an out-of-domain request. On 5 November 2026 the shipped \code{examples/cli/test_13kn_sealevel_regen_allstl.args} ($\varepsilon=4.524$, default B\'ezier) failed this way at \code{run_nozzle.py:4452}. \code{test_13kn_movable_pintle.args} uses the same $\varepsilon$ on the same path. The \code{rao-bvp} example ran to exit 0.}
+
+\subsection{S12: early figures}\label{sec:df-s12early}
+These run in best-effort blocks: exceptions are caught and reported as skips.
+\begin{itemize}
+  \item \code{plotting.plot_separation_on_contour} (called at \code{:5074}), using \code{separation.check_separation}, writes \code{separation_contour.png}.
+  \item When \code{sol.construction_diagnostics["bde_artifacts"]} exists (\code{rao-bvp} only), \code{moc_diagrams} writes \code{kernel_fan.png}, \code{rao_topology.png}, \code{bde_mesh.png}, \code{bde_diagnostics.png} and \code{bde_integrity.png} (\code{:5091-5122}).
+  \item \code{--flowfield} calls \code{flow_viz.plot_flowfield} (\code{:5130}) and writes \code{flowfield.png}. \code{--animate} calls \code{animate_moc_march} and/or \code{animate_particles} (\code{:5156}, \code{:5167}) and writes \code{anim_moc_march.gif} and \code{anim_particles.gif}.
+\end{itemize}
+
+\subsection{S07: regen wall sizing, cooling and wall structure}\label{sec:df-s07}
+\begin{itemize}
+  \item \code{--regen}~\code{--size-wall} (\code{:5177-5359}). \code{thermal_design.joint_wall_channel_design} (called at \code{:5191}) sizes the hot-wall thickness, channel count, width and height against the thermal, SP-125 eq.~4-31 stress, fatigue and pressure-drop limits, using the cycle coolant flow. \code{size_wall_profile} (called at \code{:5302}) then sizes station-wise hot-wall and jacket thicknesses into a \code{regen_profile.RegenWallProfile} stored as \code{args._wall_profile}. The run sets \code{args.thermal=True} and fills \code{summary["wall_sizing"]} and \code{summary["wall_profile"]}.
+  \item \code{--regen}~\code{--auto-size} calls \code{thermal_design.size_cooling_channels} (called at \code{:5367}) and writes \code{summary["channel_sizing"]}.
+  \item \code{--regen}~\code{--thermal} (\code{:5409-5616}) runs \code{physics.bartz_heat_flux} and \code{physics.regenerative_cooling_analysis} (called at \code{:5439}). The latter is a Sieder--Tate coolant march, with the property, hydraulic-network, radiation and boiling options supplied by \code{thermofluids.py}. Results go to \code{summary["cooling"]}. Figures: \code{cooling_profile.png}, \code{channel_march.png} and \code{cross_section.png} (from \code{physics.wall_cross_section_field}). With catalog elastic properties, \code{physics.coaxial_shell_wall_stress_profile} (called at \code{:5572}) fills \code{summary["structural"]} and \code{structural_life.png}.
+\end{itemize}
+
+\subsection{S08: pintle injector and the optional spray/c* fixed point}\label{sec:df-s08}
+\begin{itemize}
+  \item The injector is evaluated after cooling, so that its fuel feed state is the regen outlet state.
+  \item The \code{InjectorSpec} is assembled at \code{:5701-5849} from the propellant feed, pintle geometry, mechanical, movable-pintle and feed-system specifications. \code{_feed_system_spec_from_args} is at \code{:852}.
+  \item Default: the closure \code{evaluate_cli_injector} (\code{:5903}) calls \code{injector.evaluate_pintle_injector} (\code{injector.py:3457}, call at \code{:5912}). It is invoked at \code{:6182}. \code{movable_pintle.py} handles \code{son_continuous_movable}.
+  \item With \code{--spray-cstar-coupling}, \code{spray_coupling.solve_spray_cstar_fixed_point} (\code{spray_coupling.py:210}, called at \code{:5989}) wraps the injector and cooling re-evaluation in a fixed point. The run then recomputes \code{compute_engine_performance} (\code{:5998}) and rewrites the cooling, structural and figure artifacts from the final iterate. The runner builds \code{SprayCStarCouplingSpec} without a \code{source} argument (\code{:5934-5941}), so the default \code{source="legacy_screen"} (\code{spray_coupling.py:32}) applies. The Lagrangian parcel solver in \code{raosim/spray/} is therefore never executed from the CLI.
+  \item A rejected injector writes \code{summary.json} and returns 2 (\code{:6188-6193}). Otherwise \code{pintle.json} is written (\code{:6204}).
+\end{itemize}
+
+\subsection{S09: electric pump feed}\label{sec:df-s09}
+\begin{itemize}
+  \item This stage runs only with \code{--electric-pump}, which the complete-package defaults switch on. \code{pumps.size_electric_pumps(inj.feed_system, _pump_spec_from_args(args))} is called at \code{:6212} (\code{pumps.py:3747}; \code{_pump_spec_from_args} at \code{:881}). It writes \code{pump.json}, \code{pump_bom.json} and \code{pump_reference_geometry.json} (\code{:6219-6238}).
+  \item The \leavevmode\stagetag{S11} pump CAD runs inside this block. \code{pump_cad.export_pump_package} (called at \code{:6250}) writes \code{pump/}, and \code{--pump-cad-format}~\code{step|both} adds \code{pump_cad_brep.export_pump_brep_package} (\code{:6267}). \code{--pump-visualize} adds \code{flow_viz.animate_pump_particles} (\code{:6340}).
+  \item Failed pump gates write \code{summary.json} and return 2 unless \code{--allow-infeasible-pump} is given (\code{:6352-6357}). Failed injector gates do the same unless \code{--allow-infeasible-injector} is given (\code{:6361-6365}). A requested pump CAD package that fails a geometry or export gate also writes \code{summary.json} and returns 2 (\code{:6313-6326}).
+\end{itemize}
+
+\subsection{S10 and S11: interface sync, throttle map and injector package}\label{sec:df-s10}
+\begin{itemize}
+  \item \code{injector_cad.resolve_machined_pintle_layout} (called at \code{:6373}) and \code{interface.resolve_bolted_interface_geometry} (called at \code{:6375}) auto-size the flange outer diameter, the injector face outer diameter and thickness, the bolt count, the bolt circle and the holes. The results are written back into \code{args} and the injector specification (\code{:6369-6432}).
+  \item \code{--throttle-map} calls \code{injector.throttle_map} (\code{injector.py:2565}, called at \code{:6442}). An unreachable throttle map writes \code{summary.json} and returns 2 (\code{:6500-6511}).
+  \item \code{injector_export.export_pintle_package} (called at \code{:6525}) writes the \code{pintle/} folder: always \code{pintle_parameters.json}, \code{pintle_dimensions.csv}, \code{pintle_schematic.svg} and \code{pintle_cross_section.png}; with machined or auto CAD, STEP bodies through \code{injector_cad} and \code{injector_coaxial_cad} and an \code{injector_manufacturing_report.json}. If the package fails while \code{--injector-cad} is not \code{none}, the run writes \code{summary.json} and returns 2 (\code{:6543-6557}); with \code{--injector-cad}~\code{none} the failure is reported as a skipped diagnostic package. \code{injector_plots.export_all_injector_figures} (called at \code{:6563}) writes \code{injector_*.png}.
+  \item The interface screen (\code{:6574-6655}) runs \code{interface.screen_composite_regen_wall} (\code{:6592}) when a sized profile and a cooling result exist, then \code{interface.screen_injector_chamber_interface} (\code{:6611}).
+\end{itemize}
+
+\subsection{S11: core CAD}\label{sec:df-s11}
+\begin{itemize}
+  \item \code{export.export_stl} (called at \code{:6689}) writes \code{wall.stl}, with the flange from \code{--flange-od} and \code{--flange-length}. \code{export.inspect_stl} (\code{:6695}) audits that the mesh is watertight. A sized wall profile adds \code{jacket.stl} through \code{regen_profile.normal_offset_contour} (\code{:6728-6733}).
+  \item \code{--cad}~\code{step|ipt|both} calls \code{export.export_step} (\code{:6747}, \code{:6785}), which writes \code{wall.step} and, with a sized profile, \code{jacket.step}. A true B-rep is required unless \code{--no-require-brep} is given.
+  \item \code{--regen-brep} and \code{--regen-manifolds} call \code{regen_cad.export_channel_wall_step} (\code{:6820}), which writes \code{regen.step} through CadQuery. \code{--cad}~\code{ipt|both} adds \code{export.package_ipt_request} (\code{:6863}) and \code{wall_ipt_manifest.json}. Native IPT is not written.
+  \item \code{--regen} calls \code{regen_geometry.generate_regen_nozzle} (\code{:6888}), which writes \code{regen.stl} and \code{regen_3d.png}. \code{--engine-assembly} calls \code{engine_cad.export_engine_assembly} (\code{:6938}), which assembles \code{engine_assembly.step} from the wall, jacket, pintle and pump STEP files written earlier. A failed assembly gate is re-raised as \code{RuntimeError} (\code{:6951-6955}) and ends the run with a traceback.
+\end{itemize}
+
+\subsection{S14: final write}\label{sec:df-s14final}
+\code{summary.json} is always written (\code{:6957}) and the artifact list is printed. \code{args._release_readiness.blocked} selects between the ``Physical release BLOCKED'' message (\code{:6965-6970}) and the ``evidence complete'' message. The run returns 0 (\code{:6977}).
+
+% ==============================================================================
+\section{Early-exit MDO branches}\label{sec:df-mdo}
+
+The three MDO-family flags leave \code{main} before the traditional set-up (Section~\ref{sec:df-dispatch}, step~7). They share these helpers: \code{_mission_from_mdo_args} (\code{:1998}) builds an \code{mdo.schema.MissionSpec}; \code{_resolve_mdo_of_intent} (\code{:1913}) applies \code{requirements.MixtureRatioMode}; and \code{_mdo_contour_request_error} (\code{:1866}) allows \code{rao-bvp} only together with \code{--mdo-export} and \code{--cad}~\code{none}. JAX is imported lazily with 64-bit floats enabled (\code{:2096}, \code{:2516}).
+
+\begin{description}[style=nextline,leftmargin=1.2em]
+  \item[\texttt{-{}-engine-mdo} $\to$ \texttt{\_run\_engine\_mdo} (:2077)] This branch runs \code{mdo.engine.chamber_surfaces_for} and \code{mdo.coolant_htd.require_htd_coverage} first; missing coverage returns \code{INDETERMINATE} (\code{:2130}). A \code{DesignVector} goes to \code{mdo.engine.solve_engine} (\code{mdo/engine.py:282}, called at \code{:2174}). That is one coupled, differentiable evaluation of the grid, properties, propellants, cooling (with \code{jax.thermal}), injector, pintle, pump, mass, structures, envelope and assembly blocks. It reports the constraint table and the RQ1 ablation delta. With \code{--mdo-export}, \code{mdo.postprocess.reevaluate} (\code{postprocess.py:971}, called at \code{:2301}) runs \code{design.design_nozzle_v2} (\code{design.py:565}) and \code{design._write_v2_artifacts} (\code{design.py:2589}) into \code{--out}.
+  \item[\texttt{-{}-engine-mdo-optimize} $\to$ \texttt{\_run\_engine\_mdo\_optimize} (:2498)] With \code{--isp-sweep}, \code{mdo.nlp.pareto_frontier} (called at \code{:2630}) traces the mass-$I_{sp}$ frontier, and each converged point is re-evaluated into \code{--out/pareto_NNN/} (\code{:2662-2705}). Otherwise \code{mdo.nlp.solve_min_mass} (called at \code{:2723}) runs SLSQP with exact JAX Jacobians. \code{--mdo-station-study} adds \code{mdo.convergence.station_refinement_study} (\code{:2592}), and \code{--mdo-export} re-evaluates into \code{--out} (\code{:2756}).
+  \item[\texttt{-{}-requirements} $\to$ \texttt{\_run\_requirements} (:2360)] This branch builds a \code{requirements.EngineRequirement}. The thrust condition is parsed by \code{_parse_thrust_condition} (\code{:2345}), with \code{atmosphere.pressure} for altitude. \code{requirements.solve_requirement} (called at \code{:2427}) calls \code{mdo.nlp.solve_min_mass}. Output is console only.
+\end{description}
+
+{\small
+\begin{longtable}{P{3.6cm}P{1.0cm}P{10.8cm}}
+\caption{Exit codes of the early-exit branches. The enumeration WorkflowExitCode is defined in lines 28 to 35 of raosim/input\_validation.py; \_run\_requirements returns plain integers with the same meaning (run\_nozzle.py lines 2420 to 2476).}\label{tab:df-exit}\\
+\toprule
+Verdict & Code & Meaning \\
+\midrule
+\endfirsthead
+\toprule
+Verdict & Code & Meaning \\
+\midrule
+\endhead
+\code{MET} & 0 & Candidate meets every enforced margin or requirement. \\
+\code{CANDIDATE_VIOLATES} & 1 & A solution exists and at least one constraint or requirement is violated. \\
+\code{INVALID_INPUT} & 2 & Input or requirement rejected. \\
+\code{INDETERMINATE} & 3 & Model coverage missing (for example, no coolant heat-transfer data). \\
+\code{SOLVER_FAILED} & 4 & Solver error or non-convergence. \\
+\bottomrule
+\end{longtable}}
+
+\code{--mdo-export} writes the v2 package into \code{--out}: \code{thrust_chamber_profile.csv}, \code{thrust_chamber_wall.step} or \code{.stl} with its \code{.cad.json} sidecar, \code{design_report_v2.json}, a \code{pintle/} folder and \code{engine_analysis_snapshot_v1.json} (path from \code{postprocess._snapshot_report_path}, \code{postprocess.py:596}). Without \code{--mdo-export}, these branches write no files.
+
+% ==============================================================================
+\section{The job path and its run record}\label{sec:df-job}
+
+\code{lrekit}~\code{run}~\code{JOB.yaml} is the only path that publishes a self-describing, hashed run record. In order:
+\begin{enumerate}
+  \item \code{_cmd_run} (\code{job_cli.py:209}) loads and builds the specification. \code{mdo.execute.expand_architectures} (\code{execute.py:814}) expands architecture alternatives. More than one candidate goes to \code{execute_engine_job_set} (\code{:856}); one candidate goes to \code{execute_engine_job} (\code{:333}).
+  \item \code{RunRecord.start} (\code{run_record.py:33}) creates \code{<output_policy.output_dir>/<uuid4hex>/} and writes \code{manifest.json} (status \code{in_progress}, \code{hardware_release} false) and \code{job.json}.
+  \item \code{_execute_resolved_engine_job} (\code{execute.py:463}) solves. ANALYZE uses the job design vector; OPTIMIZE uses \code{mdo.nlp.solve_min_mass} (\code{:559}). The state comes from \code{mdo.state.solve_engine_state} (\code{:598}), and the resolved inputs from \code{mdo.resolved_inputs.resolve_engine_inputs} (\code{:607}). \code{mdo.postprocess.reevaluate} (\code{:640}) then runs \code{design_nozzle_v2}, writing CAD only into \code{parts/} when \code{output_policy.parts} is \code{reference_cad}. An optional post-solve Rao contour validation (\code{mdo.contour_validation}, with \code{rao_existence_scan.RaoConvergenceDomain}, \code{:499-505}) follows, then the statuses and the verdict (\code{_verdict}, \code{:248}).
+  \item \code{_attach_part_manifest} (\code{:401}) calls \code{mdo.build.build_engine_parts} and \code{write_engine_build}, which write \code{parts/engine_build_manifest.json}.
+  \item \code{RunRecord.finish} (\code{run_record.py:72}) writes each requested report through an atomic temporary-file rename and records its SHA-256 digest in \code{manifest.json}. It also hashes the parts manifest and any CAD file that no part claims.
+  \item \code{--out}~\code{FILE} writes the result JSON. The process exit code is the verdict (Table~\ref{tab:df-exit}).
+\end{enumerate}
+
+\decision{\textbf{Code wins over the trace here.} The candidate reports are \code{summary}, \code{resolved_inputs}, \code{snapshot}, \code{comparison} and \code{coverage}, but the run record writes only the ones requested. \code{RunRecord.start} requests \code{summary} plus \code{output_policy.reports} (\code{run_record.py:40}), and \code{OutputPolicy} defaults to \code{reports=()}, \code{output_dir=None} and \code{parts="none"} (\code{raosim/mdo/job.py:607-615}). A job document that sets no \code{output_dir} therefore produces no run record at all: \code{RunRecord.start} returns \code{None} (\code{run_record.py:35-36}). With an \code{output_dir} and no \code{reports}, the record holds \code{manifest.json}, \code{job.json} and \code{summary.json}. A report that is requested but not produced is written as an explicit \code{unavailable} stub, and the package is then marked \code{partial}; unless the job sets \code{allow_partial_package}, \code{RunRecord.finish} then raises \code{RuntimeError} (\code{run_record.py:145-146}), which \code{execute_engine_job} converts into a \code{SOLVER_FAILED} result.}
+
+% ==============================================================================
+\section{Artifacts written per stage}\label{sec:df-artifacts}
+
+Table~\ref{tab:df-artifacts} lists every file the traditional runner can write into \code{--out}, together with the MDO and job outputs. The paths are relative to the output directory.
+
+{\small
+\begin{longtable}{P{1.0cm}P{5.3cm}P{5.1cm}P{3.6cm}}
+\caption{Artifacts by stage (traditional runner unless stated). Lines refer to raosim/run\_nozzle.py.}\label{tab:df-artifacts}\\
+\toprule
+Stage & Function (call site) & Artifact files & Condition \\
+\midrule
+\endfirsthead
+\toprule
+Stage & Function (call site) & Artifact files & Condition \\
+\midrule
+\endhead
+\leavevmode\stagetag{S04} & \code{args.out.mkdir} (\code{:4342}) & output directory, default \code{builds/nozzle_run} & always (after throat sizing) \\
+\leavevmode\stagetag{S02} & \code{job_cli._cmd_guided}, \code{_cmd_validate} & job YAML or JSON; resolved job JSON & \code{--save}; \code{--resolved-out} \\
+\leavevmode\stagetag{S05} & \code{np.savetxt} and Matplotlib (\code{:5042-5052}) & \code{contour.csv}, \code{profile.png} & contour and chamber gates pass \\
+\leavevmode\stagetag{S06} & \code{_write_moc_crossing_samples} (\code{:427}, written at \code{:5053-5062}) & \code{contour_moc_crossings.csv} & crossings sampled \\
+\leavevmode\stagetag{S12} & \code{plotting.plot_separation_on_contour} (\code{:5074}) & \code{separation_contour.png} & best effort \\
+\leavevmode\stagetag{S12} & \code{moc_diagrams.plot_kernel_expansion_fan}, \code{plot_rao_topology}, \code{plot_bde_mesh}, \code{plot_bde_diagnostics}, \code{plot_bde_integrity} (\code{:5091-5122}) & \code{kernel_fan.png}, \code{rao_topology.png}, \code{bde_mesh.png}, \code{bde_diagnostics.png}, \code{bde_integrity.png} & \code{rao-bvp} only \\
+\leavevmode\stagetag{S12} & \code{flow_viz.plot_flowfield} (\code{:5130}); \code{animate_moc_march}, \code{animate_particles} (\code{:5156}, \code{:5167}) & \code{flowfield.png}; \code{anim_moc_march.gif}, \code{anim_particles.gif} & \code{--flowfield}; \code{--animate} (both \code{rao-bvp}) \\
+\leavevmode\stagetag{S07} \leavevmode\stagetag{S12} & \code{plotting.plot_cooling_profile}, \code{plot_coolant_channel_march}, \code{plot_channel_cross_section}, \code{plot_structural_life_dashboard} (\code{:5499-5616}; rewritten at \code{:6091-6151} after the spray fixed point) & \code{cooling_profile.png}, \code{channel_march.png}, \code{cross_section.png}, \code{structural_life.png} & \code{--regen}~\code{--thermal}; structural figure needs catalog elastic data \\
+\leavevmode\stagetag{S08} & \code{inj.to_dict()} (\code{:6204}) & \code{pintle.json} & injector evaluated \\
+\leavevmode\stagetag{S09} & \code{pumps.size_electric_pumps} (\code{:6212}) & \code{pump.json}, \code{pump_bom.json}, \code{pump_reference_geometry.json} & \code{--electric-pump} \\
+\leavevmode\stagetag{S11} & \code{pump_cad.export_pump_package} (\code{:6250}); \code{pump_cad_brep.export_pump_brep_package} (\code{:6267}) & \code{pump/} (\code{pump_parameters.json}, \code{pump_dimensions.csv}, \code{pump_reference_assembly.stl}, \code{pump_reference_assembly_layout.json}); \code{pump/pump_brep/*.step}, \code{pump_cad_units.json} & pump CAD requested; STEP with \code{--pump-cad-format}~\code{step|both} \\
+\leavevmode\stagetag{S12} & \code{flow_viz.animate_pump_particles} (\code{:6340}) & \code{pump_particles.gif} & \code{--pump-visualize} \\
+\leavevmode\stagetag{S11} & \code{injector_export.export_pintle_package} (\code{:6525}) & \code{pintle/} (\code{pintle_parameters.json}, \code{pintle_dimensions.csv}, \code{pintle_schematic.svg}, \code{pintle_cross_section.png}; STEP bodies and \code{injector_manufacturing_report.json} with CAD) & injector present \\
+\leavevmode\stagetag{S12} & \code{injector_plots.export_all_injector_figures} (\code{:6563}) & \code{injector_*.png} & injector present \\
+\leavevmode\stagetag{S11} & \code{export.export_stl} (\code{:6689}, \code{:6732}) & \code{wall.stl}; \code{jacket.stl} & always; sized profile \\
+\leavevmode\stagetag{S11} & \code{export.export_step} (\code{:6747}, \code{:6785}) & \code{wall.step}; \code{jacket.step} & \code{--cad}~\code{step|ipt|both} \\
+\leavevmode\stagetag{S11} & \code{regen_cad.export_channel_wall_step} (\code{:6820}) & \code{regen.step} & \code{--regen-brep} or \code{--regen-manifolds} \\
+\leavevmode\stagetag{S11} & \code{export.package_ipt_request} (\code{:6863}) & \code{wall_ipt_manifest.json} & \code{--cad}~\code{ipt|both} \\
+\leavevmode\stagetag{S11} & \code{regen_geometry.generate_regen_nozzle} (\code{:6888}) & \code{regen.stl}, \code{regen_3d.png} & \code{--regen} \\
+\leavevmode\stagetag{S11} & \code{engine_cad.export_engine_assembly} (\code{:6938}) & \code{engine_assembly.step} & \code{--engine-assembly} \\
+\leavevmode\stagetag{S14} & \code{json.dumps(summary)} (\code{:6957}) & \code{summary.json} & always on exit 0; also written just before the exit-2 returns at \code{:6192}, \code{:6323}, \code{:6356}, \code{:6364}, \code{:6507}, \code{:6554} \\
+\leavevmode\stagetag{S14} & \code{mdo.postprocess.reevaluate} $\to$ \code{design._write_v2_artifacts} & \code{thrust_chamber_profile.csv}, \code{thrust_chamber_wall.step/.stl}, \code{.cad.json}, \code{design_report_v2.json}, \code{pintle/}, \code{engine_analysis_snapshot_v1.json} & MDO branches with \code{--mdo-export}; \code{pareto_NNN/} per sweep point \\
+\leavevmode\stagetag{S14} & \code{RunRecord.start}, \code{finish}; \code{mdo.build.write_engine_build} & \code{<uuid4hex>/manifest.json}, \code{job.json}, \code{summary.json}, requested reports; \code{parts/engine_build_manifest.json} & \code{lrekit}~\code{run} with \code{output_dir}; parts with \code{reference_cad} \\
+X02 & \code{openfoam.case.write_openfoam_case} & OpenFOAM case tree, \code{raosim_openfoam_manifest.json} & \code{export-openfoam-spray} \\
+X03 & \code{build_log.create_build_dir}, \code{write_metadata} (\code{main.py:407}, \code{:741}, \code{:929}, \code{:1152}) & \code{builds/vNNN_YYYYMMDD_HHMMSS/metadata.txt} and CSV/STL/JSON outputs & \code{RaoRocketSimLegacy} only \\
+\bottomrule
+\end{longtable}}
+
+The runner itself never imports \code{raosim.build_log}. Versioned \code{builds/vNNN_*} folders therefore come only from the legacy toolbox, mostly when the test suite drives it. On 5 November 2026 the test run created \code{builds/v455_20261105_070346} to \code{builds/v461_20261105_071738}. Each holds one \code{cli_*.csv} and a \code{metadata.txt} whose mode line reads \code{batch}.
+
+% ==============================================================================
+\section{Import closure}\label{sec:df-closure}
+
+An AST import closure covers the 161 in-scope modules: \code{raosim/**} (including \code{jax}, \code{mdo}, \code{spray}, \code{openfoam} and \code{data/tools}), \code{lrekit/*}, \code{main.py} and \code{scripts/*}. It follows imports nested inside functions, relative imports, \code{import_module} string literals, parent-package implication and the \code{lrekit.__path__} alias. It reads files only and executes nothing.
+
+{\small
+\begin{longtable}{P{4.0cm}P{1.0cm}P{10.4cm}}
+\caption{Static reachability of the 161 modules from the console entry points.}\label{tab:df-closure}\\
+\toprule
+Category & Count & Modules \\
+\midrule
+\endfirsthead
+\toprule
+Category & Count & Modules \\
+\midrule
+\endhead
+Reachable from \code{lrekit.cli}, excluding the legacy \code{main.py} edge & 125 & All S01 to S14 modules; \code{raosim/jax}: 8 of 13 (\code{__init__}, \code{api}, \code{assembly}, \code{moc_kernel}, \code{sensitivities}, \code{theta_b_solve} through \code{rao_variational}; \code{primitives} and \code{thermal} through \code{mdo}); \code{raosim/mdo}: all 34; \code{raosim/spray}: all 14, through \code{design.py} $\to$ \code{spray_coupling.py} $\to$ \code{spray.handoff}, used for types and handoff contracts only; \code{raosim/openfoam}: all 3, through the export verb; \code{raosim/legacy_io.py}, through \code{plotting.py}. \\
+Reachable only through \code{RaoRocketSimLegacy} & 7 & \code{main.py}, \code{altitude_performance}, \code{benchmarks}, \code{build_log}, \code{conical}, \code{nozzle_comparison}, \code{trade_study} (group X03). \\
+Not reachable from any CLI (excluding \code{scripts/}) & 11 & Entry wrapper \code{raosim/__main__.py} (run as \code{python}~\code{-m}~\code{raosim}, not imported). Standalone tools \code{raosim/data/tools/acquire_sources.py} and \code{verify_collection.py} (X06). Library modules (X08): \code{flange_cad} (only \code{tests/test_flange_cad.py}), \code{trajectory} (only \code{tests/test_trajectory.py}), \code{jax/bvp} (\code{tests/test_jax_bvp.py}), \code{jax/design_opt} (\code{tests/test_jax_thermal_design_opt.py}), \code{jax/pack} (\code{tests/test_jax_bvp.py}), \code{jax/residuals} (tests only), \code{thermal_correlations} (no Python importer), \code{jax/reference} (no importer). \\
+Standalone scripts & 18 & All \code{scripts/*.py}: the compatibility wrapper \code{scripts/run_nozzle.py} (S01), two NASA/JHU comparison scripts (X04) and 15 research and generator scripts (X05). \\
+\midrule
+Total & 161 & \\
+\bottomrule
+\end{longtable}}
+
+% ==============================================================================
+\section{Where the documentation disagrees with the code}\label{sec:df-drift}
+
+Table~\ref{tab:df-drift} starts from the code-versus-document disagreements recorded in the triage taxonomy. Each row was re-checked against the working tree on 5 November 2026. Rows the 2026-11-05 edits already fixed are kept and marked as fixed, so that the earlier claim can be traced. Paths are the post-reorganization locations.
+
+{\small
+\begin{longtable}{P{0.4cm}P{3.4cm}P{4.4cm}P{5.1cm}P{1.6cm}}
+\caption{Documentation versus code, verified 2026-11-05. In every row the code is authoritative.}\label{tab:df-drift}\\
+\toprule
+\# & Document, location & Document says & Code does & Status \\
+\midrule
+\endfirsthead
+\toprule
+\# & Document, location & Document says & Code does & Status \\
+\midrule
+\endhead
+1 & \code{README.md:1217} (Outputs) & ``Normal CLI runs create \code{builds/vNNN_YYYYMMDD_HHMMSS/}'', with design-gate JSON and \code{metadata.txt}. & The runner writes to \code{--out} (default \code{builds/nozzle_run}, \code{:3534}), never imports \code{build_log}, and reports in \code{summary.json}. Versioned folders come only from legacy \code{main.py} (\code{:407}, \code{:741}, \code{:929}, \code{:1152}), and \code{design_report_v2.json} only from \code{design._write_v2_artifacts}. & open \\
+2 & \code{README.md:959-1149} (Command-line usage) & Documents the flag runner and the legacy alias only. & It does not mention the job verbs (\code{job_cli.py:29}), \code{export-openfoam-spray} (\code{raosim/cli.py:11}), or \code{--requirements}, \code{--engine-mdo}, \code{--engine-mdo-optimize} and \code{--mdo-export}, all dispatched before the traditional path (\code{:3830-3835}). The layout block (\code{README.md:1328}) names the job verbs in one line. & open \\
+3 & \code{README.md:972-973} & ``Bare \code{lrekit} runs enter the same complete-package interactive interview by default.'' & A bare run first prints \code{_MODE_MENU} (\code{:1756}, \code{:3797-3811}). Only choice~1 enters the complete-package interview. & open \\
+4 & \code{README.md:1314-1356} (Repository layout) & Before the 2026-11-05 edit: \code{main.py} was the ``Primary interactive/batch CLI''; \code{lrekit/}, \code{mdo/} and others were missing; \code{trajectory.py} was listed as active. & The working-tree README now lists \code{main.py} as the legacy CLI behind \code{RaoRocketSimLegacy}, adds \code{lrekit/} and links this data-flow map. \code{README.md:826} states that the trajectory module is not wired into the CLI. & fixed \\
+5 & \code{lrekit/cli.py:3}; \code{lrekit/job_cli.py:7-13} & Job verbs are ``run/validate/catalog''; the catalog lists six topics. & \code{JOB_VERBS} also contains \code{guided} (\code{job_cli.py:29}), and \code{_CATALOG_TOPICS} has eight, adding \code{unavailable} and \code{capabilities} (\code{:31-34}). & open \\
+6 & \code{docs/architecture/MDO_REMEDIATION_AND_OUTPUT_CONTRACT.md:151}, \code{:157} & \code{job_cli.py} ``adds three verbs''; the catalog list ends at \code{unavailable}. & Four verbs (\code{guided} as well). The catalog has eight topics, including \code{capabilities} (\code{job_cli.py:31-34}). & open \\
+7 & \code{docs/program/LREKIT_HARDWARE_PROGRAM_2026-09-05.md:620-630} & The proposed verb family ``stands'': \code{job}, \code{component}, \code{build}, \code{test}, \code{calibrate}, \code{ui}, and \code{catalog} with topics \code{models}, \code{components}, \code{processes} and \code{coefficients}. & None of these verbs or catalog topics exist; the implemented set is the four job verbs and eight topics above. & plan only \\
+8 & \code{main.py:6-11} docstring; \code{main.py:95-99} epilog & \code{lrekit}~\code{--Rt}~\code{25}~\code{--Pc}~\code{60}; \code{lrekit}~\code{--sweep}. & \code{lrekit} now dispatches to the runner (SI \code{--rt} and \code{--pc}, no \code{--sweep}). Those flags work only under \code{RaoRocketSimLegacy}. & open \\
+9 & \code{raosim/run_nozzle.py:20-55} docstring; \code{examples/cli/lox_rp1_13kn_copper_316l_full_engine.args:27-30}, \code{test_13kn_sealevel_regen_allstl.args:56-58}, \code{test_13kn_movable_pintle.args:34-35} & \code{--backend}~\code{jax}~\code{--regen} and \code{--max-nfev}~\code{0} ``seed'' examples; argument files set \code{--max-nfev}, \code{--n-control} and \code{--n-kernel} as if a solve runs. The docstring also implies \code{summary.json} needs \code{--regen}. & None of these select \code{--contour-method}~\code{rao-bvp}, so the contour is the default B\'ezier/TOP chart (\code{:2827-2831}) and \code{_solve} ignores the solver flags (\code{:1464-1487}). Only \code{test_13kn_rao_bvp_flowfield.args} runs the BVP. \code{summary.json} is always written (\code{:6957}). & open \\
+10 & \code{--allow-chart-extrapolation} help (\code{run_nozzle.py:2832-2836}) & Writes diagnostic B\'ezier artifacts when $\varepsilon$ or the length lies outside the chart domain. & The working-tree \code{lookup_angles} raises \code{ValueError} outside the domain (\code{nozzle_geometry.py:47}, raise at \code{:67}) before the override at \code{:4817-4820}. The flag can no longer produce out-of-domain artifacts. \code{test_13kn_sealevel_regen_allstl.args} ($\varepsilon=4.524$) was observed failing; \code{test_13kn_movable_pintle.args} uses the same $\varepsilon$ on the same path and is expected to fail (not executed). & open (working tree) \\
+11 & \code{docs/audits/FEATURE_DATAFLOW_AUDIT_2026-07-11.md:20-70} & The packaged CLI runs \code{design._build_v2_contour}, \code{physics.boundary_layer_displacement}, \code{validation.evaluate_design_gates} and \code{build_log}; legacy adds a trajectory integrator; spray/$c^*$ is blocked with CLI regen; the runner has 4,558 lines. & \code{run_nozzle.main} calls none of the four; they live in \code{design_nozzle_v2}. \code{main.py} does not import \code{trajectory}. Spray with regen is allowed when the coolant is the cycle fuel (\code{:4148-4157}). The runner has 6,981 lines. & historical record \\
+12 & \code{raosim/jax/__init__.py:7}; \code{raosim/jax/bvp.py:2-4} & JAX ``is the default for \code{solve_rao_bvp}''; \code{jax/bvp.py} replaces SciPy \code{least_squares}. & The first holds for \code{--backend}, but the default CLI contour never calls \code{solve_rao_bvp}. The live JAX solve is \code{jax/api.least_squares_jax} (\code{rao_variational.py:6069}); \code{jax/bvp.py} is imported only by \code{tests/test_jax_bvp.py}. & open \\
+13 & \code{raosim/flange_cad.py:3} (``The gap this closes''); \code{raosim/thermal_correlations.py:1-5} & \code{flange_cad} presents itself as filling the missing chamber-side flange of the bolted joint; \code{thermal_correlations} presents itself as source-scoped correlation choices and applicability reports (Bartz bounds). & Neither is imported by any CLI path. The live flange comes from \code{export.export_step} and \code{interface.resolve_bolted_interface_geometry}, and \code{physics.bartz_heat_flux} does not consult \code{thermal_correlations}. & open \\
+14 & \code{docs/subsystems/S08-injector-and-spray-coupling/OPENFOAM_SPRAY_EXPORT.md:88} & \code{lrekit}~\code{export-openfoam-spray}~\code{...}~\code{--case-row}~\code{case_1}. & Matches \code{raosim/cli.py:11} and \code{case.py:1611-1627}. & consistent \\
+\bottomrule
+\end{longtable}}
+
+% ==============================================================================
+\section{Finding things}\label{sec:df-find}
+
+\begin{itemize}
+  \item \textbf{Stage table and flow in markdown:} \code{docs/architecture/DATAFLOW.md}, the twin of this chapter.
+  \item \textbf{Every code file, its stage and a one-line role:} \code{docs/architecture/CODE_MAP.md}, ordered S01 to S14, then X01 to X08.
+  \item \textbf{Verbatim module docstrings and leading comments, by stage:} \code{docs/architecture/CODE_HEADER_COMMENTS.md}.
+  \item \textbf{Physics and design basis per stage:} \code{docs/subsystems/Sxx-<slug>/}. Folders exist for S04, S05, S06, S07, S08, S09, S10 and S13. S01, S02, S03, S11, S12 and S14 have no subsystem folder; their contracts are documented in \code{docs/architecture/} (\code{MDO_REMEDIATION_AND_OUTPUT_CONTRACT.md}, \code{PHYSICAL_RELEASE_GATES.md}, \code{MODEL_REGISTRY.md}).
+  \item \textbf{Per-stage chapters of this guide:} S01 and S02 in Chapter~\ref{ch:s01-s02}; S03 and S04 in Chapter~\ref{ch:s03-s04}; S05 and S06 in Chapter~\ref{ch:s05-s06}; S07 in Chapter~\ref{ch:s07}; S08 and S09 in Chapter~\ref{ch:s08-s09}; S10 to S12 in Chapter~\ref{ch:s10-s12}; S13 and S14 in Chapter~\ref{ch:s13-s14}; the cross-cutting groups in Chapters~\ref{ch:crosscutting-a} and \ref{ch:crosscutting-b}.
+  \item \textbf{To find where a flag acts:} search \code{raosim/run_nozzle.py} for \code{args.<flag_with_underscores>}. Table~\ref{tab:df-flag-families} gives the consuming stage, and Section~\ref{sec:df-pipeline} gives the line range of that stage's block.
+\end{itemize}

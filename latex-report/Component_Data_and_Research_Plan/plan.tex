@@ -1,0 +1,580 @@
+\begin{titlepage}
+\thispagestyle{empty}
+\vspace*{0.15in}
+{\sffamily\bfseries\color{teal}\large LREKit \enspace / \enspace NEXT DEVELOPMENT STAGE\par}
+\vspace{0.48in}
+{\sffamily\bfseries\color{ink}\fontsize{30}{35}\selectfont
+From Engine Design\\to Experimental Feedback\par}
+\vspace{0.22in}
+{\sffamily\large\color{muted}Component data, multi-fidelity models,\\and the first implementation plan\par}
+\vspace{0.35in}
+{\large Ibrahim Shahid\par}
+{\color{muted}3 November 2026\par}
+\vspace{0.38in}
+\lead{What we want to build}
+We want a user to be able to request an engine, supply experimental data for the components they have tested, and have that data affect the design. We also want to export the relevant simulation domains, run the required analyses, and bring the results back into LREKit in a form the component models can actually use.
+
+The pintle flow-linearity study gives us a bounded first project. We can measure a hydraulic response, ask whether it carries across operating conditions and geometries, and test whether CFD helps us choose what to build next. If that works, we can reuse the interface for cooling passages, pumps, injectors, and other components.
+
+\decision{\textbf{Our first deliverable:} one real pintle dataset, one reproducible hydraulic model, and one engine comparison showing how that model changes sizing and coupled results. We then establish the CFD round trip and test whether combining sources improves prediction.}
+
+\vfill
+{\small\color{muted}
+This is a development and research plan. Proposed interfaces, experiments, simulations, and acceptance criteria describe work we intend to do. They are not records of completed testing or hardware qualification.\par}
+\vspace{0.12in}
+{\color{teal}\rule{\linewidth}{1.2pt}}
+\end{titlepage}
+
+\setcounter{tocdepth}{1}
+\tableofcontents
+\vspace{0.2in}
+\lead{The order of the work}
+\begin{tabularx}{\linewidth}{@{}P{0.17\linewidth}Y@{}}
+\toprule
+\textbf{First} & Agree on what the pintle geometry, measurements, uncertainty, and acceptance question mean.\\
+\textbf{Then} & Import real data, fit a model, and show that it changes the engine calculation.\\
+\textbf{Next} & Establish a small internal-flow CFD pipeline with reproducible extraction and numerical checks.\\
+\textbf{After that} & Compare experiment-only and fused models, test a proposed geometry, and extend the interface to other components.\\
+\bottomrule
+\end{tabularx}
+
+We do not have to finish every research question before defining the data interface. We do need the relevant CLI, geometry, and analysis contracts to be consistent before we claim that a calibrated model has produced an exported engine component.
+
+\clearpage
+\section{What we are trying to add}
+
+The next step is to give each component a defined way to learn from data. A user might have measured a valve's flow curve, a pump's head map, or a cooling passage's pressure loss. We want to use those measurements where they are relevant, retain their uncertainty, and show what changed in the requested engine as a result.
+
+That means experimental input needs to be part of the model and design workflow. A curve attached to the final report is useful documentation, but it has not improved the design if the optimizer still used the original coefficient.
+
+We will build two connected loops. The inner loop analyzes or optimizes an engine using a fixed set of component models. The outer loop collects experiments and simulations, assesses candidate models, and produces the versions available to the next engine run. We can then reproduce a design even after more data have arrived.
+
+\subsection{What we can build on}
+
+LREKit already has a versioned engine-job contract, resolved physical inputs, numerical-state and report contracts, run records, and a manifest of expected parts. These are the places where data bindings, learned-model identities, and evidence coverage belong.
+
+The movable-pintle implementation already accepts a configuration-bound $\Cd$ curve against opening fraction. It carries an artifact identity, an exact geometry binding, a fluid identity, and declared operating ranges. That is a useful starting point. The differentiable injector calculation still uses constant mission coefficients, so accepting a calibration in one path does not yet make it part of the MDO.
+
+There is also an explicit refusal to pass an optimized movable-pintle design into the existing host export path as though it were the supported fixed-slotted injector. We need to resolve that shared geometry and model contract before claiming an optimized, exported, calibrated movable component.
+
+The OpenFOAM work gives us deterministic case generation and a typed VOF-to-parcel handoff. The current case is a literature-fixture external-gap water/air wedge. It prescribes water flow and omits the internal valve passage. It does not yet give us a general engine-to-CFD-to-model pipeline or an independent prediction of internal hydraulic $\Cd$.
+
+The neighboring ASCEND repository has geometry and flow calculations, experimental CSV import, linearity-window analysis, uncertainty helpers, and Bayesian-optimization scaffolding. Its experimental directory contained a README and no measurement CSVs when reviewed. Pilot data may exist elsewhere; we need to locate the actual records before treating them as available inputs.
+
+\subsection{Where this sits in the current work}
+
+We are already working through CLI, validation, and component-export gaps. This plan follows that work for full engine integration. In parallel, we can define the evidence schema and run an isolated pintle pilot. The immediate dependency is consistency for the component being studied, rather than a claim that every engine subsystem is already complete.
+
+\section{What a component data input needs to mean}
+
+A CSV file alone leaves too many questions open. We need to know which specimen was tested, how it was measured, what the operating conditions were, and which quantities the model is allowed to learn from it.
+
+We will use shared records for identity and provenance, with component-specific schemas for observables. A valve and a thermal coupon can use the same evidence system without pretending that the same regression problem describes both.
+
+\begin{table}[htbp]
+\centering\small
+\caption{The records we need to keep distinct.}
+\begin{tabularx}{\linewidth}{@{}P{0.22\linewidth}Y@{}}
+\toprule
+\textbf{Record} & \textbf{What we will store}\\
+\midrule
+Component identity & Geometry family and schema; nominal design; as-built specimen; material and process revision; relevant measured dimensions, surfaces, and tolerances.\\
+Dataset & Raw-file hashes; experiment, simulation, literature, or synthetic origin; specimen and campaign; units; conditions; processing version; exclusions; uncertainty.\\
+Measurement definition & The quantity observed, sensor or optical method, locations, pressure references, averaging interval, filtering, and flow-estimation procedure.\\
+Model artifact & Governing model, learned parameters or surrogate arrays, preprocessing, training data, fitting settings, software versions, applicability, and assessment results.\\
+Evidence requirement & Component, quantity, operating conditions, required evidence kind, acceptance rule, tolerance, and the basis for that rule.\\
+Simulation record & Frozen design and boundary conditions, solver build, mesh and numerical settings, requested outputs, extractor version, quality checks, and result hashes.\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+We will retain raw measurements alongside processed data. Pressure values need both units and a reference: absolute, gauge, differential, or another explicitly defined quantity. Uncertainty needs its own convention, such as a standard uncertainty or a specified distribution. Sensor resolution is not a complete uncertainty budget.
+
+We also need to retain dependence. Samples from one campaign can share calibration bias; stroke points can share uncertain dimensions and a stroke-zero error. Repeated samples and mesh refinements of one condition do not become independent physical evidence just because they occupy different rows.
+
+Measurement variability, manufacturing variability, parameter uncertainty, model discrepancy, and numerical error will remain separately traceable. We can combine them for a prediction when the assumptions justify it, while preserving where each contribution came from.
+
+\subsection{The model has to predict the measured quantity}
+
+A CFD patch-average pressure and a pressure measured at a wall tap may describe different observations. A computed wall-temperature field also needs to be related to the position and response of the actual thermocouple.
+
+We will define an observation operator for each comparison: how the physical or numerical model produces the quantity that the instrument observed. Matching column names will not be enough.
+
+\subsection{One tested part and a family of designs}
+
+We will keep exact-part calibration separate from a model that predicts across a geometry family. Measurements on specimen A remain evidence about A. A family model can predict specimen B if its geometry and conditions are within an assessed domain, but B still has its own outstanding inspection and test requirements.
+
+This is how data can help design new parts without transferring the tested status of an old part to them. A hash establishes identity. It does not establish measurement accuracy, and a box around the training inputs does not prove that every point inside it is well supported.
+
+The knowledge system can index this evidence and its source links. The underlying experiment and simulation records will remain authoritative for what was performed. We will preserve explicit unavailable and outside-validity states.
+
+\section{The models we plan to use}
+
+We will begin with the smallest model that can answer the component question. For a few well-measured curves, interpolation or a small weighted parameter fit may be enough. Bayesian parameter estimation is useful when the parameters are identifiable and we have meaningful priors. A Gaussian-process discrepancy becomes useful when the remaining error has structure that the simpler model does not capture.
+
+Spatial reduced-order models make sense when we need fields rather than a few scalar outputs. Dynamic models require time histories. Neural surrogates and physics-informed neural networks remain possible later choices; the first data interface does not depend on them.
+
+\subsection{Component-level starting points}
+
+\begin{longtable}{@{}P{0.23\linewidth}P{0.70\linewidth}@{}}
+\caption{The first model and data choices for each component question.}\\
+\toprule
+\textbf{Component} & \textbf{Our starting approach}\\
+\midrule
+\endfirsthead
+\toprule \textbf{Component} & \textbf{Our starting approach, continued}\\ \midrule
+\endhead
+\bottomrule
+\endfoot
+Metering valves and pintle hydraulics &
+Fit flow or conductance using opening, upstream and downstream pressure, temperature, measured geometry, and repeated sweep directions. Start with a measured $\Cd$ map or a small correction to a declared flow law. Add an internal-flow CFD discrepancy if it improves prediction.\\
+Feed lines and manifolds &
+Use measured pressure differences and branch flows to assess friction, local loss, and distribution. Add 3D internal-flow models for turning passages and junctions. Static data will not identify transient feed stability.\\
+Injector atomization &
+Use spray imaging, angle, sheet thickness, and drop-size distributions at defined planes. Fit corrections within a stated flow regime. Two-stream VOF and separately assessed parcel models may follow. A hydraulic $\Cd$ curve does not identify spray quality or combustion efficiency.\\
+Cooling passages and walls &
+Fit pressure-loss and heat-transfer corrections separately using flow, boundary states, heat input, and located wall temperatures. Later add conjugate heat transfer and reduced thermal models. Wall temperatures alone may not separate gas-side heat load, coolant heat transfer, and contact resistance.\\
+Pumps &
+Build head and efficiency maps from flow, speed, pressure rise, torque or power, inlet state, and temperature. Use similarity coordinates where justified. Assess rotating-flow simulations against maps; do not assume scaling establishes cavitation or cryogenic transfer.\\
+Nozzle performance &
+Assess specified wall-pressure and thrust observables using measured flow, inlet state, and ambient conditions. Add compressible-flow simulations and, if needed, reduced spatial models. Cold-flow agreement has a limited claim about hot, reacting operation.\\
+Chamber efficiency &
+Use independently measured chamber state, propellant flows, throat geometry, and thrust. Identify delivered-performance corrections carefully so that injector, combustion, throat, and nozzle losses are not all absorbed into one fitted efficiency.\\
+Structures and materials &
+Estimate temperature-dependent properties and structural response from coupons, strain/load measurements, inspection, and relevant cycle histories. Use a separate FEA adapter for structural simulations. Elastic or proof-test agreement does not establish fatigue or creep life.\\
+Actuators and dynamic feed response &
+Use time-resolved commands, position, pressure, flow, and load for grey-box or state-space identification. Keep friction, backlash, and hysteresis identifiable. Steady sweeps cannot establish dynamic admittance or combustion stability.\\
+\end{longtable}
+
+\subsection{When multi-fidelity modeling earns its place}
+
+For the pintle, we will compare an analytic baseline, an experiment-only model, a baseline corrected with experiments, CFD alone, and a fused model. We should not have to assume fusion wins before running the comparison.
+
+One candidate is an autoregressive Gaussian-process hierarchy \cite{kennedy2000}. On a suitable scalar output transform, we can write
+\begin{align}
+u_{\mathrm{CFD}}(\mathbf{x})
+  &= a_{10}u_0(\mathbf{x})+\delta_{10}(\mathbf{x}),\\
+u_{\mathrm{phys}}(\mathbf{x})
+  &= a_{21}u_{\mathrm{CFD}}(\mathbf{x})+\delta_{21}(\mathbf{x}),\\
+y_{\mathrm{obs}}
+  &= \mathcal{H}[u_{\mathrm{phys}}]+b_{\mathrm{campaign}}+\varepsilon_{\mathrm{meas}}.
+\end{align}
+Here $u_0$ is the analytic baseline, the $\delta$ terms describe differences between sources, and $\mathcal{H}$ maps the predicted response into the measurement. Experimental noise and campaign bias need their own terms. We will also retain the numerical uncertainty attached to the CFD observations.
+
+We will start with simple corrections or constant source scaling. Nonlinear source relationships, such as nonlinear autoregressive GPs, are candidates only if grouped predictive assessment supports them \cite{perdikaris2017}.
+
+We need to be careful about fitting several physical parameters and a flexible discrepancy from the same small dataset. Those explanations can be confounded \cite{brynjarsdottir2014}. Measured roughness, dimensions, and calibration records can inform useful priors. A fitted effective roughness should not be reported as a measured surface property.
+
+The ASCEND code already has optional BoTorch/GPyTorch tooling, while Emukit provides a useful multi-fidelity reference \cite{emukit}. We will benchmark a small implementation before choosing a production fitting backend, and keep the stored model semantics independent of that choice.
+
+\section{The pintle study as our first research project}
+
+The question we want to answer is whether the useful linear flow window survives changes in pressure, Reynolds number, and geometry, and whether CFD helps us predict a geometry we have not measured. We can study that directly without claiming that a water test reproduces every condition in an operating engine.
+
+\subsection{Settle geometry and conventions first}
+
+The conical seat-valve study and the Son continuous radial-gap injector are different geometry families. We need separate adapters for their areas, lengths, angle definitions, and openings. The ASCEND code uses full cone angle $\theta$ and calculates gap using its half-angle. That value cannot simply become the Son tip-angle input.
+
+For the conical-valve pilot, we will define the reference area and hydraulic diameter as functions of measured geometry and stroke. The thin-gap expressions are approximations whose scope must be checked against the chosen geometry. We will optimize manufacturable variables such as seat diameter, cone angle, and edge thickness, and derive surrogate features from a consistent forward mapping.
+
+In the intended thin-gap convention, $b\approx s\sin(\theta/2)$, $A\approx\pi D b$, and $D_h\approx 2b$. The normal gap $b$ and the axial stroke $s$ are different lengths. We will check this mapping against the actual seat and pintle before using it to process data.
+
+The ASCEND synthetic-data code includes a logistic $\Cd$ relation with selected transition and separation parameters. We can retain it as a declared baseline or prior while we review and assess it. Its presence in the code is not an experimental establishment of the correlation.
+
+\subsection{Fit the response we actually observe}
+
+For the declared incompressible, noncavitating branch, our starting hydraulic relation is
+\begin{equation}
+\mdot=\Cd A(s)\sqrt{2\rho\Delta P},
+\qquad \Delta P=P_u-P_d.
+\label{eq:flow}
+\end{equation}
+The normalized response we want to study is
+\begin{equation}
+\Phi(s,\Delta P)=\frac{\mdot}{\sqrt{\Delta P}}
+               =\Cd A(s)\sqrt{2\rho}.
+\end{equation}
+Agreement of $\Phi$ across pressure at a fixed stroke is something to test, with uncertainty; incompressibility alone does not guarantee that collapse.
+
+The conventional flow-based Reynolds number is
+\begin{equation}
+\Rey=\frac{\rho(Q/A)D_h}{\mu}.
+\end{equation}
+Here $Q$ is volumetric flow, $\rho$ is density, $\mu$ is dynamic viscosity, and $D_h$ is the hydraulic diameter under the declared reference convention.
+
+Both a back-calculated $\Cd$ and a measured $\Rey$ depend on the measured flow. Their errors are therefore correlated. At prediction time that flow is also unknown. An ordinary regression of $\Cd$ on measured $\Rey$ leaves an important part of the forward problem unresolved.
+
+Our first fit will use measured mass flow as the observation, with geometry, stroke, temperature, and pressure conditions as inputs. A positive latent $\Cd$ or conductance correction can sit inside Eq.~\eqref{eq:flow}.
+
+An alternative forcing coordinate is
+\begin{equation}
+\Rey_{\Delta P}=\frac{D_h\sqrt{2\rho\Delta P}}{\mu},
+\qquad
+\Rey=\Cd\Rey_{\Delta P},
+\label{eq:forcing}
+\end{equation}
+where the second relation follows from the same flow law and reference-area convention. This avoids needing measured flow as an independent prediction input. If we retain actual $\Rey$ instead, we will solve the implicit relation and account for the correlated errors.
+
+Near closure, uncertain stroke zero and area can dominate a derived coefficient. We will model leakage, seating, and detection limits separately rather than train a finite $\Cd$ at zero area from a software placeholder. We also need an agreed area and pressure definition before imposing coefficient bounds.
+
+\subsection{Use pressure sweeps to investigate Reynolds dependence}
+
+A stroke sweep changes the restriction geometry as well as Reynolds number. To isolate Reynolds dependence more usefully, we will choose fixed strokes and vary achievable pressure conditions, then compare the resulting normalized flow and coefficients with uncertainty.
+
+We will also repeat stroke sweeps in both directions to assess repeatability and hysteresis. Each run needs actual temperature, measured dimensions, stroke-zero information, pressure references and stability, and a defined collection or averaging interval.
+
+The pressure range should follow the rig's measured capability and the data. A larger pressure drop may extend the useful Reynolds range, but it does not guarantee a $\Cd$ plateau, a high-Re condition all the way to crack-open, or an absence of cavitation. A minimum-Re gate can be a sensitivity study; it cannot establish the plateau by itself.
+
+Before extending pressure, we need the actual pump curve, flow demand, instrument ranges, and complete pressure-system limits. At low differential pressure, subtracting two broad-range transducers may leave substantial uncertainty. For gravimetric flow, we need to account for collection time, balance response, diversion timing, vibration, and jet effects as applicable.
+
+\subsection{Reconcile cavitation and the actual rig}
+
+The attached plan and the ASCEND implementation use different cavitation-index conventions:
+\begin{align}
+\sigma_A&=\frac{P_d-P_v}{P_u-P_v},\\
+\sigma_B&=\frac{P_d-P_v}{P_u-P_d},
+\qquad
+\sigma_A=\frac{\sigma_B}{1+\sigma_B}.
+\end{align}
+We will store the definition alongside every index or threshold. A numerical criterion from one convention cannot be transferred unchanged to the other, and neither convention supplies a universal onset threshold for this valve.
+
+The current importer can estimate missing upstream pressure as $2.5\Delta P$. That assumption cannot supply measured cavitation evidence. Missing absolute-pressure information will leave the corresponding assessment unavailable. Missing hysteresis data similarly cannot become zero hysteresis.
+
+We also need one authoritative test matrix. The supplied baseline plan uses 0.3, 1, and 2 bar, while the checked-in defaults use 0.3, 1, 3, and 4 bar, with additional differences in analysis and optimization gates. The documents describe different instrumentation arrangements. We will reconcile them with the apparatus and protocol we actually use.
+
+Single-phase and cavitating observations will remain distinguishable. Cavitating data can still answer a research question while being ineligible for the initial single-phase fit. The injector uncertainty study by Venters et al.\ is useful precedent for preserving measured flow behavior, manufacturing identity, and uncertainty \cite{venters2019}; it does not provide our valve's coefficient or threshold.
+
+\subsection{Predict curves, then calculate windows}
+
+We will predict the hydraulic response over stroke and calculate the linearity window from those curves. The maximum acceptable window can change abruptly when a point crosses a tolerance, so fitting only a handful of window widths would discard useful information about the underlying response.
+
+For uncertainty, we will draw correlated posterior curves and apply the same fixed window algorithm to each draw. This gives a distribution of window width and geometry rankings. Drawing every stroke point independently would distort the curve and its inferred window.
+
+We will specify the stroke grid, window-search rule, nonlinearity definition, and treatment of missing or ineligible points. The discontinuous window calculation will remain in the outer research loop. If we later introduce a smooth approximation for optimization, we will assess its approximation error.
+
+\subsection{Judge transfer on geometries we have held out}
+
+Hundreds of measurements across eight geometries give us detailed curves, but still only eight tested geometries for judging geometric transfer. We will hold out complete geometry groups, and check specimen and campaign effects where the data allow it.
+
+Preprocessing, hyperparameter fitting, and model selection will stay inside the training partition. We will define whether deployment assumes CFD is available for the new geometry. That scenario may use the new geometry's CFD during assessment; predicting without such CFD is a separate scenario. Neither may use its withheld experimental responses.
+
+We will compare flow and $\Cd$ errors by stroke band and regime, window-width error, geometry rankings, interval coverage and sharpness, and the cost of obtaining the data. A nominal 90\% predictive interval needs an actual coverage assessment, with the small number of independent geometries acknowledged.
+
+The attached study proposes a window of at least 0.4\,mm with at most 2\% nonlinearity at each tested pressure for at least six of eight baseline geometries; at least 20\% improvement in mean window width over the best baseline at the same pressure set; no more than 25\% growth in window-width standard deviation across pressure; and a declared cavitation constraint. We will register their precise definitions and check whether the uncertainty budget can resolve them. These remain study targets, rather than general engine acceptance rules.
+
+We will begin with a small matched CFD/experiment pilot to estimate cost and discrepancy before committing to a dense sweep. If fusion does not improve the intended prediction over the experiment-only model, we will retain the simpler model and report that finding. A selected geometry then needs a prospective measurement after selection. Any claim about the method's novelty will require a separate literature review.
+
+\section{How the learned models will enter the MDO}
+
+Each supported component quantity will have a pure numerical evaluator returning a prediction, uncertainty information, availability, and applicability. Host-side reporting can expand numerical reason codes into explanations and source links.
+
+We will train outside JAX. A small GP can export its transforms, kernel, training inputs, and factorization for a JAX evaluator; a smooth table or low-order parameterization may be simpler. We will check agreement with the fitting implementation and verify derivatives where the optimizer uses them.
+
+Fitting, file reads, solver launches, and callbacks into a training library will stay outside the traced engine calculation. The model bundle will remain frozen for an entire solve.
+
+\subsection{Make the model identity part of the result}
+
+The bundle identity will cover every array, transform, hyperparameter, uncertainty setting, domain definition, and source dataset needed to reproduce an evaluation. We will extend the existing state and snapshot checks so a numerical result cannot be reported under a different calibrated model.
+
+This identity also needs to follow through the resolved inputs, exported component, simulation request, and report. When a geometry or boundary definition changes, we will reassess dependent applicability and cached responses. Old data remain records of their original configurations.
+
+\subsection{Demonstrate that the design changes for the right reason}
+
+For the pintle, a learned hydraulic response must change the required area or opening and the relevant velocities, feed requirements, and coupled outputs. Our first integration check will be an explained baseline-versus-calibrated comparison.
+
+If $\Cd$ depends on geometry being sized, the current direct area calculation can become an implicit problem. We will resolve that dependency within the component inversion or residual, differentiate it consistently, and assess monotonicity, uniqueness, branch changes, and unavailable cases.
+
+We will begin uncertainty propagation with a fixed set of model or parameter samples and repeated engine evaluations. Shared uncertainties will use shared samples across components and operating points. Injector loss, feed demand, pump power, and cooling states can depend on the same source, so we cannot assume their errors are independent.
+
+A later requirement may state a probability that a physical margin exceeds zero. That needs a declared risk level and uncertainty interpretation. A GP interval by itself does not set an engineering acceptance standard.
+
+Applicability must cover the requested operating envelope, including throttle points. Supported design runs will remain within an assessed domain. Research runs may propose new points, with the need for further evidence stated explicitly.
+
+\section{What the user will see in the CLI}
+
+Experimental data will be optional component bindings in the same engine-job contract used by guided input and YAML/JSON. Fitting a model will be a separate operation from running an engine job. We will avoid creating a second definition of the engine just for the research workflow.
+
+\begin{tabularx}{\linewidth}{@{}P{0.25\linewidth}Y@{}}
+\toprule
+\textbf{Policy} & \textbf{Intended behavior}\\
+\midrule
+Baseline & Use the declared analytic model and report its evidence limits.\\
+Prefer supplied model & Use an eligible pinned model. Report any fallback and the reason for it.\\
+Require evidence & Keep a missing or incompatible requirement unmet. Fallback cannot turn that requirement into a pass.\\
+\bottomrule
+\end{tabularx}
+
+\subsection{Proposed configuration}
+
+The following fragment illustrates the intended interface. It is future syntax and requires a versioned schema change; the current parser rejects unknown keys.
+
+\begin{lstlisting}
+component_models:
+  injector.radial_metering:
+    policy: require
+    artifact: models/pintle_family_v1/model.json
+    outside_domain: unavailable
+evidence_inputs:
+  injector.radial_metering:
+    - datasets/pintle_campaign_01/manifest.json
+simulation_assessment:
+  requirements: requirements/engine_pre_hardware.yaml
+  backend: openfoam_foundation_13
+\end{lstlisting}
+
+We intend to expose operations along these lines:
+\begin{lstlisting}
+lrekit evidence template --component pintle_valve --out template/
+lrekit evidence import dataset/manifest.json
+lrekit models fit fit-request.yaml
+lrekit models assess model.json --validation validation-plan.yaml
+lrekit validate engine.yaml
+lrekit run engine.yaml
+lrekit simulate plan engine-run/ --out requests/
+lrekit simulate run requests/
+lrekit simulate collect simulation-run/
+\end{lstlisting}
+
+For each component and required quantity, the final report will show the model used, data origin, operating coverage, prediction and uncertainty, available checks, missing evidence, and supported conclusion. Unsupported component schemas will remain explicitly unimplemented. Accepting a file into an archive does not mean that a model knows how to use its contents.
+
+\section{The OpenFOAM round trip}
+
+We will introduce profiles for specific physical questions. The first hydraulic profile needs the internal conical-valve flow passage and pressure-observation locations. The existing sheet profile can develop separately. Cooling, compressible nozzle flow, and reacting flow each need suitable profiles; structural work needs a structural solver.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+  box/.style={draw=teal,rounded corners=2pt,fill=pale,align=center,
+    text width=0.265\linewidth,minimum height=0.62in,font=\small\sffamily},
+  flow/.style={-{Latex[length=2mm]},thick,color=teal}
+]
+\node[box] (design) {Frozen design\\and operating point};
+\node[box,right=0.18in of design] (case) {Domains, conditions,\\mesh, and solver};
+\node[box,right=0.18in of case] (extract) {Versioned extraction\\and numerical checks};
+\node[box,below=0.35in of extract] (evidence) {Typed component\\simulation evidence};
+\node[box,left=0.18in of evidence] (model) {Assessed next\\model version};
+\node[box,left=0.18in of model] (run) {Subsequent engine\\analysis or MDO};
+\draw[flow] (design)--(case);
+\draw[flow] (case)--(extract);
+\draw[flow] (extract)--(evidence);
+\draw[flow] (evidence)--(model);
+\draw[flow] (model)--(run);
+\end{tikzpicture}
+\caption{The automatic feedback path we intend to implement. Each result retains the identity of the configuration that produced it.}
+\end{figure}
+
+A part surface alone does not specify a simulation. We need the fluid domain, any solid domains, interfaces, boundary labels, inlet and outlet conditions, material properties, and the intended observables.
+
+The first hydraulic case must predict a complementary response. Pressure-driven flow can predict flow rate; an internal case with imposed flow can predict pressure drop. Reading back a prescribed flow does not independently assess the valve's hydraulic response.
+
+\subsection{Profile-specific input and output requirements}
+
+\begin{longtable}{@{}P{0.23\linewidth}P{0.70\linewidth}@{}}
+\caption{What each proposed profile needs beyond the part surface.}\\
+\toprule \textbf{Profile} & \textbf{Inputs and response}\\ \midrule
+\endfirsthead
+\toprule \textbf{Profile} & \textbf{Inputs and response, continued}\\ \midrule
+\endhead
+\bottomrule \endfoot
+Internal hydraulics &
+Complete wetted passage, opening, pressure-tap positions, fluid state, compatible boundary conditions, roughness, and inlet assumptions. Extract flow or pressure response, branch distribution, consistently defined $\Cd$, and hydraulic loads where resolved.\\
+Injector sheet/spray &
+Relevant flow passages, stream states, phase properties including surface tension, ambient domain, and measurement planes. Extract sheet geometry and velocity, spray observables, conservation, and averaging evidence. Droplet statistics need resolved droplets or a separately assessed breakup model.\\
+Cooling / CHT &
+Coolant and solid domains, interfaces, temperature-dependent properties, coolant states, hot-side heat load, and external thermal conditions. Extract pressure loss, outlet state, wall temperature, and heat flux. An imposed hot-side load remains an assumption unless independently established.\\
+Compressible nozzle &
+Internal domain, inlet total state and composition, ambient condition, wall treatment, and thermochemical closure. Extract flow, pressure, and thrust using defined integration or control surfaces.\\
+Rotating pump &
+Internal and rotating domains, interfaces, speed, fluid and inlet state, complementary flow/pressure condition, and supported phase treatment. Extract head, torque/power, and efficiency. Cavitation outputs require an appropriate supported model.\\
+\end{longtable}
+
+Each request will be bound to a design snapshot, geometry and domain hashes, operating point, properties, boundary conventions, solver distribution and build, mesh recipe, numerical settings, and requested quantities. Missing inputs should be visible before launch.
+
+\subsection{Execution, extraction, and collection}
+
+We will separate case generation from execution and result collection. The workflow will generate labeled domains; verify the supported runtime; execute with resource limits and restart records; retain logs; and extract the requested observations using a versioned definition.
+
+OpenFOAM's function-object framework supplies useful averaging, sampling, flux-related processing, and wall-heat-flux tools \cite{openfoam13}. The extractor still needs to check units and references. In particular, it must distinguish pressure in Pa from kinematic pressure, reconstruct the appropriate pressure from \code{p\_rgh}, and distinguish volumetric from mass flux.
+
+For representative geometries and regimes, we will plan at least three systematically refined meshes when estimating observed convergence order. We will assess gap resolution, wall treatment, and the assumptions needed for a grid-convergence estimate \cite{nasagrid}. Transient cases also need timestep and averaging-window checks. Domain size and boundary placement can matter independently.
+
+Solver completion and a mesh-quality pass do not establish output accuracy. We need conservation and convergence evidence for the quantities we intend to use. Low-Re, separated, cavitating, and strongly three-dimensional cases will remain identifiable. A steady axisymmetric model cannot supply actuator hysteresis or resolve a passage eccentricity that its geometry omits.
+
+Collection will create immutable simulation observations and match them against component requirements. A configured assimilation policy can generate and assess a candidate model, then select an eligible new version for the next solve. The earlier run remains pinned to its original model. Failed, incomplete, mismatched, and unsupported results will remain recorded in those states.
+
+\subsection{What we can conclude before hardware testing}
+
+We will call this a pre-hardware simulation assessment with named requirements and quantities. Validation is specific to intended use and experimental coverage \cite{nasavalidation}. Simulation can strengthen the case for a design, while inspection, manufacturing quality, assembly, proof, life, and operating evidence remain separate questions.
+
+We will also keep artifact fidelity separate from simulation fidelity and physical model validation. A better CAD package does not automatically mean a better physical model, and a more expensive simulation does not automatically mean a better prediction.
+
+\section{What we need to do first}
+
+Our first implementation should be small enough that we can trace a measurement all the way into a design decision. We will use explicit exit evidence for each stage, rather than declare progress because the next function returns a number.
+
+\subsection{Stage 0: define the pilot}
+
+We will reconcile the as-built rig, instrumentation, pressure capability, geometry and angle conventions, fluid-property treatment, and intended pressure matrix. We will locate any pilot data and the associated calibration records.
+
+We will then write one component contract: what the geometry means, what we observe, which uncertainty terms matter, and what question the model must answer. The window definition, proposed study endpoints, exclusion rules, and validation scenario belong here.
+
+\lead{Exit evidence}
+One reviewed data template and protocol, an authoritative geometry mapping, and a visible list of unresolved inputs. We do not need to disguise missing rig information to begin the software scaffolding.
+
+\subsection{Stage 1: import and preserve real evidence}
+
+We will implement immutable manifests, raw-file hashing, units and pressure-reference handling, specimen/campaign grouping, uncertainty records, source kinds, and applicability checks.
+
+The first importer will process one actual pintle dataset reproducibly. It will retain raw observations and record each derived quantity's calculation. Synthetic fixtures will remain explicitly synthetic. Missing absolute pressure or metrology will remain missing.
+
+\lead{Exit evidence}
+The same raw files and processing version produce the same dataset, with auditable derived quantities and no invented eligibility evidence.
+
+\subsection{Stage 2: fit the first hydraulic model}
+
+We will build a measured curve or small parameter fit and an experiment-only baseline. We will retain training identities, fitting settings, preprocessing, applicability, and uncertainty in the model artifact.
+
+We will assess the relevant grouped prediction problem and implement a frozen numerical evaluator. Where the MDO requires JAX, we will check evaluator agreement and derivatives against the fitting implementation.
+
+\lead{Exit evidence}
+Reproducible predictions with uncertainty, correct unavailable cases, and an assessed claim that matches the available data. Exact-part calibration and geometric transfer will have different claims.
+
+\subsection{Stage 3: prove that data affect the design}
+
+We will connect the hydraulic evaluator to shared resolved inputs and component sizing, then run the baseline-versus-calibrated comparison over the requested operating points.
+
+We will explain which quantities changed and why: required area or opening, flow/velocity behavior, and any resulting feed or engine-level effect. The model identity will follow through the numerical state, report, and relevant output contract.
+
+\begin{samepage}
+Before claiming the corresponding exported movable part, we need the authoritative host handoff and consistent geometry identity. The research model will not bypass the current refusal.
+
+\lead{Exit evidence}
+One traceable engine comparison that demonstrates actual model influence and preserves the limitations of both runs.
+\end{samepage}
+
+\subsection{Stage 4: establish the CFD round trip}
+
+We will add the internal hydraulic profile, runtime execution, observation extraction, quality checks, and immutable result collection. We will start with a small set of matched geometries and conditions, including representative difficult regimes.
+
+The pilot will establish whether the requested observable is being predicted, whether the result is numerically adequate, how much it costs, and where discrepancy against experiments is concentrated.
+
+\lead{Exit evidence}
+Reproducible, eligible CFD observations bound to the correct geometry and conditions, with numerical uncertainty and unresolved regimes visible.
+
+\subsection{Stage 5: test family transfer and fusion}
+
+We will compare the candidate predictors on withheld geometries, propagate uncertainty to the window calculation, and use a bounded search to propose a machining batch.
+
+The acquisition rule should reflect the study objective, uncertainty, applicable constraints, manufacturability, and actual experimental/compute costs. Required physical constraints should not disappear into an arbitrary soft penalty. Hysteresis needs measured or separately supported treatment.
+
+We will measure the selected geometry prospectively and refit with a new version. If the fused model fails to improve the intended prediction or decision, we will document that and retain the simpler approach.
+
+\lead{Exit evidence}
+A supported decision about whether fusion helps this research problem, including its resource cost and prospective performance.
+
+\subsection{Stage 6: extend the interface}
+
+Cooling pressure loss and thermal data are useful next candidates, followed by measured pump maps and other supported component questions. We will reuse identity, provenance, uncertainty, and requirement handling while giving each component its own observables and model assessment.
+
+\lead{Exit evidence}
+Each added component has a measurable response, an assessed domain, a reproducible evaluator, and explicit requirement coverage. Components without supported models remain visible as unavailable or unimplemented.
+
+\subsection{Checks that belong in the implementation}
+
+We will test unit and pressure-reference conversions, uncertainty propagation, source-kind preservation, geometry/condition mismatches, stable identities, grouped train/validation separation, numerical evaluator agreement, and gradients where used.
+
+We will also add a small solver integration case for execution, extraction, and collection. Calibration fit and validation will remain separate records. We will not count the data used to fit a model as independent evidence that it predicts unseen conditions.
+
+Before a simulation requirement can pass, we need its acceptance rule and engineering basis. Some requirements concern numerical adequacy, some require experiments, and others require physical material or hardware records. Coverage will show all applicable items, including unknown ones.
+
+\decision{\textbf{The first completion criterion}\\
+We can begin with a pintle measurement, reproduce the processed dataset, fit and assess a pinned hydraulic model, use it in an engine calculation, and explain the resulting design change. The CFD extension is complete when the same chain accepts an eligible simulated observation without losing its origin, conditions, or uncertainty.}
+
+\Needspace{10\baselineskip}
+\section{What this opens up after the pilot}
+
+For the pintle, the research result is a measured answer about transfer: whether a Reynolds-aware model predicts flow curves and windows across geometries, whether CFD helps, and whether the combined model improves the next geometry we choose to test. A negative result on fusion can still be a useful result.
+
+For cooling passages, we can study how manufactured roughness and geometry change pressure loss and thermal performance, using measurements chosen to distinguish the possible explanations. For pumps, we can test how well measured maps transfer across speeds and geometric variants. For injectors, we can study sheet formation and spray observables across throttle conditions without conflating hydraulic, atomization, and combustion evidence.
+
+Eventually the outer planner could choose between another operating point, another CFD resolution, a repeat measurement, or a new specimen. That decision should depend on the uncertainty that matters for the design and the actual cost of reducing it. We will demonstrate that on the bounded pintle study before making it an engine-wide adaptive research system.
+
+\clearpage
+\appendix
+\section{Implementation locations and source scope}
+
+These locations identify the existing interfaces discussed in the plan. The implementation observations come from the working trees reviewed on 3 November 2026. The RaoRocketSim review was based on commit \code{d636d85} with existing local changes; it was not an immutable release audit.
+
+{\small
+\begin{tabularx}{\linewidth}{@{}P{0.34\linewidth}Y@{}}
+\toprule
+\textbf{Location} & \textbf{Role in the planned work}\\
+\midrule
+\code{raosim/mdo/job.py} and \code{lrekit/job\_cli.py} & Extend the one job contract and parser with versioned component model/data bindings and simulation requests.\\
+\code{raosim/movable\_pintle.py} & Preserve exact-part curve provenance; extend toward explicit measurement and model artifacts.\\
+\code{raosim/mdo/injector.py} & Connect the frozen hydraulic evaluator to differentiable component calculations.\\
+\code{raosim/mdo/postprocess.py} & Resolve the authoritative movable-architecture handoff before claiming matching exported hardware geometry.\\
+\code{raosim/mdo/state.py}, \code{snapshot.py}, and \code{run\_record.py} & Carry complete model identities, uncertainty, applicability, and evidence lineage through results.\\
+\code{raosim/mdo/build.py} & Attach quantity-specific evidence coverage to the expected-part manifest while retaining artifact fidelity.\\
+\code{raosim/openfoam/case.py} and \code{handoff.py} & Build on deterministic export and typed handoff with profiles, execution, extraction, and collection.\\
+\code{aiaa\_flow\_linearity/src/pintle/} & Reuse and assess geometry, window analysis, experimental import, uncertainty, and BO methods for the pilot.\\
+\bottomrule
+\end{tabularx}
+}
+
+\begingroup\raggedright
+The supplied \emph{Pintle Valve Flow Study: Test Conditions and Multi-Fidelity Optimization Plan} and the pasted reconstruction \emph{Thinking through the pintle cold-flow rig and Reynolds-number problem} provide the study context. They were treated as proposals and historical reasoning, not as completed measurement records.
+
+This document develops the recommendations in {\small\path{docs/program/COMPONENT_DATA_AND_MULTIFIDELITY_PLAN_2026-11-03.md}}. Repository code establishes the implementation observations. The sources below establish the named statistical and CFD methods; the architecture, staging, and proposed interfaces are our development choices.
+\par\endgroup
+
+\clearpage
+\begingroup
+\small
+\begin{thebibliography}{9}
+\addcontentsline{toc}{section}{References}
+\bibitem{kennedy2000}
+M. C. Kennedy and A. O'Hagan.
+\emph{Predicting the output from a complex computer code when fast approximations are available.}
+Biometrika, 87(1), 1--13, 2000.
+\href{https://doi.org/10.1093/biomet/87.1.1}{doi:10.1093/biomet/87.1.1}.
+
+\bibitem{perdikaris2017}
+P. Perdikaris, M. Raissi, A. Damianou, N. D. Lawrence, and G. E. Karniadakis.
+\emph{Nonlinear information fusion algorithms for data-efficient multi-fidelity modelling.}
+Proceedings of the Royal Society A, 473, 20160751, 2017.
+\href{https://doi.org/10.1098/rspa.2016.0751}{doi:10.1098/rspa.2016.0751}.
+
+\bibitem{brynjarsdottir2014}
+J. Brynjarsd\'ottir and A. O'Hagan.
+\emph{Learning about physical parameters: the importance of model discrepancy.}
+Inverse Problems, 30, 114007, 2014.
+\href{https://doi.org/10.1088/0266-5611/30/11/114007}{doi:10.1088/0266-5611/30/11/114007}.
+
+\bibitem{emukit}
+Emukit project.
+\emph{Multi-fidelity emulation}.
+\url{https://emukit.github.io/multifidelity-emulation/}.
+
+\bibitem{venters2019}
+J. P. Venters et al.
+\emph{Uncertainty Analysis of Experimental Discharge Coefficients in Additively Manufactured Liquid Injector Elements}.
+AIAA Propulsion and Energy Forum, 2019. NASA NTRS record 20190030431.
+\url{https://ntrs.nasa.gov/citations/20190030431}.
+
+\bibitem{openfoam13}
+CFD Direct / OpenFOAM Foundation.
+\emph{OpenFOAM v13 User Guide}, Section 7.3, Post-processing functionality.
+\url{https://doc.cfd.direct/openfoam/user-guide-v13/post-processing-functionality}.
+
+\bibitem{nasagrid}
+NASA Glenn / NPARC Alliance.
+\emph{Examining Spatial (Grid) Convergence}.
+\url{https://www.grc.nasa.gov/www/wind/valid/tutorial/spatconv.html}.
+
+\bibitem{nasavalidation}
+NASA Glenn / NPARC Alliance.
+\emph{Validation Assessment}.
+\url{https://www.grc.nasa.gov/www/wind/valid/tutorial/valassess.html}.
+\end{thebibliography}
+\endgroup

@@ -1,0 +1,28 @@
+{
+  "source_id": "fixture_radhakrishnan2018",
+  "acquired_at_utc": "2026-11-04T00:34:48.902527+00:00",
+  "evidence_kind": "mixed_experimental_numeric_fixture",
+  "status": "ACQUIRED",
+  "files": [
+    {
+      "path": "raw/fixture_radhakrishnan2018/raosim/benchmark_data/cases/radhakrishnan2018_water_air.json",
+      "bytes": 6962,
+      "sha256": "2d7199a213822348f4ea5c02669d9dc9fb0ce6231d4e8907b700bb654d5baaab",
+      "origin": "existing_repository_fixture",
+      "original_path": "raosim/benchmark_data/cases/radhakrishnan2018_water_air.json"
+    },
+    {
+      "path": "raw/fixture_radhakrishnan2018/raosim/benchmark_data/curves/radhakrishnan2018_water_air.csv",
+      "bytes": 564,
+      "sha256": "f628bb7b5c45069f9e435a9f99ae349efb2c68fef1403fb85dc6d415f10a2075",
+      "origin": "existing_repository_fixture",
+      "original_path": "raosim/benchmark_data/curves/radhakrishnan2018_water_air.csv"
+    }
+  ],
+  "review_state": "EXISTING_FIXTURE_IMPORTED_NOT_REVALIDATED",
+  "training_eligible": false,
+  "hardware_qualified": false,
+  "limitations": [
+    "Four cases; mixed experimental targets and author-model intermediates; imported without renewed original-page review."
+  ]
+}

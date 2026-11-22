@@ -1,0 +1,447 @@
+{
+ "packet": "V-LEE-p012-013",
+ "kind": "verification",
+ "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+ "source_pdf": "propulsion_texts/10.1007_s42405-020-00325-z.pdf",
+ "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+ "pages": [
+  12,
+  13
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 12,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/p0012.png",
+   "sha256": "d13362fc0c47786dbc83e4040919ab3b2e7352222bd011ee7c2a4e5198223de9",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 13,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/p0013.png",
+   "sha256": "c5ddf89922f78d4e1fb19856639d393b4bbec724aef63aeb1ce77f57b39a66be",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_ce0be4243e137e910315d7d4",
+  "ENR_fa03616da86f4e50f265fad0"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_7a0f6c84d6783a65aaf265ca",
+   "kind": "figure",
+   "pages": [
+    12
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/1",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 50.32085863523035,
+     "t": 55.92472852210665,
+     "r": 91.98135193777404,
+     "b": 43.589416206060946,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_fa03616da86f4e50f265fad0",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p12-12-67631f34b8bae9cf384286d16ce36cb055c70d35e0a067f40b66a5973a8a50b6.json",
+   "raw_sha256": "b56d103f0f532577cdb7f5b3b447b2d9dfee11bd00efdbd8b29d49aa4735515c",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_ba00218d9735969536a936e8",
+   "kind": "figure",
+   "pages": [
+    12
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [
+    "Fig. 10 Design schematic electric-pump cycle (a), gas-generator cycle (b)"
+   ],
+   "bbox": [
+    {
+     "l": 53.343042759069654,
+     "t": 737.2786020464313,
+     "r": 542.003207188139,
+     "b": 429.45933925577543,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/1\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_fa03616da86f4e50f265fad0",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p12-12-67631f34b8bae9cf384286d16ce36cb055c70d35e0a067f40b66a5973a8a50b6.json",
+   "raw_sha256": "b56d103f0f532577cdb7f5b3b447b2d9dfee11bd00efdbd8b29d49aa4735515c",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_30643ed3825edab91eee7ec0",
+   "kind": "table",
+   "pages": [
+    12
+   ],
+   "table_grid": [
+    [
+     "",
+     "Electric-pump cycle [kg]",
+     "Gas-generator cycle [kg]",
+     "Difference [%]"
+    ],
+    [
+     "Tank mass",
+     "0.5977",
+     "0.6228",
+     "- 4.20"
+    ],
+    [
+     "Feed line mass",
+     "2.4735",
+     "4.9222",
+     "- 98.98"
+    ],
+    [
+     "Power mass",
+     "2.5853",
+     "1.7078",
+     "+ 33.94"
+    ],
+    [
+     "Nozzle, combustor mass",
+     "5.1382",
+     "5.1382",
+     "0"
+    ],
+    [
+     "Propellant mass",
+     "97.7883",
+     "101.6742",
+     "- 3.97"
+    ],
+    [
+     "Total mass",
+     "108.5831",
+     "114.0653",
+     "- 5.05"
+    ],
+    [
+     "Dry mass",
+     "10.7948",
+     "12.3711",
+     "- 14.60"
+    ]
+   ],
+   "json_pointer": "/tables/0",
+   "caption_text": [
+    "Table 3 Output parameter values"
+   ],
+   "bbox": [
+    {
+     "l": 50.0573127463936,
+     "t": 373.5632008602176,
+     "r": 289.4062820293247,
+     "b": 222.09939262210742,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "TABLE 8x4 (see table_grid; full cells in raw item /tables/0)",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_fa03616da86f4e50f265fad0",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p12-12-67631f34b8bae9cf384286d16ce36cb055c70d35e0a067f40b66a5973a8a50b6.json",
+   "raw_sha256": "b56d103f0f532577cdb7f5b3b447b2d9dfee11bd00efdbd8b29d49aa4735515c",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_4e8373a1d98c3e2f15868b49",
+   "kind": "table",
+   "pages": [
+    12
+   ],
+   "table_grid": [
+    [
+     "",
+     "Present result (g)",
+     "Minimummass (g)",
+     "References"
+    ],
+    [
+     "Motor mass",
+     "451.2",
+     "80",
+     "[33]"
+    ],
+    [
+     "Battery mass",
+     "985.6",
+     "222",
+     "[34]"
+    ]
+   ],
+   "json_pointer": "/tables/1",
+   "caption_text": [
+    "Table 4 Minimum mass limit of the motor and battery"
+   ],
+   "bbox": [
+    {
+     "l": 305.24404461506066,
+     "t": 373.31400602187824,
+     "r": 544.669763813198,
+     "b": 316.80496488140506,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "TABLE 3x4 (see table_grid; full cells in raw item /tables/1)",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_fa03616da86f4e50f265fad0",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p12-12-67631f34b8bae9cf384286d16ce36cb055c70d35e0a067f40b66a5973a8a50b6.json",
+   "raw_sha256": "b56d103f0f532577cdb7f5b3b447b2d9dfee11bd00efdbd8b29d49aa4735515c",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_3d1231c42211d18ac98e041f",
+   "kind": "figure",
+   "pages": [
+    13
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 49.91846641945038,
+     "t": 738.1849998324427,
+     "r": 543.9004967917627,
+     "b": 561.3578742697001,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_ce0be4243e137e910315d7d4",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p13-13-135afc41d2b9e270ccff5ebe380eae7308cd4ea8bf3f735397981e6a592487d9.json",
+   "raw_sha256": "d4ae39962cea6fc5dd18e28fa07d53902836a6acb893e631933a4be31b70c1e9",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_da13045899748ffb4701d4d4",
+   "kind": "figure",
+   "pages": [
+    13
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/1",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 502.3257870645203,
+     "t": 55.79297594319769,
+     "r": 511.74039252896915,
+     "b": 44.00700902564131,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_ce0be4243e137e910315d7d4",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p13-13-135afc41d2b9e270ccff5ebe380eae7308cd4ea8bf3f735397981e6a592487d9.json",
+   "raw_sha256": "d4ae39962cea6fc5dd18e28fa07d53902836a6acb893e631933a4be31b70c1e9",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_841e37f4a92994376dc4e2b9",
+   "kind": "formula",
+   "pages": [
+    13
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/18",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 51.035003038024605,
+     "t": 312.406872649688,
+     "r": 289.145482197005,
+     "b": 302.6619203555651,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\Delta v = g I _ { s p } \\ln ( 1 / \\text {MR} ) .",
+   "original_text": "Delta1v equal1 g Ispln(1/MR). (39)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_ce0be4243e137e910315d7d4",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p13-13-135afc41d2b9e270ccff5ebe380eae7308cd4ea8bf3f735397981e6a592487d9.json",
+   "raw_sha256": "d4ae39962cea6fc5dd18e28fa07d53902836a6acb893e631933a4be31b70c1e9",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [
+  {
+   "id": "CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_60957F86",
+   "store": "claims",
+   "type": "Claim",
+   "page": 12,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Table 4 reports estimated motor mass 451.2 g and estimated battery mass 985.6 g; commercial minimum masses are 80 g and 222 g respectively.",
+   "quote": "Motor mass 451.2 80 [33]\n\n\n<u>Battery mass</u> <u>985.6</u> <u>222</u> <u>[34]</u>",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 12
+    }
+   ]
+  },
+  {
+   "id": "CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_C70A2429",
+   "store": "claims",
+   "type": "Claim",
+   "page": 13,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The paper calls for further study of supply-system dynamics and the power unit before a more realistic applicability assessment.",
+   "quote": "On the other hand, the final applicability and performance of the electric-pump cycle as a small-sized rocket\nengine should be evaluated more realistically through further\nstudies, including the dynamic characteristics of the propellant supply system, including the power unit.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 13
+    }
+   ]
+  },
+  {
+   "id": "VAL_DOI_10_1007_S42405_020_00325_Z_00D2425E_EE8EA526",
+   "store": "validity",
+   "type": "ValidityEnvelope",
+   "page": 12,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Use technology- and duty-appropriate power and energy densities; large-unit catalog densities cannot be assumed valid for a small engine.",
+   "quote": "Because it is not proper to apply the power and energy\ndensity of large-sized power units for a small-sized engine,\nit will be necessary to confirm whether the specifications of\nthe motors and batteries applied in this study are appropriate.",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 12
+    }
+   ]
+  }
+ ],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00032",
+   "page_start": 12,
+   "page_end": 12,
+   "section": "**Performance Analysis and Mass Estimation of a Small-Sized Liquid** **Rocket Engine with Electric-Pump Cycle** > 123",
+   "text": "**Fig. 10** Design schematic electric-pump cycle ( **a** ), gas-generator cycle ( **b** )\n\n**Table 3** Output parameter values\n\nInternational Journal of Aeronautical and Space Sciences\n\n**Table 4** Minimum mass limit of the motor and battery\n\nElectric-pump\ncycle [kg]\n\nGas-generator\ncycle [kg]\n\nDifference [%]\n\nPresent result (g) Minimum mass\n(g)\n\nReferences\n\nTank mass 0.5977 0.6228 - 4.20\n\nFeed line mass 2.4735 4.9222 - 98.98\n\nPower mass 2.5853 1.7078 + 33.94\n\nNozzle,\n\ncombustor\nmass\n\nPropellant\n\nmass\n\n5.1382 5.1382 0\n\n97.7883 101.6742 - 3.97\n\nTotal mass 108.5831 114.0653 - 5.05\n\n<u>Dry mass</u> <u>10.7948</u> <u>12.3711</u> <u>−</u> <u>14.60</u>\n\naPower: electric-pump cycle—pump, motor, inverter, battery; gasgenerator cycle—turbopump, gas generator\n\nto the electric-pump cycle. In addition, owing to the addition of flow control valves that enters the gas generator, the\nfeed line mass of the electric-pump cycle was approximately\ntwice as light. The driving element (power) of electric-pump\ncycle showed 33.94% heavier results than those of the gasgenerator cycle, but the mass difference of the other elements\nin the electric-pump cycle overcome the penalty, and the total\nmasswas5.05%lighter.Inaddition,inthecaseoftheelectric"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00033",
+   "page_start": 12,
+   "page_end": 12,
+   "section": "**Performance Analysis and Mass Estimation of a Small-Sized Liquid** **Rocket Engine with Electric-Pump Cycle** > 123",
+   "text": "Motor mass 451.2 80 [33]\n\n<u>Battery mass</u> <u>985.6</u> <u>222</u> <u>[34]</u>\n\npump, the motor and battery remained as dry mass after the\nend of combustion. On the other hand, the mass penalty of the\npower element was compensated for by the other elements,\nso the dry mass was also approximately 15% lighter.\n\nBecause it is not proper to apply the power and energy\ndensity of large-sized power units for a small-sized engine,\nit will be necessary to confirm whether the specifications of\nthe motors and batteries applied in this study are appropriate.\nA larger estimated mass of motor and battery than the minimum mass from the commercial products are acceptable.\nAmong the analysis results presented in Table 4, the estimated masses were above the minimum mass, which satisfies\nthe design goals of this study and shows the manufacturable\nperformance.\n\nThe specific impulse ( _I_ sp) and speed increment ( _�v_ ) are\nimportant factors in an engine performance evaluation [1].\nFigure 11 shows the comparison of the electric-pump cycle"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00034",
+   "page_start": 13,
+   "page_end": 13,
+   "section": "**Performance Analysis and Mass Estimation of a Small-Sized Liquid** **Rocket Engine with Electric-Pump Cycle** > 123",
+   "text": "**Fig. 11** Comparison of the\nelectric-pump cycle and\ngas-generator cycle\n\nand gas-generator cycle. In order to effectively express the\ngain, all factors are expressed to be good if they are greater\nthan 1. In the case of dry mass and total mass, the smaller\nbecomes the betterr so it is expressed as a ratio of the\ngas-generator cycle to the electric-pump cycle. In the case\nof Isp and speed increment, the bigger becomes the better so it is expressed as a ratio of the electric-pump cycle\nto the gas-generator cycle. The electric-pump cycle showed\napproximately 3.97% higher specific impulse than the gasgenerator cycle. Because the amount of propellant used in\nthe electric-pump cycle is relatively small, it is sufficiently\npredictable that the specific impulse is higher. The speed\nincrement considering the mass ratio and specific impulse\nwas found to be a more valid performance factor for comparing both cycles. The speed increment can be expressed as\nEq. (39) by ignoring the drag of the atmosphere and the drag\ncaused by gravity due to altitude changes:\n\n_�v_ - _gI_ spln _(_ 1 _/_ MR _)._ (39)\n\nThe MR (mass ratio) is the ratio of wet mass to dry mass.\nThe larger the dry mass, the more negatively it affects the\nspeed increment. The total mass and dry mass of the electricpump cycle were lighter than the gas-generator cycle, as\nlisted in Table 3. Therefore, the electric-pump cycle showed\na speed increment of approximately 8.13% better than the\ngas-generator cycle at the same thrust."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00035",
+   "page_start": 13,
+   "page_end": 13,
+   "section": "**Performance Analysis and Mass Estimation of a Small-Sized Liquid** **Rocket Engine with Electric-Pump Cycle** > 123",
+   "text": "**4 Conclusion**\n\nIn this paper, the applicability of the electric-pump cycle was\nreviewed through performance analysis of the 500 N thrust\nas a small-sized liquid rocket engine. The actual commercial\nmotor and battery were applied to the performance analysis and mass estimation. The simulation results showed that\nthe motor and battery mass were heavier than the minimum\n\nvalues of commercial products. In addition, the application\nof the compact system was possible using the present technology maturity in the power unit. The electric-pump cycle\nshowed a heavier mass compared to the driving element\n(power), but propellant was saved by the absence of a gas\ngenerator, thereby reducing the overall mass of the tank, feed\nline, and shortening the components, resulting in a lighter\ntotal mass. As a result, the mass in the power components,\nwhich was analyzed as a disadvantage of the electric-pump\ncycle, was compensated, and the dry mass showed lighter\nresults than the gas generator cycle. Finally, the engine performance factors of the electric-pump cycle, such as specific\nimpulse and speed increment, were superior. In conclusion,\nthe electric-pump cycle has a mass advantage over the gas\ngenerator cycle in a small-sized liquid rocket engine, highlighting the possibility of mounting a commercial motor and\nbattery. On the other hand, the final applicability and performance of the electric-pump cycle as a small-sized rocket\nengine should be evaluated more realistically through further\nstudies, including the dynamic characteristics of the propellant supply system, including the power unit."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00036",
+   "page_start": 13,
+   "page_end": 13,
+   "section": "**Performance Analysis and Mass Estimation of a Small-Sized Liquid** **Rocket Engine with Electric-Pump Cycle** > 123",
+   "text": "**Acknowledgements** This work was supported by Defense Acquisition\nProgram Administration and Agency for Defense Development under\nthe contract UD180046.\n\n**References**\n\n1. Kwak HD, Kwon S, Choi CH (2018) Performance assessment of\nelectrically driven pump-fed LOX/kerosene cycle rocket engine:\ncomparison with gas generator cycle. Aerosp Sci Technol 77:67–82\n2. Kim J, Lee S, Lim S, Oh S (2010) Development trend and prospect\nof upper stage engines. In: 2010 KSPE fall conference 2010, pp\n807–808\n3. JangYH,LeeKH(2015)Adevelopmenttrendstudyofbipropellant\nrocket engine for orbit transfer and attitude control of satellite. J\nKorean Soc Propuls Eng 19(1):50–60"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "figure": 4,
+   "table": 2,
+   "formula": 1
+  },
+  "flagged_candidates": 0,
+  "target_objects": 2,
+  "objects_with_anchor_problems": 0
+ }
+}

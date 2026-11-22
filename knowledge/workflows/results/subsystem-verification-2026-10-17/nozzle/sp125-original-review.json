@@ -1,0 +1,24 @@
+{
+  "record_kind": "bounded_original_source_review",
+  "reviewer": "GPT-6 (Codex nozzle agent)",
+  "document_id": "DOC_NTRS_19710019929",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "pages": [
+    100,
+    107
+  ],
+  "source_kind": "original_pdf_visually_reviewed",
+  "findings": [
+    {
+      "page": 100,
+      "figure": "4-14",
+      "statement": "Initial angle increases and exit angle decreases with expansion ratio for each stated fractional length. Displayed curves start at area ratio 5 and extend to 50; lengths 60,70,80,90,100 percent."
+    },
+    {
+      "page": 107,
+      "statement": "Worked example gives theta_n=27.4 degrees and theta_e=9.8 degrees for epsilon=14 and length=80 percent; equivalent cone includes downstream throat rounding term R*(sec15-1), not only sharp-corner cone length. The source calls parabolic contour near-optimum approximation and recommends MOC for more accurate divergent-contour calculations."
+    }
+  ],
+  "physical_validation": "NOT_ESTABLISHED",
+  "banking_state": "DRAFT_FOR_PARENT_INTEGRATION"
+}

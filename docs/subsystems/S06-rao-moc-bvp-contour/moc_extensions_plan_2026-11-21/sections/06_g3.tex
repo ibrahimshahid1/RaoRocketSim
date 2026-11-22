@@ -1,0 +1,95 @@
+\keep{10}
+\section{G3: Viscous interaction and separation}
+\label{sec:g3}
+\subsection{Governing relations}
+\textbf{Attached layer.} TDK predicts
+$I_{sp,\mathrm{del}}=\eta_{\mathrm{DER}}I'_{sp}(1-\Delta F_{\mathrm{BLM}}/F')$, where the
+primed values come from a second inviscid run on a $\delta^*$-displaced wall
+\cite[PDF p.~26, printed p.~2-4]{nickerson1985}, and
+\begin{equation}
+\Delta F_{\mathrm{BLM}}=2\pi r_e\cos\alpha_e\big[\rho_eU_e^2\theta-(P_e-P_{\mathrm{BLM}})\delta^*\big]
+\end{equation}
+\cite[PDF p.~27, printed p.~2-5]{nickerson1985}.
+
+TDK's BLW routine displaces the wall by $\delta^*$ normal to the contour and corrects
+the throat radius by $-\delta^*$ or $+\delta^*$
+\cite[Sec.~5.6.8, PDF p.~287, printed p.~5-161]{nickerson1985}; its test output shows
+the inward (analysis) case (PDF p.~396). SP-8120 states the outward design direction
+\cite[PDF p.~27, printed p.~13]{sp8120}.
+
+Reshotko and Tucker give momentum and moment-of-momentum integrals with
+Ludwieg--Tillmann friction \cite[PDF pp.~4--5, printed pp.~3--4, Eqs.~1--3]{reshotko1957}.
+Transpiration keeps the physical wall instead:
+$(\rho v)_n=r_w^{-k}\,\dd(\rho_eu_er_w^k\delta^*)/\dd x$
+\cite[PDF p.~6, printed p.~1320, Eq.~19]{whitfield1981}. Bartz's correlation
+\cite[PDF p.~2, printed p.~50, Eq.~7]{bartz1957} gives heat transfer but no $\delta^*$;
+the repository's $\delta^*$ is a labelled heuristic.
+
+\keep{5}
+\textbf{Separation onset.}
+\begin{itemize}
+\item Schmucker: $p_i/p_a=(1.88M_i-1)^{-0.64}$, referenced to ambient pressure, with
+$M_i$ at the start of separation and $M_i\le5$
+\cite[PDF pp.~44--45, printed pp.~38--39, Eq.~11]{schmucker1984}.
+\item Schilling: $p_i/p_a=0.583(p_c/p_a)^{-0.195}$, which Schmucker judges a cold-gas
+fit far too low for chemical engines (PDF p.~43, Eqs.~8--9). SP-8120 also prints 0.583
+\cite[PDF p.~31, printed p.~17]{sp8120}; the repository's 0.582 comes from
+\cite[PDF p.~52, printed p.~44, Eq.~29]{ostlund}.
+\item Summerfield's 0.4 \cite{summerfield1954}, as cited in
+\cite[PDF p.~43, Eq.~7]{schmucker1984}.
+\item Kalt--Badal, $(2/3)(p_c/p_a)^{-0.2}$ \cite{kalt1965}, as transcribed in
+\cite[PDF p.~52]{ostlund}.
+\item TP-1207: $p_s/p_a=1.082-0.363M_s+0.0386M_s^2$ for $2.4\le M_s\le4.5$
+\cite[PDF p.~13, printed p.~9, Eq.~10]{morrisette1978}.
+\end{itemize}
+SP-8120's 20\,\% rule belongs to its Fig.~39 criterion, and SP-8120 calls such
+predictions development guides only \cite[PDF pp.~81--82, printed pp.~67--68]{sp8120}.
+The MDO margin $P_e/p_{\mathrm{sep}}-1.2$ at the Q1D exit state is a project choice.
+
+\textbf{RSS.} In the Ruf--McDaniels parabolic (PAR) nozzle, FSS turned to RSS at NPR
+23.1--23.6, attached RSS persisted to about NPR 55, and RSS returned to FSS near NPR 12.7
+\cite[PDF pp.~19--21]{ruf2010}. A steady axisymmetric field gives no side-load history. Schmucker's estimate $F_{sl}=2rK_g\Delta l\,p_a(1-p_i/p_a)$ overpredicts
+effective loads \cite[PDF pp.~46--47, printed pp.~38--39, Eqs.~21--22]{schmucker1984b}.
+
+\subsection{Evidence}
+E11 is FAIL as pre-registered. E11b displaced the whole wall with an effective throat
+$R_t-s\delta^*_t$ and a $C^2$ onset. The concentric arc displacement is this plan's own
+construction, following the BLW throat correction. At $s=1$ it completes:
+$\Delta C_F=+0.0001$ on the effective throat and $-0.0053$ (0.34\,\%) on the geometric
+throat, the normalisation being a modelling choice. At $s=2$ it folds at
+$(2.79,1.12)R_t$, where post-kernel RRCs nearly coincide with BD, so E11b is
+FAIL-FEASIBILITY.
+
+In E08 and E08b, forward-net and BVP wall states differ by at most
+$|\Delta M|=2.2\times10^{-4}$ (48/64). Repeating E08 on the forward-net states changes
+each incipient $p_0/p_a$ by at most $1.6\times10^{-6}$ relative ($3.8\times10^{-6}$ at
+32/48). Incipient $p_0/p_a$ spans 8.28--9.19 across the criteria, a spread of 1.11
+inside the 1.2 reserve. Schmucker at the MOC wall exit state ($M=2.595$,
+$p/p_0=0.0465$) gives 9.02, against 12.98 at the Q1D state ($M=2.835$, $p/p_0=0.0302$),
+so the MDO's current evaluation is the more conservative one here.
+
+\subsection{Approaches and choice}
+\begingroup\footnotesize
+\par\addvspace{\LTpre}{\centering\begin{tabular}{@{}P{0.30\linewidth}P{0.50\linewidth}P{0.13\linewidth}@{}}
+\toprule\textbf{Approach} & \textbf{Assessment} & \textbf{Verdict}\\\midrule
+Report-only heuristic $\delta^*$ & Screening only & keep, labelled\\
+Integral BL plus displaced-wall second pass (TDK) & Attached thin layer; cheap; works at $s=1$, folds at $s=2$ & \textbf{V0} baseline, gated by MOC-31\\
+Transpiration on the physical wall & Same physics; same first-order turning, so similar fold risk & alternative (D9)\\
+Bartz 1955 or Elliott--Bartz--Silver & Rocket-specific; not held & acquisition\\
+RANS CFD & Turbulence-model dependent & later benchmark\\
+FSS criteria on resolved wall states & Screening with validity masks & \textbf{V1}\\
+RSS, hysteresis, side loads & Needs cap-shock topology and unsteady 3-D flow & excluded (V2)\\
+\bottomrule
+\end{tabular}\par}\addvspace{\LTpost}
+\endgroup
+V0 waits on the weak-coalescence policy (MOC-31).
+
+\begingroup\footnotesize
+\par\addvspace{\LTpre}{\centering\begin{tabular}{@{}P{0.09\linewidth}P{0.36\linewidth}P{0.30\linewidth}P{0.17\linewidth}@{}}
+\toprule\textbf{ID} & \textbf{Numerical verification} & \textbf{Benchmark agreement} & \textbf{Physical validation}\\\midrule
+V0 & Flat-plate limit; coupling convergence; closed ledger with no double counting against $\eta_{C_F}$ & Boldman $\theta$, $\delta^*$ \cite{boldman1969}; TP-2725 drag decrement \cite{tp2725}; Back heat transfer & none unless matched hot-fire data\\
+V1 & Transcriptions match the printed equations; validity masks & TP-1207 data; Farley--Campbell separation figures; Ruf--McDaniels FSS points & none (screening)\\
+V2 & Formula transcription & none & none\\
+\bottomrule
+\end{tabular}\par}\addvspace{\LTpost}
+\endgroup

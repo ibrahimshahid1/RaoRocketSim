@@ -12,8 +12,8 @@ and writes:
 
 Usage examples
 --------------
-    PYTHONPATH=. python scripts/generate_contour.py
-    PYTHONPATH=. python scripts/generate_contour.py \
+    python scripts/generate_contour.py
+    python scripts/generate_contour.py \
         --rt 0.025 --epsilon 8 --length-pct 85 --gamma 1.23 --out builds/my_nozzle
 
 Reliability: the solve must pass the 2e-3 residual gate or the script
@@ -31,8 +31,12 @@ from pathlib import Path
 
 import numpy as np
 
-import raosim.rao_variational as rv
-from raosim.rao_variational import RaoSolverConfig
+# A checkout without an editable install still runs this script directly.
+if str(Path(__file__).resolve().parents[1] / "src") not in sys.path:
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+
+import lrekit.components.nozzle.solvers.variational as rv  # noqa: E402
+from lrekit.components.nozzle.solvers.variational import RaoSolverConfig  # noqa: E402
 
 
 def solve(args):

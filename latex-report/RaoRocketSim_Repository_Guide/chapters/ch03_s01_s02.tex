@@ -1,0 +1,361 @@
+\chapter{Entry, Dispatch, Inputs and Job Contracts (S01--S02)}\label{ch:s01-s02}
+
+\lead{What this chapter covers}
+Stages \stagetag{S01} and \stagetag{S02} sit in front of every physics stage. \stagetag{S01} decides which workflow a command line runs; \stagetag{S02} decides whether the inputs that reach that workflow are admissible, in which units they are expressed, and which versioned contract carries them. Neither stage contains engineering physics, so their maturity is a software-contract maturity: whether every accepted input is consumed, refused, or explicitly recorded as unavailable.
+
+The repository has two input dialects, and the distinction runs through the whole chapter:
+\begin{itemize}
+  \item \textbf{Flag dialect.} \code{lrekit} \code{[flags]}, \code{raosim} \code{[flags]}, \code{@file.args} argument files and the bare or \code{-i} interviews. Every value is an \code{argparse} \code{float} interpreted in SI by convention (the help strings state the unit). This dialect is parsed and dispatched in \code{raosim/run_nozzle.py} and validated by \code{raosim/input_validation.py} plus in-line cross-checks.
+  \item \textbf{Job dialect.} \code{lrekit} \code{guided|validate|run|catalog} with a YAML or JSON job document. Dimensional values must carry units (\code{13}~\code{kN}, \code{3}~\code{MPa}) and are parsed by \code{raosim/units.py} into the versioned \code{EngineJobSpec} of \code{raosim/mdo/job.py}.
+\end{itemize}
+The two dialects do not meet: the flag runner never constructs an \code{EngineJobSpec} and never calls \code{raosim.units} (a search of \code{raosim/run_nozzle.py} for either name returns nothing). Section~\ref{sec:s02} records where this contradicts the module documentation.
+
+% ------------------------------------------------------------------------------
+\section{S01: CLI entry points, argument parsing and workflow dispatch}\label{sec:s01}
+
+\subsection{Role in the data flow and call sites}\label{sec:s01-role}
+
+Four console scripts are declared in \code{pyproject.toml} (\code{[project.scripts]}, lines 62--66), and line 69 packages the top-level \code{main.py} as a module (\code{py-modules} \code{=} \code{["main"]}). Together with \code{python}~\code{-m} and two wrappers they converge on three dispatch functions, all of which import lazily so that \code{--help} stays light (pinned by \code{test_lrekit_help_does_not_wake_matplotlib_cache}).
+
+{\footnotesize
+\begin{longtable}{P{3.6cm}P{4.3cm}P{7.6cm}}
+\toprule
+Entry & Target & What runs \\
+\midrule
+\endhead
+\code{lrekit} & \code{lrekit.cli:main} (\code{lrekit/cli.py:18}) & If \code{argv[1]} is in \code{JOB_VERBS} = \{guided, run, validate, catalog\} (\code{lrekit/job_cli.py:29}), \code{lrekit.job_cli.main} (\code{:398}); otherwise \code{raosim.cli.main}. \\
+\code{raosim}, \code{RaoRocketSim} & \code{raosim.cli:main} (\code{raosim/cli.py:9}) & If \code{argv[1]} is \code{export-openfoam-spray}, \code{raosim.openfoam.cli_main} (cross-cutting group X02); otherwise \code{raosim.run_nozzle.main} (\code{run_nozzle.py:2817}). \\
+\code{RaoRocketSimLegacy} & \code{raosim.cli:legacy_main} (\code{:21}) & \code{import_module("main").main()}: the top-level \code{main.py} toolbox (group X03), the only path that writes \code{builds/vNNN_*} folders. \\
+\code{python}~\code{-m}~\code{lrekit}, \code{python}~\code{-m}~\code{raosim} & \code{lrekit/__main__.py}, \code{raosim/__main__.py} & Same as \code{lrekit} and \code{raosim}; both \code{raise} \code{SystemExit(main())}, so the exit status propagates. \\
+\code{scripts/run_nozzle.py}, \code{raosim/run.sh} & compatibility wrappers & \code{raosim.run_nozzle.main}; \code{run.sh} sets \code{PYTHONPATH} and \code{exec}s the script. \\
+\bottomrule
+\end{longtable}}
+
+\code{raosim.run_nozzle.main} spans lines 2817--6977 of a 6,981-line file. Its parser is one flat \code{argparse.ArgumentParser} with 330 \code{add_argument} calls (lines 2819--3782) and no argument groups; the grouped listing printed by \code{--tags} is a separately maintained table in \code{print_tags} (\code{:139}). Figure~\ref{fig:s01-dispatch} shows the dispatch order verified against the working tree of 5 November 2026. Details the figure does not carry:
+\begin{itemize}
+  \item \code{_expand_arg_files} (\code{:562}) splits each line with \code{shlex.split(...,} \code{comments=True,} \code{posix=True)}, resolves nested \code{@} includes relative to the including file and raises on a recursive include. Expansion is positional, so a later flag overrides an earlier one.
+  \item \code{_apply_electric_technology} (\code{:522}) fills the eight motor/inverter/battery flags from the selected \code{raosim.electric_technology} set and labels the set \code{custom} when any of them was typed.
+  \item The menu (\code{_MODE_MENU}, \code{:1756}; \code{_select_mode_interactively}, \code{:1850}) raises on end-of-input, which \code{main} turns into status 130. Choices 2 and 3 run \code{_interactive_engine_mdo} (\code{:1778}) and the shared validation before the MDO branch.
+  \item After the shared validation, \code{--mdo-multistart}, \code{--mdo-multistart-seed} and \code{--mdo-station-study} are refused unless \code{--engine-mdo-optimize} is set (\code{:3813-3829}), because only that branch consumes them.
+  \item The traditional set-up runs \code{_apply_complete_package_defaults} (\code{:607}), \code{_apply_wall_sizing_mode} (\code{:920}), the cross-checks (\code{:3843-4005}), release-evidence intake (\code{:4044-4062}), the interview \code{_interactive} (\code{:957}) followed by a second wall-sizing and validation pass (\code{:4065-4075}), \code{_ensure_pyplot} (\code{:324}) and the wall-material lookup (\code{:4096-4113}). \code{--out} is created only at \code{:4342}, after thermochemistry and throat sizing.
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+  font=\footnotesize\sffamily,
+  box/.style={draw=teal, rounded corners=2pt, align=left, text width=7.3cm, inner sep=4pt, fill=pale},
+  side/.style={draw=rulegray, rounded corners=2pt, align=left, text width=5.6cm, inner sep=4pt},
+  arr/.style={-{Stealth[length=2.2mm]}, color=ink},
+  lab/.style={font=\scriptsize\sffamily, color=muted, align=center},
+  node distance=3.2mm and 8mm]
+\node[box] (m1) {Console script or \texttt{python -m}: \texttt{lrekit}, \texttt{raosim}, \texttt{RaoRocketSim}};
+\node[side, right=of m1] (s1) {\texttt{RaoRocketSimLegacy} $\rightarrow$ \texttt{raosim.cli.legacy\_main} (:21) $\rightarrow$ \texttt{main.py} (X03)};
+\node[box, below=of m1] (m2) {\texttt{lrekit.cli.main} (\texttt{lrekit/cli.py}:18)};
+\node[side, right=of m2] (s2) {\texttt{lrekit.job\_cli.main}: guided, validate, run, catalog (S02 $\rightarrow$ S13 $\rightarrow$ S14)};
+\node[box, below=of m2] (m3) {\texttt{raosim.cli.main} (\texttt{raosim/cli.py}:9)};
+\node[side, right=of m3] (s3) {\texttt{raosim.openfoam.cli\_main}: version-pinned OpenFOAM case writer (X02)};
+\node[box, below=of m3] (m4) {\texttt{run\_nozzle.main} (:2817): expand @argfiles (:3785), parse 330 flags (:3790), refuse legacy injector $\Delta p$ flag, resolve electric technology (:3792)};
+\node[box, below=of m4] (m5) {Front door (:3797--3811): bare run or \texttt{-i} without an \texttt{-{}-engine-mdo*} flag prints the workflow menu};
+\node[side, right=of m5] (s5) {Menu choice 2 or 3: MDO interview, shared validation, \texttt{\_run\_engine\_mdo} or \texttt{\_run\_engine\_mdo\_optimize} (S13)};
+\node[box, below=of m5] (m6) {\texttt{\_validate\_common\_engine\_args} (:3812), optimizer-only flag check (:3813--3829)};
+\node[box, below=of m6] (m7) {Early returns, first match wins (:3830--3835)};
+\node[side, right=of m7] (s7) {\texttt{-{}-requirements}, \texttt{-{}-engine-mdo-optimize}, \texttt{-{}-engine-mdo} (S13; S14 with \texttt{-{}-mdo-export})};
+\node[box, below=of m7] (m8) {Traditional set-up (:3836--4113): complete-package defaults, wall-sizing mode, cross-checks, cooling options, \texttt{-{}-tags}/\texttt{-{}-list-materials} exit 0, release evidence, interview, plot backend, wall material};
+\node[box, below=of m8] (m9) {S03 $\rightarrow$ \ldots{} $\rightarrow$ S12 in order; \texttt{-{}-out} created at :4342; \texttt{summary.json} at :6957 (S14); exit 0};
+\draw[arr] (m1) -- (m2);
+\draw[arr] (m2) -- node[lab, left]{else} (m3);
+\draw[arr] (m3) -- node[lab, left]{else} (m4);
+\draw[arr] (m4) -- (m5);
+\draw[arr] (m5) -- node[lab, left]{choice 1 or no menu} (m6);
+\draw[arr] (m6) -- (m7);
+\draw[arr] (m7) -- node[lab, left]{none set} (m8);
+\draw[arr] (m8) -- (m9);
+\draw[arr] (m1) -- (s1);
+\draw[arr] (m2) -- node[lab, above]{verb} (s2);
+\draw[arr] (m3) -- node[lab, above]{verb} (s3);
+\draw[arr] (m5) -- node[lab, above]{2 or 3} (s5);
+\draw[arr] (m7) -- node[lab, above]{flag} (s7);
+\end{tikzpicture}
+\caption{S01 dispatch tree as implemented in lrekit/cli.py, raosim/cli.py and raosim/run\_nozzle.py (line numbers from the 2026-11-05 working tree). Parser errors exit 2 at any step.}
+\label{fig:s01-dispatch}
+\end{figure}
+
+\subsection{Inputs and outputs}\label{sec:s01-io}
+
+\textbf{Inputs.} \code{sys.argv}; \code{@file.args} files (four ship in \code{examples/cli/}); standard input for the menu and interviews; the terminal state (colour off when \code{stdout} is not a TTY or \code{NO_COLOR} is set; live plot windows only for \code{--show} or interactive runs on a TTY, \code{_want_windows}, \code{:312}); optionally the manifest named by \code{--release-evidence-manifest}.
+
+\textbf{Outputs.} The \code{--out} directory (default \code{builds/nozzle_run}, \code{:3534}) is created with \code{exist_ok=True}, so reusing it overwrites files in place and leaves stale files the new run does not rewrite. Console: banner, build plan, \code{--tags} listing, materials table. S01/S02 provenance reaches \code{summary.json}: \code{run_defaults} (\code{:4903}), \code{*_source} labels (wall thickness, shoulder radius, upstream throat radius, minimum cylinder length, coolant inlet temperature, regen pressure boundary) and \code{hardware_qualified} \code{=} \code{False} (\code{:4968}).
+
+\textbf{Exit codes.} 0 on completion; 2 for parser errors (49 \code{ap.error} call sites in \code{main}) and explicit gate returns; 130 for an aborted menu. MDO branches return \code{WorkflowExitCode} (\code{MET}=0, \code{CANDIDATE_VIOLATES}=1, \code{INVALID_INPUT}=2, \code{INDETERMINATE}=3, \code{SOLVER_FAILED}=4; \code{raosim/input_validation.py:28}). An exception escaping a stage gives status 1, a traceback and no \code{summary.json} (Section~\ref{sec:s01-defects}).
+
+\needspace{8\baselineskip}
+\subsection{Modules}\label{sec:s01-modules}
+
+{\footnotesize
+\begin{longtable}{P{4.0cm}P{1.0cm}P{10.5cm}}
+\toprule
+File & Lines & Role \\
+\midrule
+\endhead
+\code{lrekit/__init__.py} & 18 & Package facade. Imports \code{raosim}, re-exports \code{__version__}, and sets \code{__path__} \code{=} \code{[lrekit/,} \code{*raosim.__path__]} (\code{:16}) so that \code{lrekit.<x>} resolves to \code{raosim/<x>.py}. \\
+\code{lrekit/__main__.py} & 9 & \code{python}~\code{-m}~\code{lrekit}. \\
+\code{lrekit/cli.py} & 25 & \code{lrekit} console script; routes job verbs first, everything else to \code{raosim.cli.main}. \\
+\code{raosim/__init__.py} & 5 & Package docstring and \code{__version__} \code{=} \code{"0.1.0"}. \\
+\code{raosim/__main__.py} & 9 & \code{python}~\code{-m}~\code{raosim}; propagates the CLI return code. \\
+\code{raosim/cli.py} & 24 & \code{main} (OpenFOAM verb or runner) and \code{legacy_main} (top-level \code{main.py}). \\
+\code{raosim/run_nozzle.py} & 6981 & The runner: parser, argument-file expansion, menu, interviews, defaults, cross-checks, early MDO/requirements dispatch, and the in-line traditional pipeline through \stagetag{S14}. \\
+\code{scripts/run_nozzle.py} & 34 & Historical path; inserts the repository root on \code{sys.path} and forwards every attribute to \code{raosim.run_nozzle} through a module-level \code{__getattr__}, so tests can import private helpers from it. \\
+\code{raosim/run.sh} & 9 & Shell wrapper around \code{scripts/run_nozzle.py}; tracked, but absent from \code{docs/architecture/CODE_MAP.md}. \\
+\bottomrule
+\end{longtable}}
+
+\subsection{What the header comments establish}\label{sec:s01-headers}
+
+\textbf{Package facade (\code{lrekit/__init__.py}).} The comment states that the solver modules ``currently live under \code{raosim} for compatibility'' and that new user-facing entry points should prefer \code{lrekit}. The mechanism is a \code{__path__} extension, not re-export: in \code{.venv-jax}, \code{lrekit.units} and \code{raosim.units} are distinct module objects loaded from one file, each with its own module-level state and class identities. Internal imports use \code{raosim.}, so this matters only for user code that follows the \code{README.md} examples (\code{from} \code{lrekit.design} \code{import} \code{...}, \code{README.md:1156-1195}) and mixes the two names.
+
+\textbf{Job verbs first (\code{lrekit/cli.py}).} The comment describes the ordering as ``the compatibility translator: no existing invocation changes meaning, and the unified workflow becomes reachable without a flag-day migration.'' The ordering is implemented as stated. The comment lists the verbs as \code{run}/\code{validate}/\code{catalog}; the code also routes \code{guided}.
+
+\textbf{Runner (\code{raosim/run_nozzle.py}).} The header states a four-step pipeline: (1) the ``trusted deterministic Rao/TOP chart B\'ezier contour by default'', with \code{--contour-method} \code{rao-bvp} opting into the ``experimental Rao variational / MOC boundary-value problem'', \code{--backend} \code{jax} being the ``differentiable Optimistix-LM path'' and \code{--backend} \code{numpy} the ``SciPy finite-difference oracle''; (2) the chamber from $L^{*}$ and contraction ratio on the same throat geometry; (3) \code{--regen} axial or helical channels; (4) \code{--thermal} ``coupled Bartz + Sieder-Tate cooling analysis''. It warns that the full \code{rao-bvp} \code{--backend} \code{jax} solve (\code{max_nfev} about 4000 plus a weight ladder) ``runs for minutes'' and that ``hard geometry-gate failures block export''. Three statements no longer match the code: the run examples use \code{--backend} \code{jax} and \code{--max-nfev} \code{0} without \code{--contour-method} \code{rao-bvp}, although \code{_solve} (\code{:1464}) ignores both on the default B\'ezier path; \code{summary.json} is said to be written ``with \code{--regen}'' but is always written (\code{:6957}); and the injector, pump, interface, CAD and MDO branches are not mentioned. Because the \code{argparse} description is the docstring's first line, \code{lrekit} \code{--help} prints the fragment ``run\_nozzle.py --- the main runner: solve the contour with the''.
+
+\textbf{Wrapper (\code{scripts/run_nozzle.py}).} States that all entry routes ``execute the same CLI''; the wrapper holds no logic, which keeps that true.
+
+\needspace{8\baselineskip}
+\subsection{Governing documents}\label{sec:s01-docs}
+
+There is no \code{docs/subsystems/} folder for S01. The triage assigned one file to S01; the documents that actually govern dispatch are dated audits filed under other stages.
+
+{\footnotesize
+\begin{longtable}{P{4.7cm}P{1.8cm}P{1.5cm}P{7.4cm}}
+\toprule
+Path & Type & Status & Content relevant to S01 \\
+\midrule
+\endhead
+\code{requirements.txt} & data & active & Runtime pins duplicating \code{pyproject.toml} (jax/jaxlib 0.6.2, optimistix 0.0.11, equinox 0.13.8). Moved back to the root by the cleanup (untracked; \code{docs/requirements.txt} deleted), so \code{requirements-dev.txt}'s \code{-r} \code{requirements.txt} resolves again. \\
+\code{docs/audits/LREKIT_WORKFLOW_AUDIT_2026-09-04.md} & audit & active & W05 (failure persistence differs by entry point) and W06 (two terminal front doors; the menu versus \code{lrekit} \code{guided}). \\
+\code{docs/audits/FEATURE_DATAFLOW_AUDIT_2026-07-11.md} & audit & historical & Master data-flow diagram of the packaged CLI; routes it through \code{design._build_v2_contour} and \code{build_log}, which \code{run_nozzle.main} does not call. Stale line counts. \\
+\code{README.md} (sections Command-line usage, Outputs, Repository layout) & guide & active, drifted & Says bare \code{lrekit} enters the complete-package interview (\code{README.md:972}); the code shows the three-way menu first. Omits the job verbs, \code{export-openfoam-spray} and the MDO/requirements branches; describes \code{builds/vNNN_*} output that only the legacy CLI writes. \\
+\bottomrule
+\end{longtable}}
+
+\needspace{8\baselineskip}
+\subsection{Verification}\label{sec:s01-tests}
+
+All rows are in \code{tests/test_run_nozzle.py} unless a file is named.
+
+{\footnotesize
+\begin{longtable}{P{6.4cm}P{9.1cm}}
+\toprule
+Test & What it pins \\
+\midrule
+\endhead
+\code{tests/test_cli_module_exit.py} & \code{python}~\code{-m}~\code{raosim} propagates return codes 0, 2 and 7. \\
+\code{tests/test_lrekit_job_cli.py}: \code{test_non_job_verbs_are_left_to_the_legacy_cli} & \code{JOB_VERBS} is exactly the four verbs; anything else raises \code{LookupError} and stays with the runner. \\
+\code{test_tags_flag_lists_run_tags_and_exits}, \code{test_lrekit_help_does_not_wake_matplotlib_cache} & \code{--tags} exits 0 and lists key flags; \code{--help} does not import Matplotlib. \\
+\code{test_current_runner_rejects_legacy_single_injector_pressure_drop}, \code{test_mdo_dispatch_uses_shared_input_validation}, \code{test_requirements_dispatch_rejects_negative_altitude_before_solver}, \code{test_cli_release_hard_gate_requires_evidence_manifest}, \code{test_cli_spray_cstar_coupling_requires_explicit_scope_and_efficiencies} & Refusals exit 2 with a message on the traditional, MDO and requirements branches; the absence of a traceback is asserted for the MDO and requirements cases. \\
+\code{test_burn_time_default_keeps_missionspec_value_on_mdo_path}, \code{test_electric_technology_flag_reaches_mdo_mission} & Namespace hand-off from the parser to the MDO branches. \\
+\code{test_lrekit_args_file_full_engine_sample}, \code{test_complete_package_defaults_export_nozzle_pintle_and_pump} (both smoke) & An \code{@examples/cli/...} run end to end; \code{run_defaults.complete_package} recorded with nozzle, pintle and pump artifacts. \\
+\code{test_bezier_chart_extrapolation_requires_diagnostic_override} & Out-of-chart B\'ezier run exits 2 without artifacts; \code{--allow-chart-extrapolation} gives a diagnostic run. \textbf{Fails on the current tree} (Section~\ref{sec:s01-defects}). \\
+\bottomrule
+\end{longtable}}
+
+A selected run of these \code{test_run_nozzle.py} cases on 2026-11-05 (\code{.venv-jax}, 14 tests, smoke cases excluded) gave 13 passed and 1 failed. Not covered by any test: nested or recursive \code{@file} includes in \code{_expand_arg_files}, the workflow menu \code{_select_mode_interactively}, and the traditional interview \code{_interactive}.
+
+\subsection{Maturity, limitations and known defects}\label{sec:s01-defects}
+
+S01 makes no physics claim. It always sets \code{hardware_qualified} \code{=} \code{False}, and the release-readiness report it loads is blocked by default. Its structural limitation is size: one 4,161-line function holds the parser, the dispatch and the traditional pipeline, so a stage cannot be run, tested or failed in isolation.
+
+\caution{Stage exceptions are not converted into exit codes or summaries. The uncommitted change to \code{raosim/nozzle_geometry.py} makes \code{lookup_angles} raise \code{ValueError} outside the held SP-125 chart domain ($\varepsilon \in [5, 50]$, length $60$--$100\,\%$); \code{_solve} (\code{:1464}) does not catch it, so the run ends with a traceback, status 1 and no \code{summary.json}. As a result \code{test_bezier_chart_extrapolation_requires_diagnostic_override} fails (status 1, expected 2); \code{--allow-chart-extrapolation}, still accepted and checked by S01 (\code{:3907}, \code{:4819}), cannot take effect because the lookup raises first, and the flag dialect has no option for explicit wall angles; and \code{examples/cli/test_13kn_sealevel_regen_allstl.args} ($\varepsilon = 4.524$) fails this way in the fresh run for this guide. \code{examples/cli/test_13kn_movable_pintle.args} has the same $\varepsilon$ and was also run for this guide: it ends with the same \code{ValueError} traceback and status 1.}
+
+Further defects found in the code:
+\begin{itemize}
+  \item \textbf{Unguarded pump sizing.} \code{size_electric_pumps} (\code{:6212}) has no \code{try} block, so an exception there also exits before any \code{summary.json} write (\code{:6356}, \code{:6364}, \code{:6957}). The 7 October review recorded a 500~N pump-sizing crash at this boundary (not re-run here). This is the open remainder of audit finding W05 on the flag path.
+  \item \textbf{Menu shown but ignored.} The front door excludes the two \code{--engine-mdo} flags but not \code{--requirements}; with \code{-i} \code{--requirements}, menu choice 1 is overridden by the early return at \code{:3830}.
+  \item \textbf{Interactive prompts bypass the unit policy.} \code{_prompt} (\code{:369}) casts to \code{float} and keeps the default on a parse failure; values are bare SI numbers (``Chamber pressure Pc [Pa]'').
+  \item \textbf{Validation is spread across \code{main}:} shared checks at \code{:3812} and \code{:4075}, flag combinations at \code{:3843-4005}, injector $\Delta p$ and pump flags only at \code{:4339-4340}, after thermochemistry and throat sizing. \code{--tags} refuses to print if an invalid combination accompanies it.
+  \item \textbf{Version drift.} \code{pyproject.toml} (and the installed metadata) say 0.1.1; \code{raosim.__version__}, hence \code{lrekit.__version__}, is \code{"0.1.0"}.
+\end{itemize}
+
+Two defects from the October 2026 review are closed: \code{raosim/__main__.py} passes the return value to \code{SystemExit} (pinned by \code{tests/test_cli_module_exit.py}), and \code{--burn-time} defaults to \code{None}, so traditional pump sizing uses $10\,$s (\code{:500}) while the MDO paths keep the \code{MissionSpec} $120\,$s.
+
+\needspace{8\baselineskip}
+\subsection{Developer notes}\label{sec:s01-dev}
+
+{\footnotesize
+\begin{longtable}{P{3.4cm}P{12.1cm}}
+\toprule
+Change & Where it goes \\
+\midrule
+\endhead
+New traditional flag & \code{ap.add_argument} in \code{main} (\code{:2819-3782}); the matching group of \code{print_tags} (\code{:139}); an \code{args._<name>_source} label for any implied default, copied into \code{summary}. \\
+Flag-combination rule & Cross-check block \code{:3843-4005} with \code{ap.error} (exit 2); \code{_argument_present} when the rule depends on whether the flag was typed. \\
+Scalar domain rule & \code{raosim/input_validation.py}, so every branch inherits it (Section~\ref{sec:s02-dev}). \\
+New workflow branch & Beside the early returns (\code{:3830-3835}), returning a \code{WorkflowExitCode}; extend \code{_MODE_MENU} and \code{_select_mode_interactively} if it belongs in the menu. \\
+New verb & Job verbs: \code{JOB_VERBS} and the dispatch dictionary in \code{lrekit/job_cli.py}. Tool verbs: \code{raosim/cli.py:main}, like \code{export-openfoam-spray}. Lazy imports in both (\code{--help} cost is tested). \\
+Starter defaults; console scripts & \code{_apply_complete_package_defaults} (\code{:607}) with a note for \code{run_defaults.notes}; \code{[project.scripts]} in \code{pyproject.toml}. Keep \code{scripts/run_nozzle.py} logic-free. \\
+\bottomrule
+\end{longtable}}
+
+% ------------------------------------------------------------------------------
+\section{S02: Inputs, units, validation and job contracts}\label{sec:s02}
+
+\subsection{Role in the data flow and call sites}\label{sec:s02-role}
+
+S02 turns what the user typed into validated SI quantities and, on the job path, into a versioned, digestible contract. Its call sites differ by dialect.
+
+\textbf{Flag dialect (traditional, MDO and requirements branches).} \code{run_nozzle._validate_common_engine_args} (\code{:719}) maps flags to named fields and calls \code{validate_engine_inputs}; the runner invokes it at \code{:3805}, \code{:3808}, \code{:3812} and \code{:4075}. For \code{--requirements} it first parses \code{--thrust-condition} \code{altitude:<m>} (\code{_parse_thrust_condition}, \code{:2345}); the requirements layer adds \code{validate_requirement_inputs} (\code{raosim/requirements.py:317}). Derived switches are resolved by \code{_apply_wall_sizing_mode} (\code{:920}), \code{_apply_split_injector_pressure_model} (\code{:680}: fuel and oxidizer injector $\Delta p$ default to $0.2\,p_c$ each, and the regen jacket outlet boundary inherits the fuel drop only when the coolant is the cycle fuel) and \code{_validate_pump_args} (\code{:796}).
+
+\textbf{Job dialect.} The job path is a strict pipeline in which each step refuses rather than defaults:
+
+{\footnotesize
+\begin{longtable}{P{0.5cm}P{5.3cm}P{9.6cm}}
+\toprule
+& Step (file:line) & Refuses \\
+\midrule
+\endhead
+1 & \code{_load_job_document} (\code{lrekit/job_cli.py:46}) & Duplicate keys at any depth (YAML via a \code{SafeLoader} subclass, JSON via \code{object_pairs_hook}); a non-mapping top level. \\
+2 & \code{_build_spec} (\code{:79}) & Unknown top-level keys; a missing \code{mission}; an unsupported \code{schema_version} (\code{require_capability}); wrongly typed sections. Unknown keys inside sections fail as \code{TypeError} from the dataclass constructors. \\
+3 & Dataclass \code{__post_init__} (\code{raosim/mdo/job.py}) & Bare numbers for dimensional fields; wrong dimensions; unknown variables or metrics; inconsistent variable modes; unimplemented architecture, output, model or ablation choices; more than one operating point. \\
+4 & \code{expand_architectures} (\code{raosim/mdo/execute.py:814}) & Nothing; expands list-valued propellant and material selections and enumerated variables into one job each. \\
+5 & \code{resolve_engine_job} (\code{job.py:889}) & Unavailable mission requests (mass, envelope); conflicting conditions; missing or invalid chamber property tables and Rao convergence-domain artifacts; variables outside the design space; \code{derived} mode; unfixed variables in an \code{analyze} job. \\
+\bottomrule
+\end{longtable}}
+
+\code{lrekit} \code{guided} (\code{_cmd_guided}, \code{job_cli.py:274}) produces a job document through \code{lrekit.guided.run_guided} (\code{guided.py:271}), which itself runs steps 2, 3 and 5 before showing a coverage preview. \code{lrekit} \code{catalog} (\code{:320}) reads the registries described below.
+
+\subsection{Inputs and outputs}\label{sec:s02-io}
+
+\textbf{Inputs.} Parsed flags (flag dialect); a job document in YAML (\code{.yaml}/\code{.yml}, requires PyYAML) or JSON (any other suffix); interview answers; optionally a chamber property table and a Rao convergence-domain JSON named in the job's \code{models} section.
+
+\textbf{Artifacts written.} \code{lrekit} \code{guided} \code{--save} \code{FILE} writes the job document as YAML (JSON with the suffix changed if PyYAML is missing); \code{--run} requires \code{--save} so that an executed job is on disk. \code{lrekit} \code{validate} \code{JOB} \code{--resolved-out} \code{FILE} writes \code{ResolvedEngineJob.to_dict()} or a \code{candidates} list. \code{lrekit} \code{run} \code{JOB} \code{--out} \code{FILE} writes the compact \code{EngineJobResult.to_dict()}; the hashed run-record directory is \stagetag{S14} and exists only when \code{output_policy.output_dir} is set (\code{RunRecord.start}, \code{raosim/mdo/run_record.py:33}, returns \code{None} otherwise). Every verb returns a \code{WorkflowExitCode}; a rejected document or unreadable file is \code{INVALID_INPUT} (2).
+
+\needspace{8\baselineskip}
+\subsection{Modules}\label{sec:s02-modules}
+
+{\footnotesize
+\begin{longtable}{P{4.3cm}P{1.0cm}P{10.2cm}}
+\toprule
+File & Lines & Role \\
+\midrule
+\endhead
+\code{lrekit/job_cli.py} & 416 & Job verbs: strict document loading, \code{_build_spec}, \code{validate}, \code{run}, \code{guided}, \code{catalog} (topics: variables, targets, objectives, constraints, propellants, materials, unavailable, capabilities). \\
+\code{lrekit/guided.py} & 300 & Guided interview with injected prompt and output callables; unit-checked re-prompting; coverage preview; confirmation. \\
+\code{raosim/input_validation.py} & 236 & \code{WorkflowExitCode}, \code{InputValidationError}, \code{validate_engine_inputs}, \code{validate_requirement_inputs}. \\
+\code{raosim/units.py} & 224 & \code{parse_quantity} into a canonical store; \code{canonical_unit}; \code{format_quantity}. \\
+\code{raosim/mdo/job.py} & 1209 & \code{EngineJobSpec} (schema 1.1.0) and its parts; \code{resolve_engine_job} into \code{ResolvedEngineJob}. \\
+\code{raosim/mdo/capabilities.py} & 69 & \code{JOB_CAPABILITIES} (13 rows) and \code{require_capability}. \\
+\code{raosim/mdo/metrics.py} & 382 & \code{METRIC_REGISTRY} of selectable objectives, targets and reportable metrics. \\
+\code{raosim/manufacturing_limits.py} & 203 & Wadel milled-channel limits and the two checkers; imported only by \code{_resolve_engine_job}. \\
+\bottomrule
+\end{longtable}}
+
+\subsection{What the header comments establish}\label{sec:s02-headers}
+
+\textbf{Units (\code{raosim/units.py}).} The governing rule is ``never guess a unit'': a bare number where a unit is expected is rejected, because ``the failure mode being prevented is not a parse error --- it is a 1000x design error that runs to completion and produces a plausible-looking answer''. It cites two earlier defects of the same class, ``the pintle STEP metres-as-millimetres defect and the material label that never reached the traced core'', and requires every parse to be dimension-checked (a pressure given \code{13}~\code{kN} is an error naming the dimension supplied). The code adds: fifteen dimensions (force, pressure, length, volume, time, mass, mass flow, velocity, angle, rotational speed, power, heat flux, energy, temperature, dimensionless); case-sensitive symbols, so \code{Mbar} cannot become \code{mbar}; affine temperature conversion (\code{K}, \code{degC}/\code{C}, \code{degF}/\code{F}, \code{degR}/\code{R}) with rejection below absolute zero; rejection of booleans, non-finite values and conversion overflow; a percent sign scales by $0.01$ in the dimensionless table. Two conventions deserve care: the canonical rotational-speed unit is \code{rpm}, not the SI $\mathrm{rad\,s^{-1}}$, so ``canonical SI store'' is not literally true for that dimension; and \code{psi} and \code{psia} share one factor, so the parser does not distinguish gauge from absolute pressure.
+
+\textbf{Shared validation (\code{raosim/input_validation.py}).} Purpose: to prevent ``workflow dispatch order from changing whether bad input is rejected cleanly or reaches a logarithm, square root, or division first''. Scope: ``mathematical/input-contract checks, not literature-derived design limits''; \code{validate_engine_inputs} ``deliberately does not impose a chamber-pressure design box, a propellant-specific O/F band, a recommended burn duration''. Rules: chamber pressure, thrust, mixture ratio, durations, Isp floor, envelope and mass limits finite and positive; $\varepsilon \geq 1$; ambient pressure non-negative and below $p_c$; $p_a/p_c \in [0, 1)$; altitude non-negative; film fraction in $[0, 1)$; qualification duration at least the flight (or burn) duration; injector $\Delta p$ fractions and named dimensions positive; restart and reuse counts non-negative integers. \code{validate_requirement_inputs} applies the same primitives without placeholder $p_c$ or $\varepsilon$ and adds a $0 < \mathrm{lo} \leq \mathrm{hi}$ throttle-range check. The flag runner passes \code{reusable_cycles} but not \code{restart_count}.
+
+\textbf{Manufacturing limits (\code{raosim/manufacturing_limits.py}).} ``A milled channel that cannot be cut is not a physics failure --- it is a geometry no shop will produce.'' Source: Wadel, M.~F., \emph{Comparison of High Aspect Ratio Cooling Channel Designs for a Rocket Combustion Chamber}, NASA TM-107276 (1997), fabrication list quoted verbatim: aspect ratio $< 8$, channel height $< 0.51\,$cm, channel width $> 0.051\,$cm, land width $> 0.051\,$cm, no sharp changes in width or height. Applicability is stated: Wadel analysed a liquid-hydrogen-cooled chamber with an 89~kN-class companion combustor, so ``applying these numbers to a 13 kN RP-1 engine is an extrapolation in both coolant and scale''. Wadel's analytical designs reached aspect ratio 40 and were cut back to 8 only for fabrication, and Carlile (1992) tested 8 and 15, so 8 is ``a manufacturing bound, not a model-validity bound''. The code stores the four numeric limits in SI (\code{MILLED_CHANNEL_LIMITS}, \code{:86}); ``no sharp changes'' is not encoded. \code{check_channel_geometry} derives the aspect ratio rather than accepting one; \code{check_design_space} reports search-box bounds outside the limits. Findings become notes, not constraints. The header citation carries a placeholder (``AIAA-97-????'').
+
+\textbf{Capabilities (\code{raosim/mdo/capabilities.py}).} ``An accepted selection names an implemented execution path. Unsupported choices must acquire an implementation here before a client can advertise them.'' The 13 rows are: schema \code{1.1.0}; feed \code{electric_pump} (``detailed assembly remains partial''); injector \code{pintle} (fixed slotted pintle; the Son movable pintle is deliberately not a job selection because the authoritative re-evaluation has no movable hand-off); cooling \code{regenerative}; parts \code{none} and \code{reference_cad} (``unverified artifacts, always a partial package''); CAD format \code{step}; CAD fidelity \code{L0_numerical_only} only; and five JSON report kinds (summary, resolved\_inputs, snapshot, comparison, coverage). \code{require_capability} refuses anything else and says the selection ``will not be replaced by a default''.
+
+\textbf{Job contract (\code{raosim/mdo/job.py}).} Three claims: (1) ``The guided wizard, ordinary CLI flags, and advanced JSON/YAML all produce an \code{EngineJobSpec}'', so that nothing downstream branches on the front end. (2) \code{ResolvedEngineJob} \emph{contains} a \code{ResolvedEngineInputs} rather than standing beside it, to avoid ``a third competing definition of the same conventions''. (3) ``Design intent is always explicit'': each variable states a mode, and O/F intent is an enum rather than an overloaded \code{None}. (2) and (3) are implemented. (1) is not: the flag runner builds no \code{EngineJobSpec}, so claim (1) describes an intended state. The code further establishes:
+\begin{itemize}
+  \item \emph{Variables.} Thirteen addressable quantities with fixed dimensions (\code{VARIABLE_DIMENSIONS}, \code{:98}): \code{Pc}, \code{eps}, \code{dp_f_frac}, \code{dp_o_frac}, \code{D_pintle}, \code{N_rpm}, \code{channel_width}, \code{channel_height}, \code{film_frac}, \code{t_wall}, \code{t_post}, \code{D_cg}, \code{OF}. Modes are \code{fixed}, \code{free}, \code{bounded}, \code{derived} and \code{enumerate}; a mode that receives a field it does not consume is refused. \code{derived} passes construction only for \code{N_rpm} and is then refused by the resolver (\code{:1145}) because no job-level resolver exists. Fixed values must satisfy $0 \leq$ \code{film_frac} $< 1$, \code{eps} $> 1$, and positivity otherwise.
+  \item \emph{Mission} (\code{MissionRequest}, \code{:322}; described as ``the SP-125 sec.~2.1 requirement set''). Burn duration defaults to $120\,$s; the thrust condition is \code{sea_level}, \code{vacuum} ($p_a = 0$) or \code{altitude}, the last restricted to $0$--$32{,}000\,$m because \code{raosim.atmosphere} is a simplified ISA whose next lapse segment is not implemented. A total \code{mission_consumers} mapping (\code{:928-940}) fails resolution if a new \code{MissionRequest} field lacks a declared consumer. Dry-mass and envelope requests are refused with the metric registry's unavailable reason; \code{qualification_duration} is recorded with status \code{unavailable} because ``a steady design calculation cannot establish qualified duration''; \code{isp_min} becomes an effective \code{performance.isp_delivered} target.
+  \item \emph{Operating points.} At most one, with \code{thrust_fraction} exactly 1; an explicit point pressure that disagrees with an explicit mission condition is refused.
+  \item \emph{Models.} \code{constraint_policy} must be \code{all_applicable} (\code{custom_ablation} is refused as unimplemented); O/F optimisation requires a \code{chamber_property_table}; a non-nominal pinned O/F also requires one; the contour provider id is resolved exactly; the post-solve Rao validator requires the analytic TOP provider, a convergence-domain artifact (hash-bound into the job digest) and four explicit discrepancy thresholds.
+  \item \emph{Output policy.} \code{parts='reference_cad'} requires \code{cad_formats=['step']}, an \code{output_dir}, and \code{allow_partial_package=true}; requested reports require \code{output_dir}.
+  \item \emph{Resolution.} Without a policy, an \code{analyze} job takes each variable's reference value and lists it in a note as a default rather than a choice; an \code{optimize} job searches the configured domain. Requested bounds beyond the domain are clipped with a note stating that ``these search bounds do not establish physical validation''. For LOX/RP-1 at 13~kN with default mission settings the domain includes $p_c \in [1.5, 6.0]\,$MPa, $\varepsilon \in [5, 50]$ and \code{channel_width} $\in [0.3, 1.2]\,$mm; the last lower bound is below Wadel's $0.51\,$mm minimum, which the manufacturability note reports.
+  \item \emph{Identity.} \code{EngineJobSpec.digest()} is the SHA-256 of the JSON of the dataclass. Variable and target values are normalised to SI floats, but \code{MissionRequest} keeps the strings as written, so \code{13}~\code{kN} and \code{13000}~\code{N} digest differently; the 2026-09-04 audit already classifies this digest as request/replay identity, not physical identity.
+\end{itemize}
+
+\textbf{Metric registry (\code{raosim/mdo/metrics.py}).} ``A quantity is selectable only if something can actually be said about it.'' Two structural rules: constraint metrics are derived from \code{CONSTRAINT_MANIFEST} and never re-listed, and every reportable metric must resolve in \code{SNAPSHOT_FIELD_MANIFEST} or the module refuses to build. Unmodellable quantities are registered ``unavailable with a reason'' because ``omission reads as `not thought about'\,''. At import the registry holds 64 metrics: 18 reported (all target-capable), of which two are objective-capable (\code{masses.electric_package}, \code{masses.dry_mass_partial}, both minimisation-only); 36 constraint margins derived from the manifest, which are neither objectives nor targets because re-targeting ``would silently weaken a mandatory limit''; and 10 unavailable. The unavailable reasons cite their basis: no valve/line/bracket/gimbal mass model (\code{docs/program/PLAN_VALVES_LINES_BRACKETS_GIMBAL.md}); no purge balance for engine-system Isp; no duty cycle for qualified reuse; \code{life.cycles_to_failure} with source ids NASA-CR-134627 and Porowski-1985; combustion stability, where NASA SP-194 treats stability as empirical; restart, which needs a transient solver; side loads, where Frey and Hagemann (JPP 16(3), 2000) report restricted-shock separation in thrust-optimised nozzles that onset-pressure correlations cannot detect; and cost and reliability, which need data the repository does not have. The performance Isp target carries source id \code{NASA-SP-125-sec-2.1-item-2}.
+
+\textbf{Job verbs (\code{lrekit/job_cli.py}).} The comment states why the verbs exist: ``O/F optimization was implemented long before it was reachable from a command line, which meant in practice it was not usable.'' The verbs are additive; anything else falls through. The code adds the duplicate-key and unknown-key refusals described above. YAML jobs need PyYAML, which is declared in neither \code{pyproject.toml} nor \code{requirements.txt}; without it, \code{_load_job_document} exits with a message to supply JSON.
+
+\textbf{Guided interview (\code{lrekit/guided.py}).} ``The wizard asks only what SP-125 sec.~2.1 calls the defining engine requirements --- thrust and the condition it is quoted at, duration, propellant, mixture-ratio intent, mass and envelope limits --- plus the architecture and output choices a user genuinely owns.'' Prompting is injected ``so the whole flow is testable with scripted answers and cannot hang a non-interactive run''. The implemented interview asks for mode (mission targets, partial design, complete design point), thrust with units, condition, altitude when needed, burn duration (default \code{120}~\code{s}), propellant, liner and closeout alloys from the materials catalog, an optional minimum Isp, and, for the two optimising modes, an objective from \code{objective_capable_metrics()}. Partial mode then offers each variable except \code{OF} and \code{D_cg} as an optional pin; complete mode requires all of them. A unit error re-prompts instead of failing later. The coverage preview reports estimated propellant constants, missing real-fluid heat-transfer coverage (feasibility ``will be reported as UNKNOWN, not as a pass''), O/F not being a lever without a property table, and unmodelled dry mass, envelope, cost and reliability. Three items in the header are not implemented: the interview asks for no mixture-ratio intent, no mass or envelope limits and no output choices, so the resulting document has neither a \code{models} section nor an \code{output_policy}.
+
+\needspace{8\baselineskip}
+\subsection{Governing documents}\label{sec:s02-docs}
+
+There is no \code{docs/subsystems/} folder for S02. Three documents name S02 as their primary stage; two more define parts of the contract and are listed for completeness.
+
+{\footnotesize
+\begin{longtable}{P{4.7cm}P{1.8cm}P{1.5cm}P{7.4cm}}
+\toprule
+Path & Type & Status & One line \\
+\midrule
+\endhead
+\code{docs/audits/LREKIT_WORKFLOW_AUDIT_2026-09-04.md} & audit & active & Findings W01--W06 on the job/CLI layer at \code{f763fe1}, the proposed identity chain (request, resolved configuration, build article, test data, comparison, calibration) and stages S0--S7. Its stage labels are unrelated to this guide's S01--S14. \\
+\code{docs/audits/CONTRACT_INTEGRITY_REMEDIATION_2026-09-05.md} & remediation record & historical & Frames W01--W04 as one defect, ``parsing is not binding''; blockers B1--B5; proposes the totality gate ``No field may be accepted that does not change the run, compile to a target or evidence requirement, or produce an explicit refusal.'' \\
+\code{docs/audits/INPUT_EXECUTION_INTEGRITY_2026-09-09.md} (with \code{INPUT_EXECUTION_SMOKE_2026-09-09.json}) & remediation record & active & What landed for D01--D04, D26, W01--W04: altitude and operating-point consumption, optimizer variable policies, report packages, roughness units; 281 focused tests. \\
+\code{docs/literature/LITERATURE_REQUESTS_GENERALIZATION.md} & literature request & active & Sources G1--G14 needed to generalise beyond the electric-pump feed (SP-8110, SP-8081, SP-8124, \ldots); cited by the \code{NotImplementedError} for other feeds in \code{raosim/requirements.py:446-453}. Defines why the capability registry holds one feed. \\
+\code{docs/architecture/MDO_REMEDIATION_AND_OUTPUT_CONTRACT.md} & architecture & active & Job contract, metric registry and verbs as of 2026-08-26 (filed under S13). \\
+\code{docs/program/COMPONENT_DATA_AND_MULTIFIDELITY_PLAN_2026-11-03.md} & plan & proposed & Future job sections \code{component_models}, \code{evidence_inputs}, \code{simulation_assessment} and verbs \code{lrekit} \code{evidence|models|simulate}; none exist, and the current parser rejects the keys. \\
+\bottomrule
+\end{longtable}}
+
+\decision{\textbf{Where the documents and the code disagree, the code governs.} (a) \code{INPUT_EXECUTION_INTEGRITY_2026-09-09.md} says CAD requests are rejected by the job service; the current \code{OutputPolicy} accepts \code{parts='reference_cad'} with STEP and an explicit partial-package opt-in, exercised by \code{tests/test_job_reference_parts.py}. (b) \code{MDO_REMEDIATION_AND_OUTPUT_CONTRACT.md} reports 59 metrics and ``three verbs'' with a catalog list lacking \code{capabilities}; the code has 64 metrics, four verbs and eight catalog topics. The same document says the guided wizard never asks for $p_c$, $\varepsilon$ or channel geometry; that holds only for mission-target mode. (c) \code{CONTRACT_INTEGRITY_REMEDIATION_2026-09-05.md} proposes a capability registry with the fields of \code{ModelProvenance} (status, requires, source, validity); the implemented \code{JobCapability} has only kind, id, implemented\_by and scope.}
+
+Status of the 2026-09-04 audit findings against the code read on 2026-11-05:
+\begin{itemize}
+  \item \textbf{W01 mission fields dropped.} Closed on the job path: altitude becomes $p_a$ through \code{raosim.atmosphere.pressure} (\code{job.py:973}), vacuum sets $p_a = 0$ (\code{:971}), the single operating point supplies pressure and duration, \code{isp_min} joins the targets (\code{:960}), mass and envelope are refused (\code{:946}), and the total consumer mapping guards new fields.
+  \item \textbf{W02 optimizer ignores pins.} Reported closed by the 09-09 record; \code{test_optimizer_receives_resolved_pins_bounds_and_strongest_floor} passes. The optimizer side is \stagetag{S13} and was not re-read for this chapter.
+  \item \textbf{W03 accepted but unimplemented.} Closed for schema and architecture via \code{require_capability} (\code{job_cli.py:110}, \code{job.py:407}, \code{:695}). Output policy now drives reports and reference CAD.
+  \item \textbf{W04, W05.} W04 is \stagetag{S14} (build manifest). W05: the job path keeps partial run records (\stagetag{S14}); the flag path is still open (Section~\ref{sec:s01-defects}).
+  \item \textbf{W06 two front doors.} Still two. Guided partial/complete modes now collect pins and objectives come from the registry, but the interview sets no output policy, no screening opt-in (\code{allow_incomplete_physics}, which its preview says is required) and no model selection, so a guided job cannot optimise O/F. A dead branch still assigns direction \code{max} to the non-objective \code{performance.isp_delivered}.
+\end{itemize}
+
+\needspace{8\baselineskip}
+\subsection{Verification}\label{sec:s02-tests}
+
+{\footnotesize
+\begin{longtable}{P{4.0cm}P{11.5cm}}
+\toprule
+Test file (\code{tests/}) & What it pins \\
+\midrule
+\endhead
+\code{test_units.py} & Notation lands in SI; bare numbers refused for dimensional fields only; wrong dimension named; unknown units refused; case-sensitive prefixes; non-finite, sub-absolute-zero and boolean inputs refused. \\
+\code{test_input_validation.py} & Non-physical scalars fail before numerics; $p_a < p_c$; qualification $\geq$ flight duration; no unsourced pressure box (30~MPa accepted); negative altitude refused. \\
+\code{test_mdo_job.py} & Complete fixed points; defaults named as defaults; units required; explicit intent; \code{derived} needs a resolver; unknown variables refused; bounds clipped with a note; objective rules; O/F optimisation needs a table; exact post-solve validator selection with domain hash in the digest; multipoint and ablation refused; digest stability. \\
+\code{test_job_execution_integrity.py} & Unit case and overflow; ambient condition reaches both execution paths; operating-point hand-off; no architecture fall-back; unimplemented output policy refused; optimizer receives pins and bounds; enumeration keeps units; report hashes and replay; failures keep the summary; duplicate keys and malformed fields refused. \\
+\code{test_lrekit_job_cli.py} & \code{validate} and \code{--resolved-out}; post-solve contour selection threads through; missing units and misspelled keys exit 2; \code{run} exit code is the verdict; seven of eight catalog topics (\code{capabilities} not exercised). \\
+\code{test_lrekit_guided.py} & Mission-target mode never asks for solver-owned variables; output validates; complete mode selects \code{analyze}; bad units and choices re-prompt; preview before solve; declining aborts. \\
+\code{test_mdo_metrics.py} & Snapshot paths exist; constraint metrics derived and not re-targetable; objectives differentiable and available; unavailable quantities carry reasons. \\
+\code{test_fidelity_scope_gates.py} & Wadel limits match the published list; the default box admits unmillable channel width; aspect ratio derived; unknown process refused; findings reach job notes. \\
+\code{test_job_reference_parts.py} & Only \code{reference_cad} parts and L0 fidelity advertised; invalid policies refused; a reference-CAD job writes a partial manifest and real STEP. \\
+\bottomrule
+\end{longtable}}
+
+On 2026-11-05, in \code{.venv-jax}: \code{test_units.py}, \code{test_input_validation.py}, \code{test_mdo_job.py}, \code{test_lrekit_job_cli.py}, \code{test_lrekit_guided.py}, \code{test_mdo_metrics.py}, \code{test_fidelity_scope_gates.py} and \code{test_cli_module_exit.py} gave 108 passed; \code{test_job_execution_integrity.py}, \code{test_job_reference_parts.py} and \code{test_electric_technology.py} gave 75 passed with two \code{ElectricTechnologyValidityWarning}s (a technology set used outside its stated burn time). These are software regressions, not physical validation.
+
+\subsection{Maturity, limitations and known defects}\label{sec:s02-defects}
+
+The job contract refuses unknown, unimplemented and ambiguous requests by name and records defaults as defaults. Its stated limits: one feed, one injector and one cooling scheme; one operating point at full thrust; no whole-engine dry mass, envelope, life, stability, restart, cost or reliability metric; no O/F lever without a validated property table; CAD fidelity never claimed beyond L0. Defects and gaps found while reading:
+\begin{itemize}
+  \item \textbf{The unit policy covers one dialect.} Flags, \code{@file.args} and both interactive interviews in \code{run_nozzle.py} take bare SI floats. The ``1000x design error'' that \code{units.py} exists to prevent is still possible on the default command line.
+  \item \textbf{Two contracts.} The flag dialect does not compile to \code{EngineJobSpec}, contrary to the \code{mdo/job.py} header, and uses different vocabulary for the same concepts (\code{--feed-architecture} \code{pump_fed} versus \code{feed:} \code{electric_pump}; \code{--mdo-of-mode} versus \code{models.mixture_ratio_mode}).
+  \item \textbf{Guided output is not a complete job.} No \code{output_policy}, so \code{lrekit} \code{guided} \code{--save} \code{F} \code{--run} writes only the job file and prints the verdict; no run record. No \code{models} section and no screening opt-in. The unreachable \code{if} \code{save} \code{is} \code{None} block in \code{_cmd_guided} (\code{job_cli.py:314-316}) duplicates the check at \code{:291}.
+  \item \textbf{PyYAML is undeclared} although YAML is the documented job format.
+  \item \textbf{Manufacturing limits are advisory and partial.} Findings become notes only; the aspect-ratio limit is not checked against the search box; ``no sharp changes'' is not encoded; the Wadel citation has an unfilled AIAA number.
+  \item \textbf{Unit conventions to know.} Canonical rotational speed is rpm; \code{psi} and \code{psia} are identical; the request digest depends on how mission quantities are spelled.
+\end{itemize}
+
+\needspace{8\baselineskip}
+\subsection{Developer notes}\label{sec:s02-dev}
+
+{\footnotesize
+\begin{longtable}{P{3.4cm}P{12.1cm}}
+\toprule
+Change & Where it goes \\
+\midrule
+\endhead
+Unit or dimension & \code{_UNITS} in \code{raosim/units.py} (first key canonical, symbols case-sensitive); a case in \code{tests/test_units.py}. \\
+Scalar domain rule & \code{validate_engine_inputs} (or \code{validate_requirement_inputs}), fed from \code{_validate_common_engine_args}; empirical limits go to model domains or constraints. \\
+Mission field & \code{MissionRequest.resolved()} and the \code{mission_consumers} mapping (\code{job.py:928}), which fails resolution until a consumer exists. \\
+Job section or option & \code{_build_spec} allowed keys (\code{job_cli.py:94-144}), the dataclass, \code{to_document}; a \code{JobCapability} row only once the path is implemented. \\
+Variable; metric & \code{VARIABLE_DIMENSIONS} plus the \stagetag{S13} layout; a \code{_REPORTED} entry with a valid snapshot path (constraints only via \code{CONSTRAINT_MANIFEST}). \\
+Process; catalog; guided & \code{ManufacturingLimit} rows with source and applicability; \code{_CATALOG_TOPICS}; \code{Question(dimension=...)} in \code{GuidedSession.run}. \\
+\bottomrule
+\end{longtable}}

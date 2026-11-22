@@ -1,0 +1,729 @@
+{
+  "schema_version": 1,
+  "scope": "Initial bounded acquisition of cited experimental reports, related methods and existing numeric fixtures. Candidate observables and uses require source-level review.",
+  "sources": [
+    {
+      "id": "ntrs_19870015990",
+      "ntrs_id": "19870015990",
+      "title": "NASA TP-2725: 1030:1 nozzle thrust-performance experiment",
+      "landing_url": "https://ntrs.nasa.gov/citations/19870015990",
+      "subsystems": [
+        "nozzle",
+        "performance",
+        "flow",
+        "altitude"
+      ],
+      "evidence_kind": "published_experimental_report",
+      "candidate_observables": [
+        "thrust_coefficient",
+        "specific_impulse",
+        "wall_pressure"
+      ],
+      "candidate_use": "CALIBRATION_OR_VALIDATION_AFTER_REVIEW",
+      "limitations": [
+        "Published experimental and TDK outputs must remain separate. Not independent of TP-2726; reconcile shared campaign and hardware before splitting."
+      ],
+      "raw_measurement_files_located": false,
+      "training_eligible": false
+    },
+    {
+      "id": "ntrs_19870015991",
+      "ntrs_id": "19870015991",
+      "title": "NASA TP-2726: 1030:1 nozzle heat-transfer experiment",
+      "landing_url": "https://ntrs.nasa.gov/citations/19870015991",
+      "subsystems": [
+        "thermal",
+        "flow"
+      ],
+      "evidence_kind": "published_experimental_report",
+      "candidate_observables": [
+        "wall_temperature",
+        "inferred_heat_flux"
+      ],
+      "candidate_use": "CALIBRATION_OR_VALIDATION_AFTER_REVIEW",
+      "limitations": [
+        "Heat flux is inferred from outer wall temperatures. Preserve inverse heat-conduction assumptions; likely shared campaign with TP-2725, not an independent test family."
+      ],
+      "raw_measurement_files_located": false,
+      "training_eligible": false
+    },
+    {
+      "id": "ntrs_19960042495",
+      "ntrs_id": "19960042495",
+      "title": "NASA TP-3576: high-pressure high-area-ratio nozzle tests",
+      "landing_url": "https://ntrs.nasa.gov/citations/19960042495",
+      "subsystems": [
+        "nozzle",
+        "performance",
+        "thermal",
+        "thermochemistry"
+      ],
+      "evidence_kind": "published_experimental_report",
+      "candidate_observables": [
+        "thrust_coefficient",
+        "cstar_efficiency",
+        "wall_temperature",
+        "specific_impulse"
+      ],
+      "candidate_use": "CALIBRATION_OR_VALIDATION_AFTER_REVIEW",
+      "limitations": [
+        "Hydrogen/oxygen and source-specific geometry; do not transfer to arbitrary propellant or separate thermochemistry from combustion losses without identification."
+      ],
+      "raw_measurement_files_located": false,
+      "training_eligible": false
+    },
+    {
+      "id": "ntrs_19650010083",
+      "ntrs_id": "19650010083",
+      "title": "JPL TR-32-415 revision 1: convective heat transfer in a convergent-divergent nozzle",
+      "landing_url": "https://ntrs.nasa.gov/citations/19650010083",
+      "subsystems": [
+        "thermal",
+        "flow",
+        "nozzle"
+      ],
+      "evidence_kind": "published_experimental_report",
+      "candidate_observables": [
+        "heat_transfer",
+        "wall_pressure"
+      ],
+      "candidate_use": "CALIBRATION_OR_VALIDATION_AFTER_REVIEW",
+      "limitations": [
+        "1965 report revision related to the 1964 journal paper; do not count both as independent experiments. Check full source for measured versus derived observables."
+      ],
+      "raw_measurement_files_located": false,
+      "training_eligible": false
+    },
+    {
+      "id": "ntrs_19950024435",
+      "ntrs_id": "19950024435",
+      "title": "NASA TM-106985: heated cooling-channel geometry experiments",
+      "landing_url": "https://ntrs.nasa.gov/citations/19950024435",
+      "subsystems": [
+        "thermal"
+      ],
+      "evidence_kind": "published_experimental_report",
+      "candidate_observables": [
+        "wall_temperature",
+        "heat_transfer",
+        "pressure_loss"
+      ],
+      "candidate_use": "CALIBRATION_OR_VALIDATION_AFTER_REVIEW",
+      "limitations": [
+        "Gaseous nitrogen electrically heated tubes; no automatic transfer to cryogenic two-phase or reacting-wall conditions. Confirm available pressure-loss observations in full source."
+      ],
+      "raw_measurement_files_located": false,
+      "training_eligible": false
+    },
+    {
+      "id": "ntrs_19990025912",
+      "ntrs_id": "19990025912",
+      "title": "Santoro and Pal: compact GO2/GH2 thruster thermal experiment",
+      "landing_url": "https://ntrs.nasa.gov/citations/19990025912",
+      "subsystems": [
+        "thermal"
+      ],
+      "evidence_kind": "published_experimental_report",
+      "candidate_observables": [
+        "wall_temperature",
+        "model_reduced_heat_flux"
+      ],
+      "candidate_use": "CALIBRATION_OR_VALIDATION_AFTER_REVIEW",
+      "limitations": [
+        "Heat flux reduced using Bartz is not an independent target for calibrating Bartz; prioritize measured wall temperature and an explicit observation model."
+      ],
+      "raw_measurement_files_located": false,
+      "training_eligible": false
+    },
+    {
+      "id": "ntrs_20050123582",
+      "ntrs_id": "20050123582",
+      "title": "NASA TM-2005-213566: GRCop-84 properties",
+      "landing_url": "https://ntrs.nasa.gov/citations/20050123582",
+      "subsystems": [
+        "materials",
+        "structure"
+      ],
+      "evidence_kind": "published_experimental_report",
+      "candidate_observables": [
+        "conductivity",
+        "strength",
+        "creep",
+        "fatigue"
+      ],
+      "candidate_use": "CALIBRATION_OR_VALIDATION_AFTER_REVIEW",
+      "limitations": [
+        "Material process and thermal-history dependence; properties do not qualify a chamber or its cycle life."
+      ],
+      "raw_measurement_files_located": false,
+      "training_eligible": false
+    },
+    {
+      "id": "ntrs_19750021165",
+      "ntrs_id": "19750021165",
+      "title": "NASA CR-134806: high-performance nozzle material properties",
+      "landing_url": "https://ntrs.nasa.gov/citations/19750021165",
+      "subsystems": [
+        "materials",
+        "structure"
+      ],
+      "evidence_kind": "published_experimental_report",
+      "candidate_observables": [
+        "temperature_dependent_properties",
+        "cyclic_stress_strain",
+        "fatigue"
+      ],
+      "candidate_use": "CALIBRATION_OR_VALIDATION_AFTER_REVIEW",
+      "limitations": [
+        "Retain alloy, processing, temperature, and test mode; separate isothermal coupon fits from thermomechanical life."
+      ],
+      "raw_measurement_files_located": false,
+      "training_eligible": false
+    },
+    {
+      "id": "ntrs_20190030431",
+      "ntrs_id": "20190030431",
+      "title": "Venters et al.: AM liquid-injector discharge-coefficient uncertainty",
+      "landing_url": "https://ntrs.nasa.gov/citations/20190030431",
+      "subsystems": [
+        "injector"
+      ],
+      "evidence_kind": "published_experimental_report",
+      "candidate_observables": [
+        "discharge_coefficient",
+        "manufacturing_variability"
+      ],
+      "candidate_use": "CALIBRATION_OR_VALIDATION_AFTER_REVIEW",
+      "limitations": [
+        "Different injector geometries and AM process; useful for uncertainty methods, not a transferable conical-pintle Cd curve."
+      ],
+      "raw_measurement_files_located": false,
+      "training_eligible": false
+    },
+    {
+      "id": "ntrs_19700005097",
+      "ntrs_id": "19700005097",
+      "title": "NASA CR-107381: coaxial pintle design criteria",
+      "landing_url": "https://ntrs.nasa.gov/citations/19700005097",
+      "subsystems": [
+        "injector",
+        "chamber"
+      ],
+      "evidence_kind": "published_experimental_report",
+      "candidate_observables": [
+        "combustion_performance",
+        "pressure_effects"
+      ],
+      "candidate_use": "CALIBRATION_OR_VALIDATION_AFTER_REVIEW",
+      "limitations": [
+        "Legacy source-specific pintle geometry and propellants; locate case-level measurements before proposing fitted targets."
+      ],
+      "raw_measurement_files_located": false,
+      "training_eligible": false
+    },
+    {
+      "id": "ntrs_19710011726",
+      "ntrs_id": "19710011726",
+      "title": "NASA TM-X-66997: solid-motor nozzle heat transfer versus Bartz",
+      "landing_url": "https://ntrs.nasa.gov/citations/19710011726",
+      "subsystems": [
+        "thermal"
+      ],
+      "evidence_kind": "published_experimental_report",
+      "candidate_observables": [
+        "heat_transfer_coefficient"
+      ],
+      "candidate_use": "CALIBRATION_OR_VALIDATION_AFTER_REVIEW",
+      "limitations": [
+        "Solid-propellant data: secondary mechanism check only; keep separate from liquid-engine calibration."
+      ],
+      "raw_measurement_files_located": false,
+      "training_eligible": false
+    },
+    {
+      "id": "ntrs_19780012674",
+      "ntrs_id": "19780012674",
+      "title": "Pump/control-system minimum operating-cost testing",
+      "landing_url": "https://ntrs.nasa.gov/citations/19780012674",
+      "subsystems": [
+        "pump"
+      ],
+      "evidence_kind": "published_experimental_report",
+      "candidate_observables": [
+        "head",
+        "flow",
+        "efficiency",
+        "power"
+      ],
+      "candidate_use": "CALIBRATION_OR_VALIDATION_AFTER_REVIEW",
+      "limitations": [
+        "Small nonrocket liquid-transport pumps; methods and source-geometry map comparison only, no cryogenic or geometric-family transfer established."
+      ],
+      "raw_measurement_files_located": false,
+      "training_eligible": false
+    },
+    {
+      "id": "ntrs_19690063911",
+      "ntrs_id": "19690063911",
+      "title": "Cuffel, Back and Massier 1969 transonic nozzle experiment",
+      "landing_url": "https://ntrs.nasa.gov/citations/19690063911",
+      "subsystems": [
+        "throat",
+        "nozzle"
+      ],
+      "evidence_kind": "published_experimental_report",
+      "candidate_observables": [
+        "static_pressure",
+        "derived_mach"
+      ],
+      "candidate_use": "CALIBRATION_OR_VALIDATION_AFTER_REVIEW",
+      "limitations": [
+        "NTRS has no full-text download. An original-paper copy was located on a third-party host; reuse rights remain unknown. Full plotted profiles still need reviewed digitization; existing numeric fixture contains only two rounded anchors."
+      ],
+      "raw_measurement_files_located": false,
+      "training_eligible": false,
+      "alternate_pdf_url": "https://drahmednagib.com/onewebmedia/SPC407/CUFFEL_1969.pdf",
+      "alternate_copy_identity_check": "Original three-page AIAA paper; title, authors, journal pages and DOI 10.2514/3.5349 inspected against NTRS identity. Scientific data extraction not reviewed."
+    },
+    {
+      "id": "mueller2000",
+      "title": "TRW 40 klbf LOX/RP-1 low cost pintle engine test results",
+      "local_path": "propulsion_texts/pintle_injector/mueller2000.pdf",
+      "knowledge_document_id": "DOC_MUELLER2000",
+      "doi": "",
+      "subsystems": [
+        "injector",
+        "chamber",
+        "performance"
+      ],
+      "evidence_kind": "published_experimental_report",
+      "candidate_observables": [
+        "cstar_efficiency",
+        "geometry_variations",
+        "film_cooling"
+      ],
+      "candidate_use": "REVIEW_BEFORE_ASSIGNING_TRAIN_OR_HOLDOUT",
+      "limitations": [
+        "LOX/RP-1 source engine; no generic geometry transfer; keep test cases and author reductions traceable."
+      ],
+      "raw_measurement_files_located": false,
+      "training_eligible": false
+    },
+    {
+      "id": "gavitt2001",
+      "title": "Testing of the 650Klbf LOX/LH2 Low Cost Pintle Engine (LCPE)",
+      "local_path": "propulsion_texts/pintle_injector/gavitt2001.pdf",
+      "knowledge_document_id": "DOC_GAVITT2001",
+      "doi": "",
+      "subsystems": [
+        "injector",
+        "chamber",
+        "performance"
+      ],
+      "evidence_kind": "published_experimental_report",
+      "candidate_observables": [
+        "combustion_efficiency",
+        "test_history"
+      ],
+      "candidate_use": "REVIEW_BEFORE_ASSIGNING_TRAIN_OR_HOLDOUT",
+      "limitations": [
+        "Large LOX/LH2 engine; aggregate performance and heritage are not a dense geometry-response training set."
+      ],
+      "raw_measurement_files_located": false,
+      "training_eligible": false
+    },
+    {
+      "id": "austin2005",
+      "title": "Characterization of Pintle Engine Performance for Nontoxic Hypergolic Bipropellants",
+      "local_path": "propulsion_texts/pintle_injector/austin2005.pdf",
+      "knowledge_document_id": "DOC_DOI_10_2514_1_7988",
+      "doi": "10.2514/1.7988",
+      "subsystems": [
+        "injector",
+        "chamber"
+      ],
+      "evidence_kind": "published_experimental_report",
+      "candidate_observables": [
+        "cstar_efficiency",
+        "momentum_ratio"
+      ],
+      "candidate_use": "REVIEW_BEFORE_ASSIGNING_TRAIN_OR_HOLDOUT",
+      "limitations": [
+        "Nontoxic hypergolic system; propellant and combustion mechanism differ from water-air and LOX fuel systems."
+      ],
+      "raw_measurement_files_located": false,
+      "training_eligible": false
+    },
+    {
+      "id": "sakaki2016",
+      "title": "Performance Evaluation of Rocket Engine Combustors using Ethanol/Liquid Oxygen Pintle Injector",
+      "local_path": "propulsion_texts/pintle_injector/sakaki2016.pdf",
+      "knowledge_document_id": "DOC_DOI_10_2514_6_2016_5080",
+      "doi": "10.2514/6.2016-5080",
+      "subsystems": [
+        "injector",
+        "chamber"
+      ],
+      "evidence_kind": "published_experimental_report",
+      "candidate_observables": [
+        "cstar_efficiency",
+        "momentum_ratio",
+        "pressure_oscillation"
+      ],
+      "candidate_use": "REVIEW_BEFORE_ASSIGNING_TRAIN_OR_HOLDOUT",
+      "limitations": [
+        "Planar and axisymmetric ethanol/LOX cases are distinct geometry families; stability observations do not identify a universal n-tau model."
+      ],
+      "raw_measurement_files_located": false,
+      "training_eligible": false
+    },
+    {
+      "id": "sakaki2018",
+      "title": "Longitudinal combustion instability of a pintle injector for a liquid rocket engine combustor",
+      "local_path": "propulsion_texts/pintle_injector/sakaki2018.pdf",
+      "knowledge_document_id": "DOC_DOI_10_1016_J_COMBUST",
+      "doi": "10.1016/j.combust",
+      "subsystems": [
+        "injector",
+        "chamber"
+      ],
+      "evidence_kind": "published_experimental_report",
+      "candidate_observables": [
+        "pressure_oscillation",
+        "combustion_instability"
+      ],
+      "candidate_use": "REVIEW_BEFORE_ASSIGNING_TRAIN_OR_HOLDOUT",
+      "limitations": [
+        "Dynamic fitting requires actual time histories, bandwidth and geometry; plotted statistics alone may be insufficient."
+      ],
+      "raw_measurement_files_located": false,
+      "training_eligible": false
+    },
+    {
+      "id": "kang2022",
+      "title": "Design of pintle injector using Kerosene-LOx as propellant and solving the problem of pintle tip thermal damage in hot firing test",
+      "local_path": "propulsion_texts/pintle_injector/kang2022.pdf",
+      "knowledge_document_id": "DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029",
+      "doi": "10.1016/j.actaastro.2022.08.029",
+      "subsystems": [
+        "injector",
+        "thermal"
+      ],
+      "evidence_kind": "published_experimental_report",
+      "candidate_observables": [
+        "tip_damage",
+        "tip_cooling"
+      ],
+      "candidate_use": "REVIEW_BEFORE_ASSIGNING_TRAIN_OR_HOLDOUT",
+      "limitations": [
+        "Hot-fire failure/mitigation observations; not automatically a transferable thermal-life fit."
+      ],
+      "raw_measurement_files_located": false,
+      "training_eligible": false
+    },
+    {
+      "id": "ninish2018",
+      "title": "SPRAY CHARACTERISTICS OF LIQUID-LIQUID PINTLE INJECTOR",
+      "local_path": "propulsion_texts/pintle_injector/ninish2018.pdf",
+      "knowledge_document_id": "DOC_DOI_10_1016_J_EXPTHERMFLUSCI_2018_03_033",
+      "doi": "10.1016/j.expthermflusci.2018.03.033",
+      "subsystems": [
+        "injector",
+        "spray"
+      ],
+      "evidence_kind": "published_experimental_report",
+      "candidate_observables": [
+        "spray_angle",
+        "droplet_size"
+      ],
+      "candidate_use": "REVIEW_BEFORE_ASSIGNING_TRAIN_OR_HOLDOUT",
+      "limitations": [
+        "Nonreacting liquid-liquid regime; preserve angle convention and observation plane."
+      ],
+      "raw_measurement_files_located": false,
+      "training_eligible": false
+    },
+    {
+      "id": "radhakrishnan2018",
+      "title": "AAS2805(4)-22652.dvi",
+      "local_path": "propulsion_texts/pintle_injector/radhakrishnan2018 (1).pdf",
+      "knowledge_document_id": "DOC_RADHAKRISHNAN2018",
+      "doi": "",
+      "subsystems": [
+        "spray",
+        "injector"
+      ],
+      "evidence_kind": "mixed_experiment_simulation_or_method_report",
+      "candidate_observables": [
+        "spray_angle",
+        "smd"
+      ],
+      "candidate_use": "REVIEW_BEFORE_ASSIGNING_TRAIN_OR_HOLDOUT",
+      "limitations": [
+        "Mixed experimental targets and author VOF/derived quantities. Preserve per-column origins; not a reacting validation case."
+      ],
+      "raw_measurement_files_located": false,
+      "training_eligible": false
+    },
+    {
+      "id": "radhakrishnan2021",
+      "title": "A detailed modelling on spray atomisation and combustion of LOX/GCH4 in variable area pintle injecto",
+      "local_path": "propulsion_texts/pintle_injector/radhakrishnan2021.pdf",
+      "knowledge_document_id": "DOC_DOI_10_1080_13647830_2021_1937702",
+      "doi": "10.1080/13647830.2021.1937702",
+      "subsystems": [
+        "spray",
+        "injector"
+      ],
+      "evidence_kind": "mixed_experiment_simulation_or_method_report",
+      "candidate_observables": [
+        "spray_angle",
+        "smd",
+        "author_simulation"
+      ],
+      "candidate_use": "REVIEW_BEFORE_ASSIGNING_TRAIN_OR_HOLDOUT",
+      "limitations": [
+        "2021 water-air validation revision must remain separate from 2018; Tables 7 and 8 are simulations."
+      ],
+      "raw_measurement_files_located": false,
+      "training_eligible": false
+    },
+    {
+      "id": "son2017",
+      "title": "Design Procedure of a Movable Pintle Injector for Liquid Rocket Engines",
+      "local_path": "propulsion_texts/pintle_injector/son2017.pdf",
+      "knowledge_document_id": "DOC_DOI_10_2514_1_B36301",
+      "doi": "10.2514/1.B36301",
+      "subsystems": [
+        "injector"
+      ],
+      "evidence_kind": "mixed_experiment_simulation_or_method_report",
+      "candidate_observables": [
+        "geometry",
+        "hydraulic_response"
+      ],
+      "candidate_use": "REVIEW_BEFORE_ASSIGNING_TRAIN_OR_HOLDOUT",
+      "limitations": [
+        "Son radial-gap injector is a distinct family from the conical seat valve. Review observed versus calculated values."
+      ],
+      "raw_measurement_files_located": false,
+      "training_eligible": false
+    },
+    {
+      "id": "hong2012",
+      "title": "Study on inducer and impeller of a centrifugal pump for a rocket engine turbopump",
+      "local_path": "propulsion_texts/fuel_pump_design/hong-et-al-2012-study-on-inducer-and-impeller-of-a-centrifugal-pump-for-a-rocket-engine-turbopump.pdf",
+      "knowledge_document_id": "DOC_DOI_10_1177_0954406212449939",
+      "doi": "10.1177/0954406212449939",
+      "subsystems": [
+        "pump"
+      ],
+      "evidence_kind": "published_experimental_report",
+      "candidate_observables": [
+        "head",
+        "efficiency",
+        "npsh",
+        "inducer_head"
+      ],
+      "candidate_use": "REVIEW_BEFORE_ASSIGNING_TRAIN_OR_HOLDOUT",
+      "limitations": [
+        "Water tests of one rocket-pump design, reduced speed and different pump/inducer speeds; no automatic cryogenic transfer."
+      ],
+      "raw_measurement_files_located": false,
+      "training_eligible": false
+    },
+    {
+      "id": "carlile1992",
+      "title": "An experimental investigation of high-aspect-ratio cooling passages",
+      "local_path": "propulsion_texts/carlile1992.pdf",
+      "knowledge_document_id": "DOC_DOI_10_2514_6_1992_3154",
+      "doi": "10.2514/6.1992-3154",
+      "subsystems": [
+        "thermal"
+      ],
+      "evidence_kind": "published_experimental_report",
+      "candidate_observables": [
+        "wall_temperature",
+        "channel_aspect_ratio"
+      ],
+      "candidate_use": "REVIEW_BEFORE_ASSIGNING_TRAIN_OR_HOLDOUT",
+      "limitations": [
+        "Extract matched channel dimensions and boundary conditions before learning an aspect-ratio correction."
+      ],
+      "raw_measurement_files_located": false,
+      "training_eligible": false
+    },
+    {
+      "id": "betti2014",
+      "title": "Coupled Heat Transfer Analysis in Regeneratively Cooled Thrust Chambers",
+      "local_path": "propulsion_texts/betti2014.pdf",
+      "knowledge_document_id": "DOC_DOI_10_2514_1_B34855",
+      "doi": "10.2514/1.B34855",
+      "subsystems": [
+        "thermal"
+      ],
+      "evidence_kind": "simulation_method_report",
+      "candidate_observables": [
+        "wall_temperature",
+        "heat_flux",
+        "coolant_pressure_drop"
+      ],
+      "candidate_use": "REVIEW_BEFORE_ASSIGNING_TRAIN_OR_HOLDOUT",
+      "limitations": [
+        "Computational comparison is not independent experimental truth. No solver outputs downloaded with this paper."
+      ],
+      "raw_measurement_files_located": false,
+      "training_eligible": false
+    },
+    {
+      "id": "pizzarelli2011",
+      "title": "DOI: 10.1080/10407782.2011.578011 A QUASI-2-D MODEL FOR THE PREDICTION OF THE WALL TEMPERATURE OF ROCKET ENGINE COOLING CHANNELS",
+      "local_path": "propulsion_texts/pizzarelli2011.pdf",
+      "knowledge_document_id": "DOC_DOI_10_1080_10407782_2011_578011",
+      "doi": "10.1080/10407782.2011.578011",
+      "subsystems": [
+        "thermal"
+      ],
+      "evidence_kind": "simulation_method_report",
+      "candidate_observables": [
+        "wall_temperature",
+        "channel_heat_transfer"
+      ],
+      "candidate_use": "REVIEW_BEFORE_ASSIGNING_TRAIN_OR_HOLDOUT",
+      "limitations": [
+        "Reference method and source-specific computational cases; inspect each comparison for experimental or numerical origin."
+      ],
+      "raw_measurement_files_located": false,
+      "training_eligible": false
+    },
+    {
+      "id": "hagemann1998",
+      "title": "Advanced Rocket Nozzles",
+      "local_path": "propulsion_texts/hagemann1998.pdf",
+      "knowledge_document_id": "DOC_DOI_10_2514_2_5354",
+      "doi": "10.2514/2.5354",
+      "subsystems": [
+        "separation",
+        "nozzle"
+      ],
+      "evidence_kind": "review_report",
+      "candidate_observables": [
+        "separation_onset"
+      ],
+      "candidate_use": "REVIEW_BEFORE_ASSIGNING_TRAIN_OR_HOLDOUT",
+      "limitations": [
+        "Review evidence; follow original campaign citations and avoid treating redrawn curves as new experiments."
+      ],
+      "raw_measurement_files_located": false,
+      "training_eligible": false
+    },
+    {
+      "id": "frey2000",
+      "title": "Restricted Shock Separation in Rocket Nozzles",
+      "local_path": "propulsion_texts/frey2000.pdf",
+      "knowledge_document_id": "DOC_DOI_10_2514_2_5593",
+      "doi": "10.2514/2.5593",
+      "subsystems": [
+        "separation",
+        "nozzle"
+      ],
+      "evidence_kind": "mixed_experiment_simulation_or_method_report",
+      "candidate_observables": [
+        "separation_onset",
+        "pressure"
+      ],
+      "candidate_use": "REVIEW_BEFORE_ASSIGNING_TRAIN_OR_HOLDOUT",
+      "limitations": [
+        "Separate simulations, physical observations and shared campaigns; no side-load qualification."
+      ],
+      "raw_measurement_files_located": false,
+      "training_eligible": false
+    },
+    {
+      "id": "fixture_radhakrishnan2018",
+      "title": "fixture radhakrishnan2018",
+      "repository_files": [
+        "raosim/benchmark_data/cases/radhakrishnan2018_water_air.json",
+        "raosim/benchmark_data/curves/radhakrishnan2018_water_air.csv"
+      ],
+      "subsystems": [
+        "spray"
+      ],
+      "evidence_kind": "mixed_experimental_numeric_fixture",
+      "candidate_observables": [
+        "spray_angle",
+        "smd"
+      ],
+      "candidate_use": "FIXTURE_REVIEW_ONLY",
+      "limitations": [
+        "Four cases; mixed experimental targets and author-model intermediates; imported without renewed original-page review."
+      ],
+      "raw_measurement_files_located": false,
+      "training_eligible": false
+    },
+    {
+      "id": "fixture_radhakrishnan2021_water_air",
+      "title": "fixture radhakrishnan2021 water air",
+      "repository_files": [
+        "raosim/benchmark_data/cases/radhakrishnan2021_water_air_validation.json"
+      ],
+      "subsystems": [
+        "spray"
+      ],
+      "evidence_kind": "mixed_experimental_numeric_fixture",
+      "candidate_observables": [
+        "spray_angle",
+        "smd"
+      ],
+      "candidate_use": "FIXTURE_REVIEW_ONLY",
+      "limitations": [
+        "One case; related to 2018, not an additional independent experimental campaign."
+      ],
+      "raw_measurement_files_located": false,
+      "training_eligible": false
+    },
+    {
+      "id": "fixture_radhakrishnan2021_simulation",
+      "title": "fixture radhakrishnan2021 simulation",
+      "repository_files": [
+        "raosim/benchmark_data/cases/radhakrishnan2021_variable_area_lox_gch4.json",
+        "raosim/benchmark_data/curves/radhakrishnan2021_tables_3_7_8.csv"
+      ],
+      "subsystems": [
+        "spray"
+      ],
+      "evidence_kind": "simulation_numeric_fixture",
+      "candidate_observables": [
+        "smd",
+        "sheet_thickness"
+      ],
+      "candidate_use": "FIXTURE_REVIEW_ONLY",
+      "limitations": [
+        "Tables 7 and 8 contain author CFD outputs, never experimental observations."
+      ],
+      "raw_measurement_files_located": false,
+      "training_eligible": false
+    },
+    {
+      "id": "fixture_cuffel_anchors",
+      "title": "fixture cuffel anchors",
+      "repository_files": [
+        "raosim/benchmark_data/cuffel_back_massier_1969.json"
+      ],
+      "subsystems": [
+        "throat",
+        "nozzle"
+      ],
+      "evidence_kind": "rounded_abstract_anchor_fixture",
+      "candidate_observables": [
+        "derived_mach"
+      ],
+      "candidate_use": "FIXTURE_REVIEW_ONLY",
+      "limitations": [
+        "Two rounded abstract anchors and project tolerances; not a full source-resolved profile."
+      ],
+      "raw_measurement_files_located": false,
+      "training_eligible": false
+    }
+  ]
+}

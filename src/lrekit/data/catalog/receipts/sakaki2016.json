@@ -1,0 +1,32 @@
+{
+  "source_id": "sakaki2016",
+  "acquired_at_utc": "2026-11-04T00:34:47.185004+00:00",
+  "evidence_kind": "published_experimental_report",
+  "status": "ACQUIRED",
+  "files": [
+    {
+      "path": "raw/sakaki2016/source.pdf",
+      "bytes": 1399893,
+      "sha256": "dcd323f398315b4c0b89f88b0d3eedfbafec604d283bbcc0835199eed5ea9db2",
+      "origin": "existing_local_literature_copy",
+      "original_path": "propulsion_texts/pintle_injector/sakaki2016.pdf"
+    },
+    {
+      "path": "derived/sakaki2016/source.txt",
+      "bytes": 101448,
+      "sha256": "34aa46ee5108d81844dd8017b5448b46f1f3310c7730a83ea39caa725508305e",
+      "origin": "unreviewed_pdf_text_derivative"
+    }
+  ],
+  "review_state": "NOT_REVIEWED_FOR_TRAINING",
+  "training_eligible": false,
+  "hardware_qualified": false,
+  "limitations": [
+    "Planar and axisymmetric ethanol/LOX cases are distinct geometry families; stability observations do not identify a universal n-tau model."
+  ],
+  "pdf_info": "Title:           Performance Evaluation of Rocket Engine Combustors using Ethanol/Liquid Oxygen Pintle Injector\nAuthor:          Kazuki Sakaki, Hiromitsu Kakudo, Shinji Nakaya, Mitsuhiro Tsue, Ryuichiro Kanai, Kyohei Suzuki, Takahiro Inagawa, and Tetsuo Hiraiwa\nCreator:         Microsoft® Word 2013\nProducer:        䵩捲潳潦璮⁗潲搠㈰ㄳ㬠浯摩晩敤⁵獩湧⁩呥硴‴⸲⸰⁢礠ㅔ㍘\nCreationDate:    Thu Jun 23 19:38:36 2016 EDT\nModDate:         Sat Jul 30 01:53:06 2016 EDT\nCustom Metadata: no\nMetadata Stream: yes\nTagged:          yes\nUserProperties:  no\nSuspects:        no\nForm:            none\nJavaScript:      no\nPages:           16\nEncrypted:       no\nPage size:       612 x 792 pts (letter)\nPage rot:        0\nFile size:       1399893 bytes\nOptimized:       no\nPDF version:     1.5\n",
+  "text_extraction": {
+    "status": "DERIVATIVE_TEXT_UNREVIEWED",
+    "warning_excerpt": ""
+  }
+}

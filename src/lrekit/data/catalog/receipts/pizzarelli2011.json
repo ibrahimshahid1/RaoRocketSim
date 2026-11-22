@@ -1,0 +1,32 @@
+{
+  "source_id": "pizzarelli2011",
+  "acquired_at_utc": "2026-11-04T00:34:48.682766+00:00",
+  "evidence_kind": "simulation_method_report",
+  "status": "ACQUIRED",
+  "files": [
+    {
+      "path": "raw/pizzarelli2011/source.pdf",
+      "bytes": 1322455,
+      "sha256": "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356",
+      "origin": "existing_local_literature_copy",
+      "original_path": "propulsion_texts/pizzarelli2011.pdf"
+    },
+    {
+      "path": "derived/pizzarelli2011/source.txt",
+      "bytes": 145226,
+      "sha256": "1e6a211455c9081f94c10fabd2fe9fb7647cb54b71b5719a40930c62ce0c28dd",
+      "origin": "unreviewed_pdf_text_derivative"
+    }
+  ],
+  "review_state": "NOT_REVIEWED_FOR_TRAINING",
+  "training_eligible": false,
+  "hardware_qualified": false,
+  "limitations": [
+    "Reference method and source-specific computational cases; inspect each comparison for experimental or numerical origin."
+  ],
+  "pdf_info": "Title:           unht578011 1..24\nCreator:         3B2 Total Publishing System 7.51c/W\nProducer:        Acrobat Distiller 5.0.5 (Windows)\nCreationDate:    Wed Jun 29 23:22:58 2011 EDT\nModDate:         Fri Jan  3 07:50:18 2014 EST\nCustom Metadata: no\nMetadata Stream: yes\nTagged:          no\nUserProperties:  no\nSuspects:        no\nForm:            none\nJavaScript:      no\nPages:           25\nEncrypted:       no\nPage size:       504 x 720 pts\nPage rot:        0\nFile size:       1322455 bytes\nOptimized:       no\nPDF version:     1.4\n",
+  "text_extraction": {
+    "status": "DERIVATIVE_TEXT_UNREVIEWED",
+    "warning_excerpt": ""
+  }
+}

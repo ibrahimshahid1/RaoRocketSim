@@ -1,0 +1,35 @@
+\section{Current state from the MOC logbook}
+\label{sec:current-state}
+The logbook (Repository Guide, Chapter 15) closes with one accepted configuration:
+Nozzle-B, inviscid and constant-$\gamma$, solved as a BVP with exact D/E attachment,
+an explicit kernel capacity and accurate seed controls.
+Both levels pass the eleven gates. The 32/48 to 48/64 comparison passes the unchanged
+policy: Mach difference 0.00080366, flow-angle difference $0.0228912^\circ$ (limit
+$0.05^\circ$), field coverage 0.950270. $C_F=1.57955$ is 0.212\,\% below Rao's 1.5829,
+with different throat and start-line models. The pair took 1{,}497.5\,s. This is numerical verification of one configuration only.
+
+The audit's 26 findings were 4 correct, 9 incorrect (all repaired), 6 incomplete,
+3 uncertain and 4 missing. It left open MOC-08/09 (KL table and normalisation), MOC-14 (axis limit), MOC-15
+(independent reference), MOC-16 (the extensions) and two LEA/TOP failures
+($L/R_t=15.0448$ against $15\pm0.02$). Table~\ref{tab:new-rows} gives their status now, with five proposed new rows. The
+optimiser closes thrust with a Q1D model before it requests geometry
+(Section~\ref{sec:geometry-arch}).
+
+\begingroup\footnotesize\renewcommand{\LTcaptype}{table}
+\begin{longtable}{@{}P{0.09\linewidth}P{0.50\linewidth}P{0.35\linewidth}@{}}
+\caption{Open and proposed traceability rows.}\label{tab:new-rows}\\
+\toprule\textbf{ID} & \textbf{Finding} & \textbf{Status / action}\\\midrule
+\endfirsthead
+\toprule\textbf{ID} & \textbf{Finding} & \textbf{Status / action}\\\midrule
+\endhead
+MOC-08/09 & KL axisymmetric $v_3$ $zy^3$ sign wrong; four planar defects; $\sqrt{U^2+V^2}$ is $M^*$ & Confirmed; production unchanged; opt-in K0b\\
+MOC-14 & Exact-axis source limit & Proposed: no active defect on the tested paths (E05, E06); the BVP's \code{_source_axisym} and JAX mirrors untested (X0 test before closing)\\
+MOC-15 & Independent reference; accuracy envelope & Oracle exists; E05 FAIL as pre-registered (lip row). Post hoc: interior order 1.59--1.76, functionals $\approx2$ ($15^\circ$, E05b). CFD pending D1\\
+MOC-27 & Near-axis closure: the exit-lip special row puts a point at 0.18--0.54 of the normal spacing (E05); at $n=64$ the sign-only (KL-V1) and $M^*$-only (KL-V2) start lines fail near the axis, KL-V3 does not (E09); a $\theta\ge0$ clamp switches inside $\theta_B$ windows (E12) & Open (N0, K0a, N2); the lip row does not contaminate exit-plane functionals (E05b)\\
+MOC-28 & The forward net audits whole RRCs to the axis, so a fold outside the nozzle ends the replay (E07) & Fix verified in a diagnostic harness (E07b); production opt-in in N0\\
+MOC-29 & The production start line passes more than the ideal throat mass flow ($C_D=1.0075$) & Open (K0); KL-V3 gives 0.9944\\
+MOC-30 & The LEA case uses a $0.382R_t$ arc where the source shows $0.5y_t$, and the source's 15.0 is likely $x_E-x_N$ & Open (G0, D11)\\
+MOC-31 & The forward net stops at weak coalescences where post-kernel RRCs nearly coincide (E11b) & Open: weak-coalescence policy (N0, S0a)\\
+\bottomrule
+\end{longtable}
+\endgroup

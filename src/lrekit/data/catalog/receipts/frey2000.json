@@ -1,0 +1,32 @@
+{
+  "source_id": "frey2000",
+  "acquired_at_utc": "2026-11-04T00:34:48.844436+00:00",
+  "evidence_kind": "mixed_experiment_simulation_or_method_report",
+  "status": "ACQUIRED",
+  "files": [
+    {
+      "path": "raw/frey2000/source.pdf",
+      "bytes": 523027,
+      "sha256": "4ec2d8ef0f7f4f7fac7e6bfdd27ac56d758b460fa7d699dcb1323a14a844f734",
+      "origin": "existing_local_literature_copy",
+      "original_path": "propulsion_texts/frey2000.pdf"
+    },
+    {
+      "path": "derived/frey2000/source.txt",
+      "bytes": 92730,
+      "sha256": "f1ddb9d73a43e816e11f2060983c689782868ce9b843c4cb385360b0c38afb3d",
+      "origin": "unreviewed_pdf_text_derivative"
+    }
+  ],
+  "review_state": "NOT_REVIEWED_FOR_TRAINING",
+  "training_eligible": false,
+  "hardware_qualified": false,
+  "limitations": [
+    "Separate simulations, physical observations and shared campaigns; no side-load qualification."
+  ],
+  "pdf_info": "Title:           Restricted Shock Separation in Rocket Nozzles\nSubject:         Journal of Propulsion and Power 2000.16:478-484\nAuthor:          Manuel Frey and Gerald Hagemann\nCreator:         RealPage PDF Generator 2.0\nProducer:        RealPage data converter\nCreationDate:    Thu Jul 24 12:07:57 2003 EDT\nModDate:         Sat Jul  5 10:00:33 2014 EDT\nCustom Metadata: no\nMetadata Stream: no\nTagged:          no\nUserProperties:  no\nSuspects:        no\nForm:            none\nJavaScript:      no\nPages:           7\nEncrypted:       no\nPage size:       554.74 x 821.764 pts\nPage rot:        0\nFile size:       523027 bytes\nOptimized:       no\nPDF version:     1.2\n",
+  "text_extraction": {
+    "status": "DERIVATIVE_TEXT_UNREVIEWED",
+    "warning_excerpt": ""
+  }
+}

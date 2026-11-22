@@ -1,0 +1,403 @@
+{
+ "packet": "V-WHITE-p750",
+ "kind": "verification",
+ "document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+ "source_pdf": "propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf",
+ "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+ "pages": [
+  750,
+  750
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 750,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/p0750.png",
+   "sha256": "ff9987b1efa45f67c5d8108de5a00befe0966020fb2caf8cf9b8557cccb0d807",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_878ea95e76e8b79a4695ee5d"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_ae331df77413c20f66e283d7",
+   "kind": "figure",
+   "pages": [
+    750
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [
+    "Fig. 6.45 Compressible flow expansion factor Y for flowmeters."
+   ],
+   "bbox": [
+    {
+     "l": 178.44430541992188,
+     "t": 461.4169006347656,
+     "r": 454.165283203125,
+     "b": 236.44482421875,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/4\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_878ea95e76e8b79a4695ee5d",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p750-750-1998281c9be0da7850c19bbfe64e364d96f4ec9e92a44ed578c4f8ec3941c20b.json",
+   "raw_sha256": "0dbbf0f19937871d1f5e2f0eba550d90d7b0b0e6991661ce28dd8bc02d059dac",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_9743775a81bcf869055ce21c",
+   "kind": "formula",
+   "pages": [
+    750
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/2",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 156.0,
+     "t": 586.0,
+     "r": 477.3333333333333,
+     "b": 555.6666666666666,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\dot { m } = C _ { d } Y A _ { t } \\sqrt { \\frac { 2 \\rho _ { 1 } ( p _ { 1 } - p _ { 2 } ) } { 1 - \\beta ^ { 4 } } } \\quad \\text {where} \\quad \\beta = \\frac { d } { D }",
+   "original_text": "2 a > ti = Cy Aya] PPP where p-< (6.117)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_878ea95e76e8b79a4695ee5d",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p750-750-1998281c9be0da7850c19bbfe64e364d96f4ec9e92a44ed578c4f8ec3941c20b.json",
+   "raw_sha256": "0dbbf0f19937871d1f5e2f0eba550d90d7b0b0e6991661ce28dd8bc02d059dac",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [
+  {
+   "id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_7ACA91AB",
+   "store": "equations",
+   "type": "Equation",
+   "page": 750,
+   "is_target": false,
+   "active": false,
+   "source_state": "SUPERSEDED_EXTRACTION",
+   "verification": null,
+   "label": "White Eq. (6.117) compressible flowmeter (orifice/nozzle/venturi) mass flow with expansion factor Y",
+   "equation_number": "6.117",
+   "form": "Eq. (6.104) rewritten in terms of mass flow and upstream density ρ1, multiplied by the dimensionless expansion factor Y  [display equation NOT rendered in Markdown]",
+   "statement": null,
+   "quote": "The dimensionless _expansion factor Y_ is a function of pressure ratio, _β_, and",
+   "confidence": "low",
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "Y",
+     "meaning": "dimensionless expansion factor, function of p2/p1, β and meter type",
+     "units": "",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "ρ1",
+     "meaning": "upstream gas density",
+     "units": "",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "p2/p1",
+     "meaning": "downstream-to-upstream pressure ratio",
+     "units": "",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "β",
+     "meaning": "meter diameter ratio",
+     "units": "",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [
+    "gas flow through an obstruction meter",
+    "empirical Y from Fig. 6.45"
+   ],
+   "validity": [
+    "needed when the fluid is a gas and the pressure ratio p2/p1 is not near unity"
+   ],
+   "extraction_note": "This is the source's only treatment of compressible flow through an orifice proper; it is an empirical correction chart, not the isentropic/choked relation. Equation body missing from Markdown.",
+   "same_page_formula_candidates": [
+    "CAND_9743775a81bcf869055ce21c"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 750
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": [
+      "DAMAGE_OR_REPETITION_MARKER"
+     ]
+    },
+    {
+     "check": "variable_symbol_absent_from_form",
+     "symbols": [
+      "p2/p1",
+      "β"
+     ]
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "Y",
+      "ρ1",
+      "p2/p1",
+      "β"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_AA664617",
+   "store": "equations",
+   "type": "Equation",
+   "page": 750,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "White Eq. (6.117) compressible flowmeter expansion-factor correction",
+   "equation_number": "6.117",
+   "form": "m_dot = C_d*Y*A_t*sqrt(2*rho_1*(p_1-p_2)/(1-beta^4)); beta = d/D",
+   "statement": null,
+   "quote": "The dimensionless _expansion factor Y_ is a function of pressure ratio, _β_, and",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "m_dot",
+     "meaning": "mass flow rate",
+     "units": "kg/s",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_MDOT"
+     ]
+    },
+    {
+     "symbol": "C_d",
+     "meaning": "discharge coefficient",
+     "units": "1",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_CD"
+     ]
+    },
+    {
+     "symbol": "Y",
+     "meaning": "flowmeter expansion factor",
+     "units": "1",
+     "role": "source_variable",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "A_t",
+     "meaning": "flowmeter throat area",
+     "units": "m^2",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_AT"
+     ]
+    },
+    {
+     "symbol": "rho_1",
+     "meaning": "upstream density",
+     "units": "kg/m^3",
+     "role": "source_variable",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "p_1",
+     "meaning": "upstream pressure",
+     "units": "Pa",
+     "role": "source_variable",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "p_2",
+     "meaning": "downstream pressure",
+     "units": "Pa",
+     "role": "source_variable",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "beta",
+     "meaning": "flowmeter diameter ratio d/D",
+     "units": "1",
+     "role": "source_variable",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "d",
+     "meaning": "flowmeter throat diameter",
+     "units": "m",
+     "role": "source_variable",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "D",
+     "meaning": "pipe diameter",
+     "units": "m",
+     "role": "source_variable",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [
+    "Differential-pressure orifice/nozzle/venturi flowmeter construction with upstream density; expansion factor is meter-type dependent"
+   ],
+   "validity": [
+    "Y depends on pressure ratio, diameter ratio beta and meter type; not a universal choked injector formula"
+   ],
+   "extraction_note": "Docling visually located formula stage executed; original-PDF expression checked directly. Source numerator contains rho_1; beta=d/D. Source Y curves distinguish sharp-edged orifices from nozzles/venturis. No empirical Y curve digitization or universal Cd selection is asserted. SI units are dimensional interpretations.",
+   "same_page_formula_candidates": [
+    "CAND_9743775a81bcf869055ce21c"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 750
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "Y",
+      "rho_1",
+      "p_1",
+      "p_2",
+      "beta",
+      "d",
+      "D"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_27C9150F",
+   "store": "claims",
+   "type": "Claim",
+   "page": 750,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The orifice/nozzle/venturi formulas assume incompressible flow; if the fluid is a gas and the pressure ratio p2/p1 is not near unity, a compressibility correction (expansion factor Y, Fig. 6.45) is needed and Eq. (6.104) is rewritten in terms of mass flow and upstream density.",
+   "quote": "flow. If the fluid is a gas, and the pressure ratio ( _p_ 2/ _p_ 1) is not near unity, a",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 750
+    }
+   ]
+  },
+  {
+   "id": "VAL_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_8E0C323E",
+   "store": "validity",
+   "type": "ValidityEnvelope",
+   "page": 750,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The Chapter 6 orifice/nozzle/venturi formulas assume incompressible flow; a compressibility correction Y is needed for gas when p2/p1 is not near unity.",
+   "quote": "The orifice/nozzle/venturi formulas in this section assume incompressible",
+   "confidence": null,
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 750
+    }
+   ]
+  }
+ ],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01008",
+   "page_start": 750,
+   "page_end": 750,
+   "section": "**Compressible Gas Flow Correction Factor.**",
+   "text": "The orifice/nozzle/venturi formulas in this section assume incompressible\nflow. If the fluid is a gas, and the pressure ratio ( _p_ 2/ _p_ 1) is not near unity, a\ncompressibility correction is needed. Equation (6.104) is rewritten in terms of\nmass flow and the upstream density _ρ_ 1:\n\nThe dimensionless _expansion factor Y_ is a function of pressure ratio, _β_, and\nthe type of meter. Some values are plotted in Fig. 6.45. The orifice, with its\nstrong jet contraction, has a different factor from the venturi or the flow nozzle,\nwhich are designed to eliminate contraction.\n\n**Fig. 6.45 Compressible flow expansion factor** **_Y_** **for flowmeters.**\n\nWe want to meter the volume flow of water ( _ρ_ = 1000 kg/m <sup>3</sup>, _ν_ = 1.02 × 10 <sup>−6</sup>\n\nm <sup>2</sup> /s) moving through a 200-mm-diameter pipe at an average velocity of 2.0 m/s.\nIf the differential pressure gage selected reads accurately at _p_ 1 − _p_ 2 = 50,000 Pa,"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "figure": 1,
+   "formula": 1
+  },
+  "flagged_candidates": 0,
+  "target_objects": 1,
+  "objects_with_anchor_problems": 0
+ }
+}

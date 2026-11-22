@@ -1,0 +1,258 @@
+\chapter{Orientation}\label{ch:orientation}
+
+\lead{What this chapter covers}
+This chapter answers the questions a reader has before opening any stage chapter: what the toolkit is and how mature it is, how a command line reaches the code, how the repository is laid out after the cleanup of 5 November 2026, which Python environments the project uses, and which working conventions govern changes. It closes with a map of the rest of the guide. Every statement is tied to a repository path. Where a document and the code disagree, the code is taken as authoritative and the disagreement is stated.
+
+% ------------------------------------------------------------------------------
+\section{What LREKit is}\label{sec:orient-what}
+
+LREKit is a Python toolkit for preliminary design and numerical research on liquid rocket engines. \code{pyproject.toml} publishes it as the distribution \code{lrekit}, version 0.1.1, with the description ``Research and preliminary-design toolkit for liquid rocket engine simulation and CAD export'' and the classifier ``Development Status :: 3 - Alpha''. The repository that holds it is called RaoRocketSim.
+
+The README (lines 11--19) lists the covered workflows: nozzle, throat, chamber, regenerative cooling and pintle injector. These workflows pair a Rao thrust-optimized parabolic (TOP) bell with quasi-one-dimensional performance estimation and low-order engineering screens. The research side adds an axisymmetric method-of-characteristics (MOC) solver, a finite-dimensional Rao variational boundary-value problem (BVP), a vendored NASA/JHU reference-code port, and a differentiable JAX backend with exact-Jacobian solves and gradient sensitivities. The code also sizes an electric-pump feed system (stage \stagetag{S09}), runs a differentiable whole-engine multidisciplinary design optimization (MDO, stage \stagetag{S13}), and exports neutral computer-aided design (CAD) geometry as STL meshes and STEP solids (stage \stagetag{S11}). The stage chapters describe each of these.
+
+\subsection{Three names for one codebase}
+
+\begin{description}[leftmargin=1.4em,style=nextline]
+  \item[RaoRocketSim] The repository name and the name of two console scripts: the compatibility alias \code{RaoRocketSim} and \code{RaoRocketSimLegacy}, which runs the old toolbox.
+  \item[\texttt{lrekit}] The distribution name and the primary console script. The \code{lrekit/} package is thin: five modules, two of which (\code{lrekit/guided.py}, \code{lrekit/job_cli.py}) implement the job verbs. \code{lrekit/__init__.py} (line 16) sets the package \code{__path__} to the \code{lrekit/} directory followed by \code{raosim.__path__}, so an import such as \code{lrekit.engine} resolves to \code{raosim/engine.py}. Its docstring states that ``the original solver modules currently live under raosim for compatibility''.
+  \item[\texttt{raosim}] The engineering package: 137 Python files covering every physics, geometry, optimization and export module (71 top-level modules plus the \code{jax}, \code{mdo}, \code{spray}, \code{openfoam} and \code{data/tools} subpackages).
+\end{description}
+
+\subsection{Package facts}
+
+{\small
+\begin{longtable}{P{3.5cm}P{8.3cm}P{3.6cm}}
+\toprule
+Item & Value & Source \\
+\midrule
+\endhead
+Distribution & \code{lrekit} 0.1.1, alpha classifier & \code{pyproject.toml} \\
+Python & \code{>=3.10,<3.14}; the README recommends 3.12 because the JAX stack is pinned & \code{pyproject.toml}; README line 834 \\
+Core dependencies & numpy $\geq$ 1.24, scipy $\geq$ 1.10, matplotlib $\geq$ 3.7, CoolProp $\geq$ 7.0, jax and jaxlib 0.6.2, optimistix 0.0.11, equinox 0.13.8 (exact pins) & \code{pyproject.toml}, \code{requirements.txt} \\
+Optional extras & \code{dev} (pytest $\geq$ 7), \code{cea} (rocketcea $\geq$ 1.2), \code{cad} (cadquery) & \code{pyproject.toml} \\
+Packaged data & benchmark cases and curves, frozen CEA tables (\code{catalog_v1.json}, \code{*.npz}), Rao domain maps & \code{[tool.setuptools.package-data]} \\
+Release state & Not yet on PyPI; the README installs from GitHub until the first release. A publish workflow builds on \code{v*} tags & README lines 837--858; \code{.github/workflows/publish.yml} \\
+\bottomrule
+\end{longtable}}
+
+\subsection{How far along the project is}
+
+The September readiness review is the project's own summary of where it stands. Its conclusion (\code{docs/program/LREKIT_READINESS_AND_DELIVERY_PLAN_2026-09-05.md}, line 9) reads: ``LREKit is an established preliminary engine-design and numerical-research toolkit with useful reference CAD. It does not yet provide an end-to-end, configuration-controlled route from a user's performance requirements to a complete machinable and testable article.'' The same document declines to give a single completion percentage, because ``a STEP export, a converged nonlinear solve and a tested pump are different deliverables'' (§1). It tracks evidence per part and per intended test instead.
+
+The part manifest the review cites is still current. \code{ENGINE_PART_MANIFEST} in \code{raosim/mdo/build.py} has 27 entries. Their supported-fidelity ceilings are 11 \code{L2_VALID_REFERENCE_CAD}, 4 \code{L1_RESOLVED_ANALYTICAL_GEOMETRY} and 12 \code{L0_NUMERICAL_ONLY}. These counts were re-read from the code for this guide and match the review. The review calls these ``declared ceilings, not built parts, readiness percentages or a complete architecture-independent BOM''.
+
+\buildfig{figures/builds/01_overview_wall_jacket_cutaway.png}{Typical package output: half-cutaway render of the wall.stl and jacket.stl meshes from the archived build tests/13kn\_sl\_fast (13 kN LOX/RP-1, chamber pressure 30 bar, GRCop-84 liner inside an Inconel 718 jacket, injector-end flange; recorded reliability label moc\_compatible). The run predates the cleanup and is kept under builds/\_archive\_2026-11-05/.}{0.86}
+
+% ------------------------------------------------------------------------------
+\section{Console entry points}\label{sec:orient-entry}
+
+\code{pyproject.toml} declares four console-script names under \code{[project.scripts]}. They resolve to three dispatch functions. All three import lazily, so \code{--help} stays light.
+
+{\small
+\begin{longtable}{P{3.4cm}P{3.4cm}P{8.6cm}}
+\toprule
+Script & Target & What it dispatches to \\
+\midrule
+\endhead
+\code{lrekit} & \code{lrekit.cli:main} (\code{lrekit/cli.py:18}) & If the first argument is in \code{JOB_VERBS} (\code{guided}, \code{run}, \code{validate}, \code{catalog}; \code{lrekit/job_cli.py:29}), the job-file workflow in \code{lrekit.job_cli.main}. Otherwise it falls through to \code{raosim.cli.main} unchanged. \\
+\code{raosim}, \code{RaoRocketSim} & \code{raosim.cli:main} (\code{raosim/cli.py:9}) & If the first argument is \code{export-openfoam-spray}, the OpenFOAM case writer \code{raosim.openfoam.cli_main}. It writes a version-pinned volume-of-fluid (VOF) case and does not run OpenFOAM. Otherwise the flag runner \code{raosim.run_nozzle.main}. \\
+\code{RaoRocketSimLegacy} & \code{raosim.cli:legacy_main} (\code{raosim/cli.py:21}) & \code{import_module("main").main()}: the top-level \code{main.py} toolbox (sweeps, benchmark cases, batch and interactive modes). It is the only route that writes versioned \code{builds/vNNN_<timestamp>/} folders with \code{metadata.txt}. \\
+\bottomrule
+\end{longtable}}
+
+\code{python}~\code{-m}~\code{lrekit} and \code{python}~\code{-m}~\code{raosim} behave like \code{lrekit} and \code{raosim}. \code{scripts/run_nozzle.py} and \code{raosim/run.sh} are compatibility wrappers around \code{raosim.run_nozzle.main}.
+
+The flag runner is one function, \code{raosim.run_nozzle.main}, spanning lines 2817--6977 of a 6,981-line file. It builds a parser with about 330 flags, expands \code{@argfile} includes, and runs the shared input validation. Three flags then exit early into the optimization stage \stagetag{S13}, first match winning: \code{--requirements}, \code{--engine-mdo-optimize}, \code{--engine-mdo}. Without any of them, the traditional pipeline runs stages \stagetag{S03} to \stagetag{S12} in order and writes \code{summary.json} (\stagetag{S14}). Its default output directory is \code{builds/nozzle_run} (\code{--out}, \code{run_nozzle.py:3534}). Chapter~\ref{ch:cli-dataflow} traces this flow end to end (Section~\ref{sec:df-drift} lists further documentation drift), and Chapter~\ref{ch:s01-s02} documents the dispatch in detail.
+
+\begin{lstlisting}[language=bash]
+# flag runner (examples from README.md lines 969 and 992-993)
+lrekit --complete-package --max-nfev 0 --out builds/complete_seed
+lrekit @examples/cli/lox_rp1_13kn_copper_316l_full_engine.args --out builds/samples/latest_13kn_check
+# job-file workflow (lrekit/job_cli.py module docstring)
+lrekit guided --save job.yaml
+lrekit validate job.yaml
+lrekit run job.yaml
+lrekit catalog capabilities
+# OpenFOAM case export and the legacy toolbox
+lrekit export-openfoam-spray OUTPUT_DIR
+RaoRocketSimLegacy --help
+\end{lstlisting}
+
+\caution{Where the README and the code disagree about the command line, the code is authoritative:
+\begin{itemize}[leftmargin=1.2em]
+  \item README §Outputs (line 1217) says normal CLI runs create \code{builds/vNNN_YYYYMMDD_HHMMSS/}. The \code{lrekit}/\code{raosim} runner writes into \code{--out} (default \code{builds/nozzle_run}) and never imports \code{raosim/build_log.py}. Versioned folders and \code{metadata.txt} come only from \code{main.py}.
+  \item README lines 971--973 say a bare \code{lrekit} enters the complete-package interview. The code first prints a three-way workflow menu (\code{_MODE_MENU}, \code{run_nozzle.py:1756}; front door at lines 3797--3811). Only choice~1 continues to that interview.
+  \item The module docstring of \code{lrekit/cli.py} names three job verbs. \code{JOB_VERBS} also contains \code{guided}.
+  \item README §Command-line usage does not document the job verbs, \code{export-openfoam-spray}, or the \code{--engine-mdo}, \code{--engine-mdo-optimize}, \code{--requirements} and \code{--mdo-export} branches.
+  \item Three of the four shipped argument files under \code{examples/cli/} pass solver flags (\code{--max-nfev}, \code{--n-control}, \code{--n-kernel}) without \code{--contour-method}~\code{rao-bvp}. The default B\'ezier/TOP contour ignores those flags. Only \code{test_13kn_rao_bvp_flowfield.args} selects the BVP.
+\end{itemize}}
+
+% ------------------------------------------------------------------------------
+\section{Engineering status}\label{sec:orient-status}
+
+\caution{Every result this repository produces is preliminary. The README (lines 28--33) states: ``Every generated contour is stamped \texttt{hardware\_qualified = False}. Passing the repository's design gates means a result cleared internal preliminary screening. It does not replace independent CFD, conjugate heat-transfer analysis, structural FEA, combustion-stability work, material allowables, manufacturing review, inspection, proof testing, or hot-fire qualification.'' The flag runner writes \code{summary["hardware_qualified"]}~\code{=}~\code{False} unconditionally (\code{raosim/run_nozzle.py:4968}).}
+
+The repository keeps \emph{software verification} separate from \emph{physical validation}, and it records maturity with explicit vocabulary rather than prose. The README uses CFD (computational fluid dynamics) and FEA (finite-element analysis) without expanding them. The vocabulary used throughout this guide is listed below.
+
+{\small
+\begin{longtable}{P{3.7cm}P{11.7cm}}
+\toprule
+Marker & Meaning and location \\
+\midrule
+\endhead
+\code{hardware_qualified} & Always \code{False} in run summaries, pump packages and CAD records. None of the 134 occurrences in \code{raosim/} (Python sources and packaged JSON), \code{lrekit/} and \code{main.py} assigns \code{True}, and \code{knowledge/AGENTS.md} §6 records it as never asserted. \\
+\code{design_status} & Set per contour method by \code{DESIGN_STATUS_BY_METHOD} in \code{raosim/validation.py}: \code{preliminary_top_geometry} (B\'ezier, the default), \code{experimental_moc_geometry}, \code{experimental_variational_geometry}, \code{experimental_rao_variational_moc_bvp}. \\
+\code{ContourReliability} & Ordered vocabulary in \code{raosim/rao_variational.py:148}, running from \code{geometric_approximation}, \code{moc_compatible} and \code{rao_variational_residual_solved} up to \code{nasa_reference_matched}, \code{benchmark_validated}, \code{cfd_checked} and \code{experimentally_validated}. The README calls it ``a vocabulary, not a claim that every level has been reached''. \\
+\code{BENCHMARK_VALIDATED_AT_RELEASE} & \code{False} (\code{raosim/rao_variational.py:862}). Promotion of the public solver to \code{benchmark_validated} is disabled. \\
+Readiness labels in prose & ``Trusted preliminary baseline'' (TOP geometry), ``Experimental'', ``Screening only'' and ``Software-verified preliminary; not physically validated'', from the capability table in the README (lines 68--81). \\
+\bottomrule
+\end{longtable}}
+
+% ------------------------------------------------------------------------------
+\section{A reader's map of this guide}\label{sec:orient-map}
+
+The guide follows the data flow of the current command-line interface (CLI). Stages \stagetag{S01}--\stagetag{S14} are the pipeline steps a run passes through, in order. Groups X01--X08 are cross-cutting code that sits outside that sequence. \code{docs/architecture/CODE_MAP.md} assigns every code file to exactly one stage or group.
+
+{\small
+\begin{longtable}{P{7.6cm}P{3.2cm}P{4.4cm}}
+\toprule
+Question & Where & Stages and groups \\
+\midrule
+\endhead
+What is the toolkit, how is the repository laid out, which environments and conventions apply? & Chapter~\ref{ch:orientation} & -- \\
+What runs, in which order, when I type a command or submit a job file? & Chapter~\ref{ch:cli-dataflow} & S01--S14 overview \\
+How are entry, arguments, units, validation and job contracts handled? & Chapter~\ref{ch:s01-s02} & S01, S02 \\
+Where do the propellant properties, throat size, performance and off-design screens come from? & Chapter~\ref{ch:s03-s04} & S03, S04 \\
+How is the nozzle and chamber contour built, by default and through the Rao/MOC BVP? & Chapter~\ref{ch:s05-s06} & S05, S06 \\
+How are the regenerative-cooling wall and its structural screens sized? & Chapter~\ref{ch:s07} & S07 \\
+How are the pintle injector, spray coupling and electric pump feed sized? & Chapter~\ref{ch:s08-s09} & S08, S09 \\
+How are the bolted interface, mass ledger, CAD files and figures produced? & Chapter~\ref{ch:s10-s12} & S10, S11, S12 \\
+How do the engine MDO, requirements solve, re-evaluation and run records work? & Chapter~\ref{ch:s13-s14} & S13, S14 \\
+What do the JAX core, spray/OpenFOAM tier, legacy CLI, NASA/JHU port and unreachable modules do? & Chapter~\ref{ch:crosscutting-a} & X01--X04, X08 \\
+What are the research scripts, the knowledge system and the test harness? & Chapter~\ref{ch:crosscutting-b} & X05--X07 \\
+What did earlier runs produce, and what is in the archived builds? & Chapter~\ref{ch:builds} & outputs of S11, S12, S14, X03 \\
+What is verified, by which tests, and what is not? & Chapter~13 & X07 and all stages \\
+What remains to be done, and in which order? & Chapter~14 & all \\
+Where did each document go, and which documents are active or historical? & Appendix~\ref{ch:docs-inventory} & \code{docs/} \\
+What exactly changed in the 5 November 2026 cleanup? & Appendix~\ref{app:cleanup} & repository layout \\
+\bottomrule
+\end{longtable}}
+
+% ------------------------------------------------------------------------------
+\section{Repository layout after the cleanup}\label{sec:orient-layout}
+
+The tree below is the working tree on 5 November 2026, after the cleanup recorded in Appendix~\ref{app:cleanup}. File counts are Python files unless stated otherwise. The \code{docs/} counts include one index \code{README.md} per folder and \code{architecture/DATAFLOW.md}, which were added after the cleanup (74 files at the cleanup, 84 now). \code{__pycache__} folders, \code{.DS_Store}, \code{.git/}, \code{.claude/} and \code{lrekit.egg-info/} (editable-install metadata, gitignored) are omitted.
+
+\begin{lstlisting}
+RaoRocketSim/
+|-- lrekit/                    5 modules: console entry and job verbs
+|-- raosim/                    137 .py files: the engineering package
+|   |-- *.py                   71 top-level modules (cli.py, run_nozzle.py, ...)
+|   |-- jax/                   13 modules
+|   |-- mdo/                   34 modules
+|   |-- spray/  openfoam/      14 + 3 modules
+|   |-- data/                  cea_tables/ rao_domains/ catalog/ derived/ raw/ tools/
+|   |-- benchmark_data/        cases/ curves/ cuffel_back_massier_1969.json
+|   `-- run.sh
+|-- main.py                    legacy toolbox (1,280 lines)
+|-- scripts/                   18 standalone scripts
+|-- tests/                     131 test modules
+|-- examples/cli/              4 argument files (*.args)
+|-- docs/                      84 files, organized by stage (74 at the cleanup)
+|   |-- README.md              index (added after the cleanup)
+|   |-- architecture/          9
+|   |-- subsystems/            24, in S04- S05- S06- S07- S08- S09- S10- S13-<slug>/
+|   |-- program/               13
+|   |-- audits/                17
+|   |-- literature/            8
+|   |-- data/                  3
+|   |-- agents/                3
+|   `-- archive/               6
+|-- knowledge/                 kg.sh, kg/, tools/, tests/, graph/, reports/, ...
+|-- propulsion_texts/          local PDF corpus and Markdown (gitignored)
+|-- Three-Dimensional-Nozzle-Design-Code-master/
+|                              Rice/JHU reference: MOC_Grid_BDE/ 3D_MOC/ STT2001/
+|-- debug_outputs/             43 tracked scan and comparison artifacts
+|-- builds/                    _archive_2026-11-05/, v454 marker, new runs
+|-- archive/                   tmp_literature_scratch_2026-11-05/ (gitignored)
+|-- latex-report/              report sources, incl. this guide
+|-- output/pdf/                compiled PDFs
+|-- .github/workflows/         test.yml, publish.yml
+|-- .venv-jax/  .venv-kg/  .venv-docling/
+`-- pyproject.toml  requirements.txt  requirements-dev.txt  pytest.ini  README.md
+\end{lstlisting}
+
+The table gives each top-level entry's purpose, the pipeline stages or cross-cutting groups it serves, and its version-control state.
+
+{\small
+\begin{longtable}{P{3.4cm}P{6.8cm}P{2.5cm}P{2.6cm}}
+\toprule
+Entry & Purpose & Serves & Git \\
+\midrule
+\endhead
+\code{lrekit/} & Console entry \code{lrekit}, \code{python}~\code{-m}~\code{lrekit}, guided interview and job verbs; namespace alias onto \code{raosim} & S01, S02 & tracked \\
+\code{raosim/} & All engineering code: dispatch, contracts, thermochemistry, performance, geometry, Rao/MOC, cooling, injector, pumps, interface, CAD, plots, MDO, re-evaluation; plus the JAX core, spray and OpenFOAM tiers and packaged data & S01--S14, X01--X04, X06, X08 & tracked (two new modules and \code{data/} files untracked) \\
+\code{main.py} & Legacy toolbox behind \code{RaoRocketSimLegacy}; writes \code{builds/vNNN_*} & X03 & tracked \\
+\code{scripts/} & Research diagnostics and offline generators, the NASA comparison tools and the \code{run_nozzle.py} wrapper; several are imported by tests & X04, X05, S01 & tracked \\
+\code{tests/} & pytest suite, with markers \code{slow} and \code{smoke} declared in \code{pytest.ini} & X07 & tracked \\
+\code{examples/cli/} & Shipped \code{@argfile} examples, including the 13 kN regression configurations & X07; input to S01/S02 & tracked \\
+\code{docs/} & Documentation by stage (inventory in Appendix~\ref{ch:docs-inventory}, reorganization in Appendix~\ref{app:cleanup}). Documents describe the state of the implementation; they are not scientific authority & all & 68 old paths deleted, new folders untracked \\
+\code{knowledge/} & Local scientific memory: JSON stores, graph, retrieval package \code{kg/}, \code{kg.sh} wrapper, PDF tools, own tests & X06 & tracked; \code{vector_index/} ignored \\
+\code{propulsion_texts/} & Local literature corpus (PDFs) and generated Markdown, the source authority for equations & X06 & ignored (21 PDFs tracked from before the ignore rule) \\
+\code{Three-Dimensional-Nozzle-Design-Code-master/} & Vendored Rice/JHU MOC reference source and outputs; the M3.5 perfect-nozzle oracle for the parity suites & X04; oracle for S06 & tracked \\
+\code{debug_outputs/} & Evidence written by \code{scripts/rao_existence_scan.py}, \code{scripts/compare_jax_scan_stationarity.py} and the NASA comparison & X04, X05 & tracked \\
+\code{builds/} & Run output. The runner's default \code{--out} is \code{builds/nozzle_run}; \code{main.py} adds \code{vNNN_*}. Holds \code{_archive_2026-11-05/} & outputs of S11--S14, X03 & ignored \\
+\code{archive/} & Local-only scratch moved out of the tree & none & ignored \\
+\code{latex-report/} & LaTeX sources of the written reports and of this guide & documentation & tracked; guide untracked \\
+\code{output/pdf/} & Compiled PDFs of the reports & documentation & untracked \\
+\code{.github/workflows/} & Continuous integration (CI): a corpus-free knowledge job, the non-slow suite with \code{.[dev,cad]}, and the slow suite; tag-triggered publishing & X07 & tracked \\
+\code{.venv-*} & Local environments (Section~\ref{sec:orient-env}) & none & ignored \\
+\bottomrule
+\end{longtable}}
+
+% ------------------------------------------------------------------------------
+\section{Environments}\label{sec:orient-env}
+
+The README's development install (lines 860--867) creates a single environment, \code{.venv-jax}, with \code{python3.12}~\code{-m}~\code{venv}~\code{.venv-jax} followed by \code{python}~\code{-m}~\code{pip}~\code{install}~\code{-e}~\code{".[dev]"}. The working tree holds three environments. The table lists the interpreter each reports and the packages found in its \code{site-packages}.
+
+{\small
+\begin{longtable}{P{2.3cm}P{2.3cm}P{5.0cm}P{5.8cm}}
+\toprule
+Environment & Interpreter & Notable packages present & Used for \\
+\midrule
+\endhead
+\code{.venv-jax} & CPython 3.12.14 & jax and jaxlib 0.6.2, optimistix 0.0.11, equinox 0.13.8, CoolProp 7.2.0, pytest 9.0.3, and also cadquery 2.7.0 and rocketcea 1.2.3 & Default development and test environment; every README test command uses \code{.venv-jax/bin/python}. Needed for JAX (BVP backend, MDO) and B-rep STEP export. Second candidate in \code{knowledge/kg.sh}. \\
+\code{.venv-kg} & CPython 3.14.7 & numpy 2.5.3, PyMuPDF 1.28.2, pymupdf4llm 1.28.2 & PDF-to-Markdown conversion and PDF triage for the knowledge system (\code{knowledge/README.md} lines 10--12 and 116; \code{knowledge/AGENTS.md} §3); third \code{kg.sh} candidate. It cannot host the JAX stack, because jaxlib 0.6.2 has no CPython 3.14 wheel (comment in \code{requirements.txt}). \\
+\code{.venv-docling} & CPython 3.12.14 (created by uv) & docling 2.139.0 and companions pinned in \code{knowledge/requirements-docling.lock} & Bounded Docling formula and table enrichment (\code{knowledge/README.md} lines 129--131; \code{knowledge/tools/docling_batch.py:113}). \\
+\code{.venv} & absent & -- & Still named as the first \code{kg.sh} candidate and in \code{docs/agents/AGENTS.md} line 10, \code{knowledge/README.md} lines 81 and 155 and \code{knowledge/tools/bank_extraction.py}. No such directory exists in the working tree, so \code{kg.sh} falls through to \code{.venv-jax}; the documented \code{.venv/bin/python} commands fail as written. \\
+\bottomrule
+\end{longtable}}
+
+The CI file \code{.github/workflows/test.yml} reproduces only the first environment, on Python 3.12. Its non-slow job installs \code{.[dev,cad]} and runs \code{pytest}~\code{-m}~\code{"not}~\code{slow"}. Its slow job installs \code{.[dev]} and runs \code{pytest}~\code{-m}~\code{slow}. A separate job installs only numpy, scipy and pytest and runs \code{knowledge/tests}. Matplotlib is forced to the Agg backend in CI (\code{MPLBACKEND:}~\code{Agg}).
+
+% ------------------------------------------------------------------------------
+\section{Working conventions}\label{sec:orient-conventions}
+
+The following conventions are stated in repository files and are assumed by every later chapter.
+
+\subsection{Code wins over documents; PDFs win over both}
+\code{knowledge/AGENTS.md} (§1, corpus authority table) ranks the sources. The PDFs under \code{propulsion_texts/} are ``authoritative''. Generated Markdown derived from them is ``derivative''. Repository documents (\code{docs/}, \code{README.md}) are ``implementation-state authority only, not scientific authority''. The same file says that ``existing code is not scientific authority merely because it exists''. \code{docs/agents/AGENTS.md} (formerly the root \code{AGENTS.md}) repeats the rule: ``The original PDF is the authority; a registry citation or passing software test is not physical validation.'' The README (lines 35--39) routes literature-attributed relations to local sources in \code{propulsion_texts/} and labels repository heuristics as assumptions. The model inventory with validity levels is \code{raosim/model_registry.py}, and every run reports its audit in \code{summary.json} (\code{run_nozzle.py:4967-4974}). This guide applies the same precedence to implementation questions: when a document describes behaviour the code does not have, the code is reported.
+
+\subsection{STATUS heads are the project record}
+Plan and remediation documents carry dated STATUS blockquotes at the top, newest first. The README layout block (line 1342) names \code{docs/program/JAX_DIFFERENTIABLE_PLAN.md} as the project record. Its newest block, ``PHYSICS-COUPLED DESIGN LANDED (2026-06-15)'', heads a stack of about thirty dated blockquotes, newest first; the oldest dated block (2026-06-09, J0--J4 spike) sits at line 489. For later work the record sits in the heads of the stage plans, for example:
+\begin{itemize}
+  \item \code{docs/subsystems/S09-feed-system-and-electric-pumps/PUMP_CAD_IMPLEMENTATION_PLAN.md}: STATUS 2026-07-12. The physics audit calls this head ``the running record'' (\code{docs/audits/REPO_PHYSICS_AUDIT_2026-07-02.md}, line 224).
+  \item \code{docs/subsystems/S06-rao-moc-bvp-contour/MOC_MARCH_TOPOLOGY_REMEDIATION_2026-09-21.md}: STATUS 2026-09-21. Its line 52 states that the later status block supersedes an earlier snapshot.
+  \item \code{docs/program/PHYSICS_FIDELITY_ROADMAP.md}: status head 2026-08-26.
+  \item \code{docs/audits/MDO_ISSUES_AND_WORKFLOW_BLOCKERS_2026-10-16.md}: repair status 2026-10-16.
+\end{itemize}
+The knowledge harvester copies up to twelve lines (at most 1,200 characters) from the first line that starts with \texttt{STATUS} into \code{knowledge/repo_documents.json} (\code{STATUS_HEAD} in \code{knowledge/kg/harvest_repo.py}). The pattern does not allow a leading blockquote marker, so heads written as \texttt{>}~\texttt{**STATUS} blockquotes, such as those of the JAX plan and the pump CAD plan, are stored as empty strings.
+
+\subsection{Numerics changes keep the pairing and oracle tests green}
+\code{docs/program/COMPLETION_PLAN.md} (§12 risk log, item 5, on track F2) and the principles of the MOC remediation plan (§5) set three tests as invariants for any change to the characteristic numerics. \code{tests/test_characteristic_pairing.py} pins the corrected characteristic invariant pairing of 2026-06-11 against two independent oracles. The M3.5Perf oracle suites \code{tests/test_nasa_kernel_march_parity.py} and \code{tests/test_nasa_port.py} compare against the vendored Rice/JHU outputs and are not to be modified. The \code{wall_method="bde"} path is described there as oracle-matched and is likewise not to be touched.
+
+\subsection{The knowledge system}
+\code{knowledge/kg.sh} is the entry point to the local scientific memory. It selects an interpreter (\code{KG_PYTHON}, otherwise the first of \code{.venv}, \code{.venv-jax}, \code{.venv-kg} that exists) and runs \code{python}~\code{-m}~\code{kg}. The startup protocol in \code{knowledge/AGENTS.md} §0 (\code{status}, \code{context}~\code{--task}, \code{model}, \code{equation}, \code{claims}, \code{validity}, \code{basis}, \code{sources}, \code{compare}) applies to any scientifically consequential change. Purely mechanical tasks are exempt. \code{kg.sh}~\code{rebuild} regenerates the derived stores. Repository-document records are keyed by path, so after the documentation move (Appendix~\ref{app:cleanup}) a rebuild is required before document lookups resolve to the new locations. This guide was written without running that rebuild.
+
+\subsection{Units and dialects}
+The flag runner takes SI values (pascals, metres, newtons, kg/s; README lines 961--962) as plain numbers. The job dialect requires explicit units, which \code{raosim/units.py} parses into SI and dimension-checks. Chapter~\ref{ch:s01-s02} documents both dialects.

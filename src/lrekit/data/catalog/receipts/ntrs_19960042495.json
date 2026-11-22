@@ -1,0 +1,69 @@
+{
+  "source_id": "ntrs_19960042495",
+  "acquired_at_utc": "2026-11-04T00:33:23.050390+00:00",
+  "evidence_kind": "published_experimental_report",
+  "status": "ACQUIRED",
+  "files": [
+    {
+      "path": "raw/ntrs_19960042495/ntrs_metadata.json",
+      "bytes": 3609,
+      "sha256": "a5f0657d832fa3dbc3eb9b080c30121324e0832a1b29a84147faf31a4210bfb0",
+      "origin": "publisher_metadata",
+      "requested_url": "https://ntrs.nasa.gov/api/citations/19960042495",
+      "resolved_url": "https://ntrs.nasa.gov/api/citations/19960042495",
+      "headers": {
+        "Content-Type": "application/json; charset=utf-8",
+        "ETag": "W/\"e19-6nKa7hPsr0/GOWphjxhlm7pMmvY\"",
+        "Last-Modified": null
+      }
+    },
+    {
+      "path": "raw/ntrs_19960042495/source.pdf",
+      "bytes": 12845060,
+      "sha256": "993cc9f55e8c53c890d4101ff364796571c038b8a84e786111f2d30c8ac196fc",
+      "origin": "publisher_report_pdf",
+      "requested_url": "https://ntrs.nasa.gov/api/citations/19960042495/downloads/19960042495.pdf",
+      "resolved_url": "https://ntrs.nasa.gov/api/citations/19960042495/downloads/19960042495.pdf",
+      "headers": {
+        "Content-Type": "application/pdf",
+        "ETag": "\"568a34130dcecb8e5cf642288908dec4\"",
+        "Last-Modified": "Thu, 06 Aug 2020 20:30:50 GMT"
+      }
+    },
+    {
+      "path": "derived/ntrs_19960042495/source.txt",
+      "bytes": 99903,
+      "sha256": "4bc41cd779ec0b2f7afab82268ff8f4b1e2da44e9befa5ea0bd7675479fa3750",
+      "origin": "unreviewed_pdf_text_derivative"
+    }
+  ],
+  "review_state": "NOT_REVIEWED_FOR_TRAINING",
+  "training_eligible": false,
+  "hardware_qualified": false,
+  "limitations": [
+    "Hydrogen/oxygen and source-specific geometry; do not transfer to arbitrary propellant or separate thermochemistry from combustion losses without identification."
+  ],
+  "publisher_title": "Experimental performance of a high-area-ratio rocket nozzle at high combustion chamber pressure",
+  "publisher_copyright": {
+    "thirdPartyPermissionsProduced": false,
+    "disclosedToPublic": false,
+    "containsIndication": false,
+    "publisherPermissionOrRightsToDistribute": false,
+    "belongsToUsGov": false,
+    "determinationType": "GOV_PUBLIC_USE_PERMITTED",
+    "thirdPartyContentCondition": "NOT_SET",
+    "belongsToContractor": false,
+    "disclosedInvention": false,
+    "submissionId": 19960042495,
+    "containsThirdPartyMaterial": false,
+    "belongsToPublisher": false,
+    "id": "355b55f3e3914d268c91df34dcf7435e",
+    "belongsToAuthors": false
+  },
+  "publisher_distribution": "PUBLIC",
+  "pdf_info": "Producer:        Adobe Acrobat 9.33 Paper Capture Plug-in\nCreationDate:    Tue Nov  1 12:03:13 2011 EDT\nModDate:         Tue Nov  8 23:50:56 2011 EST\nCustom Metadata: no\nMetadata Stream: yes\nTagged:          no\nUserProperties:  no\nSuspects:        no\nForm:            none\nJavaScript:      no\nPages:           24\nEncrypted:       no\nPage size:       594 x 792 pts\nPage rot:        0\nFile size:       12845060 bytes\nOptimized:       yes\nPDF version:     1.6\n",
+  "text_extraction": {
+    "status": "DERIVATIVE_TEXT_UNREVIEWED",
+    "warning_excerpt": ""
+  }
+}

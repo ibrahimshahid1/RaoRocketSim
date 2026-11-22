@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "primary_plan": {
+    "path": "output/pdf/LREKit_Component_Data_and_Research_Plan.pdf",
+    "sha256": "af2042f1eecbc8cdafe82b18b16f515c8ffd77267654567d219349c5e746fd66",
+    "role": "user_selected_governing_development_plan"
+  },
+  "previous_pintle_plan_role": "pilot_background_only",
+  "snapshot_git_head": "d636d854cd485c6f5f40e61d9360c55f1aed9945",
+  "working_tree_note": "Pre-existing uncommitted scientific/code changes present; snapshots are observations, not an integration baseline.",
+  "training_started": false,
+  "production_integration_started": false
+}

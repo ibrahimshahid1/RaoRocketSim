@@ -1,0 +1,148 @@
+{
+ "packet": "V-SP8089-p017-018",
+ "kind": "verification",
+ "document_id": "DOC_NTRS_19760023196",
+ "source_pdf": "propulsion_texts/19760023196.pdf",
+ "source_sha256": "5e9db6a6f7860ee51acbf5cbe137005ef259ec3fd87ff0ed5f1ad466d6227c44",
+ "pages": [
+  17,
+  18
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 17,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19760023196/p0017.png",
+   "sha256": "f245f52b21b692c1b0ac53fc6798365f4d1d5bd075f20e8a275cfb0bab1b91bd",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 18,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19760023196/p0018.png",
+   "sha256": "fca0cc4029385c8c0c52891ca10b85a1931da8250d676417c68dcf81260e6500",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_22c80cdca5b9dc9c9d854014",
+  "ENR_694b13a88e1403eb2acc1778"
+ ],
+ "candidates": [],
+ "stored_objects": [
+  {
+   "id": "CLM_NTRS_19760023196_9CEE5060",
+   "store": "claims",
+   "type": "Claim",
+   "page": 18,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Nonuniform distributions designed to tailor the amount of propellant within the sensitive region of a particular acoustic mode have been successful in producing stable combustion.",
+   "quote": "Nonuniform distributions designed to tailor the amount of propellants within the sensitive region of a particular acoustic mode have been successful in producing stable combustion.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 18
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_DD72BD63",
+   "store": "claims",
+   "type": "Claim",
+   "page": 17,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Combustion stability has been found to be sensitive to changes in local mixture-ratio and mass distribution; changes in only the elements at baffle-baffle or wall-baffle junctions have significantly changed stability characteristics.",
+   "quote": "Combustion stability has been found fo be sensitive to changes in local mixture-ratio and mass distribution.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 17
+    }
+   ]
+  }
+ ],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00021",
+   "page_start": 17,
+   "page_end": 17,
+   "section": "Used in Major Operational Vehicles (concluded)",
+   "text": "Design of the entire flow-system geometry specifies the spray distributions (i.e., mass, mixture-ratio, and dropsize distributions) and baffle arrangement if needed. Often in the past. design of an injector flow system has been a relatively rudimentary process and frequently has resulted in numerous problems. Techniques now available, even though inadequate in some respects, produce a much improved initial design of the injector flow system."
+  },
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00022",
+   "page_start": 17,
+   "page_end": 17,
+   "section": "2.1.1 Total Element Pattern",
+   "text": "Design of the total element pattern consists of (1) selection of the injection element, including the type and designation of all geometric parameters, (2) arrangement of the elements, including the orientation of an element with respect to the chamber wall and to other elements as well as clement distribution across the injector face, and (3) provision for stabilization devices. such as baffles, acoustic ‘absorbers. and feed-system resistors, that are integral parts of the injector. Proper desien of the total pattern ensures that the propcllants will mix in the desired manner and result in high performance, stable operation. and chamber and injector durability.\n\nThe mixing and propellant dropsize levels that must be achieved within the combustor generally are specified through the use of combustion models. The most comprehensive models available are those developed by the JANNAF Performance Standardization Working Group and described in references 1 and 2. These combustion-model programs, in addition to experimental evidence, have shown that the level of combustion performance is a strong function of the propellant spray distributions (mass, mixture-ratio, and drop size). High combustion efficiency requires a reasonably uniform overall mixture-ratio distribution, initial drap sive consistent with the chamber geometry and operating conditions, and a uniform mass distribution. Low performance results from a poor mixture-ratio distribution or incomplete vaporization. Propellant mixing and atomization are controlled by the total element pattern of the injector."
+  },
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00023",
+   "page_start": 17,
+   "page_end": 17,
+   "section": "2.1.1 Total Element Pattern",
+   "text": "Hardware durability is affected strongly by local mixture-ratio and mass distribution near the injector face or chamber walls and also by the radial and transverse winds* produced by overall mass or mixture-ratio maldistribution. Impingement of highly reactive propellant on the chamber wall can cause catastrophic failure of the chamber as a result of a high rate of chemical reaction or erosion of material. Although high combustion rates are attractive from a performance standpoint, they can produce high heat-transfer rates and damage the chamber. The mixture-ratio and mass distributions of propellant near the chamber walls are controlled by the injector element and its location and orientation on the injector face.\n\nCombustion stability has been found fo be sensitive to changes in local mixture-ratio and mass distribution. Changes in only those elements at the baffle-baffle junction or the\n\n“Flow of pases from regions of high pressure to regions of low pressure."
+  },
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00024",
+   "page_start": 18,
+   "page_end": 18,
+   "section": "2.1.1 Total Element Pattern",
+   "text": "wall-baffle junction have significantly changed the stability characteristics. Nonuniform distributions designed to tailor the amount of propellants within the sensitive region of a particular acoustic mode have been successful in producing stable combustion."
+  },
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00025",
+   "page_start": 18,
+   "page_end": 18,
+   "section": "2.1.1.1 ELEMENT SELECTION",
+   "text": "The choice of the element or elements depends on the application. Tables I and III present comparisions of injector elements that have been used in production engines or have been | extensively studied. Note that some of the elements can be designed for wall compatibility*, | whereas others provide high performance. Note also that considerably more information is available for liquid/liquid injection (table II) than for gas/liquid injection (table III).\n\nParameters that influence element selection are as follows:\n\n- ® Propellants: hypergolic, cryogenic, storable.\n\n- ® Condition of propellants: liquid, gas, gel.\n\n.\n\n- ® Chamber walls: uncooled, ablative, regeneratively cooled.\n\n- © Chamber length: limiting process (mixing or vaporization).\n\n- ® Operating conditions: mixture ratio, chamber pressure.\n\n- ® Throttling requirements.\n\n- © System-pressure-drop limitation.\n\n- e Engine life: restarts, total duration.\n\nAll of the above parameters directly or indirectly affect combustion performance, heat transfer, chamber materials compatibility, or stability. (Some affect more than one.) Each imposes specific demands on the element (e.g., local mixture-ratio and mass gradients or spray drop size). Consideration of the advantages and disadvantages listed in tables II and III suggests that no single element type or design can accomplish everything. (Note that this table does not exhaust element types that have been conceived. Elements listed are restricted to those that have been utilized in production engines or otherwise studied extensively.) If a single element type is selected for the entire injector, then large compromises generally are required. However, when a combination of element types or specific element-type design variations or orientations can be used, then generally the performance, heat-transfer, or stability specifications can be met without compromise.\n\n*Mass and mixture-ratio distribution produced by element does not endanger wall durability or integrity."
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {},
+  "flagged_candidates": 0,
+  "target_objects": 2,
+  "objects_with_anchor_problems": 0
+ }
+}

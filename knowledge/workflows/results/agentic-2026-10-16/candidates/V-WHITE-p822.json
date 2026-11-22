@@ -1,0 +1,267 @@
+{
+ "packet": "V-WHITE-p822",
+ "kind": "verification",
+ "document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+ "source_pdf": "propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf",
+ "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+ "pages": [
+  822,
+  822
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 822,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/p0822.png",
+   "sha256": "b97ed2f7b4787496c69b293a5bab5e185806aae5b8bd9a497ff273bf8fa3e77c",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_92dedf165cb3d85f32832b79"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_183e22d1d329b46a8424e0b4",
+   "kind": "figure",
+   "pages": [
+    822
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 163.6627197265625,
+     "t": 589.337890625,
+     "r": 471.4935607910156,
+     "b": 515.6615905761719,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_92dedf165cb3d85f32832b79",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p822-822-c46547911a14b5fa5768358803bfba341c315e7fa136ec9c0a9bf451db6ccada.json",
+   "raw_sha256": "55ee0444db8f1ee3bfed95c00db0d64541166f37c623ff41252091431674fc19",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_dbe6e535d711553328500062",
+   "kind": "figure",
+   "pages": [
+    822
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/1",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 93.36235809326172,
+     "t": 313.3202209472656,
+     "r": 346.43487548828125,
+     "b": 264.90972900390625,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_92dedf165cb3d85f32832b79",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p822-822-c46547911a14b5fa5768358803bfba341c315e7fa136ec9c0a9bf451db6ccada.json",
+   "raw_sha256": "55ee0444db8f1ee3bfed95c00db0d64541166f37c623ff41252091431674fc19",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [
+  {
+   "id": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_717AA556",
+   "store": "claims",
+   "type": "Claim",
+   "page": 822,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The turbulent flow formula for flat-plate boundary layer thickness applies for Re_x greater than approximately 10^6.",
+   "quote": "plate surface. The turbulent flow formula applies for Re _x_ greater than",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 822
+    }
+   ]
+  },
+  {
+   "id": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_7BBFB1F5",
+   "store": "claims",
+   "type": "Claim",
+   "page": 822,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Flat-plate boundary layers are so thin that their displacement effect on the outer inviscid layer is negligible, so the pressure distribution can be computed from inviscid theory.",
+   "quote": "boundary layers are so thin that their displacement effect on the outer inviscid",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 822
+    }
+   ]
+  },
+  {
+   "id": "ASM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_1B654D28",
+   "store": "entities",
+   "type": "Assumption",
+   "page": 822,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "Boundary-layer displacement effect on the outer inviscid flow is negligible, so the external pressure field is computed from inviscid theory.",
+   "equation_number": null,
+   "form": null,
+   "statement": "Boundary-layer displacement effect on the outer inviscid flow is negligible, so the external pressure field is computed from inviscid theory.",
+   "quote": "boundary layers are so thin that their displacement effect on the outer inviscid",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 822
+    }
+   ]
+  },
+  {
+   "id": "CONST_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_AF3FA7F7",
+   "store": "entities",
+   "type": "EmpiricalConstant",
+   "page": 822,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "Reynolds number threshold for turbulent flat-plate formula = approximately 1e6 dimensionless",
+   "equation_number": null,
+   "form": null,
+   "statement": null,
+   "quote": "plate surface. The turbulent flow formula applies for Re _x_ greater than",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 822
+    }
+   ]
+  },
+  {
+   "id": "VAL_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_303808E6",
+   "store": "validity",
+   "type": "ValidityEnvelope",
+   "page": 822,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The turbulent flat-plate formula applies for Re_x greater than approximately 10^6.",
+   "quote": "plate surface. The turbulent flow formula applies for Re _x_ greater than",
+   "confidence": null,
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 822
+    }
+   ]
+  }
+ ],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01099",
+   "page_start": 822,
+   "page_end": 822,
+   "section": "**7.1 Reynolds Number and Geometry Effects**",
+   "text": "A high-Reynolds-number flow (Fig. 7.1 _b_ ) is much more amenable to\nboundary layer patching, as first pointed out by Prandtl in 1904. The viscous\nlayers, either laminar or turbulent, are very thin, thinner even than the drawing\nshows. We define the boundary layer thickness _δ_ as the locus of points where the\nvelocity _u_ parallel to the plate reaches 99 percent of the external velocity _U_ . As\nwe shall see in Sec. 7.4, the accepted formulas for flat-plate flow, and their\napproximate ranges, are\n\nwhere Re _x_ = _Ux_ / _ν_ is called the _local Reynolds number_ of the flow along the\nplate surface. The turbulent flow formula applies for Re _x_ greater than\napproximately 10 <sup>6</sup> .\n\nSome computed values from Eq. (7.1) are\nThe blanks indicate that the formula is not applicable. In all cases these\nboundary layers are so thin that their displacement effect on the outer inviscid\nlayer is negligible. Thus the pressure distribution along the plate can be\ncomputed from inviscid theory as if the boundary layer were not even there. This\nexternal pressure field then “drives” the boundary layer flow, acting as a forcing\nfunction in the momentum equation along the surface. We shall explain this\nboundary layer theory in Secs. 7.4 and 7.5.\n\nFor slender bodies, such as plates and airfoils parallel to the oncoming\nstream, we conclude that this assumption of negligible interaction between the\nboundary layer and the outer pressure distribution is an excellent approximation."
+  },
+  {
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01100",
+   "page_start": 822,
+   "page_end": 822,
+   "section": "**7.1 Reynolds Number and Geometry Effects**",
+   "text": "For a blunt-body flow, however, even at very high Reynolds numbers, there\nis a discrepancy in the viscous–inviscid patching concept. Figure 7.2 shows two\nsketches of flow past a two-or three-dimensional blunt body. In the idealized\nsketch (7.2 _a_ ), there is a thin film of boundary layer about the body and a narrow\nsheet of viscous wake in the rear. The patching theory would be glorious for this\npicture, but it is false. In the actual flow (Fig. 7.2 _b_ ), the boundary layer is thin on\nthe front, or windward, side of the body, where the pressure decreases along the\nsurface ( _favorable_ pressure gradient). But in the rear the boundary layer"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "figure": 2
+  },
+  "flagged_candidates": 0,
+  "target_objects": 2,
+  "objects_with_anchor_problems": 0
+ }
+}

@@ -1,0 +1,509 @@
+{
+  "scope": "Thermodynamics/transonic/startline phase audit after nine-PDF ingestion gate",
+  "status": "COMPLETED_BOUNDED_REVIEW",
+  "findings": [
+    {
+      "id": "TS-01",
+      "severity": "P1",
+      "classification": "MISSING_ACCEPTANCE_EVIDENCE",
+      "title": "T1 needs a separate error gate for approximate transonic starting data",
+      "plan_locations": [
+        {
+          "path": "docs/subsystems/S06-rao-moc-bvp-contour/moc_extensions_plan_2026-11-21/sections/03_g1.tex",
+          "lines": [
+            57,
+            63
+          ]
+        },
+        {
+          "path": "docs/subsystems/S06-rao-moc-bvp-contour/moc_extensions_plan_2026-11-21/sections/03_g1.tex",
+          "lines": [
+            123,
+            124
+          ]
+        }
+      ],
+      "code_locations": [
+        {
+          "path": "src/lrekit/components/nozzle/solvers/transonic.py",
+          "lines": [
+            164,
+            239
+          ],
+          "original_review_path": "raosim/transonic_kernel.py",
+          "sha256": "41036fb81a406a2a04355acb6b1aacfbf080b444fd76d0d4f462c94e23277d46",
+          "intermediate_review_path": "src/raosim/components/nozzle/solvers/transonic.py"
+        }
+      ],
+      "claim": "A frozen variable-cp characteristic march can be admitted after KL at gamma* and comparison with zoned Sauer, source-flow order, and downstream mass conservation.",
+      "evidence": [
+        {
+          "title": "Engineering and Programming Manual: Two-Dimensional Kinetic Reference Computer Program (TDK)",
+          "authors": "G. R. Nickerson, L. D. Dang, D. E. Coats",
+          "year": 1985,
+          "report": "NASA CR-178628; NTRS19860007470",
+          "pdf": "builds/moc_extensions_plan_2026-11-21/scout1_thermo/downloads/19860007470.pdf",
+          "pdf_pages": [
+            41,
+            42
+          ],
+          "printed_pages": [
+            "2-19",
+            "2-20"
+          ],
+          "section": "2.4.3 Transonic Analysis",
+          "quote": "With the above assumptions equations 2.3-1 through 2.3-11 reduce to the equations governing the irrotational flow of a perfect gas.",
+          "visual_check": true
+        },
+        {
+          "title": "Transonic Flow in Small Throat Radius of Curvature Nozzles",
+          "doi": "10.2514/3.5355",
+          "pdf": "propulsion_texts/kliegel1969.pdf",
+          "pdf_pages": [
+            2
+          ],
+          "printed_pages": [
+            1376
+          ],
+          "section": "Perturbation formulation",
+          "quote": "small perturbation transonic solution for irrotational, perfect gas flow",
+          "visual_check": true
+        }
+      ],
+      "rationale": "KL(gamma*) and zoned Sauer are approximate perfect-gas-based initializations. Their mutual agreement, a downstream exact-oracle convergence rate, or conservation of their input mass flux does not bound variable-cp transonic initialization bias. The extension plan itself says the Levine-Coats small-change estimate excludes cp(T); T1 acceptance does not close this acknowledged dependency. This is an admission-evidence gap, not proof that gamma* initialization is inaccurate for every case.",
+      "correction": "Split T1 into consistent smooth-core verification and start-data admission. Require matched variable-cp transonic Euler/reference comparisons of sonic surface, initial p,T,V, mass flux and downstream functionals, with independent start-location/series/property-grid refinement and a declared initialization-error budget. Until then mark KL(gamma*) provisional and restrict its calibrated domain.",
+      "confidence": "high"
+    },
+    {
+      "id": "TS-02",
+      "severity": "P2",
+      "classification": "DOCUMENT_EQUATION_NORMALIZATION_AMBIGUITY",
+      "title": "Restore TDK nondimensional coordinates before using its chemistry source",
+      "plan_locations": [
+        {
+          "path": "docs/subsystems/S06-rao-moc-bvp-contour/moc_extensions_plan_2026-11-21/sections/03_g1.tex",
+          "lines": [
+            46,
+            55
+          ]
+        }
+      ],
+      "code_locations": [
+        {
+          "path": "src/lrekit/components/nozzle/solvers/moc.py",
+          "lines": [
+            75,
+            84
+          ],
+          "original_review_path": "raosim/moc.py",
+          "sha256": "54805bc2acbdf82ab6d0a21ec93863578d22cbbb92de5f2597d899bfdef9634b",
+          "intermediate_review_path": "src/raosim/components/nozzle/solvers/moc.py"
+        }
+      ],
+      "claim": "The printed TDK source A and species equations use x in the same notation as the dimensional flow geometry.",
+      "evidence": [
+        {
+          "title": "TDK Engineering and Programming Manual",
+          "report": "NASA CR-178628",
+          "pdf": "builds/moc_extensions_plan_2026-11-21/scout1_thermo/downloads/19860007470.pdf",
+          "pdf_pages": [
+            37,
+            54,
+            55
+          ],
+          "printed_pages": [
+            "2-15",
+            "2-32",
+            "2-33"
+          ],
+          "section": "2.3 and 2.5",
+          "quote": "where the coordinates (r,x) have been normalized with the throat radius.",
+          "visual_check": true
+        }
+      ],
+      "rationale": "TDK keeps dimensional production rates and inserts r* because xhat=x/r*. The plan retains r* in A and dci but omits the coordinate normalization. A is dimensionless; multiplying it by dimensional dx would be inconsistent. The neighboring smooth characteristic source has units 1/length. No finite-rate production implementation was identified, so this is a specification ambiguity with a concrete scale-factor failure mode.",
+      "correction": "Write xhat=x/r*, rhat=r/r* explicitly and keep the TDK normalized set throughout; or use dimensional x and remove r* from A and the species transport coefficient. Add a scale-invariance/dimensional-units check to T3.",
+      "confidence": "high"
+    },
+    {
+      "id": "TS-03",
+      "severity": "P2",
+      "classification": "ACCEPTANCE_SPECIFICATION_AMBIGUITY",
+      "title": "Distinguish thermodynamic smoothing from legacy parity",
+      "plan_locations": [
+        {
+          "path": "docs/subsystems/S06-rao-moc-bvp-contour/moc_extensions_plan_2026-11-21/sections/03_g1.tex",
+          "lines": [
+            115,
+            124
+          ]
+        }
+      ],
+      "code_locations": [
+        {
+          "path": "src/lrekit/thermochemistry/frozen_flow.py",
+          "lines": [
+            385,
+            421
+          ],
+          "original_review_path": "raosim/frozen_flow.py",
+          "sha256": "ecf874d2df2c73b7c7a84a8b9c16126a58d6d75d7caac75c48634787acd28c24",
+          "intermediate_review_path": "src/raosim/thermochemistry/frozen_flow.py"
+        }
+      ],
+      "claim": "T0 needs a shape-preserving C1 cp table while frozen Q1D stations agree to 1e-9; T1 also reduces bitwise to constant gamma.",
+      "evidence": [
+        {
+          "title": "Current implementation",
+          "pdf": null,
+          "section": "FrozenIdealGasTable._segment, enthalpy_change, standard_entropy_change",
+          "quote": "Return h(to)-h(from) = integral(cp dT) exactly per segment.",
+          "visual_check": false
+        },
+        {
+          "title": "Implementation counterexample (project calculation, not literature data)",
+          "artifact": "builds/moc_cfd_literature_audit_2026-11-21/cp_regularization_counterexample.json",
+          "relative_enthalpy_change": 0.007092198581560243
+        }
+      ],
+      "rationale": "The existing piecewise-linear cp is a thermodynamically consistent representation; h and s are already C1 when cp is continuous. Smoothing cp across its knots can be useful for higher derivatives but changes the constitutive approximation. PCHIP through cp=[1000,1200,1300] at T=[300,500,700] changes integral h from470000 to473333.333 J/kg. Thus tight legacy parity is not guaranteed merely by keeping the nodes. Bitwise parity of an interpolated/integrated branch with an analytic closed form likewise needs explicit dispatch; physics only requires a controlled limiting agreement.",
+      "correction": "Specify which quantities need which derivative orders. Preserve the legacy piecewise-linear adapter for exact parity; identify a smoother backend as a separate property representation, derive h,s from it, and assess its error against the same EOS or a refined property reference. Require bitwise parity only for an explicit analytic constant-cp dispatch; otherwise declare numerical tolerance and property-grid/quadrature convergence.",
+      "confidence": "high"
+    },
+    {
+      "id": "TS-04",
+      "severity": "P2",
+      "classification": "INCOMPLETE_ACCEPTANCE_DEFINITION",
+      "title": "Define the finite-rate equilibrium-limit test as a singular relaxation limit",
+      "plan_locations": [
+        {
+          "path": "docs/subsystems/S06-rao-moc-bvp-contour/moc_extensions_plan_2026-11-21/sections/03_g1.tex",
+          "lines": [
+            36,
+            40
+          ]
+        },
+        {
+          "path": "docs/subsystems/S06-rao-moc-bvp-contour/moc_extensions_plan_2026-11-21/sections/03_g1.tex",
+          "lines": [
+            125,
+            126
+          ]
+        }
+      ],
+      "code_locations": [],
+      "claim": "T3 acceptance includes an unspecified equilibrium trend.",
+      "evidence": [
+        {
+          "title": "Characteristics of the equations of motion of a reacting gas",
+          "authors": "L. J. F. Broer",
+          "year": 1958,
+          "doi": "10.1017/S0022112058000434",
+          "pdf": "propulsion_texts/broer1958.pdf",
+          "pdf_pages": [
+            1,
+            5,
+            6
+          ],
+          "printed_pages": [
+            276,
+            280,
+            281
+          ],
+          "section": "5. Motion near equilibrium state",
+          "quote": "One could conjecture that the characteristic speeds would in some way change continuously ... but this appears not to be true.",
+          "visual_check": true
+        }
+      ],
+      "rationale": "Broer distinguishes convergence of resolved flow toward equilibrium from the characteristic speeds of the unreduced finite-rate PDE. For every finite rate the characteristics remain frozen; the exact-equilibrium reduced equations have equilibrium speeds. The plan states the frozen result correctly, but leaves its equilibrium acceptance and refinement order undefined. Requiring frozen characteristic angles to converge to equilibrium angles would be wrong. No existing implementation defect is asserted.",
+      "correction": "Define separate tests for finite-rate frozen eigenvalues, relaxation conservation and resolved/macroscopic equilibrium convergence as rate and spatial/source-step resolution change. State the limiting variables, boundary data, order of limits and supported acoustic modes. Retain chemistry stiffness/error diagnostics.",
+      "confidence": "high"
+    },
+    {
+      "id": "TS-05",
+      "severity": "P3",
+      "classification": "DERIVATION_QUALIFICATION",
+      "title": "Apply CD<=1 at the geometric throat and bind curved-start flux to it",
+      "plan_locations": [
+        {
+          "path": "docs/subsystems/S06-rao-moc-bvp-contour/moc_extensions_plan_2026-11-21/sections/04_kl.tex",
+          "lines": [
+            32,
+            34
+          ]
+        },
+        {
+          "path": "docs/subsystems/S06-rao-moc-bvp-contour/moc_extensions_plan_2026-11-21/sections/04_kl.tex",
+          "lines": [
+            65,
+            66
+          ]
+        }
+      ],
+      "code_locations": [
+        {
+          "path": "tests/experiments/nozzle/moc_ext_e09b_startline_review.py",
+          "lines": [
+            135,
+            140
+          ],
+          "original_review_path": "scripts/moc_ext_e09b_startline_review.py",
+          "sha256": "d5a9364eb852cc0a8e50379a4719ac9d7921b34b5e68d120194133265b8e6fe9",
+          "intermediate_review_path": "tests/experiments/nozzle/moc_ext_e09b_startline_review.py"
+        },
+        {
+          "path": "src/lrekit/components/nozzle/solvers/nasa.py",
+          "lines": [
+            1776,
+            1842
+          ],
+          "original_review_path": "raosim/nasa_moc.py",
+          "sha256": "1fffcebd6a3bc1ef0e9075ba2fea27cb504ed51cc19e06a4bab9c61418071bb4",
+          "intermediate_review_path": "src/raosim/components/nozzle/solvers/nasa.py"
+        }
+      ],
+      "claim": "The pointwise area-Mach relation directly proves that any start-line coefficient above one indicates a defect.",
+      "evidence": [
+        {
+          "title": "Transonic Flow in Small Throat Radius of Curvature Nozzles",
+          "doi": "10.2514/3.5355",
+          "pdf": "propulsion_texts/kliegel1969.pdf",
+          "pdf_pages": [
+            3,
+            4
+          ],
+          "printed_pages": [
+            1377,
+            1378
+          ],
+          "section": "Eq14 and Appendix A7",
+          "quote": "The ratio of the mass flow through the nozzle to the one-dimensional mass flow (discharge coefficient)",
+          "visual_check": true
+        }
+      ],
+      "rationale": "The physical upper bound holds for matched uniform stagnation conditions and the same minimum throat area: at the throat rho*u_n<=rho*|V|<=rho_star*a_star, then integrate over At. A curved C-minus surface has a different area, so its equality to throat mass flux additionally requires a closed steady mass balance, oriented flux, correct normalization and controlled quadrature/series error. calc_massflow_along_rrc sums absolute segment contributions. Its scalar value alone does not establish that control-volume equivalence. Independent source sign and normalization evidence still establishes the production defects; this caveat does not rescue them. Eq14 at gamma1.23,R1.5 gives CD=0.99442694, consistent with V3 about0.9944.",
+      "correction": "Use the throat-normal flux proof and list assumptions. Compare source Eq14, a throat-plane integral and signed curved-start flux under refinement, with a numerical allowance. Describe CD>1 as a mass-flux consistency failure pending attribution rather than a proof identifying an individual series coefficient.",
+      "confidence": "high"
+    }
+  ],
+  "reviewed_claims_that_hold": [
+    {
+      "claim": "Axisymmetric v3 z*r^3 coefficient is negative; production positive sign is a real discrepancy.",
+      "basis": "Kliegel1969 PDFp4 A6 visually checked; src/lrekit/components/nozzle/solvers/transonic.py:88 has positive sign."
+    },
+    {
+      "claim": "The KL velocity magnitude is critical-speed Mach M*, not local Mach M.",
+      "basis": "Kliegel1969 PDFp2 sonic-normalized velocities; Hall1962 PDFp2 printed488 explicitly qbar=q/a* visually checked; TDK1985 PDFp42 explicitly u/a*,v/a*. The constant-gamma energy relation gives the plan M*/M conversion."
+    },
+    {
+      "claim": "Hall original is not an independent uncorrected gold table for all axisymmetric third-order coefficients.",
+      "basis": "Kliegel1969 PDFp4 expressly reports errors in Hall third-order velocity and discharge terms and supplies corrected appendix."
+    },
+    {
+      "claim": "A thermodynamically consistent isentrope-based generalized turning function is the proper smooth frozen-gas extension; local gamma substitution into constant-gamma nu is unsupported.",
+      "basis": "Anderson PDF186 printed170 Eqs4.35\u20134.40 visually checked: general geometry relation followed by a calorically perfect specialization. NACA1135/Guentert references additionally routed through plan/build-source text. No new numerical claim beyond existing experiments was rerun."
+    },
+    {
+      "claim": "Finite-rate characteristics use frozen sound speed; exact-equilibrium reduced equations require equilibrium acoustic derivatives.",
+      "basis": "Broer1958 PDF1,5,6 visually checked."
+    },
+    {
+      "claim": "X0 correctly leaves the untested BVP _source_axisym axis-limit path open.",
+      "basis": "Plan08_verification explicitly distinguishes tested forward axis and solve_axis_point paths from residual path; no fabricated closure."
+    },
+    {
+      "claim": "G0 needs explicit length conventions and a source-qualified LEA benchmark.",
+      "basis": "Current src/lrekit/optimization/grid.py:381 uses sharp cone while host path changed; plan09_geometry_arch:23\u201331 honestly labels xmn interpretation as inferred. Approval of inferred geometry cannot make it an independently established physical benchmark."
+    }
+  ],
+  "source_searches": [
+    "knowledge/kg.sh --json context --task Transonic starting line Hall Kliegel Levine Broer reacting gas frozen equilibrium speed variable gas Prandtl Meyer",
+    "knowledge/kg.sh --json compare transonic throat Kliegel Hall",
+    "knowledge/manifest.json identity search across corpus and new9",
+    "Corpus search for TDK/Sivells/Levine/Guentert; key cited sources found in build-stage scout downloads rather than canonical propulsion_texts"
+  ],
+  "evidence_artifacts": [
+    "builds/moc_cfd_literature_audit_2026-11-21/thermo_kg_context.json",
+    "builds/moc_cfd_literature_audit_2026-11-21/thermo_kg_compare.json",
+    "builds/moc_cfd_literature_audit_2026-11-21/page_checks/",
+    "builds/moc_cfd_literature_audit_2026-11-21/cp_regularization_counterexample.json"
+  ],
+  "limits": [
+    "No production models/defaults or KG stores edited by this reviewer.",
+    "No expensive BVP re-solve or new physical validation.",
+    "Counterexample is a completed diagnostic calculation, not a dataset or production test.",
+    "T1,T3 findings concern acceptance/specification gaps; no claim that an unimplemented method demonstrably fails."
+  ],
+  "locator_snapshot": {
+    "refreshed_at_utc": "2026-11-21T23:19:06.526374+00:00",
+    "note": "Final canonical package is src/lrekit; src/raosim is a compatibility shim. Read docs/architecture/relocations_2026-11-21.json and re-verified symbols/line ranges. Scientific findings unchanged; historical plan references retain their original spelling. Current reviewed numerical expressions remain as observed; eleven affected functions also have identical normalized AST to pre-refactor git HEAD after stripping imports/docstrings. Whole-file byte equivalence is not claimed. No solve run.",
+    "relocations_map": "docs/architecture/relocations_2026-11-21.json",
+    "relocations_map_sha256": "a8c547c4e2bd6a7d7dd975bfc2221ad6504d79f1ee8a8d61cc4dc293b4f368df",
+    "files": [
+      {
+        "path": "src/lrekit/components/nozzle/solvers/transonic.py",
+        "previous_path": "raosim/transonic_kernel.py",
+        "intermediate_path": "src/raosim/components/nozzle/solvers/transonic.py",
+        "sha256": "41036fb81a406a2a04355acb6b1aacfbf080b444fd76d0d4f462c94e23277d46"
+      },
+      {
+        "path": "src/lrekit/components/nozzle/solvers/moc.py",
+        "previous_path": "raosim/moc.py",
+        "intermediate_path": "src/raosim/components/nozzle/solvers/moc.py",
+        "sha256": "54805bc2acbdf82ab6d0a21ec93863578d22cbbb92de5f2597d899bfdef9634b"
+      },
+      {
+        "path": "src/lrekit/thermochemistry/frozen_flow.py",
+        "previous_path": "raosim/frozen_flow.py",
+        "intermediate_path": "src/raosim/thermochemistry/frozen_flow.py",
+        "sha256": "ecf874d2df2c73b7c7a84a8b9c16126a58d6d75d7caac75c48634787acd28c24"
+      },
+      {
+        "path": "src/lrekit/components/nozzle/solvers/nasa.py",
+        "previous_path": "raosim/nasa_moc.py",
+        "intermediate_path": "src/raosim/components/nozzle/solvers/nasa.py",
+        "sha256": "1fffcebd6a3bc1ef0e9075ba2fea27cb504ed51cc19e06a4bab9c61418071bb4"
+      },
+      {
+        "path": "tests/experiments/nozzle/moc_ext_e09b_startline_review.py",
+        "previous_path": "scripts/moc_ext_e09b_startline_review.py",
+        "intermediate_path": "tests/experiments/nozzle/moc_ext_e09b_startline_review.py",
+        "sha256": "d5a9364eb852cc0a8e50379a4719ac9d7921b34b5e68d120194133265b8e6fe9"
+      },
+      {
+        "path": "src/lrekit/optimization/grid.py",
+        "previous_path": "raosim/mdo/grid.py",
+        "intermediate_path": "src/raosim/optimization/grid.py",
+        "sha256": "f158c21f0067dd7b8fe8c32bc1d4788ac849905ea60ca7924c7a78d178e156bb"
+      }
+    ],
+    "equation_preservation_checks": [
+      {
+        "path": "src/lrekit/components/nozzle/solvers/transonic.py",
+        "symbol": "_kl_axi_coeffs",
+        "line": 36,
+        "comparison": "AST versus git HEAD:raosim/transonic_kernel.py after stripping imports/docstrings only",
+        "equal": true,
+        "current_normalized_ast_sha256": "f05bb1deea319eb1968288bfcfb268005223419fb7e070f40c822950793b8a68"
+      },
+      {
+        "path": "src/lrekit/components/nozzle/solvers/transonic.py",
+        "symbol": "_kl_twod_coeffs",
+        "line": 100,
+        "comparison": "AST versus git HEAD:raosim/transonic_kernel.py after stripping imports/docstrings only",
+        "equal": true,
+        "current_normalized_ast_sha256": "491e4c568faf5e8403c89c4354ad1bd79b9238b3fc00e5e116563b7b4d294065"
+      },
+      {
+        "path": "src/lrekit/components/nozzle/solvers/transonic.py",
+        "symbol": "kliegel_levine",
+        "line": 164,
+        "comparison": "AST versus git HEAD:raosim/transonic_kernel.py after stripping imports/docstrings only",
+        "equal": true,
+        "current_normalized_ast_sha256": "cb44fe1730ef90f266579374dddb27ed67ced6653baf5b68b4798624c82f4224"
+      },
+      {
+        "path": "src/lrekit/components/nozzle/solvers/nasa.py",
+        "symbol": "calc_massflow_along_rrc",
+        "line": 1776,
+        "comparison": "AST versus git HEAD:raosim/nasa_moc.py after stripping imports/docstrings only",
+        "equal": true,
+        "current_normalized_ast_sha256": "0409f86cb9478b0c36ebfe1167e373dad2a758506e5a87fc44abc2197f5e2dfa"
+      },
+      {
+        "path": "src/lrekit/thermochemistry/frozen_flow.py",
+        "symbol": "_segment",
+        "line": 385,
+        "comparison": "AST versus git HEAD:raosim/frozen_flow.py after stripping imports/docstrings only",
+        "equal": true,
+        "current_normalized_ast_sha256": "bcbfde67fc1354ed9057b9421de742bbbf3d25d653fc11671f5315bda86c5627"
+      },
+      {
+        "path": "src/lrekit/thermochemistry/frozen_flow.py",
+        "symbol": "cp",
+        "line": 399,
+        "comparison": "AST versus git HEAD:raosim/frozen_flow.py after stripping imports/docstrings only",
+        "equal": true,
+        "current_normalized_ast_sha256": "0ab7a20c00cab66640c87e6468145f5ba82a264f461ed1777fa600b7587a4ee2"
+      },
+      {
+        "path": "src/lrekit/thermochemistry/frozen_flow.py",
+        "symbol": "cv",
+        "line": 404,
+        "comparison": "AST versus git HEAD:raosim/frozen_flow.py after stripping imports/docstrings only",
+        "equal": true,
+        "current_normalized_ast_sha256": "7bce471f297a02fba62dad42468ef65c0501c8c61e20f8f12915204b60d14dbf"
+      },
+      {
+        "path": "src/lrekit/thermochemistry/frozen_flow.py",
+        "symbol": "gamma",
+        "line": 407,
+        "comparison": "AST versus git HEAD:raosim/frozen_flow.py after stripping imports/docstrings only",
+        "equal": true,
+        "current_normalized_ast_sha256": "e9b03c7e81d3bf39cc45c288bbf34c91cafdf996be2e7db4d9a66bc4a5eeb633"
+      },
+      {
+        "path": "src/lrekit/thermochemistry/frozen_flow.py",
+        "symbol": "enthalpy_change",
+        "line": 411,
+        "comparison": "AST versus git HEAD:raosim/frozen_flow.py after stripping imports/docstrings only",
+        "equal": true,
+        "current_normalized_ast_sha256": "f21773961eec7f37b3d8804a4d84a14118d011b894a2fd17cadac900da5b3ad7"
+      },
+      {
+        "path": "src/lrekit/thermochemistry/frozen_flow.py",
+        "symbol": "standard_entropy_change",
+        "line": 416,
+        "comparison": "AST versus git HEAD:raosim/frozen_flow.py after stripping imports/docstrings only",
+        "equal": true,
+        "current_normalized_ast_sha256": "d3d7fccc597e9ad8d55ee45bf63ef82587c357dd1ebbdcd4324671fcdd4590c4"
+      },
+      {
+        "path": "src/lrekit/thermochemistry/frozen_flow.py",
+        "symbol": "_integral",
+        "line": 423,
+        "comparison": "AST versus git HEAD:raosim/frozen_flow.py after stripping imports/docstrings only",
+        "equal": true,
+        "current_normalized_ast_sha256": "c2764c40988a1f7e4942d9c15af4b7d532716b80a6056f8e2af6b005c71d033a"
+      }
+    ]
+  },
+  "locator_snapshot_history": [
+    {
+      "refreshed_at_utc": "2026-11-21T19:35:11.619756+00:00",
+      "note": "A concurrent repository reorganization moved source modules and experiment scripts after scientific review. Code paths and line ranges were re-verified against current symbols; findings are unchanged. Original plan paths remain historical document references, not current-code locators. No solve was run.",
+      "files": [
+        {
+          "path": "src/raosim/components/nozzle/solvers/transonic.py",
+          "previous_path": "raosim/transonic_kernel.py",
+          "sha256": "523735a7fa7e70bd0e3ab3c7234d354b402fa2c0df63ac8f7bb2f5a7a6aa1ea7"
+        },
+        {
+          "path": "src/raosim/components/nozzle/solvers/moc.py",
+          "previous_path": "raosim/moc.py",
+          "sha256": "dc3d656c2ce46b58c4674d10bf79dd4d049f0dd0b680ccd59f94bbf5ae2f20da"
+        },
+        {
+          "path": "src/raosim/thermochemistry/frozen_flow.py",
+          "previous_path": "raosim/frozen_flow.py",
+          "sha256": "ecf874d2df2c73b7c7a84a8b9c16126a58d6d75d7caac75c48634787acd28c24"
+        },
+        {
+          "path": "src/raosim/components/nozzle/solvers/nasa.py",
+          "previous_path": "raosim/nasa_moc.py",
+          "sha256": "7a6a15749ab87fc4ce49f66ff2d66e98b917b6653707393a836af08772080386"
+        },
+        {
+          "path": "tests/experiments/nozzle/moc_ext_e09b_startline_review.py",
+          "previous_path": "scripts/moc_ext_e09b_startline_review.py",
+          "sha256": "e5063e62b3a3500282decd6ecdfd12640949e3757d0ec05daea5f502cd429ef4"
+        },
+        {
+          "path": "src/raosim/optimization/grid.py",
+          "previous_path": "raosim/mdo/grid.py",
+          "sha256": "6903af09ec0d3c9b9732bf9d2d28c0a656035523dac1ba5166b11c0ff32bc896"
+        }
+      ]
+    }
+  ]
+}

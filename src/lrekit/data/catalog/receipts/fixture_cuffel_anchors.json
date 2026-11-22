@@ -1,0 +1,21 @@
+{
+  "source_id": "fixture_cuffel_anchors",
+  "acquired_at_utc": "2026-11-04T00:34:48.906642+00:00",
+  "evidence_kind": "rounded_abstract_anchor_fixture",
+  "status": "ACQUIRED",
+  "files": [
+    {
+      "path": "raw/fixture_cuffel_anchors/raosim/benchmark_data/cuffel_back_massier_1969.json",
+      "bytes": 887,
+      "sha256": "32baeca538fa3d0a295d419706a14fdca1d7a5858905ae22c3c43430f3ca35db",
+      "origin": "existing_repository_fixture",
+      "original_path": "raosim/benchmark_data/cuffel_back_massier_1969.json"
+    }
+  ],
+  "review_state": "EXISTING_FIXTURE_IMPORTED_NOT_REVALIDATED",
+  "training_eligible": false,
+  "hardware_qualified": false,
+  "limitations": [
+    "Two rounded abstract anchors and project tolerances; not a full source-resolved profile."
+  ]
+}

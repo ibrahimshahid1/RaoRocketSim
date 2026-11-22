@@ -1,0 +1,238 @@
+\chapter{Documentation Inventory}\label{ch:docs-inventory}
+
+\lead{What this appendix lists}
+This appendix lists every file that was in \code{docs/} immediately before the cleanup of 5 November 2026, where it is now, and what it is. That is 73 files: 69 directly in \code{docs/} (including \code{requirements.txt}) and four in \code{docs/audit_work/}. Four of the 69 (\code{AGENTS.md}, \code{TEST_PROMPT.md}, \code{Rocket_nozzle_sim_phase2.py} and \code{deep-research-report.md}) are recorded at the repository root in \code{HEAD}; they had been placed in \code{docs/} earlier the same day (Appendix~\ref{app:cleanup}). Every file kept its name; only its folder changed. A reader holding an old path \code{docs/<NAME>} can therefore find the file by name in Table~\ref{tab:inv}.
+
+\lead{Sources}
+The old-to-new paths come from the path map written by the reorganization script. The type, status and primary stage of each document come from the per-document triage records produced during the cleanup. Both were working files of the cleanup session and are not kept in the repository. The one-line summaries condense the triage summaries. On 9 November 2026 every row was checked again without those files. Its old location was compared with the files tracked in \code{HEAD} (72 files; the 73rd, \code{COMPONENT_DATA_AND_MULTIFIDELITY_PLAN_2026-11-03.md}, was untracked) and its new location with the working tree. The identifiers, counts and dates quoted in its summary were compared with the document itself. Where a summary states a fact about code (a module name, a constant, a line), that fact was re-read in the working tree. Six summaries were corrected in that pass (Section~\ref{sec:inv-notes}). The Markdown indexes in \code{docs/README.md}, \code{docs/subsystems/README.md} and the \code{README.md} of each top-level \code{docs/} folder carry the same rows, so the appendix and those indexes agree row for row.
+
+% ------------------------------------------------------------------------------
+\section{How to read the inventory}\label{sec:inv-read}
+
+Each row of Table~\ref{tab:inv} gives the file name under its new folder, its location before the move, its document type and status, its primary pipeline stage and a one-line summary. Status uses the four values of the triage:
+
+{\small
+\noindent\begin{tabularx}{\linewidth}{@{}P{3.0cm}Y@{}}
+\toprule
+Status & Meaning \\
+\midrule
+active & Current reference, or a plan whose work is still open. It may contain dated sections, and its numbers can lag the code. \\
+historical record & A dated snapshot kept for traceability. Its counts, test totals and statuses are true only as of its date. \\
+superseded & Replaced by a named later document. \\
+stub & An empty file, or data without provenance that nothing reads. \\
+\bottomrule
+\end{tabularx}}
+
+The types are, by frequency: subsystem basis (16), audit (11), plan (10), roadmap (6), data (5), architecture (4), remediation record (4), agent prompt (3), literature request (3), provenance (3), guide (2), host evidence (2), legacy (2), literature inventory (2). The stage column gives the triage's primary stage: \stagetag{S01} to \stagetag{S14} for a pipeline stage (Chapter~\ref{ch:cli-dataflow}), ``cross'' for a document that spans stages, and ``--'' where the triage recorded none. Three documents in stage folders carry no primary stage in their triage records (\code{SPRAY_CSTAR_COUPLING.md}, \code{pintle_injector_model_gap_analysis.md}, \code{PUMP_PHYSICS_AND_PROCESS_BASIS_2026-09-05.md}); for these the stage of the folder chosen in the triage is shown with an asterisk.
+
+\caution{Status here describes the document, not the engineering it describes. An ``active'' design-basis document records preliminary, screening-level models. None of the 73 files is a hardware qualification record, and no code path sets \code{hardware_qualified} to true; the flag runner writes it as false (\code{raosim/run_nozzle.py:4968}). Where a document and the code disagree, the code is the authority.}
+
+% ------------------------------------------------------------------------------
+\section{Inventory by folder}\label{sec:inv-table}
+
+{\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{longtable}{@{}P{4.15cm}P{1.75cm}P{2.25cm}P{0.85cm}P{6.75cm}@{}}
+\caption{All 73 files of the pre-cleanup docs folder, grouped by their new folder. Names sort case-insensitively within a group.}\label{tab:inv}\\
+\toprule
+File (new folder in group heading) & Old location & Type / \emph{status} & Stage & Summary \\
+\midrule
+\endfirsthead
+\toprule
+File & Old location & Type / \emph{status} & Stage & Summary \\
+\midrule
+\endhead
+\midrule
+\multicolumn{5}{r}{\emph{continued on next page}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+\rowcolor{pale}\multicolumn{5}{@{}l}{\sffamily\bfseries \code{docs/architecture/}\enspace\normalfont\rmfamily\footnotesize (Cross-stage contracts and maps; 5 files)} \\
+\code{IMPLICIT_RAO_JAX_MDO_ARCHITECTURE.md} & \code{docs/} & architecture\newline\emph{active} & S13 & Design checkpoint, not implemented: how an exact Rao/JAX contour would enter the MDO (pure-array \code{RaoState}, implicit KKT/IFT derivatives, MDO integration stages A to D, acceptance tests). \\
+\code{MDO_REMEDIATION_AND_OUTPUT_CONTRACT.md} & \code{docs/} & architecture\newline\emph{active} & S13 & Two-layer MDO output contract (pure-JAX \code{EngineState}, host \code{EngineAnalysisSnapshot} 2.0.0), resolved inputs, \code{EngineJobSpec}, metric registry and the \code{lrekit} job verbs; remediation table with parity evidence and open solver-equivalence gaps. \\
+\code{MODEL_REGISTRY.md} & \code{docs/} & architecture\newline\emph{active} & cross & Explainer for \code{raosim/model_registry.py}: entry fields, what \code{audit_model_registry} enforces, and validation levels; \code{hardware_qualified} is never asserted. \\
+\code{PHYSICAL_RELEASE_GATES.md} & \code{docs/} & architecture\newline\emph{active} & cross & Keeps software verification, geometry verification and physical release evidence apart; defines the \code{lrekit.release_evidence.v1} manifest checked by \code{raosim/release_readiness.py}. \\
+\code{pypi_release.md} & \code{docs/} & guide\newline\emph{active} & cross & Checklist for publishing the \code{lrekit} package to TestPyPI/PyPI through GitHub Actions trusted publishing. \\
+\rowcolor{pale}\multicolumn{5}{@{}l}{\sffamily\bfseries \code{docs/subsystems/S04-performance-and-off-design/}\enspace\normalfont\rmfamily\footnotesize (Stage S04; 1 file)} \\
+\code{FROZEN_VARIABLE_CP_EXPANSION.md} & \code{docs/} & subsystem basis\newline\emph{active} & S04 & Theory and claim boundary of \code{raosim/frozen_flow.py} (chemically frozen, variable-cp quasi-1-D expansion): equations, property-table provenance contract, unsupported couplings, promotion gates. \\
+\rowcolor{pale}\multicolumn{5}{@{}l}{\sffamily\bfseries \code{docs/subsystems/S05-nozzle-and-chamber-geometry/}\enspace\normalfont\rmfamily\footnotesize (Stage S05; 1 file)} \\
+\code{shoulder_radius_design_basis.md} & \code{docs/} & subsystem basis\newline\emph{active} & S05 & Separates the throat-approach radius Ru (performance-governed, SP-8120) from the chamber shoulder fillet Rs (SP-125); records the Rs closure and the \code{--cd-target} Ru closure. \\
+\rowcolor{pale}\multicolumn{5}{@{}l}{\sffamily\bfseries \code{docs/subsystems/S06-rao-moc-bvp-contour/}\enspace\normalfont\rmfamily\footnotesize (Stage S06; 5 files)} \\
+\code{MOC_MARCH_TOPOLOGY_REMEDIATION_2026-09-21.md} & \code{docs/} & remediation record\newline\emph{active} & S06 & Shows that the old \code{moc.py} forward march was not a bounded characteristic net; Phase 0--4 plan. Its STATUS head says Phases 0--2 landed through \code{raosim/moc_bounded.py}. \\
+\code{nasa_tt_prime_provenance.md} & \code{docs/} & provenance\newline\emph{active} & S06 & Provenance of the NASA/JHU M3.5Perf TT' fixture: the visible source-port workflow, not the fixture, is the authority for \code{NASA_REFERENCE_MATCHED}. Named by code constants. \\
+\code{rao_stationarity_transversality.md} & \code{docs/} & subsystem basis\newline\emph{active} & S06 & Terminology note for the Rao D-existence scans: fixed-endpoint problem, hard closure conditions, optional free-exit diagnostic, scan modes. \\
+\code{REWRITE_PLAN.md} & \code{docs/} & plan\newline\emph{active} & S06 & Thirteen-phase repair plan for \code{rao_variational.py} and the MOC contour pipeline. Phase 10 (variable-gamma MOC) and Phase 11 (SU2 CFD cross-check) have not landed: the unit processes of \code{raosim/moc.py} take a scalar \code{gamma}, and no SU2 code exists. \\
+\code{rice_jhu_moc_topology_map.md} & \code{docs/} & subsystem basis\newline\emph{active} & S06 & Names the characteristic regions of NASA/JHU MOC\_Grid\_BDE and maps each routine to its Python analogue; lists ports still incomplete. \\
+\rowcolor{pale}\multicolumn{5}{@{}l}{\sffamily\bfseries \code{docs/subsystems/S07-regen-cooling-and-wall-structures/}\enspace\normalfont\rmfamily\footnotesize (Stage S07; 1 file)} \\
+\code{regen_wall_model.md} & \code{docs/} & subsystem basis\newline\emph{active} & S07 & Station-wise regenerative wall sizing: literature, implemented equations, input-to-thickness table, CAD export and qualification limits. \\
+\rowcolor{pale}\multicolumn{5}{@{}l}{\sffamily\bfseries \code{docs/subsystems/S08-injector-and-spray-coupling/}\enspace\normalfont\rmfamily\footnotesize (Stage S08; 7 files)} \\
+\code{injector_pintle_provenance.md} & \code{docs/} & subsystem basis\newline\emph{active} & S08 & Equation/source table for \code{raosim/injector.py} with an explicit not-validated list (cold flow and hot fire required). \\
+\code{LAGRANGIAN_SPRAY_MODEL.md} & \code{docs/} & subsystem basis\newline\emph{active} & S08 & Opt-in, non-reacting Lagrangian droplet model (\code{raosim/spray/}) and its fail-closed gates; the CLI keeps the correlation screen. \\
+\code{MOVABLE_PINTLE_MODEL.md} & \code{docs/} & subsystem basis\newline\emph{active} & S08 & Son et al. (2017) continuous movable-pintle model (\code{raosim/movable_pintle.py}): area law, Cd evidence contract, throttle-map semantics, CLI flags; \code{hardware_qualified} stays false. \\
+\code{OPENFOAM_SPRAY_EXPORT.md} & \code{docs/} & subsystem basis\newline\emph{active} & S08 & Deterministic OpenFOAM Foundation 13 VOF case export for the movable-pintle sheet stage (\code{export-openfoam-spray}) and the typed VOF-to-Lagrangian handoff. \\
+\code{PINTLE_DESIGN_EVALUATION.md} & \code{docs/} & subsystem basis\newline\emph{active} & S08 & Literature-grounded pintle equations, a line-by-line audit of \code{raosim/injector.py}, the CLI propagation map and recommendations. \\
+\code{pintle_injector_model_gap_analysis.md} & \code{docs/} & subsystem basis\newline\emph{active} & S08* & Strengths and weaknesses of the pintle model against the literature; proposed design flow and implementation order. \\
+\code{SPRAY_CSTAR_COUPLING.md} & \code{docs/} & subsystem basis\newline\emph{active} & S08* & Opt-in relaxed fixed point (\code{raosim/spray_coupling.py}) that closes the c* efficiency as vaporization times mixing times combustion efficiency, re-sizing the pintle each pass. \\
+\rowcolor{pale}\multicolumn{5}{@{}l}{\sffamily\bfseries \code{docs/subsystems/S09-feed-system-and-electric-pumps/}\enspace\normalfont\rmfamily\footnotesize (Stage S09; 4 files)} \\
+\code{electric_pump_model_basis.md} & \code{docs/} & subsystem basis\newline\emph{active} & S09 & Basis of the electric-pump sizing screen from feed ledger to battery mass: meanline, assumptions, literature anchors, blade/channel geometry fidelity. \\
+\code{PUMP_ADVANCED_GEOMETRY_ROADMAP_2026-07-11.md} & \code{docs/} & roadmap\newline\emph{superseded} & S09 & Eight-item roadmap for next-tier impeller, inducer, diffuser and volute CAD, with a 2026-07-12 closure update; remaining items corrected by the 2026-07-13 plan. \\
+\code{PUMP_CAD_IMPLEMENTATION_PLAN.md} & \code{docs/} & plan\newline\emph{active} & S09 & Plan and STATUS log for pump CAD B-rep parity, Phases 0--3; its STATUS head (2026-07-12) records them landed plus split-casing remediation. \\
+\code{PUMP_PHYSICS_AND_PROCESS_BASIS_2026-09-05.md} & \code{docs/} & subsystem basis\newline\emph{active} & S09* & Pump meanline relations, process rules and design criteria with a verification mark on each number and a D1--D12 discrepancy ledger against the code. \\
+\rowcolor{pale}\multicolumn{5}{@{}l}{\sffamily\bfseries \code{docs/subsystems/S10-interface-and-mass-ledger/}\enspace\normalfont\rmfamily\footnotesize (Stage S10; 2 files)} \\
+\code{HARDWARE_MASS_LEDGER.md} & \code{docs/} & subsystem basis\newline\emph{active} & S10 & Geometry-integrated mass ledger for chamber, interface, injector and pump BOM, with the rule that missing masses are None, never 0.0. \\
+\code{injector_interface_model.md} & \code{docs/} & subsystem basis\newline\emph{active} & S10 & Basis for \code{raosim/interface.py}: separating load, hoop screens, faceplate bending, bolt separation and bolt-pattern heuristics, with limits. \\
+\rowcolor{pale}\multicolumn{5}{@{}l}{\sffamily\bfseries \code{docs/subsystems/S13-engine-mdo-and-requirements/}\enspace\normalfont\rmfamily\footnotesize (Stage S13; 2 files)} \\
+\code{DIFFERENTIABLE_ENGINE_MDO_PLAN.md} & \code{docs/} & plan\newline\emph{active} & S13 & Living plan and phase/gate tracker for the differentiable engine MDO (\code{raosim/mdo/}): formulation, per-discipline physics, phases with status, decision log. \\
+\code{MDO_GUIDE.md} & \code{docs/} & guide\newline\emph{active} & S13 & Reviewer's guide to \code{raosim/mdo/}: module map, design vector, constraint manifest, NLP robustness, run commands and a list of what is still soft. \\
+\rowcolor{pale}\multicolumn{5}{@{}l}{\sffamily\bfseries \code{docs/program/}\enspace\normalfont\rmfamily\footnotesize (Plans, roadmaps, backlogs; 12 files)} \\
+\code{COMPLETION_PLAN.md} & \code{docs/} & roadmap\newline\emph{active} & cross & Deduplicated backlog of remaining work (tracks A--G) with acceptance gates and host batches H1--H5; front matter says last updated 2026-08-26. \\
+\code{COMPONENT_DATA_AND_MULTIFIDELITY_PLAN_2026-11-03.md} & \code{docs/} & plan\newline\emph{active} & S13 & PROPOSED plan with no executable code: evidence interfaces for component models, fitting outside the JAX MDO, a conical-pintle pilot, an OpenFOAM round trip. \\
+\code{GENERALIZATION_PLAN_THRUST_PROPELLANT_FEED.md} & \code{docs/} & plan\newline\emph{active} & S13 & Plan to generalize the 13 kN LOX/RP-1 electric-pump tool across thrust class, propellant and feed architecture, with an acceptance suite and work orders. \\
+\code{INTEGRATION_PROGRAM_2026-08-22.md} & \code{docs/} & roadmap\newline\emph{active} & cross & Eight-item gap list from design candidates to one fabricable article, sequenced as Phases 0--7 with the literature that blocks each. \\
+\code{JAX_DIFFERENTIABLE_PLAN.md} & \code{docs/} & plan\newline\emph{active} & S06 & Build plan for the JAX Rao BVP backend (\code{raosim/jax/}); its head STATUS blockquotes are the running project record (newest dated 2026-06-15). \\
+\code{LREKIT_DELIVERY_BACKLOG_2026-09-05.md} & \code{docs/} & roadmap\newline\emph{active} & cross & Implementation backlog D01--D26 with an issue contract and milestones toward a first-article exit gate. \\
+\code{LREKIT_HARDWARE_PROGRAM_2026-09-05.md} & \code{docs/} & plan\newline\emph{active} & cross & Draft tracks H--M from reference geometry to machinable, testable hardware; its head banner defers corrected claims to the readiness review. \\
+\code{LREKIT_READINESS_AND_DELIVERY_PLAN_2026-09-05.md} & \code{docs/} & plan\newline\emph{active} & cross & Readiness review and delivery index: capability state, target architecture, milestones M0--M6. The root README points new readers here. \\
+\code{PHYSICS_FIDELITY_ROADMAP.md} & \code{docs/} & roadmap\newline\emph{active} & -- & Seven-item fidelity roadmap (variable-gamma MOC, boundary-layer displacement, separation, thermal/structural coupling, Rao promotion, differentiability, CAD/GD\&T). \\
+\code{PLAN_VALVES_LINES_BRACKETS_GIMBAL.md} & \code{docs/} & plan\newline\emph{active} & S10 & Unimplemented design plan for valves, lines, brackets and gimbal, the subsystems still missing from the mass ledger. \\
+\code{PUMP_GEOMETRY_IMPLEMENTATION_PLAN_2026-07-13.md} & \code{docs/} & plan\newline\emph{active} & S09 & Pump 3-D geometry sequence P0--P11 with corrections C1--C8 and an SP-8109/SP-8052 literature ledger; the Track H geometry backlog. \\
+\code{ROADMAP_REQUIREMENTS_TO_PARTS.md} & \code{docs/} & roadmap\newline\emph{active} & S13 & Roadmap R0--R6 from requirements to parameterized parts. Its status table (clarified 2026-10-15) marks R3, the requirements layer, partly implemented; the 2026-08-25 audit had flagged the older not-started entry. \\
+\rowcolor{pale}\multicolumn{5}{@{}l}{\sffamily\bfseries \code{docs/audits/}\enspace\normalfont\rmfamily\footnotesize (Dated audits and evidence; 16 files)} \\
+\code{CEA_H1_HOST_EVIDENCE_2026-08-22.md} & \code{docs/} & host evidence\newline\emph{historical record} & S03 & Host-run record: four held-out-validated RocketCEA chamber-property tables, the packaged CEA catalog, and a four-propellant 13 kN MDO survey. \\
+\code{CONTRACT_INTEGRITY_REMEDIATION_2026-09-05.md} & \code{docs/} & remediation record\newline\emph{historical record} & S02 & Treats findings W01--W04 as one defect (parsing is not binding) and gives fixes and a totality gate; a 9 September note says the repairs landed. \\
+\code{DIFFERENTIABLE_MDO_PLAN_EVALUATION_2026-07-22.md} & \code{docs/} & audit\newline\emph{historical record} & S13 & Feasibility check of the differentiable MDO plan against corpus and code; one deviation fixed the same day; ten amendments. \\
+\code{FEATURE_DATAFLOW_AUDIT_2026-07-11.md} & \code{docs/} & audit\newline\emph{historical record} & cross & Whole-repository feature, data-flow, literature and CAD audit at commit \code{ba8fcb6} plus uncommitted work; several of its CLI data-flow claims no longer hold (\code{DATAFLOW.md}, section 10, row 11). \\
+\code{INPUT_EXECUTION_INTEGRITY_2026-09-09.md} & \code{docs/} & remediation record\newline\emph{active} & -- & Remediation of request/solver/report boundary defects (D01--D04, D26, W01--W04): no silently dropped inputs, variable policies, unified report package. \\
+\code{INPUT_EXECUTION_SMOKE_2026-09-09.json} & \code{docs/audit_work/} & data\newline\emph{historical record} & S14 & JSON evidence of one \code{lrekit}~\code{run} smoke run, cited by \code{INPUT_EXECUTION_INTEGRITY_2026-09-09.md}. \\
+\code{legacy_code_audit.md} & \code{docs/} & audit\newline\emph{historical record} & S06 & Early audit of the NASA/JHU MOC\_Grid\_BDE port; its head banner marks it a historical snapshot. \\
+\code{LITERATURE_AUDIT_2026-07-24.md} & \code{docs/} & audit\newline\emph{historical record} & S13 & Re-verifies each physical choice in \code{raosim/mdo/} against \code{propulsion_texts/} with VERIFIED/SURROGATE/GAP verdicts. \\
+\code{LREKIT_LITERATURE_AUDIT_2026-09-05.md} & \code{docs/audit_work/} & audit\newline\emph{active} & cross & Corpus and acquisition audit of \code{propulsion_texts/} with issues LIT-01 to LIT-06 and a literature gate sequence. \\
+\code{LREKIT_PUMP_AUDIT_2026-09-05.md} & \code{docs/audit_work/} & audit\newline\emph{active} & S09 & Finds the pump branch is preliminary sizing plus reference CAD, not released hardware; gives pump sequence A--H. \\
+\code{LREKIT_WORKFLOW_AUDIT_2026-09-04.md} & \code{docs/audit_work/} & audit\newline\emph{active} & S02 & Job/CLI/MDO audit with findings W01--W06, a proposed identity chain and its own stages S0--S7 (not the pipeline stages). \\
+\code{MDO_ISSUES_AND_WORKFLOW_BLOCKERS_2026-10-16.md} & \code{docs/} & audit\newline\emph{active} & S13 & Open MDO solver issues and ten blockers that keep the MDO out of the part-geometry workflow, with a repair-status table. \\
+\code{PHYSICAL_INTEGRITY_REMEDIATION_2026-07-11.md} & \code{docs/} & remediation record\newline\emph{active} & -- & Maps the 2026-07-02 audit findings to the implementation in 15 areas with the remaining boundary per row; states it is not CFD validation or hardware qualification. \\
+\code{PROJECT_AUDIT_2026-08-25.md} & \code{docs/} & audit\newline\emph{historical record} & cross & Whole-repository audit at commit f763fe1: both pipelines, capability tiers, nine gaps to the endpoint, validation table, limitations. \\
+\code{RAO_B3_B5_HOST_EVIDENCE_2026-08-24.md} & \code{docs/} & host evidence\newline\emph{historical record} & S06 & Host timings and results of the opt-in B3 post-solve variational validator and the B5 declared-domain artifact. \\
+\code{REPO_PHYSICS_AUDIT_2026-07-02.md} & \code{docs/} & audit\newline\emph{historical record} & cross & First full-repository physics and CAD audit against \code{propulsion_texts/}; its head banner marks it a historical snapshot. \\
+\rowcolor{pale}\multicolumn{5}{@{}l}{\sffamily\bfseries \code{docs/literature/}\enspace\normalfont\rmfamily\footnotesize (Literature requests and provenance; 7 files)} \\
+\code{chamber_design_literature.md} & \code{docs/} & literature inventory\newline\emph{active} & S05 & Maps chamber and convergent-section geometry rules to held SP-125 and SP-8120 sections; acquisition checklist. \\
+\code{LITERATURE_REQUESTS.md} & \code{docs/} & literature request\newline\emph{active} & cross & Master ledger of 26 numbered literature requests by priority (valves/lines, structures, pump rotor, feed, TVC, igniter), a 2026-10-16 holdings check, and eight further requests raised that day. \\
+\code{LITERATURE_REQUESTS_GENERALIZATION.md} & \code{docs/} & literature request\newline\emph{active} & S02 & Sources G1--G14 needed to generalize across thrust class, propellant and feed cycle, with acquisition status. \\
+\code{LITERATURE_REQUESTS_HARDWARE_LOOP.md} & \code{docs/} & literature request\newline\emph{active} & S09 & Gaps H1--H14 for pump manufacturing, assembly testing and measurement ingestion; resolves the SP-8109 reference list. \\
+\code{pintle_injector_literature_inventory.md} & \code{docs/} & literature inventory\newline\emph{active} & S08 & First-pass map of \code{propulsion_texts/pintle_injector/}: priority sources, local inventory, papers to add or verify. \\
+\code{REMEDIATION_LITERATURE_TRACEABILITY.md} & \code{docs/} & provenance\newline\emph{active} & S13 & Source ledger and claim/decision matrix separating literature, repository calculation and software policy in the MDO remediation. \\
+\code{thermofluid_literature_provenance.md} & \code{docs/} & provenance\newline\emph{active} & S07 & Equation-to-code map for thermofluid, regen-cooling and wall-structure models with sources and limits; a \code{local_source} of the model registry. \\
+\rowcolor{pale}\multicolumn{5}{@{}l}{\sffamily\bfseries \code{docs/data/}\enspace\normalfont\rmfamily\footnotesize (Reference data; 2 files)} \\
+\code{nasa_jhu_file_list.txt} & \code{docs/} & data\newline\emph{active} & S06 & Inventory of the NASA/JHU M3.5Perf fixture files with column layouts and the \code{raosim/legacy_io.py} parser for each. \\
+\code{rao_nozzle.csv} & \code{docs/} & data\newline\emph{stub} & S05 & 200-point \code{x_m,y_m} wall contour without a provenance header; not referenced by code, tests or docs. \\
+\rowcolor{pale}\multicolumn{5}{@{}l}{\sffamily\bfseries \code{docs/agents/}\enspace\normalfont\rmfamily\footnotesize (Agent prompts; 2 files)} \\
+\code{AGENTS.md} & repository root & agent prompt\newline\emph{active} & cross & Agent guidance: read \code{knowledge/AGENTS.md}, use \code{knowledge/kg.sh}, treat the original PDF as the authority, follow the packet protocol. \\
+\code{TEST_PROMPT.md} & repository root & agent prompt\newline\emph{active} & cross & Paste-in prompt for the standard 13 kN regression check on \code{examples/cli/test_13kn_sealevel_regen_allstl.args}, ending in a PASS/FAIL/CHANGE report. \\
+\rowcolor{pale}\multicolumn{5}{@{}l}{\sffamily\bfseries \code{docs/archive/}\enspace\normalfont\rmfamily\footnotesize (Archived items; 5 files)} \\
+\code{deep-research-report.md} & repository root & legacy\newline\emph{stub} & cross & Empty file (0 bytes). \\
+\code{NEXT_SESSION_PROMPT.md} & \code{docs/} & agent prompt\newline\emph{superseded} & -- & June 2026 hand-off prompt from the characteristic-pairing milestone, with a five-item work queue. \\
+\code{PROJECT_AUDIT_2026-08-25.html} & \code{docs/} & audit\newline\emph{historical record} & -- & Styled HTML twin of the 2026-08-25 project audit, section for section. \\
+\code{rao_nozzle_profile.csv} & \code{docs/} & data\newline\emph{stub} & S05 & 300-point \code{x_m,y_m} wall profile, apparently a default output of \code{main.py}. \\
+\code{Rocket_nozzle_sim_phase2.py} & repository root & legacy\newline\emph{superseded} & cross & Original single-file interactive Rao bell prototype (contour, plots, simple ascent model, CSV export). \\
+\rowcolor{pale}\multicolumn{5}{@{}l}{\sffamily\bfseries \code{requirements.txt}\enspace\normalfont\rmfamily\footnotesize (Moved out of docs/ (repository root); 1 file)} \\
+\code{requirements.txt} & \code{docs/} & data\newline\emph{active} & S01 & Runtime dependency pins (core packages plus the exact JAX stack); moved to the root, where \code{requirements-dev.txt} includes it with \code{-r}. \\
+\end{longtable}}
+
+% ------------------------------------------------------------------------------
+\section{Files added on 5 November 2026}\label{sec:inv-added}
+
+The path map covers moved files only. The following files were created in \code{docs/} during or after the cleanup, or are cited as part of it, and are not rows of Table~\ref{tab:inv}.
+
+{\small
+\begin{longtable}{@{}P{6.2cm}P{9.6cm}@{}}
+\toprule
+File & What it is \\
+\midrule
+\endhead
+\code{docs/architecture/CODE_MAP.md} & Generated from the per-file header extraction: one row per code file with stage, line count and one-line role. \\
+\code{docs/architecture/CODE_HEADER_COMMENTS.md} & Generated: verbatim module docstrings and leading comment blocks of every code file, grouped by stage. \\
+\code{docs/architecture/DATAFLOW.md} & Markdown twin of Chapter~\ref{ch:cli-dataflow}: stage table, entry points, dispatch, pipeline order, artifacts per stage and documented disagreements with the code. \\
+\code{docs/program/REMAINING_WORK_AND_GOALS.md} & Markdown twin of \ifcsname r@ch:remaining-work\endcsname Chapter~\ref{ch:remaining-work}\else the remaining-work chapter of this guide\fi{} (the remaining-work register), cited by the root README and by \code{docs/README.md}. Not present in the working tree on 9 November 2026 (Section~\ref{sec:inv-notes}). \\
+\code{docs/README.md} & Entry point: folder scheme, reading order, stage-to-code/docs/tests table, filing rules, and the document paths that code depends on. \\
+\code{docs/subsystems/README.md} & One section per stage S01--S14 listing its documents, or stating that it has none, plus the cross-cutting groups. \\
+\code{README.md} in \code{architecture/}, \code{program/}, \code{audits/}, \code{literature/}, \code{data/}, \code{agents/}, \code{archive/} & One line per document with status, type, stage and a one-line description; the archive index adds why each item was archived and what replaces it. \\
+\bottomrule
+\end{longtable}}
+\addtocounter{table}{-1}
+
+% ------------------------------------------------------------------------------
+\section{Superseded and historical documents}\label{sec:inv-superseded}
+
+Table~\ref{tab:inv-sup} lists every document whose status is superseded, stub or historical record, plus one active document whose own head banner defers to a later one. The upper block is \code{docs/archive/}: nothing cites these items as an authority. The lower block stays in place because other documents, code or the knowledge stores cite it, or because it remains the record of a dated host run. ``Basis'' gives the evidence for the status: the document's own banner, a note in another file, or the triage record.
+
+{\footnotesize
+\begin{longtable}{@{}P{4.6cm}P{1.6cm}P{5.0cm}P{4.4cm}@{}}
+\caption{Superseded, stub and historical documents, with what to read instead.}\label{tab:inv-sup}\\
+\toprule
+Document & Status & Basis & Read instead \\
+\midrule
+\endfirsthead
+\toprule
+Document & Status & Basis & Read instead \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+\code{docs/archive/NEXT_SESSION_PROMPT.md} & superseded & Describes June-era work and test counts; row 22 of \code{knowledge/reports/pdf_issue_disposition_2026-10-15.md} already says it must be treated as historical. Apart from that report, only generated knowledge indexes name it. & The STATUS head of \code{docs/program/JAX_DIFFERENTIABLE_PLAN.md} and \code{docs/agents/AGENTS.md} \\
+\code{docs/archive/PROJECT_AUDIT_2026-08-25.html} & historical record & Presentation-only duplicate; live citations (in \code{LREKIT_HARDWARE_PROGRAM_2026-09-05.md}) name the \code{.md}, and only generated knowledge indexes name the \code{.html}. & \code{docs/audits/PROJECT_AUDIT_2026-08-25.md} \\
+\code{docs/archive/Rocket_nozzle_sim_phase2.py} & superseded & No code, test, \code{pyproject.toml} entry, registry source or knowledge code imports or cites it. & The \code{raosim} package (CLI: \code{lrekit} / \code{raosim}; legacy toolbox: \code{main.py}) \\
+\code{docs/archive/deep-research-report.md} & stub & Zero-byte file tracked at the repository root in \code{HEAD}; nothing to preserve beyond the name. & Nothing \\
+\code{docs/archive/rao_nozzle_profile.csv} & stub & Example output; the name survives only as an output-file default (\code{main.py} lines 745 and 1157, and the archived prototype); nothing reads this file. & Nothing (a run writes its own contour CSV into its output folder) \\
+\midrule
+\code{docs/subsystems/S09-feed-system-and-electric-pumps/PUMP_ADVANCED_GEOMETRY_ROADMAP_2026-07-11.md} & superseded & Line 3 of the 2026-07-13 plan states that it updates this roadmap; that plan corrects the remaining items. & \code{docs/program/PUMP_GEOMETRY_IMPLEMENTATION_PLAN_2026-07-13.md} \\
+\code{docs/audits/REPO_PHYSICS_AUDIT_2026-07-02.md} & historical record & Own head banner: historical snapshot, superseded for current-status decisions. & \code{docs/audits/PHYSICAL_INTEGRITY_REMEDIATION_2026-07-11.md}; \code{docs/architecture/MODEL_REGISTRY.md} \\
+\code{docs/audits/legacy_code_audit.md} & historical record & Own head banner: historical development snapshot, not current capability status. & \code{docs/audits/PHYSICAL_INTEGRITY_REMEDIATION_2026-07-11.md}; \code{docs/subsystems/S06-rao-moc-bvp-contour/nasa_tt_prime_provenance.md} \\
+\code{docs/audits/FEATURE_DATAFLOW_AUDIT_2026-07-11.md} & historical record & Dated snapshot (triage record). Section 10, row 11 of \code{DATAFLOW.md} lists claims about the CLI path that the current runner contradicts. Neither this audit nor the 2026-08-25 audit states a supersession. & \code{docs/architecture/DATAFLOW.md}; \code{docs/audits/PROJECT_AUDIT_2026-08-25.md} (the later whole-repository audit) \\
+\code{docs/audits/PROJECT_AUDIT_2026-08-25.md} & historical record & Snapshot at commit f763fe1. The readiness review re-audits the same commit plus the 4--5 September working tree and calls itself the delivery index; the 2026-10-16 audit is the later MDO status. & \code{docs/program/LREKIT_READINESS_AND_DELIVERY_PLAN_2026-09-05.md}; \code{docs/audits/MDO_ISSUES_AND_WORKFLOW_BLOCKERS_2026-10-16.md} \\
+\code{docs/program/LREKIT_HARDWARE_PROGRAM_2026-09-05.md} & active & Own head banner (6 September): use the readiness review and its D-series as the delivery index; corrected claims must not become code or release criteria. & \code{docs/program/LREKIT_READINESS_AND_DELIVERY_PLAN_2026-09-05.md}; \code{docs/program/LREKIT_DELIVERY_BACKLOG_2026-09-05.md} \\
+\code{docs/audits/CONTRACT_INTEGRITY_REMEDIATION_2026-09-05.md} & historical record & Own head note (9 September): the repairs are in the working tree; the body describes the 5 September baseline. & \code{docs/audits/INPUT_EXECUTION_INTEGRITY_2026-09-09.md} \\
+\code{docs/audits/CEA_H1_HOST_EVIDENCE_2026-08-22.md} & historical record & Dated host-run evidence; kept as the record of the CEA tables it produced. & -- \\
+\code{docs/audits/RAO_B3_B5_HOST_EVIDENCE_2026-08-24.md} & historical record & Dated host-run evidence for the B3 validator and B5 domain map. & -- \\
+\code{docs/audits/DIFFERENTIABLE_MDO_PLAN_EVALUATION_2026-07-22.md} & historical record & Dated evaluation (triage record); the MDO plan cites its section A.2.1. & \code{docs/subsystems/S13-engine-mdo-and-requirements/DIFFERENTIABLE_ENGINE_MDO_PLAN.md} \\
+\code{docs/audits/LITERATURE_AUDIT_2026-07-24.md} & historical record & Dated literature verdicts for the MDO layer (triage record). & -- \\
+\code{docs/audits/INPUT_EXECUTION_SMOKE_2026-09-09.json} & historical record & Evidence file of one dated smoke run. & -- \\
+\end{longtable}}
+
+% ------------------------------------------------------------------------------
+\section{Filing notes and discrepancies}\label{sec:inv-notes}
+
+\begin{itemize}
+  \item \textbf{Two placements differ from the triage.} The triage proposed \code{subsystems/S06-rao-moc-bvp-contour/} for \code{JAX_DIFFERENTIABLE_PLAN.md} and \code{data/} for \code{requirements.txt}. The reorganization script overrode both: the plan went to \code{docs/program/} as the project's STATUS-head record, and \code{requirements.txt} went to the repository root, where \code{requirements-dev.txt} includes it with \code{-r}. Appendix~\ref{app:cleanup} lists all eight overrides.
+  \item \textbf{The STATUS-head record is not the newest status.} The STATUS blockquotes at the head of \code{docs/program/JAX_DIFFERENTIABLE_PLAN.md} are dated from 2026-06-09 to 2026-06-15 and concern the Rao/JAX contour and the physics-coupled design loop. Later status lives at the head of dated documents: the MOC bounded-net remediation (STATUS of 2026-09-21), the MDO blockers audit of 2026-10-16, and the PROPOSED component-data plan of 2026-11-03. \code{docs/README.md} states this next to its reading order.
+  \item \textbf{Document folder and module stage can differ.} \code{FROZEN_VARIABLE_CP_EXPANSION.md} sits in the S04 folder, but \code{docs/architecture/CODE_MAP.md} assigns the module it describes, \code{raosim/frozen_flow.py}, to S03. \code{LAGRANGIAN_SPRAY_MODEL.md} and \code{OPENFOAM_SPRAY_EXPORT.md} sit in the S08 folder, but their modules (\code{raosim/spray/}, \code{raosim/openfoam/}) form the cross-cutting group X02. The CLI never runs the parcel solver (\code{raosim/spray_coupling.py} imports the spray package only for its handoff types); the one X02 entry point the CLI exposes is the \code{export-openfoam-spray} verb. \code{MODEL_REGISTRY.md} and \code{PHYSICAL_RELEASE_GATES.md} are filed under \code{architecture/} as cross-cutting, while \code{CODE_MAP.md} assigns \code{raosim/model_registry.py} and \code{raosim/release_readiness.py} to S14. For module ownership, \code{CODE_MAP.md} is the authority.
+  \item \textbf{Missing stage folders do not mean missing documents.} S01, S02, S03, S11, S12 and S14 have no folder under \code{docs/subsystems/}. S11 and S12 have no document whose primary stage they are, and S01 had only \code{requirements.txt}. S02, S03 and S14 do have such documents (\code{LREKIT_WORKFLOW_AUDIT_2026-09-04.md}, \code{CONTRACT_INTEGRITY_REMEDIATION_2026-09-05.md}, \code{LITERATURE_REQUESTS_GENERALIZATION.md}; \code{CEA_H1_HOST_EVIDENCE_2026-08-22.md}; \code{INPUT_EXECUTION_SMOKE_2026-09-09.json}). They are audits, literature ledgers or evidence and were filed by kind. \code{docs/subsystems/README.md} lists them under their stages.
+  \item \textbf{Two plans for one stage sit in different folders.} \code{PUMP_CAD_IMPLEMENTATION_PLAN.md} (S09) is in the S09 folder, while \code{PUMP_GEOMETRY_IMPLEMENTATION_PLAN_2026-07-13.md} (S09) is in \code{program/}. Both placements follow the triage; the second plan is cited by the hardware program as the Track~H backlog.
+  \item \textbf{Code names three documents in four places.} \code{raosim/model_registry.py:662} gives \code{docs/literature/thermofluid_literature_provenance.md} as a \code{local_source}. \code{audit_model_registry} reports a missing \code{local_source} as a failure (line 766), and \code{raosim/run_nozzle.py:4973} writes that audit into the flag runner's \code{summary.json}. \code{raosim/model_registry.py:349} names \code{shoulder_radius_design_basis.md} in a source string. \code{raosim/rao_variational.py:347} and \code{scripts/compare_nasa_reference.py:45} name \code{nasa_tt_prime_provenance.md}. Moving any of these documents requires editing that code.
+  \item \textbf{The knowledge stores still use the old paths.} Repository-document records are keyed by path (\code{knowledge/kg/harvest_repo.py}, lines 74 and 80). Until \code{knowledge/kg.sh}~\code{rebuild} runs, \code{knowledge/repo_documents.json} lists the documents under their old flat paths.
+  \item \textbf{Three inventoried documents disagree with the code.} Section 10 of \code{docs/architecture/DATAFLOW.md} tabulates documents that the working tree contradicts. Three rows concern files in Table~\ref{tab:inv}. Row 6: \code{MDO_REMEDIATION_AND_OUTPUT_CONTRACT.md} (lines 151 and 157) says \code{lrekit/job_cli.py} adds three verbs and lists catalog topics ending at \code{unavailable}; the code has four verbs (\code{guided}, \code{run}, \code{validate}, \code{catalog}; \code{lrekit/job_cli.py:29}) and eight topics, including \code{capabilities} (lines 31--34). Row 7: the verb family proposed in \code{LREKIT_HARDWARE_PROGRAM_2026-09-05.md} (lines 620--630: \code{job}, \code{component}, \code{build}, \code{test}, \code{calibrate}, \code{ui}) is a plan only; none of these verbs exists. Row 11: the CLI data-flow claims of \code{FEATURE_DATAFLOW_AUDIT_2026-07-11.md} (lines 20--70) no longer describe \code{run_nozzle.main}.
+  \item \textbf{One cited document is missing.} On 9 November 2026 \code{docs/program/REMAINING_WORK_AND_GOALS.md} did not exist, although the root \code{README.md} and the reading order in \code{docs/README.md} cite it. It is the Markdown twin of the remaining-work register and is written together with that chapter. Until it exists, the link in \code{docs/README.md} is the one dangling relative link in the \code{docs/} indexes.
+  \item \textbf{Corrections made on 9 November 2026.} The re-check against the documents changed six summaries. \code{IMPLICIT_RAO_JAX_MDO_ARCHITECTURE.md} names its steps MDO integration \emph{stages} A to D (its section 9), not levels. \code{PHYSICAL_INTEGRITY_REMEDIATION_2026-07-11.md} maps 15 areas, not 14. \code{LITERATURE_REQUESTS.md} also records eight requests raised on 2026-10-16 beyond its 26 numbered ones. \code{OPENFOAM_SPRAY_EXPORT.md} targets OpenFOAM Foundation 13. For \code{REWRITE_PLAN.md}, the statement that Phases 10 and 11 have not landed now rests on the code: the unit processes of \code{raosim/moc.py} take a scalar \code{gamma}, and no SU2 code exists under \code{raosim/}, \code{scripts/} or \code{lrekit/}. For \code{FEATURE_DATAFLOW_AUDIT_2026-07-11.md}, the claim that the 2026-08-25 audit supersedes it was removed, because neither document says so.
+  \item \textbf{Agent prompts carry stale environment details.} \code{docs/agents/AGENTS.md} (line 10) gives a \code{.venv/bin/python} test command; on 9 November 2026 the checkout held \code{.venv-jax}, \code{.venv-kg} and \code{.venv-docling} but no \code{.venv}. Step~4 of \code{docs/agents/TEST_PROMPT.md} compares against \code{builds/tests/13kn_sl_baseline_summary.json} and initializes it when absent; no such file existed anywhere under \code{builds/} on that date.
+\end{itemize}
+
+% ------------------------------------------------------------------------------
+\section{Counts}\label{sec:inv-counts}
+
+{\small
+\noindent\begin{tabularx}{\linewidth}{@{}Yrrrrr@{}}
+\toprule
+Folder & Active & Historical & Superseded & Stub & Total \\
+\midrule
+\code{docs/architecture/} & 5 & 0 & 0 & 0 & 5 \\
+\code{docs/subsystems/} (eight stage folders) & 22 & 0 & 1 & 0 & 23 \\
+\code{docs/program/} & 12 & 0 & 0 & 0 & 12 \\
+\code{docs/audits/} & 6 & 10 & 0 & 0 & 16 \\
+\code{docs/literature/} & 7 & 0 & 0 & 0 & 7 \\
+\code{docs/data/} & 1 & 0 & 0 & 1 & 2 \\
+\code{docs/agents/} & 2 & 0 & 0 & 0 & 2 \\
+\code{docs/archive/} & 0 & 1 & 2 & 2 & 5 \\
+repository root (\code{requirements.txt}) & 1 & 0 & 0 & 0 & 1 \\
+\midrule
+Total & 56 & 11 & 3 & 3 & 73 \\
+\bottomrule
+\end{tabularx}}

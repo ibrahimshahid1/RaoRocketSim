@@ -1,0 +1,400 @@
+{
+  "date": "2026-11-21",
+  "reviewer": "cfd_audit agent",
+  "scope": "CFD/GCI portions of MOC extension plan and E13 implementation, reviewed after all-nine Docling/KG ingestion gate",
+  "production_files_changed": false,
+  "CFD_executed": false,
+  "sources": {
+    "CELIK": {
+      "title": "Procedure for Estimation and Reporting of Uncertainty Due to Discretization in CFD Applications",
+      "authors": "Celik, Ghia, Roache, Freitas, Coleman and Raad",
+      "year": 2008,
+      "doi": "10.1115/1.2960953",
+      "pdf": "propulsion_texts/procedure-for-estimation-and-reporting-of-uncertainty-due-to-dis-2008.pdf",
+      "pages_inspected": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "pages_rendered_and_viewed": [
+        1,
+        2,
+        4
+      ]
+    },
+    "LOVELY": {
+      "title": "Shock Detection from Computational Fluid Dynamics Results",
+      "authors": "Lovely and Haimes",
+      "year": 1999,
+      "doi": "10.2514/6.1999-3285",
+      "pdf": "propulsion_texts/lovely1999.pdf",
+      "pages_inspected": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "pages_rendered_and_viewed": [
+        2,
+        6
+      ]
+    },
+    "OPENFOAM": {
+      "title": "OpenFOAM Foundation v13 source, immutable pinned commit",
+      "commit": "65eda17ad4caa916bfd0606039db92509670f9f7",
+      "download_manifest": "builds/moc_cfd_literature_audit_2026-11-21/cfd_sources/manifest.json",
+      "scope": "Source behavior inspection, not executed CFD."
+    }
+  },
+  "findings": [
+    {
+      "id": "CFD-01",
+      "severity": "P1",
+      "kind": "confirmed source-level runtime incompatibility",
+      "title": "The inviscid case enables a force monitor that requires a transport model",
+      "locations": [
+        {
+          "path": "tests/experiments/nozzle/moc_ext_e13_write_shockfluid_case.py",
+          "line": 649
+        },
+        {
+          "path": "tests/experiments/nozzle/moc_ext_e13_write_shockfluid_case.py",
+          "line": 536
+        },
+        {
+          "path": "tests/experiments/nozzle/moc_ext_e13_write_shockfluid_case.py",
+          "line": 1148
+        }
+      ],
+      "claim_under_review": "E13 can monitor wallForces while shockFluid takes its zero-viscosity path and constructs no momentumTransport model.",
+      "evidence": "The pinned shockFluid.C lines148\u2013180 chooses inviscid when max(mu)<=0 and leaves momentumTransport null. Sutherland As=0 gives mu=0 for positive finite T (sutherlandTransportI.H mu implementation). forcesCompressible loads the standard forces object. In the exact pinned forcesBase.C, write() lines934\u2013936 calls calcForcesMoments; its ordinary pressure/viscous branch lines828\u2013839 unconditionally calls devTau(); lines250\u2013254 then emits a fatal error when no recognized transport model is registered. Creating a momentumTransport dictionary does not instantiate the missing model. The generated object does not select directForceDensity. This is a deterministic source-path conflict, although no OpenFOAM process was run to capture its runtime log.",
+      "concrete_correction": "Use a pressure-only wall integration that does not call viscous-stress lookup, or a source-verified inviscid-compatible monitor. Retain raw pressure/face vectors for an independent integral. Include execution of this function object in the first dry run; static dictionary tests cannot close CFD0 runtime compatibility.",
+      "sources": [
+        "OPENFOAM:https://raw.githubusercontent.com/OpenFOAM/OpenFOAM-13/65eda17ad4caa916bfd0606039db92509670f9f7/applications/modules/shockFluid/shockFluid.C",
+        "OPENFOAM:https://raw.githubusercontent.com/OpenFOAM/OpenFOAM-13/65eda17ad4caa916bfd0606039db92509670f9f7/src/functionObjects/forces/forcesBase/forcesBase.C",
+        "OPENFOAM:https://raw.githubusercontent.com/OpenFOAM/OpenFOAM-13/65eda17ad4caa916bfd0606039db92509670f9f7/src/thermophysicalModels/specie/transport/sutherland/sutherlandTransportI.H"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "CFD-02",
+      "severity": "P2",
+      "kind": "confirmed plan/writer mismatch",
+      "title": "The displayed shock criterion discards compression direction",
+      "locations": [
+        {
+          "path": "docs/subsystems/S06-rao-moc-bvp-contour/moc_extensions_plan_2026-11-21/sections/10_cfd.tex",
+          "line": 28
+        },
+        {
+          "path": "tests/experiments/nozzle/moc_ext_e13_write_shockfluid_case.py",
+          "line": 1177
+        }
+      ],
+      "claim_under_review": "The LaTeX plan identifies shock location through the absolute normal Mach number.",
+      "evidence": "Lovely\u2013Haimes stationary-shock section, PDFp2/printed297, uses the pressure-gradient direction and rejects expansions because its dot product with the Mach vector is negative. Taking an absolute value loses that rejection. The actual writer string already uses signed M_n and a pressure-gradient filter, so the defect is in the plan formula rather than the writer. The M_n=1 contour bounds a detected region rather than selecting a unique fitted front.",
+      "concrete_correction": "Write signed M_n=(u/a) dot grad(p)/|grad(p)|, apply the positive compression-region criterion with small-gradient refusal/filtering, and describe M_n=1 as a region boundary. Preserve the distinction between a numerical region and a front location.",
+      "sources": [
+        "LOVELY PDFp2 printed297; Filtering PDFp6 printed301"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "CFD-03",
+      "severity": "P1",
+      "kind": "unsupported uncertainty inference",
+      "title": "A two-level MOC delta is promoted into an uncertainty bound",
+      "locations": [
+        {
+          "path": "docs/subsystems/S06-rao-moc-bvp-contour/moc_extensions_plan_2026-11-21/sections/10_cfd.tex",
+          "line": 32
+        },
+        {
+          "path": "tests/experiments/nozzle/moc_ext_e13_write_shockfluid_case.py",
+          "line": 1140
+        },
+        {
+          "path": "tests/experiments/nozzle/moc_ext_e13_write_shockfluid_case.py",
+          "line": 1196
+        },
+        {
+          "path": "tests/experiments/nozzle/moc_ext_e13_write_shockfluid_case.py",
+          "line": 1202
+        }
+      ],
+      "claim_under_review": "The t19 coarse/fine difference is U_MOC and may be combined quadratically with a fine-grid CFD GCI to adjudicate agreement.",
+      "evidence": "A two-level difference does not establish an observed order or remaining continuum error. Even for f(h)=f_exact+C h^p, the fine-grid error is |f_coarse-f_fine|/(r^p-1), not generally the raw difference; without a justified p it can exceed or fall below it. Celik PDFp2 Eq7 applies an apparent-order denominator and safety factor, and explicitly excludes modeling error. No probabilistic interpretation, covariance assumption, or consistent bound interpretation is supplied for root-sum-square mixing of these two different evidence types. It can be a declared comparison policy but is not a literature-established complete numerical uncertainty budget.",
+      "concrete_correction": "Keep t19 delta labeled a refinement sensitivity until an MOC error estimate is justified for the same observable and regime (additional matched refinement levels or verified-order evidence). State separately what U_CFD/U_MOC mean, what errors are excluded, and why any combination rule is appropriate. Preserve discrepancies for diagnosis rather than automatically interpreting a failed narrow band as model failure.",
+      "sources": [
+        "CELIK PDFpp1\u20132, Eq3\u20137; algebraic derivation stated here"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "CFD-04",
+      "severity": "P1",
+      "kind": "boundary/model mismatch in acceptance design",
+      "title": "The comparison tests different starting-flow problems using discretization-only tolerance",
+      "locations": [
+        {
+          "path": "tests/experiments/nozzle/moc_ext_e13_write_shockfluid_case.py",
+          "line": 1212
+        },
+        {
+          "path": "tests/experiments/nozzle/moc_ext_e13_write_shockfluid_case.py",
+          "line": 1215
+        },
+        {
+          "path": "docs/subsystems/S06-rao-moc-bvp-contour/moc_extensions_plan_2026-11-21/sections/10_cfd.tex",
+          "line": 19
+        }
+      ],
+      "claim_under_review": "Nozzle-B CFD with a newly selected convergent is a same-model comparison to a prescribed KL start, and differences should fit discretization uncertainty alone.",
+      "evidence": "The writer expressly adds a45-degree convergent with contraction2.5, whereas the MOC supplies transonic initial data from the KL series and a throat curvature. Both may solve inviscid perfect-gas equations, but they do not share the same initial/boundary data or necessarily the same continuum field. The writer also compares a faceted wall with a solved MOC wall representation. Those systematic differences survive h->0 and are absent from the stated root-sum-square budget. Celik PDFp1 specifically asks for inlet-condition sensitivity. The plan already acknowledges the convergent difference, but does not propagate it into acceptance interpretation.",
+      "concrete_correction": "Split CFD1 into a matched supersonic-boundary/geometry MOC discretization comparison and a full-convergent transonic/KL model assessment. For the latter declare starting-model/geometry discrepancies and run convergent/inlet sensitivity; do not require their difference to be explained by spatial discretization alone.",
+      "sources": [
+        "CELIK PDFp1 Preliminaries; CODE W1210\u20131227; problem-definition reasoning"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "CFD-05",
+      "severity": "P2",
+      "kind": "confirmed incomplete postprocessor specification",
+      "title": "The GCI prescription permits zero or negative apparent orders and singular relative errors",
+      "locations": [
+        {
+          "path": "tests/experiments/nozzle/moc_ext_e13_write_shockfluid_case.py",
+          "line": 1186
+        },
+        {
+          "path": "tests/experiments/nozzle/moc_ext_e13_write_shockfluid_case.py",
+          "line": 1189
+        },
+        {
+          "path": "tests/experiments/nozzle/moc_ext_e13_write_shockfluid_case.py",
+          "line": 1198
+        }
+      ],
+      "claim_under_review": "Rejecting a negative successive-difference ratio is sufficient before applying the stated p/GCI expressions.",
+      "evidence": "The planned formula has no stated branches for zero/near-zero differences, positive ratios<=1, nonfinite values, or f1 nearzero. For the monotonically ordered triple(f1,f2,f3)=(1,2,2.5), its formula gives p=-1 and GCI21=-2.5. Ratio1 gives p0 and a zero denominator. Celik PDFp2 Eq3a includes absolute values and explicitly warns that very small differences defeat the procedure; PDFp3 discusses high relative errors at near-zero velocity. No actual postprocessor exists here, so this is a specification defect, not a claim that bad CFD numbers have already been computed.",
+      "concrete_correction": "Define finite-data checks, an explicit observed-order/admissibility policy, zero-difference and near-zero-output cases, and absolute-error reporting with a declared reference scale. Mark unresolved convergence unavailable and request more levels rather than emitting negative/undefined uncertainty.",
+      "sources": [
+        "CELIK PDFp2 Eq3a\u20137 and limitations; PDFp3 near-zero velocity example; exact algebraic counterexample"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "CFD-06",
+      "severity": "P2",
+      "kind": "confirmed weakness of acceptance test",
+      "title": "The proposed asymptotic-ratio check is not independent evidence of the asymptotic range",
+      "locations": [
+        {
+          "path": "tests/experiments/nozzle/moc_ext_e13_write_shockfluid_case.py",
+          "line": 1190
+        },
+        {
+          "path": "docs/subsystems/S06-rao-moc-bvp-contour/moc_extensions_plan_2026-11-21/sections/10_cfd.tex",
+          "line": 47
+        }
+      ],
+      "claim_under_review": "GCI32/(r^p GCI21) near1 establishes the asymptotic range for these equal-r triples.",
+      "evidence": "If p=log(|epsilon32/epsilon21|)/log(r) is estimated from the same equal-r three-grid triple, then with the stated relative GCI definitions the ratio reduces algebraically to |f1/f2| (assuming admissible nonzero differences). With common normalization it is exactly1. A large output offset therefore makes this check nearly1 without showing that a leading-order error model dominates. The recorded counterexample f(h)=100+h^2+100h^6 on h=(.25,.5,1) has estimated p5.845 although its true asymptotic order is2; the ratio is0.98305. This does not invalidate GCI; it invalidates treating this check alone as sufficient evidence.",
+      "concrete_correction": "Retain it as a consistency diagnostic, but require an additional refinement level/order stability, agreement with a verified scheme limit, and evidence that iterative/geometry error is below the measured signal. Do not assign automatic asymptotic PASS solely from near1.",
+      "sources": [
+        "CELIK PDFp2 discussion of apparent versus formal order; independent algebraic derivation and manufactured sequence"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "CFD-07",
+      "severity": "P2",
+      "kind": "missing numerical-quality evidence",
+      "title": "Fixed mass-balance and thrust-drift thresholds do not control iterative error in every reported output",
+      "locations": [
+        {
+          "path": "tests/experiments/nozzle/moc_ext_e13_write_shockfluid_case.py",
+          "line": 1204
+        },
+        {
+          "path": "tests/experiments/nozzle/moc_ext_e13_write_shockfluid_case.py",
+          "line": 1077
+        },
+        {
+          "path": "docs/subsystems/S06-rao-moc-bvp-contour/moc_extensions_plan_2026-11-21/sections/10_cfd.tex",
+          "line": 47
+        }
+      ],
+      "claim_under_review": "Mass imbalance<1e-4 and CF change<1e-5 over a flow-through time are sufficient prerequisites for GCI on all functionals and smooth samples.",
+      "evidence": "These are sensible monitoring choices, but neither constrains local wall-pressure/Mach changes or slow convergence modes. Celik PDFp1 asks for residual trends for each equation and convergence of key variables, and PDFp4 recommends estimated iteration error at least one order below discretization error. It explicitly warns that small successive changes can be misleading when the convergence factor is near1. The writer supplies no per-observable iteration-error estimate or signal-based rule, and its fixed ten-flow-through endtime is an initial schedule, not proof of stationarity.",
+      "concrete_correction": "Add per-observable stationarity/iterative-error estimates, conservation/energy monitoring, extended-run checks, and residual histories suitable for this explicit conservative solver. Require iterative contamination below the discretization signal used in each GCI. If only physical steady state is compared, distinguish this from time-accurate transient qualification.",
+      "sources": [
+        "CELIK PDFp1 Preliminaries, PDFpp3\u20134 Appendix; CODE W997\u20131001"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "CFD-08",
+      "severity": "P2",
+      "kind": "uncontrolled systematic numerical effects",
+      "title": "Wall faceting and wedge-angle error are outside the three-grid uncertainty estimate",
+      "locations": [
+        {
+          "path": "tests/experiments/nozzle/moc_ext_e13_write_shockfluid_case.py",
+          "line": 1061
+        },
+        {
+          "path": "tests/experiments/nozzle/moc_ext_e13_write_shockfluid_case.py",
+          "line": 1209
+        },
+        {
+          "path": "tests/experiments/nozzle/moc_ext_e13_write_shockfluid_case.py",
+          "line": 1225
+        }
+      ],
+      "claim_under_review": "Refining the emitted mesh supports a continuum smooth-nozzle comparison without additional geometry/wedge error control.",
+      "evidence": "All three grids keep identical block vertices and the same polyline wall; refining cell counts converges toward that polygonal domain. A fixed0.125degree turning limit creates geometric kinks and associated local waves that do not vanish under this refinement. The0.2degree wedge is tested only on the coarse mesh, with no acceptance: it cannot isolate an angle error on the fine mesh from angle/grid interaction. The script already labels these effects, which is good, but they are not included in the disagreement budget or quantified at the accuracy demanded of CFD1.",
+      "concrete_correction": "Either make the MOC analyze the identical polygonal wall for a matched comparison, or perform separate wall-representation convergence against the intended smooth contour. Perform wedge-angle sensitivity at a mesh level appropriate to the accepted accuracy, with separate limits/reporting. Continue normalizing fluxes using the actual mesh throat area; that part is correct.",
+      "sources": [
+        "CELIK PDFp1 definition of the discrete problem and PDFp2 systematic refinement; CODE W351\u2013355,W1059\u20131061,W1207\u20131227; geometry-convergence reasoning"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "CFD-09",
+      "severity": "P2",
+      "kind": "missing deliverables and dependencies",
+      "title": "CFD1 promises TOP shocks and variable-cp fields that the current case family cannot generate",
+      "locations": [
+        {
+          "path": "docs/subsystems/S06-rao-moc-bvp-contour/moc_extensions_plan_2026-11-21/sections/10_cfd.tex",
+          "line": 27
+        },
+        {
+          "path": "docs/subsystems/S06-rao-moc-bvp-contour/moc_extensions_plan_2026-11-21/sections/12_roadmap.tex",
+          "line": 42
+        },
+        {
+          "path": "tests/experiments/nozzle/moc_ext_e13_write_shockfluid_case.py",
+          "line": 517
+        },
+        {
+          "path": "tests/experiments/nozzle/moc_ext_e13_write_shockfluid_case.py",
+          "line": 1016
+        }
+      ],
+      "claim_under_review": "The Nozzle-B E13 prototype provides the CFD1 references required by S1 and T1.",
+      "evidence": "E13 hard-codes a Nozzle-B case identity/source and hConst/pureMixture/perfectGas thermodynamics with one constantCp and gamma. Its own cannot_establish list excludes variable-gamma effects. It has neither an accepted TOP shock case nor a JANAF variable-cp case/initial-state contract. Thus Nozzle-B success would not close either advertised reference. CFD1 currently depends only on CFD0 and X0; the additional geometry/gas/source matching tasks have no explicit deliverable or acceptance.",
+      "concrete_correction": "Split CFD1a smooth constant-gas Nozzle-B, CFD1b matched TOP internal shock, CFD1c frozen variable-cp/JANAF with matching gas tables and sound speed, and later viscous/RANS work. Add the corresponding geometry, thermodynamic and shock-extraction dependencies. A useful first limited case need not cover all regimes.",
+      "sources": [
+        "CODE W509\u2013538,W1014,W1218\u20131220; PLAN10_cfd27\u201335 and12_roadmap42"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "CFD-10",
+      "severity": "P2",
+      "kind": "confirmed invalid alternate comparator",
+      "title": "Mass-averaged Mach on C-D-E is not the exit-plane mass-averaged Mach",
+      "locations": [
+        {
+          "path": "tests/experiments/nozzle/moc_ext_e13_write_shockfluid_case.py",
+          "line": 1164
+        }
+      ],
+      "claim_under_review": "Either a C-D-E mass-averaged M or an exit-plane mass-averaged M is a valid counterpart to the CFD outlet-plane metric.",
+      "evidence": "Mass flow and complete momentum-plus-pressure flux can be moved between suitable control surfaces using conservation. Mach number is not a conserved transported scalar; it changes through smooth expansion along a streamline. Therefore an oblique upstream C-D-E average need not equal an outlet-plane average even for an exact common flow, while the pressure/momentum control-surface equality can remain valid.",
+      "concrete_correction": "Compare the same x=x_E plane and use the same weighting: integral(M rho u_x dA)/integral(rho u_x dA). Keep C-D-E averages as separately named diagnostics. Verify interpolation coverage and quadrature on that exit plane.",
+      "sources": [
+        "CODE W1162\u20131163; conservation/observable-definition derivation"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "CFD-11",
+      "severity": "P2",
+      "kind": "confirmed sign error plus ambiguous inlet term in planned control-volume cross-check",
+      "title": "The wall-force cross-check needs an outward-normal sign and inlet pressure term",
+      "locations": [
+        {
+          "path": "tests/experiments/nozzle/moc_ext_e13_write_shockfluid_case.py",
+          "line": 1155
+        },
+        {
+          "path": "tests/experiments/nozzle/moc_ext_e13_write_shockfluid_case.py",
+          "line": 649
+        }
+      ],
+      "claim_under_review": "Outlet momentum-plus-pressure thrust equals inlet momentum flux plus the standard wallForces pressure integral.",
+      "evidence": "With normals outward from the fluid, steady inviscid x-momentum gives J_out=J_in-W_x, where J_in=integral_inlet(rho u_x^2+p)dA and W_x=integral_wall p n_x dA. The pinned forcesBase.C lines853\u2013858 returns +(p-pRef)Sf, so the raw pressure force has this W_x sign. The writer says plus wallForces, which is opposite. Its inlet momentum wording also does not explicitly include inlet pressure. Inlet pressure is material for the finite inlet radius. Main outlet integral is correct; the defect affects the independent cross-check specification.",
+      "concrete_correction": "Write the complete signed control-volume balance including inlet pressure, all included wall patches, any nonzero unsteady storage term, and explicit fluid/solid force convention. Export an inlet surface as well as outlet/wall data, or supply a tested inlet integration. Set pRef0 explicitly for reproducibility. Verify the identity on a uniform manufactured flow and a converging/diverging geometry.",
+      "sources": [
+        "OPENFOAM:https://raw.githubusercontent.com/OpenFOAM/OpenFOAM-13/65eda17ad4caa916bfd0606039db92509670f9f7/src/functionObjects/forces/forcesBase/forcesBase.C#L853-L858",
+        "steady Euler momentum integral derived here"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "CFD-12",
+      "severity": "P2",
+      "kind": "missing extraction contract",
+      "title": "The return-data plan has no implemented field/flux extractor or reproducible shock-region estimator",
+      "locations": [
+        {
+          "path": "tests/experiments/nozzle/moc_ext_e13_write_shockfluid_case.py",
+          "line": 640
+        },
+        {
+          "path": "tests/experiments/nozzle/moc_ext_e13_write_shockfluid_case.py",
+          "line": 1177
+        },
+        {
+          "path": "tests/experiments/nozzle/moc_ext_e13_write_shockfluid_case.py",
+          "line": 1233
+        }
+      ],
+      "claim_under_review": "The writer and schema suffice to deliver accepted numerical quantities after a user returns logs.",
+      "evidence": "The script emits field samples, monitor templates, prose definitions and an illustrative handoff schema, but no implementation is present for the promised surface quadrature, signed inlet flux handling, field registration, GCI edge cases, connected shock-region localization, or threshold sensitivity. The axis sampling line is actually at r=1e-4Rt and excludes domain ends (W630\u2013635), while the comparison describes r0 extrapolated cell-centre results; reconstruction policy is unspecified. Proposed gradient threshold0.05 is honestly labeled a policy, but no detection calibration or miss/false-positive study is specified. Lovely PDFp6 describes threshold selection as a substantive filter problem, not a universal constant.",
+      "concrete_correction": "Add CFD-extract as a distinct milestone before CFD1 adjudication: typed SI field/surface inputs, extraction-code hashes, exact station/normal/area conventions, robust convergence handling, and synthetic/exact detector checks including smooth expansion, smooth compression, constant flow and known captured shocks. Require explicit UNAVAILABLE for missing samples; do not infer all metrics from a checkMesh log or a short dry run.",
+      "sources": [
+        "LOVELY PDFp6 Filtering; CODE W630\u2013674,W1175\u20131178,W1231\u20131255"
+      ],
+      "confidence": "high"
+    }
+  ],
+  "calculations": "builds/moc_cfd_literature_audit_2026-11-21/cfd_algebra_checks.json",
+  "current_source_fingerprints": [
+    {
+      "path": "tests/experiments/nozzle/moc_ext_e13_write_shockfluid_case.py",
+      "sha256": "8daf42050bfc252eff5441bd04887c744b3886cdf808086d291961174da87299"
+    },
+    {
+      "path": "tests/components/nozzle/test_moc_ext_shockfluid_case.py",
+      "sha256": "fb6d11c32a7a95072b5131eec2674fcead950f9d948507acdf7a3591a231594e"
+    },
+    {
+      "path": "src/lrekit/components/nozzle/solvers/nasa.py",
+      "sha256": "1fffcebd6a3bc1ef0e9075ba2fea27cb504ed51cc19e06a4bab9c61418071bb4"
+    },
+    {
+      "path": "docs/subsystems/S06-rao-moc-bvp-contour/moc_extensions_plan_2026-11-21/sections/08_verification.tex",
+      "sha256": "a7a166d37460248b48286a0230c768e72c1b269610ede3ae30a9c6ac6a12f4e5"
+    },
+    {
+      "path": "docs/subsystems/S06-rao-moc-bvp-contour/moc_extensions_plan_2026-11-21/sections/10_cfd.tex",
+      "sha256": "ec93061343d30532f89b8d62287fb54d3b84f84ed1f19d5d3cf39a914cb64f1c"
+    },
+    {
+      "path": "docs/subsystems/S06-rao-moc-bvp-contour/moc_extensions_plan_2026-11-21/sections/12_roadmap.tex",
+      "sha256": "6a3a1ebd64666606b36972798fe12c05fd7c7dd3d95d5af036c2a80ac33b949b"
+    }
+  ],
+  "refactor_note": "Final canonical package src/lrekit; legacy imports remain aliases. Locators and present-file hashes refreshed; pinned OpenFOAM sources and scientific findings unchanged."
+}

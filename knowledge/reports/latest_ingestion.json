@@ -1,10 +1,10 @@
 {
- "started_at": "2026-10-17T17:57:57.134346+00:00",
+ "started_at": "2026-11-21T23:24:25.147749+00:00",
  "steps": {
   "sync": {
-   "pdf_count": 286,
-   "manifest_rows": 286,
-   "synchronized": 286,
+   "pdf_count": 305,
+   "manifest_rows": 305,
+   "synchronized": 305,
    "missing_markdown": 0,
    "stale_markdown": 0,
    "orphan_markdown": 1,
@@ -12,20 +12,24 @@
    "weak_mapping": 0,
    "duplicate_payloads": 27
   },
+  "repository_relocations": {
+   "software_links": 0,
+   "tests": 0
+  },
   "manifest": {
-   "documents": 252
+   "documents": 271
   },
   "chunks": {
    "ingested": 0,
-   "unchanged": 247,
+   "unchanged": 266,
    "skipped_no_markdown": 0,
    "skipped_failed_conversion": 0,
    "skipped_empty_source": 1,
    "skipped_empty_extraction": 0,
-   "n_chunks_total": 19565,
+   "n_chunks_total": 20757,
    "removed": 0,
    "skipped_alternate_copy": 4,
-   "generated_at": "2026-10-17T17:57:59.004053+00:00"
+   "generated_at": "2026-11-21T23:24:26.789951+00:00"
   },
   "index": {
    "skipped": "no chunk changes"
@@ -69,29 +73,29 @@
    "invalidated_objects": 0
   },
   "enrichments": {
-   "records": 560,
+   "records": 1512,
    "inactive": 154
   },
   "repo": {
-   "repo_documents": 64,
-   "doc_relations": 2,
+   "repo_documents": 90,
+   "doc_relations": 184,
    "unresolved_doc_refs": [],
-   "tests": 1068,
+   "tests": 1215,
    "tests_by_kind": {
-    "unit_test": 933,
-    "model_vs_model_comparison": 7,
+    "unit_test": 1077,
     "cad_round_trip": 49,
-    "numpy_jax_parity": 50,
-    "numerical_regression": 11,
     "autodiff_finite_difference": 12,
-    "snapshot_contract": 6
+    "snapshot_contract": 7,
+    "model_vs_model_comparison": 7,
+    "numpy_jax_parity": 52,
+    "numerical_regression": 11
    },
-   "capabilities": 102,
+   "capabilities": 141,
    "capabilities_by_state": {
-    "UNSUPPORTED": 14,
-    "NOT_QUALIFIED": 9,
-    "NOT_IMPLEMENTED": 9,
-    "UNAVAILABLE": 33,
+    "UNAVAILABLE": 39,
+    "UNSUPPORTED": 42,
+    "NOT_IMPLEMENTED": 12,
+    "NOT_QUALIFIED": 11,
     "BLOCKED_ON_LITERATURE": 37
    },
    "citations": 33,
@@ -128,135 +132,455 @@
    "accepted_reports": 17,
    "sources": [
     {
-     "path": "builds/13kn_engine/pintle/injector_manufacturing_report.json",
+     "path": "builds/_archive_2026-11-05/13kn_engine/pintle/injector_manufacturing_report.json",
      "state": "CURRENT",
      "sha256": "f5c5316c653cc64d5c6af84511b46f7bd82c4d206eb0660b5ac3fd672b53646d"
     },
     {
-     "path": "builds/lox_rp1_13kn_20bar_grcop84_inconel_pintle/pintle/injector_manufacturing_report.json",
+     "path": "builds/_archive_2026-11-05/lox_rp1_13kn_20bar_grcop84_inconel_pintle/pintle/injector_manufacturing_report.json",
      "state": "CURRENT",
      "sha256": "3906529223bfa79801bd4cb8bc7568196131a71b0da7cf36670ef024054c44fb"
     },
     {
-     "path": "builds/lox_rp1_13kn_40bar_grcop84_inconel_pintle/pintle/injector_manufacturing_report.json",
+     "path": "builds/_archive_2026-11-05/lox_rp1_13kn_40bar_grcop84_inconel_pintle/pintle/injector_manufacturing_report.json",
      "state": "CURRENT",
      "sha256": "ff3319469811db124bb68779d22b3cd1089f81e43cbbe6e6956b4e40ceeff510"
     },
     {
-     "path": "builds/lox_rp1_13kn_grcop84_inconel_pintle/pintle/injector_manufacturing_report.json",
+     "path": "builds/_archive_2026-11-05/lox_rp1_13kn_grcop84_inconel_pintle/pintle/injector_manufacturing_report.json",
      "state": "CURRENT",
      "sha256": "8fae395c6b4dc583ee2979c53f252a0ae1246c72e2be7c44a26130100ce090a2"
     },
     {
-     "path": "builds/lox_rp1_13kn_grcop84_inconel_pintle_flanged/pintle/injector_manufacturing_report.json",
+     "path": "builds/_archive_2026-11-05/lox_rp1_13kn_grcop84_inconel_pintle_flanged/pintle/injector_manufacturing_report.json",
      "state": "CURRENT",
      "sha256": "52e719b15f046ec3b7f1d396adccb7f8ad4b269341eecf26b99ec381a9aa584d"
     },
     {
-     "path": "builds/pintle_inventor_bundle_20260629/pintle/injector_manufacturing_report.json",
+     "path": "builds/_archive_2026-11-05/pintle_inventor_bundle_20260629/pintle/injector_manufacturing_report.json",
      "state": "CURRENT",
      "sha256": "b318f8028d8329e3002aab43acf57dc1880806acf796de433cd5c5a18c3c601c"
     },
     {
-     "path": "builds/review_machined_pintle_cli/pintle/injector_manufacturing_report.json",
+     "path": "builds/_archive_2026-11-05/review_machined_pintle_cli/pintle/injector_manufacturing_report.json",
      "state": "CURRENT",
      "sha256": "9741211f0dfb4005abf8d99254d30752cb1a70e9de726306cb68aa572d65e0b0"
     },
     {
-     "path": "builds/review_machined_pintle_cli_after_fixes/pintle/injector_manufacturing_report.json",
+     "path": "builds/_archive_2026-11-05/review_machined_pintle_cli_after_fixes/pintle/injector_manufacturing_report.json",
      "state": "CURRENT",
      "sha256": "549fb1def5bfc09ec68d91d23a9465a0c95ea566cb665e568405b4f527734838"
     },
     {
-     "path": "builds/tests/13kn_sl_fast/pintle/injector_manufacturing_report.json",
+     "path": "builds/_archive_2026-11-05/tests/13kn_sl_fast/pintle/injector_manufacturing_report.json",
      "state": "CURRENT",
      "sha256": "88888d2a97d3629838ebd031b3b2bcdd254b64b4072bedfa541a69c624510b1c"
     },
     {
-     "path": "builds/tests/13kn_sl_full/pintle/injector_manufacturing_report.json",
+     "path": "builds/_archive_2026-11-05/tests/13kn_sl_full/pintle/injector_manufacturing_report.json",
      "state": "CURRENT",
      "sha256": "55862e2c0487a936c050d813abcdda0f371688a50d98a556ebbf8b962b29a948"
     },
     {
-     "path": "builds/tests/13kn_sl_sandbox_20260713/pintle/injector_manufacturing_report.json",
+     "path": "builds/_archive_2026-11-05/tests/13kn_sl_sandbox_20260713/pintle/injector_manufacturing_report.json",
      "state": "CURRENT",
      "sha256": "3f1b368d96745391ebe8b6784f34f241a2b46b4960cbce30d128651038df1a99"
     },
     {
-     "path": "builds/tests/coaxial_injector_13kn/holes/injector_manufacturing_report.json",
+     "path": "builds/_archive_2026-11-05/tests/coaxial_injector_13kn/holes/injector_manufacturing_report.json",
      "state": "CURRENT",
      "sha256": "71b4d3f740acd9d30b672892f6bbc507264c63745a3e39dde14f64f625fd8163"
     },
     {
-     "path": "builds/tests/coaxial_injector_13kn/slots/injector_manufacturing_report.json",
+     "path": "builds/_archive_2026-11-05/tests/coaxial_injector_13kn/slots/injector_manufacturing_report.json",
      "state": "CURRENT",
      "sha256": "a47972c23b5edad601a1494930017cb440af759339a44d7520689c1d47c1582f"
     },
     {
-     "path": "builds/v045_20260514_191821/design_report_v2.json",
+     "path": "builds/_archive_2026-11-05/v045_20260514_191821/design_report_v2.json",
      "state": "CURRENT",
      "sha256": "adce0f7146bef302e9cc8bd979e23da4aaa85535d788a22c497234727a81cb83"
     },
     {
-     "path": "builds/v309_20260620_224603/design_report_v2.json",
+     "path": "builds/_archive_2026-11-05/v309_20260620_224603/design_report_v2.json",
      "state": "CURRENT",
      "sha256": "c0b384716bab4ce6a11dde0bea83a72550d69f701bccf15ef0b8cff31c37d5b9"
     },
     {
-     "path": "builds/windows_inventor_pintle_20260629_pass/pintle/injector_manufacturing_report.json",
+     "path": "builds/_archive_2026-11-05/windows_inventor_pintle_20260629_pass/pintle/injector_manufacturing_report.json",
      "state": "CURRENT",
      "sha256": "d3930c5e786fbb042ba79fbecc1b26839a26a0297820f56d82375dd3b6012391"
     },
     {
-     "path": "builds/windows_inventor_pintle_20260629_smoke/pintle/injector_manufacturing_report.json",
+     "path": "builds/_archive_2026-11-05/windows_inventor_pintle_20260629_smoke/pintle/injector_manufacturing_report.json",
      "state": "CURRENT",
      "sha256": "e27430bcdca08b3c0ea533814610dea1da442558b9e59e3b22caf0bd5fb10725"
     }
    ],
    "issues": [
     {
-     "path": "builds/tests/13kn_sl_sandbox_20260713/pintle/injector_manufacturing_report.json",
+     "path": "builds/_archive_2026-11-05/13kn_engine/pintle/injector_manufacturing_report.json",
+     "role": "annular_sleeve",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/13kn_engine/pintle/injector_manufacturing_report.json",
+     "role": "injector_face_machined",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/13kn_engine/pintle/injector_manufacturing_report.json",
+     "role": "machined_assembly",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/13kn_engine/pintle/injector_manufacturing_report.json",
+     "role": "pintle_post_slotted",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/lox_rp1_13kn_20bar_grcop84_inconel_pintle/pintle/injector_manufacturing_report.json",
+     "role": "annular_sleeve",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/lox_rp1_13kn_20bar_grcop84_inconel_pintle/pintle/injector_manufacturing_report.json",
+     "role": "injector_face_machined",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/lox_rp1_13kn_20bar_grcop84_inconel_pintle/pintle/injector_manufacturing_report.json",
+     "role": "machined_assembly",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/lox_rp1_13kn_20bar_grcop84_inconel_pintle/pintle/injector_manufacturing_report.json",
+     "role": "pintle_post_slotted",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/lox_rp1_13kn_40bar_grcop84_inconel_pintle/pintle/injector_manufacturing_report.json",
+     "role": "annular_sleeve",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/lox_rp1_13kn_40bar_grcop84_inconel_pintle/pintle/injector_manufacturing_report.json",
+     "role": "injector_face_machined",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/lox_rp1_13kn_40bar_grcop84_inconel_pintle/pintle/injector_manufacturing_report.json",
+     "role": "machined_assembly",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/lox_rp1_13kn_40bar_grcop84_inconel_pintle/pintle/injector_manufacturing_report.json",
+     "role": "pintle_post_slotted",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/lox_rp1_13kn_grcop84_inconel_pintle/pintle/injector_manufacturing_report.json",
+     "role": "annular_sleeve",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/lox_rp1_13kn_grcop84_inconel_pintle/pintle/injector_manufacturing_report.json",
+     "role": "injector_face_machined",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/lox_rp1_13kn_grcop84_inconel_pintle/pintle/injector_manufacturing_report.json",
+     "role": "machined_assembly",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/lox_rp1_13kn_grcop84_inconel_pintle/pintle/injector_manufacturing_report.json",
+     "role": "pintle_post_slotted",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/lox_rp1_13kn_grcop84_inconel_pintle_flanged/pintle/injector_manufacturing_report.json",
+     "role": "annular_sleeve",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/lox_rp1_13kn_grcop84_inconel_pintle_flanged/pintle/injector_manufacturing_report.json",
+     "role": "injector_face_machined",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/lox_rp1_13kn_grcop84_inconel_pintle_flanged/pintle/injector_manufacturing_report.json",
+     "role": "machined_assembly",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/lox_rp1_13kn_grcop84_inconel_pintle_flanged/pintle/injector_manufacturing_report.json",
+     "role": "pintle_post_slotted",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/pintle_inventor_bundle_20260629/pintle/injector_manufacturing_report.json",
+     "role": "annular_sleeve",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/pintle_inventor_bundle_20260629/pintle/injector_manufacturing_report.json",
+     "role": "injector_face_machined",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/pintle_inventor_bundle_20260629/pintle/injector_manufacturing_report.json",
+     "role": "machined_assembly",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/pintle_inventor_bundle_20260629/pintle/injector_manufacturing_report.json",
+     "role": "pintle_post_slotted",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/review_machined_pintle_cli/pintle/injector_manufacturing_report.json",
+     "role": "annular_sleeve",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/review_machined_pintle_cli/pintle/injector_manufacturing_report.json",
+     "role": "injector_face_machined",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/review_machined_pintle_cli/pintle/injector_manufacturing_report.json",
+     "role": "machined_assembly",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/review_machined_pintle_cli/pintle/injector_manufacturing_report.json",
+     "role": "pintle_post_slotted",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/review_machined_pintle_cli_after_fixes/pintle/injector_manufacturing_report.json",
+     "role": "annular_sleeve",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/review_machined_pintle_cli_after_fixes/pintle/injector_manufacturing_report.json",
+     "role": "injector_face_machined",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/review_machined_pintle_cli_after_fixes/pintle/injector_manufacturing_report.json",
+     "role": "machined_assembly",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/review_machined_pintle_cli_after_fixes/pintle/injector_manufacturing_report.json",
+     "role": "pintle_post_slotted",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/tests/13kn_sl_fast/pintle/injector_manufacturing_report.json",
+     "role": "faceplate",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/tests/13kn_sl_fast/pintle/injector_manufacturing_report.json",
+     "role": "injector_body",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/tests/13kn_sl_fast/pintle/injector_manufacturing_report.json",
+     "role": "machined_assembly",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/tests/13kn_sl_fast/pintle/injector_manufacturing_report.json",
+     "role": "orifice_plate",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/tests/13kn_sl_fast/pintle/injector_manufacturing_report.json",
+     "role": "pintle_body",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/tests/13kn_sl_fast/pintle/injector_manufacturing_report.json",
+     "role": "pintle_tip",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/tests/13kn_sl_full/pintle/injector_manufacturing_report.json",
+     "role": "faceplate",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/tests/13kn_sl_full/pintle/injector_manufacturing_report.json",
+     "role": "injector_body",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/tests/13kn_sl_full/pintle/injector_manufacturing_report.json",
+     "role": "machined_assembly",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/tests/13kn_sl_full/pintle/injector_manufacturing_report.json",
+     "role": "orifice_plate",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/tests/13kn_sl_full/pintle/injector_manufacturing_report.json",
+     "role": "pintle_body",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/tests/13kn_sl_full/pintle/injector_manufacturing_report.json",
+     "role": "pintle_tip",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/tests/13kn_sl_sandbox_20260713/pintle/injector_manufacturing_report.json",
      "role": "faceplate",
      "state": "OUTSIDE_REPOSITORY"
     },
     {
-     "path": "builds/tests/13kn_sl_sandbox_20260713/pintle/injector_manufacturing_report.json",
+     "path": "builds/_archive_2026-11-05/tests/13kn_sl_sandbox_20260713/pintle/injector_manufacturing_report.json",
      "role": "injector_body",
      "state": "OUTSIDE_REPOSITORY"
     },
     {
-     "path": "builds/tests/13kn_sl_sandbox_20260713/pintle/injector_manufacturing_report.json",
+     "path": "builds/_archive_2026-11-05/tests/13kn_sl_sandbox_20260713/pintle/injector_manufacturing_report.json",
      "role": "machined_assembly",
      "state": "OUTSIDE_REPOSITORY"
     },
     {
-     "path": "builds/tests/13kn_sl_sandbox_20260713/pintle/injector_manufacturing_report.json",
+     "path": "builds/_archive_2026-11-05/tests/13kn_sl_sandbox_20260713/pintle/injector_manufacturing_report.json",
      "role": "orifice_plate",
      "state": "OUTSIDE_REPOSITORY"
     },
     {
-     "path": "builds/tests/13kn_sl_sandbox_20260713/pintle/injector_manufacturing_report.json",
+     "path": "builds/_archive_2026-11-05/tests/13kn_sl_sandbox_20260713/pintle/injector_manufacturing_report.json",
      "role": "pintle_body",
      "state": "OUTSIDE_REPOSITORY"
     },
     {
-     "path": "builds/tests/13kn_sl_sandbox_20260713/pintle/injector_manufacturing_report.json",
+     "path": "builds/_archive_2026-11-05/tests/13kn_sl_sandbox_20260713/pintle/injector_manufacturing_report.json",
      "role": "pintle_tip",
      "state": "OUTSIDE_REPOSITORY"
     },
     {
-     "path": "builds/v045_20260514_191821/design_report_v2.json",
+     "path": "builds/_archive_2026-11-05/tests/coaxial_injector_13kn/holes/injector_manufacturing_report.json",
+     "role": "faceplate",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/tests/coaxial_injector_13kn/holes/injector_manufacturing_report.json",
+     "role": "injector_body",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/tests/coaxial_injector_13kn/holes/injector_manufacturing_report.json",
+     "role": "machined_assembly",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/tests/coaxial_injector_13kn/holes/injector_manufacturing_report.json",
+     "role": "orifice_plate",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/tests/coaxial_injector_13kn/holes/injector_manufacturing_report.json",
+     "role": "pintle_body",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/tests/coaxial_injector_13kn/holes/injector_manufacturing_report.json",
+     "role": "pintle_tip",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/tests/coaxial_injector_13kn/slots/injector_manufacturing_report.json",
+     "role": "faceplate",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/tests/coaxial_injector_13kn/slots/injector_manufacturing_report.json",
+     "role": "injector_body",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/tests/coaxial_injector_13kn/slots/injector_manufacturing_report.json",
+     "role": "machined_assembly",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/tests/coaxial_injector_13kn/slots/injector_manufacturing_report.json",
+     "role": "orifice_plate",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/tests/coaxial_injector_13kn/slots/injector_manufacturing_report.json",
+     "role": "pintle_body",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/tests/coaxial_injector_13kn/slots/injector_manufacturing_report.json",
+     "role": "pintle_tip",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/v045_20260514_191821/design_report_v2.json",
      "state": "NONFINITE_REPORT_VALUES",
      "json_pointers": [
       "/report_sections/structural/hoop_stress"
      ]
     },
     {
-     "path": "builds/v309_20260620_224603/design_report_v2.json",
+     "path": "builds/_archive_2026-11-05/v309_20260620_224603/design_report_v2.json",
      "state": "NONFINITE_REPORT_VALUES",
      "json_pointers": [
       "/report_sections/structural/hoop_stress"
      ]
+    },
+    {
+     "path": "builds/_archive_2026-11-05/windows_inventor_pintle_20260629_pass/pintle/injector_manufacturing_report.json",
+     "role": "annular_sleeve",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/windows_inventor_pintle_20260629_pass/pintle/injector_manufacturing_report.json",
+     "role": "injector_face_machined",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/windows_inventor_pintle_20260629_pass/pintle/injector_manufacturing_report.json",
+     "role": "machined_assembly",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/windows_inventor_pintle_20260629_pass/pintle/injector_manufacturing_report.json",
+     "role": "pintle_post_slotted",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/windows_inventor_pintle_20260629_smoke/pintle/injector_manufacturing_report.json",
+     "role": "annular_sleeve",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/windows_inventor_pintle_20260629_smoke/pintle/injector_manufacturing_report.json",
+     "role": "injector_face_machined",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/windows_inventor_pintle_20260629_smoke/pintle/injector_manufacturing_report.json",
+     "role": "machined_assembly",
+     "state": "FileNotFoundError"
+    },
+    {
+     "path": "builds/_archive_2026-11-05/windows_inventor_pintle_20260629_smoke/pintle/injector_manufacturing_report.json",
+     "role": "pintle_post_slotted",
+     "state": "FileNotFoundError"
     }
    ],
    "records_by_type": {
@@ -304,21 +628,21 @@
   },
   "graph": {
    "ontology_version": "1.2.0",
-   "generated_at": "2026-10-17T17:58:07.928151+00:00",
-   "n_nodes": 5728,
-   "n_edges": 7266,
+   "generated_at": "2026-11-21T23:24:35.407649+00:00",
+   "n_nodes": 7049,
+   "n_edges": 8332,
    "n_dangling_dropped": 0,
    "n_candidate_link_issues": 54
   },
   "validation": {
-   "generated_at": "2026-10-17T17:58:08.805732+00:00",
-   "n_issues": 14,
+   "generated_at": "2026-11-21T23:24:36.180239+00:00",
+   "n_issues": 78,
    "issues_by_check": {
     "empty_source_pdf": 1,
     "canonical_document_without_chunks": 1,
     "markdown_without_manifest_row": 1,
     "registry_citation_not_confirmed_in_local_source": 1,
-    "declared_cad_bytes_unavailable": 6,
+    "declared_cad_bytes_unavailable": 70,
     "source_extraction_incomplete": 1,
     "source_verification_incomplete": 1,
     "unknown_basis_software_constants": 1,
@@ -362,32 +686,32 @@
       "EngineConfiguration": 17,
       "ManufacturingProcess": 15
      },
-     "inactive_snapshots": 72
+     "inactive_snapshots": 378
     },
     "graph": {
-     "nodes": 5728,
-     "edges": 7266,
+     "nodes": 7049,
+     "edges": 8332,
      "edges_without_provenance": 0,
      "top_degree": [
       [
        "DOC_NTRS_19710019929",
-       153
+       156
       ],
       [
        "MODEL_NOZZLE_RAO_VARIATIONAL_BVP",
        146
       ],
       [
-       "DOC_NTRS_19760023196",
-       111
-      ],
-      [
        "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
-       110
+       134
       ],
       [
-       "MODEL_NOZZLE_MOC",
-       97
+       "DOC_NTRS_19760023196",
+       134
+      ],
+      [
+       "ENR_00af2ca27fbeddd3fdbd8d88",
+       101
       ]
      ]
     },
@@ -397,17 +721,17 @@
      "concept_completeness": "NOT_ESTABLISHED",
      "scope_note": "Coverage of stored source objects against manifest identities; live PDF/Markdown bytes are not rehashed here. Existing independently_confirmed counters preserve historical stored-verdict totals; content_bound_confirmed additionally checks the assertion fingerprint. No all-equation denominator or physical validation.",
      "documents": {
-      "records": 252,
-      "canonical": 248,
+      "records": 271,
+      "canonical": 267,
       "alternate_copies": 4,
       "with_source_objects": 30,
-      "without_source_objects": 218,
+      "without_source_objects": 237,
       "with_equations": 24,
-      "without_equations": 224,
+      "without_equations": 243,
       "with_independently_confirmed_objects": 20,
       "with_content_bound_confirmed_objects": 4,
-      "conversion_requires_review": 230,
-      "conversion_low_confidence": 16,
+      "conversion_requires_review": 249,
+      "conversion_low_confidence": 28,
       "zero_page_sources": 1,
       "zero_page_source_ids": [
        "DOC_DOI_10_1007_978_3_030_14788_4"
@@ -607,8 +931,8 @@
       "scope_note": "Stored totals preserve history. Current counts include active records with CURRENT source state; absent legacy state fields retain their existing active/CURRENT defaults."
      },
      "gaps": {
-      "canonical_documents_without_source_objects": 218,
-      "canonical_documents_without_equations": 224,
+      "canonical_documents_without_source_objects": 237,
+      "canonical_documents_without_equations": 243,
       "equations_and_claims_pending_independent_verification": 271,
       "current_source_objects_without_content_bound_confirmation": 725,
       "equations_without_model_links": 160,
@@ -643,27 +967,27 @@
     "equations": 67
    },
    "documents_with_extracted_objects": 30,
-   "canonical_documents_without_extracted_objects": 218
+   "canonical_documents_without_extracted_objects": 237
   },
   "completion_reports": {
    "CORPUS_COMPLETENESS.json": {
-    "content_sha256": "86bee2dc789ec0de1802dd7db9ae5c6220e10ccdf4cb49d2636ba50fc2868713",
+    "content_sha256": "c296fb60b8b1540a03ede8e2324ad4f6a80b322caf903683d1ef00b0547c1376",
     "denominators": {
-     "canonical_documents": 248,
+     "canonical_documents": 267,
      "alternate_copies": 4,
      "claims_current": 287,
      "claims_historical": 0,
      "docling_attempted_unfinished_pages": 0,
-     "docling_candidates": 455,
-     "docling_processed_pages": 94,
+     "docling_candidates": 1318,
+     "docling_processed_pages": 479,
      "docling_region_crop_pages": 14,
      "docling_rejected_pages": 7,
-     "docling_unattempted_pages": 11274,
-     "documents_with_chunks": 247,
+     "docling_unattempted_pages": 11589,
+     "documents_with_chunks": 266,
      "documents_with_confirmed_objects": 19,
      "documents_with_content_bound_confirmed_objects": 4,
      "documents_with_current_source_objects": 30,
-     "documents_with_docling_candidates": 24,
+     "documents_with_docling_candidates": 36,
      "entities_current": 226,
      "entities_historical": 0,
      "equations_claims_confirmed": 204,
@@ -672,19 +996,19 @@
      "equations_claims_refuted": 3,
      "equations_current": 191,
      "equations_historical": 22,
-     "pages_with_indexed_text": 9746,
+     "pages_with_indexed_text": 10359,
      "source_assertions_content_bound_confirmed": 15,
      "source_assertions_content_state_confirmed": 15,
      "source_assertions_content_state_legacy_content_not_bound": 257,
      "source_assertions_content_state_not_checked": 469,
      "source_assertions_content_state_refuted": 3,
-     "source_pages": 11375,
+     "source_pages": 12075,
      "validity_current": 40,
      "validity_historical": 0
     }
    },
    "EQUATION_FIDELITY_AUDIT.json": {
-    "content_sha256": "95f30e5f88b81f4f5b8e9af66648fd0a19ab55cb02b4eb6216e9304814184c16",
+    "content_sha256": "c53180568e97bbe0d73e4400dc1fc2937d57da64c9a5a5ed8783687cb078e950",
     "summary": {
      "equations": 213,
      "current": 191,
@@ -700,7 +1024,7 @@
      },
      "current_content_bound_confirmed": 5,
      "current_with_recorded_verifier": 66,
-     "current_with_implementation_associations": 37,
+     "current_with_implementation_associations": 22,
      "current_with_model_comparisons": 37,
      "current_with_relationships": 35,
      "current_variables": {
@@ -723,13 +1047,13 @@
     }
    },
    "MODEL_SOURCE_AUDIT.json": {
-    "content_sha256": "cf0238d115f6c600de22a4d2fbd02cfafa2c0baa099473e1e7e77664838406b1",
+    "content_sha256": "675e136bf4baf834bf54d8f8f9fb8ebdb28be138c801ffef44a14e11b50ae06c",
     "summary": {
      "models": 61,
      "by_audit_status": {
       "NOT_CHECKED": 48,
       "SOURCE_REVIEW_CURRENT_UNSTRUCTURED": 6,
-      "STRUCTURED_REVIEW_CURRENT": 7
+      "IMPLEMENTATION_CHANGED_REVIEW_REQUIRED": 7
      },
      "by_current_support": {
       "NOT_CHECKED": 48,
@@ -864,6 +1188,12 @@
    "n_chunks": 0,
    "source_pdf": "propulsion_texts/10.1007_978-3-030-14788-4.pdf",
    "remediation": "Restore the original PDF: the tracked payload has zero pages; enrichment cannot recover absent pages."
+  },
+  {
+   "doc_id": "DOC_DOI_10_1007_978_3_319_68427_7",
+   "state": "LOW_EXTRACTION_CONFIDENCE",
+   "n_chunks": 435,
+   "unchanged": true
   },
   {
    "doc_id": "DOC_DOI_10_1007_S00170_015_7201_4",
@@ -1153,6 +1483,18 @@
    "unchanged": true
   },
   {
+   "doc_id": "DOC_DOI_10_1017_S0022112000002366",
+   "state": "LOW_EXTRACTION_CONFIDENCE",
+   "n_chunks": 45,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1017_S0022112058000434",
+   "state": "LOW_EXTRACTION_CONFIDENCE",
+   "n_chunks": 16,
+   "unchanged": true
+  },
+  {
    "doc_id": "DOC_DOI_10_1038_S41598_024_64027_2",
    "state": "INGESTED",
    "n_chunks": 35,
@@ -1230,6 +1572,12 @@
    "canonical": "DOC_DOI_10_1088_1757_899X_1301_1_012030"
   },
   {
+   "doc_id": "DOC_DOI_10_1093_QJMAM_15_4_487",
+   "state": "LOW_EXTRACTION_CONFIDENCE",
+   "n_chunks": 38,
+   "unchanged": true
+  },
+  {
    "doc_id": "DOC_DOI_10_1115_1_2814127",
    "state": "INGESTED",
    "n_chunks": 19,
@@ -1239,6 +1587,12 @@
    "doc_id": "DOC_DOI_10_1115_1_2817294",
    "state": "INGESTED",
    "n_chunks": 14,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1115_1_2960953",
+   "state": "LOW_EXTRACTION_CONFIDENCE",
+   "n_chunks": 12,
    "unchanged": true
   },
   {
@@ -1311,6 +1665,12 @@
    "doc_id": "DOC_DOI_10_1115_94_GT_426",
    "state": "INGESTED",
    "n_chunks": 20,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1137_09078078X",
+   "state": "LOW_EXTRACTION_CONFIDENCE",
+   "n_chunks": 28,
    "unchanged": true
   },
   {
@@ -1469,9 +1829,21 @@
    "unchanged": true
   },
   {
+   "doc_id": "DOC_DOI_10_2514_3_5355",
+   "state": "LOW_EXTRACTION_CONFIDENCE",
+   "n_chunks": 13,
+   "unchanged": true
+  },
+  {
    "doc_id": "DOC_DOI_10_2514_3_60066",
    "state": "INGESTED",
    "n_chunks": 30,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_3_61399",
+   "state": "LOW_EXTRACTION_CONFIDENCE",
+   "n_chunks": 26,
    "unchanged": true
   },
   {
@@ -1514,6 +1886,12 @@
    "doc_id": "DOC_DOI_10_2514_6_1997_2913",
    "state": "INGESTED",
    "n_chunks": 43,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_6_1999_3285",
+   "state": "LOW_EXTRACTION_CONFIDENCE",
+   "n_chunks": 28,
    "unchanged": true
   },
   {
@@ -1817,6 +2195,12 @@
    "unchanged": true
   },
   {
+   "doc_id": "DOC_NTRS_19650010083",
+   "state": "INGESTED",
+   "n_chunks": 98,
+   "unchanged": true
+  },
+  {
    "doc_id": "DOC_NTRS_19670010557",
    "state": "INGESTED",
    "n_chunks": 74,
@@ -1841,9 +2225,21 @@
    "unchanged": true
   },
   {
+   "doc_id": "DOC_NTRS_19690063911",
+   "state": "INGESTED",
+   "n_chunks": 14,
+   "unchanged": true
+  },
+  {
    "doc_id": "DOC_NTRS_19700005097",
    "state": "LOW_EXTRACTION_CONFIDENCE",
    "n_chunks": 31,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_19710011726",
+   "state": "LOW_EXTRACTION_CONFIDENCE",
+   "n_chunks": 89,
    "unchanged": true
   },
   {
@@ -1985,6 +2381,12 @@
    "unchanged": true
   },
   {
+   "doc_id": "DOC_NTRS_19780012674",
+   "state": "LOW_EXTRACTION_CONFIDENCE",
+   "n_chunks": 78,
+   "unchanged": true
+  },
+  {
    "doc_id": "DOC_NTRS_19780013268",
    "state": "INGESTED",
    "n_chunks": 223,
@@ -2012,6 +2414,18 @@
    "doc_id": "DOC_NTRS_19870007469",
    "state": "INGESTED",
    "n_chunks": 28,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_19870015990",
+   "state": "INGESTED",
+   "n_chunks": 50,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_19870015991",
+   "state": "INGESTED",
+   "n_chunks": 68,
    "unchanged": true
   },
   {
@@ -2045,6 +2459,18 @@
    "unchanged": true
   },
   {
+   "doc_id": "DOC_NTRS_19950024435",
+   "state": "INGESTED",
+   "n_chunks": 24,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_19960042495",
+   "state": "LOW_EXTRACTION_CONFIDENCE",
+   "n_chunks": 49,
+   "unchanged": true
+  },
+  {
    "doc_id": "DOC_NTRS_19960044559",
    "state": "INGESTED",
    "n_chunks": 278,
@@ -2060,6 +2486,12 @@
    "doc_id": "DOC_NTRS_19970004933",
    "state": "INGESTED",
    "n_chunks": 31,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_19990025912",
+   "state": "INGESTED",
+   "n_chunks": 53,
    "unchanged": true
   },
   {
@@ -2165,6 +2597,12 @@
    "unchanged": true
   },
   {
+   "doc_id": "DOC_NTRS_20190030431",
+   "state": "INGESTED",
+   "n_chunks": 28,
+   "unchanged": true
+  },
+  {
    "doc_id": "DOC_PAPERLREENGINEMASSANDSIZING",
    "state": "INGESTED",
    "n_chunks": 33,
@@ -2267,5 +2705,5 @@
    "unchanged": true
   }
  ],
- "finished_at": "2026-10-17T17:58:08.817183+00:00"
+ "finished_at": "2026-11-21T23:24:36.190645+00:00"
 }

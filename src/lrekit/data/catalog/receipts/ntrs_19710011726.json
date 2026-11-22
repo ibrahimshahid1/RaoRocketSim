@@ -1,0 +1,69 @@
+{
+  "source_id": "ntrs_19710011726",
+  "acquired_at_utc": "2026-11-04T00:34:01.009287+00:00",
+  "evidence_kind": "published_experimental_report",
+  "status": "ACQUIRED",
+  "files": [
+    {
+      "path": "raw/ntrs_19710011726/ntrs_metadata.json",
+      "bytes": 2473,
+      "sha256": "191a62ca4c99096b172d982dd93a07ea39e82a400944f7b88ed6e7329b3961a9",
+      "origin": "publisher_metadata",
+      "requested_url": "https://ntrs.nasa.gov/api/citations/19710011726",
+      "resolved_url": "https://ntrs.nasa.gov/api/citations/19710011726",
+      "headers": {
+        "Content-Type": "application/json; charset=utf-8",
+        "ETag": "W/\"9a9-L1tE+CKz9df2Ynms3rEct9yP96U\"",
+        "Last-Modified": null
+      }
+    },
+    {
+      "path": "raw/ntrs_19710011726/source.pdf",
+      "bytes": 3613262,
+      "sha256": "62d165ed0710e515c56ed993eed3871deb5b96662d141d180b0cb93d697904df",
+      "origin": "publisher_report_pdf",
+      "requested_url": "https://ntrs.nasa.gov/api/citations/19710011726/downloads/19710011726.pdf",
+      "resolved_url": "https://ntrs.nasa.gov/api/citations/19710011726/downloads/19710011726.pdf",
+      "headers": {
+        "Content-Type": "application/pdf",
+        "ETag": "\"f832943ac8ad902a944373eb0c0e572a\"",
+        "Last-Modified": "Thu, 06 Aug 2020 19:13:37 GMT"
+      }
+    },
+    {
+      "path": "derived/ntrs_19710011726/source.txt",
+      "bytes": 114546,
+      "sha256": "f761e31c638537c71b823f2cf608cf3811d342161b6964da2753727b5a8d88df",
+      "origin": "unreviewed_pdf_text_derivative"
+    }
+  ],
+  "review_state": "NOT_REVIEWED_FOR_TRAINING",
+  "training_eligible": false,
+  "hardware_qualified": false,
+  "limitations": [
+    "Solid-propellant data: secondary mechanism check only; keep separate from liquid-engine calibration."
+  ],
+  "publisher_title": "A comparison of experimental heat transfer coefficients in a nozzle with analytical predictions from Bartz's methods for various combustion chamber pressures in a solid propellant rocket motor",
+  "publisher_copyright": {
+    "thirdPartyPermissionsProduced": false,
+    "disclosedToPublic": false,
+    "containsIndication": false,
+    "publisherPermissionOrRightsToDistribute": false,
+    "belongsToUsGov": false,
+    "determinationType": "GOV_PUBLIC_USE_PERMITTED",
+    "thirdPartyContentCondition": "NOT_SET",
+    "belongsToContractor": false,
+    "disclosedInvention": false,
+    "submissionId": 19710011726,
+    "containsThirdPartyMaterial": false,
+    "belongsToPublisher": false,
+    "id": "dcd85d733a4843c5af3ea2630e5e5b96",
+    "belongsToAuthors": false
+  },
+  "publisher_distribution": "PUBLIC",
+  "pdf_info": "Creator:          \nProducer:         \nCreationDate:    Fri Nov 19 07:54:36 2010 EST\nModDate:         Tue Dec  7 17:33:52 2010 EST\nCustom Metadata: no\nMetadata Stream: yes\nTagged:          no\nUserProperties:  no\nSuspects:        no\nForm:            AcroForm\nJavaScript:      no\nPages:           99\nEncrypted:       no\nPage size:       610.92 x 792 pts\nPage rot:        0\nFile size:       3613262 bytes\nOptimized:       yes\nPDF version:     1.6\n",
+  "text_extraction": {
+    "status": "DERIVATIVE_TEXT_UNREVIEWED",
+    "warning_excerpt": ""
+  }
+}

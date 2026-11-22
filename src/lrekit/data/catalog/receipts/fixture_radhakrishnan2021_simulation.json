@@ -1,0 +1,28 @@
+{
+  "source_id": "fixture_radhakrishnan2021_simulation",
+  "acquired_at_utc": "2026-11-04T00:34:48.905288+00:00",
+  "evidence_kind": "simulation_numeric_fixture",
+  "status": "ACQUIRED",
+  "files": [
+    {
+      "path": "raw/fixture_radhakrishnan2021_simulation/raosim/benchmark_data/cases/radhakrishnan2021_variable_area_lox_gch4.json",
+      "bytes": 8340,
+      "sha256": "40fbfd3e2d16b594087c95232c4c514f9586d47f22ac2838c4344b2f50f17b9e",
+      "origin": "existing_repository_fixture",
+      "original_path": "raosim/benchmark_data/cases/radhakrishnan2021_variable_area_lox_gch4.json"
+    },
+    {
+      "path": "raw/fixture_radhakrishnan2021_simulation/raosim/benchmark_data/curves/radhakrishnan2021_tables_3_7_8.csv",
+      "bytes": 567,
+      "sha256": "a163a1da39bcd81d689d14ef24908f656b5e000a40f52c5d672a02b35bc8532d",
+      "origin": "existing_repository_fixture",
+      "original_path": "raosim/benchmark_data/curves/radhakrishnan2021_tables_3_7_8.csv"
+    }
+  ],
+  "review_state": "EXISTING_FIXTURE_IMPORTED_NOT_REVALIDATED",
+  "training_eligible": false,
+  "hardware_qualified": false,
+  "limitations": [
+    "Tables 7 and 8 contain author CFD outputs, never experimental observations."
+  ]
+}

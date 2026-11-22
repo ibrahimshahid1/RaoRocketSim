@@ -1,0 +1,32 @@
+{
+  "source_id": "hagemann1998",
+  "acquired_at_utc": "2026-11-04T00:34:48.746590+00:00",
+  "evidence_kind": "review_report",
+  "status": "ACQUIRED",
+  "files": [
+    {
+      "path": "raw/hagemann1998/source.pdf",
+      "bytes": 955390,
+      "sha256": "f4626872b2bf3eaf77c07f04d659155c55ab90ce407ca9741614b72edb5f78b6",
+      "origin": "existing_local_literature_copy",
+      "original_path": "propulsion_texts/hagemann1998.pdf"
+    },
+    {
+      "path": "derived/hagemann1998/source.txt",
+      "bytes": 188543,
+      "sha256": "54b5d42362cde6566edc02d21490b31529f93b04bd17d5571a2833469557e696",
+      "origin": "unreviewed_pdf_text_derivative"
+    }
+  ],
+  "review_state": "NOT_REVIEWED_FOR_TRAINING",
+  "training_eligible": false,
+  "hardware_qualified": false,
+  "limitations": [
+    "Review evidence; follow original campaign citations and avoid treating redrawn curves as new experiments."
+  ],
+  "pdf_info": "Title:           Advanced Rocket Nozzles\nSubject:         Journal of Propulsion and Power 1998.14:620-634\nAuthor:          Gerald Hagemann, Hans Immich, Thong Van Nguyen, and Gennady E. Dumnov\nCreator:         RealPage PDF Generator 2.0\nProducer:        RealPage data converter\nCreationDate:    Thu Jul 24 11:04:47 2003 EDT\nModDate:         Thu Apr 11 13:06:15 2013 EDT\nCustom Metadata: no\nMetadata Stream: no\nTagged:          no\nUserProperties:  no\nSuspects:        no\nForm:            none\nJavaScript:      no\nPages:           15\nEncrypted:       no\nPage size:       578.268 x 797.386 pts\nPage rot:        0\nFile size:       955390 bytes\nOptimized:       no\nPDF version:     1.2\n",
+  "text_extraction": {
+    "status": "DERIVATIVE_TEXT_UNREVIEWED",
+    "warning_excerpt": ""
+  }
+}

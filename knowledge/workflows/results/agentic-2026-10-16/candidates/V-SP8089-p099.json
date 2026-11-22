@@ -1,0 +1,126 @@
+{
+ "packet": "V-SP8089-p099",
+ "kind": "verification",
+ "document_id": "DOC_NTRS_19760023196",
+ "source_pdf": "propulsion_texts/19760023196.pdf",
+ "source_sha256": "5e9db6a6f7860ee51acbf5cbe137005ef259ec3fd87ff0ed5f1ad466d6227c44",
+ "pages": [
+  99,
+  99
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 99,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19760023196/p0099.png",
+   "sha256": "a98149db716430d0d6dc734284c375ce4291cb15ce69f163a1b93859c5fb46b1",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_cf55e5f25abd03fd94d1901e"
+ ],
+ "candidates": [],
+ "stored_objects": [
+  {
+   "id": "CLM_NTRS_19760023196_9FDDF2A8",
+   "store": "claims",
+   "type": "Claim",
+   "page": 99,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Flow-distribution uniformity is enhanced by keeping the total pressure drop within the injector upstream of the orifices to less than approximately 25 percent of the orifice pressure drop.",
+   "quote": "keeping the total pressure drop within the injector upstream of the orifices to less than approximately 25 percent of the orifice pressure drop, thereby minimizing the feed-system variation effects.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 99
+    }
+   ]
+  },
+  {
+   "id": "CONST_NTRS_19760023196_104E13C6",
+   "store": "entities",
+   "type": "EmpiricalConstant",
+   "page": 99,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "upstream-of-orifice pressure drop limit = < ~25 percent of orifice pressure drop",
+   "equation_number": null,
+   "form": null,
+   "statement": null,
+   "quote": "keeping the total pressure drop within the injector upstream of the orifices to less than approximately 25 percent of the orifice pressure drop",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 99
+    }
+   ]
+  }
+ ],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00179",
+   "page_start": 99,
+   "page_end": 99,
+   "section": "__— eee > 3.1.3.5 RADIAL AND TRANSVERSE PASSAGES",
+   "text": "following step. If the manifold is stepped, or if outlets that flow a large proportion of the manifold flow are placed near each other, experimentally verify the analytically calculated flowrates through the manifold outlets. Cold-flow experiments for all facets of the radial and transverse manifold designs are recommended for checking the flow distribution and aiding optimization."
+  },
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00180",
+   "page_start": 99,
+   "page_end": 99,
+   "section": "__— eee > 3.1.3.6 GENERAL FLOW SYSTEM UPSTREAM OF THE ORIFICES",
+   "text": "Auxiliary components in the injector flow system or the flow system in general shall not result in unacceptable orifice flow distribution.\n\nIn the initial injector design, make allowances for the insertion of nonfeed-system-related components such as instrumentation and igniter passages that eventually may be required. If possible, these components should be designed as an integral part of the injector: othenvise they should be designed to prevent flow-system maldistribution.\n\nAvoid flow splitters by using a low velocity in the inlet line or by using inlets that are symmetrical to the two downstream flow passages (fig. 26(a)). Do not use inlets that are nonsymmetrical to the two downstream flow passages (fig. 26(b)). When flow splitters are | used, determine their flow and hysteresis characteristics across the entire range of inlet flow | conditions, not just at the nominal point.\n\nUniformity of flow distribution may be enchanced by minimizing the number of turns that the propellant makes through the injector and by keeping the total pressure drop within the injector upstream of the orifices to less than approximately 25 percent of the orifice pressure drop, thereby minimizing the feed-system variation effects. If additional pressure drop is needed, use a single restrictor through which all of the propellant flows, in preference to several restrictors in parallel.\n\nAvoid trapping bubbles in stagnation regions at the top, relative to gravity, of a manifold. as in figure 27(a). Taper the manifold to increase the velocity in the bubble-trap area. Avoid trapping bubbles at the end of a radial by a large stagnation region beyond the end of the last outlet from the radial and the radial attitude, as in figure 27(b). Reduce the radial length or place the last outlet closer to the end of the radial."
+  },
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00181",
+   "page_start": 99,
+   "page_end": 99,
+   "section": "__— eee > 3.1.3.6 GENERAL FLOW SYSTEM UPSTREAM OF THE ORIFICES",
+   "text": "The injector-assembly design shall complement the flow-system-ecometry design.\n\nThe injector-assembly design efforts should be accomplished in parallel with the flowsystem-geometry design. Shift back and forth as necessary between the two design phases to obtain an acceptable balance."
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {},
+  "flagged_candidates": 0,
+  "target_objects": 1,
+  "objects_with_anchor_problems": 0
+ }
+}

@@ -1,0 +1,69 @@
+\section[Transonic start line (MOC-08/09)]{Transonic start line: KL coefficients and normalisation (MOC-08/09)}
+\label{sec:kl}
+\subsection{Sources and the confirmed finding}
+The start line uses Kliegel and Levine's recasting of Hall's series in
+$1/(1+R_c/R_t)$, three terms at constant $\gamma$
+\cite[PDF p.~2, printed p.~1365]{cuffel1969}. The original paper \cite{kliegel1969}
+(DOI 10.2514/3.5355) and Hall's paper \cite{hall1962} are paywalled. Three open sources reproduce the
+coefficients: Levine and Coats's Table~1, to fifth order at $\gamma=1.4$, of which the
+third-order columns were compared \cite[PDF pp.~38--42, printed pp.~30--34]{levine1970};
+second-order terms with explicit $\gamma$ \cite[PDF p.~30, printed p.~4-1,
+Eqs.~4-1--4-4]{kliegel1966}; and third-order terms with explicit $\gamma$
+\cite[PDF pp.~48--51, printed pp.~45--48, App.~A]{sivells1978}.
+
+\textbf{Finding.} Three independent checks agree: a blind symbolic derivation, a
+page-image comparison with the Levine--Coats and Sivells tables, and an adversarial
+review. In the axisymmetric $v_3$, the coefficient of $zy^3$ must be
+$-(388G^2+1161G+1881)/576$ with $G=\gamma$; the repository has the positive sign.
+
+The deciding argument is irrotationality, $\partial u/\partial y=\partial v/\partial z$,
+which must hold at each order. With the positive sign the third-order residual is
+$-y^3(388G^2+1161G+1881)/288\neq0$; with the negative sign it vanishes. The other 37
+of the 38 axisymmetric terms agree, including the disputed 1881, $y^3$ and 384.
+
+The planar branch has four further defects ($(y+6)$ should be $(G+6)$; the same $v_3$
+sign; a missing $y$ in the $v_3$ $z^2$ term; the $u_3$ constant). No production call
+site uses it.
+
+\textbf{Normalisation.} The sources normalise by the critical speed, $U=u/a^*$
+\cite[PDF p.~7, printed p.~vii]{kliegel1966}. So $\sqrt{U^2+V^2}$ is $M^*$, and
+$M^{*2}=(\gamma+1)M^2/[2+(\gamma-1)M^2]$ \cite[PDF p.~98, printed p.~82, Eq.~3.37]{anderson}.
+
+\textbf{Necessary check.} The area--Mach relation gives $\rho V/(\rho^*a^*)=A^*/A\le1$
+\cite[PDF p.~220, printed p.~204, Eq.~5.20]{anderson}. A start-line discharge
+coefficient $C_D>1$ therefore indicates a defect (our derivation).
+
+The production coefficients were not changed.
+
+\subsection{Diagnostics (E09, E09b, E09c)}
+All runs used local copies of the series, in four variants: KL-V0 (production),
+KL-V1 (sign corrected), KL-V2 ($M^*\to M$ only) and KL-V3 (both).
+
+\textbf{E09, E09b.} Correcting the sign raises the residual order by 1.25--1.30. The
+$M_{\min}$ push is inactive, and the start line is a discretised $C^-$. The start-line
+$C_D$ is 1.0075 (KL-V0), 0.9968 (KL-V1), 1.0068 (KL-V2) and 0.9944 (KL-V3). At
+$n=64$, KL-V1 folds in RRC~4 and KL-V2 fails in RRC~1; at $n=24$ and 48 KL-V1 does not
+fail. KL-V3 is the only variant with $C_D<1$ and no early failure at $n=64$, so it is
+the candidate.
+
+\textbf{E09c (DIAGNOSTIC).} This is a forward replay on the 48/64 wall optimised with
+KL-V0, not a corrected design. KL-V3 reaches the exit without folding. Relative to KL-V0 it changes $M_B$ from 1.9481
+to 2.0010, the wall Mach by up to 0.057 (71 times the t19 band), the wall $p/p_0$ by up
+to 0.0166 (221 times), the wall angle by only $0.0017^\circ$, and $C_F$ by $-1.22$\,\%
+(307 times). The exit mass flow falls by 1.25\,\%, so thrust per unit mass barely changes.
+
+\caution{The accepted Nozzle-B $C_F$ and wall pressures are conditional on the
+uncorrected start line, at two orders of magnitude above their numerical uncertainty.
+The BVP has not been re-solved with the corrected series (D10).}
+
+\subsection{Milestone K0 and acceptance}
+K0 has two parts: \textbf{K0a}, a start-line construction review (largely done by
+E09b), and \textbf{K0b}, an opt-in start-line method implementing KL-V3, with tests. The
+production series stays the default.
+\begingroup\footnotesize
+\par\addvspace{\LTpre}{\centering\begin{tabular}{@{}P{0.09\linewidth}P{0.40\linewidth}P{0.27\linewidth}P{0.16\linewidth}@{}}
+\toprule\textbf{ID} & \textbf{Numerical verification} & \textbf{Benchmark agreement} & \textbf{Physical validation}\\\midrule
+K0 & Residual order gain and table reproduction (done); $C_D\le1$; the forward net clears the kernel without near-axis folds; Nozzle-B pair re-solved with K0b passes the unchanged gates and refinement policy (D10) & Cuffel et al.\ transonic data, after digitisation (B0) & none\\
+\bottomrule
+\end{tabular}\par}\addvspace{\LTpost}
+\endgroup

@@ -1,0 +1,129 @@
+\section[G1: Variable-gas MOC]{G1: Thermodynamically consistent variable-gas MOC}
+\label{sec:g1}
+\subsection{Governing equations}
+The turning relation of a Mach wave depends only on geometry:
+\begin{equation}
+\dd\theta=\sqrt{M^2-1}\,\frac{\dd V}{V},\qquad \frac{\dd V}{V}=\frac{\dd M}{M}+\frac{\dd a}{a}
+\label{eq:turning}
+\end{equation}
+\cite[PDF p.~186, printed p.~170, Eqs.~4.35, 4.38]{anderson}. The closed form
+$\nu(M,\gamma)$ requires a calorically perfect $a(M)$ (Eqs.~4.39--4.40).
+
+The repository's axisymmetric compatibility relations are
+\begin{equation}
+C^-:\ \dd(\theta+\nu)=S\,\dd s,\qquad C^+:\ \dd(\theta-\nu)=-S\,\dd s,\qquad S=\frac{\sin\theta\sin\mu}{r}.
+\label{eq:compat}
+\end{equation}
+These are Anderson's Eqs.~11.52--11.53, rewritten from their $\dd r/r$ form using
+$\dd r=\dd s\sin(\theta\mp\mu)$ \cite[PDF p.~422, printed p.~406]{anderson}.
+
+For an imperfect gas the Prandtl--Meyer angle is an integral along the isentrope:
+\begin{equation}
+\nu=-\int\frac{\dd p}{\rho V^2\tan\mu},\qquad
+\text{and for a thermally perfect gas}\quad \nu=-\int\frac{\sin 2\mu}{2\gamma p}\,\dd p
+\label{eq:nutp}
+\end{equation}
+\cite[PDF p.~19, printed p.~630, Eqs.~199--200]{ames1953}, valid to about 5000\,R
+without dissociation (PDF p.~15). Guentert and Neumann keep the characteristic
+relations unchanged and supply $a(T)$ and $V=K(H_c-\phi(\ln p))^{1/2}$ from frozen or
+equilibrium tables \cite[PDF pp.~4--7, printed pp.~2--5, Eqs.~1--4, 13--18]{guentert1959}.
+
+\textbf{Closures.} Enthalpy is $h=\int c_p\,\dd T$
+\cite[PDF p.~40, printed p.~24, Eq.~1.18]{anderson}. The entropy
+$s=\int c_p/T\,\dd T-R\ln(p/p_{\mathrm{ref}})$ is the standard thermally perfect result,
+derived from the first law with $c_p-c_v=R$ (Eq.~1.20). Frozen and equilibrium heat
+capacities are given in \cite[PDF p.~678, Eqs.~17.20--17.25]{anderson}. The sound speeds
+are $a_e^2=\gamma RT[1+(1/p)(\partial e/\partial v)_T]/[1-\rho(\partial h/\partial p)_T]$
+and $a_f^2=\gamma RT$ \cite[PDF p.~682, printed p.~666, Eqs.~17.35--17.36]{anderson}. The
+equilibrium form $a^2=\gamma_sp/\rho$ is in \cite[PDF p.~5, printed p.~4,
+Eqs.~8--10]{moeckel1957}, and Broer's abstract places finite-rate characteristics at the
+frozen speed \cite{broer1958}. An effective constant $\gamma$ is exact only for the
+relation it was fitted to \cite[PDF pp.~684--685]{anderson}.
+
+\textbf{Finite rate.} The flow is non-isentropic, and the sonic point lies downstream
+of the throat \cite[PDF p.~704, printed p.~688]{anderson}. Species obey
+$DY_i/Dt=\dot\omega_i/\rho$ \cite[PDF p.~687, Eq.~17.42]{anderson}. TDK adds a
+streamline family,
+\begin{equation}
+\frac{\dd P}{\gamma P}-\frac{\dd\rho}{\rho}=A\frac{\dd x}{\cos\theta},\qquad
+\dd c_i=\frac{\omega_ir^*\dd x}{\rho V\cos\theta},\qquad
+A=\frac{r^*}{PV}\Big(\sum_i\omega_iR_iT-\frac{\gamma-1}{\gamma}\sum_i\omega_ih_i\Big)
+\label{eq:tdkA}
+\end{equation}
+\cite[PDF pp.~54--55, printed pp.~2-32--2-33]{nickerson1985}. The streamline relations
+and $A$ are unnumbered; the Mach-line relations are Eqs.~2.5-1--2.5-4 and $F$, $G$, $H$
+are Eqs.~2.5-5--2.5-7.
+
+\textbf{Transonic start.} No thermally perfect KL series was found. TDK starts from a
+Sauer solution in annular zones with $\gamma_n=\ln(P/P_1)/\ln(\rho/\rho_1)$
+\cite[PDF pp.~41--46]{nickerson1985}. Levine and Coats bound the real-gas change of
+$\gamma$ by an assumed $B\le0.05$ and find it negligible for $R_c/R_t\ge1.5$
+\cite[PDF pp.~49--50, printed pp.~41--42]{levine1970}. Their calculation excludes
+$c_p(T)$ variation, so it does not bound the thermally perfect effect. T1 therefore
+starts from KL at $\gamma^*$ and checks the residual with the zoned Sauer start.
+
+\subsection{The Young source-term discrepancy}
+Young's Eq.~4.15 uses the absolute enthalpy $h_i+h_i^\circ$
+\cite[PDF p.~88, printed p.~77]{young}. His Eqs.~4.22--4.23 then print, with $R$ the
+\emph{mixture} gas constant (PDF p.~89, printed p.~78),
+\begin{equation}
+\psi=\sum_i\big[\gamma RT-(\gamma-1)(h_i-h_i^\circ)\big]\sigma_i .
+\end{equation}
+Eq.~4.49 adds $\psi\,\dd x/(\rho V^2a_f\cos(\theta\pm\mu))$ to the compatibility
+relation (PDF p.~93, printed p.~82). The discretised Eqs.~4.51--4.52 print
+$\psi/(\rho v^2\cos(\theta\pm\mu))$ without $a_f$, i.e.\ in units of 1/s instead of
+1/m (PDF p.~94, printed p.~83).
+
+Because $\sum_i\sigma_i=0$, a mixture $R$ makes the $\gamma RT$ term vanish
+identically. TDK's printed $A$ (Eq.~\ref{eq:tdkA}) instead has species-indexed $R_i$
+and absolute $h_i$, and gives
+$\gamma PVA/r^*=\sum_i[\gamma R_iT-(\gamma-1)h_i]\omega_i$ (our algebra)
+\cite[PDF p.~55, printed p.~2-33]{nickerson1985}\cite[PDF p.~47, printed p.~2-30]{nickerson1973}.
+
+\textbf{Status:} resolved for the source term with medium confidence, against two TDK
+editions only. Zucrow--Hoffman Vol.~2 and Ferri, which TDK cites, were not read (D2).
+\begingroup\footnotesize
+\par\addvspace{\LTpre}{\centering\begin{tabular}{@{}P{0.30\linewidth}P{0.50\linewidth}P{0.13\linewidth}@{}}
+\toprule\textbf{Approach} & \textbf{Assessment} & \textbf{Verdict}\\\midrule
+Adopt the TDK form & Two editions agree; dimensionally consistent & \textbf{chosen}\\
+Use Young as printed & Mixture-$R$ term vanishes; Eqs.~4.51--4.52 have wrong units & reject\\
+Await Zucrow--Hoffman, Ferri & Primary chain; paywalled & gate for T3 (D2)\\
+Independent derivation and 0-D reactor check & Confirms the TDK form and its limits & T3 test\\
+\bottomrule
+\end{tabular}\par}\addvspace{\LTpost}
+\endgroup
+
+\subsection{Approaches and choice}
+\begingroup\footnotesize
+\par\addvspace{\LTpre}{\centering\begin{tabular}{@{}P{0.28\linewidth}P{0.53\linewidth}P{0.12\linewidth}@{}}
+\toprule\textbf{Approach} & \textbf{Assessment} & \textbf{Verdict}\\\midrule
+Local $\gamma(T)$ in $\nu(M,\gamma)$ & Inconsistent with Eq.~\eqref{eq:turning}; E03: 7.32--8.92\,deg errors & reject\\
+Effective constant $\gamma$ & The current branch; exact only for its fitted relation; E03: chamber, throat or exit $\gamma$ err by 3.95--13.10\,deg & limit case\\
+Isentrope tables in unchanged unit processes & Exact for homentropic irrotational frozen flow; reduces to the current branch; JAX-friendly with a $C^1$ table & \textbf{T1}\\
+Equilibrium isentrope with $a_e$ & Same framework; needs a backend (\code{cea_equilibrium} is not implemented) & T2\\
+Three-family finite-rate net & Stiff and rotational; source term per TDK & T3, gated\\
+Q1D with frozen variable $c_p$ & Exists, one-dimensional & T0 reference\\
+In-repo or external CFD & General, needs its own verification & benchmark\\
+\bottomrule
+\end{tabular}\par}\addvspace{\LTpost}
+\endgroup
+In homentropic flow every streamline shares one isentrope, so $\nu_{tp}(V)$,
+$\mu(V)$, $p(V)$ and $\rho(V)$ are one-dimensional tables and
+Eq.~\eqref{eq:compat} keeps its form. E03 reproduced the closed form to
+$1.7\times10^{-12}$\,deg in the constant-$c_p$ limit.
+
+The current \code{FrozenIdealGasTable} has a $C^0$ $c_p(T)$ and exposes no
+derivatives. T0 therefore needs a shape-preserving $C^1$ table that keeps
+$h_T=c_p$ and $c_p-c_v=R$.
+
+\subsection{Milestones and acceptance}
+\begingroup\footnotesize
+\par\addvspace{\LTpre}{\centering\begin{tabular}{@{}P{0.09\linewidth}P{0.36\linewidth}P{0.30\linewidth}P{0.17\linewidth}@{}}
+\toprule\textbf{ID} & \textbf{Numerical verification} & \textbf{Benchmark agreement} & \textbf{Physical validation}\\\midrule
+T0 & Constant-$c_p$ limit $\le10^{-10}$\,rad; identities; property-grid refinement; frozen Q1D stations to $10^{-9}$ & RocketCEA frozen exit states & none\\
+T1 & Bitwise reduction to constant $\gamma$; variable-$c_p$ source-flow oracle order $\ge1.5$; mass conservation & CFD1 with JANAF $c_p(T)$; RocketCEA frozen Q1D & none\\
+T2 & Element, mass and energy closure; $a_e$ against $(\partial p/\partial\rho)_s$; frozen limit & RocketCEA equilibrium Q1D & none\\
+T3 & $\omega=0$ reproduces T1; equilibrium trend; species and energy conservation; Young/TDK source term dimensionally and symbolically checked & none open & none\\
+\bottomrule
+\end{tabular}\par}\addvspace{\LTpost}
+\endgroup

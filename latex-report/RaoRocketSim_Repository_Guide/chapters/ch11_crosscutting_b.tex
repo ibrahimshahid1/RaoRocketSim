@@ -1,0 +1,341 @@
+\chapter{Cross-cutting groups B: research scripts, scientific memory and test harness}\label{ch:crosscutting-b}
+% Local compact style for the long tables of this chapter.
+\newcommand{\chelevenTables}{\footnotesize\renewcommand{\code}[1]{{\footnotesize\path{##1}}}\setlength{\tabcolsep}{4pt}}
+
+\lead{Scope of this chapter}
+The three groups here are not stages of the command-line interface (CLI) pipeline: no file in them is imported by \code{raosim.run_nozzle.main} or by the \code{lrekit} job verbs. Each relates to the pipeline in a different way. \stagetag{X05} (research and offline scripts) \emph{produces} two packaged data products that the multidisciplinary design optimization (MDO) path reads at run time. \stagetag{X06} (knowledge system and source data) \emph{records} the provenance of the pipeline's physics and holds the packaged tables. \stagetag{X07} (test harness) \emph{checks} every stage. Statements come from the files named and, where stated, from commands run on 5 November 2026 with \code{.venv-jax}; the working tree held uncommitted changes to \code{raosim/}, \code{scripts/}, \code{tests/} and \code{knowledge/}, so some observations describe the working tree, not \texttt{HEAD}.
+
+\caution{On 5 November 2026 the three groups meet at one defect. A knowledge-system review (\code{knowledge/reports/REMAINING_SCIENTIFIC_GAPS.md}, item G1) found the old Rao/TOP angle table misattributed. The working tree replaces it with \code{raosim/rao_top_chart.py}, an SP-125 Figure~4-14 digitization that refuses $\varepsilon\notin[5,50]$. That file is \emph{untracked} although the tracked \code{raosim/nozzle_geometry.py} imports it; 15 of the 24 non-slow test failures (by their error output) and the broken 13\,kN sea-level regression file trace to it (\S\ref{sec:x07}).}
+
+% =====================================================================
+\section{X05: Research and offline scripts}\label{sec:x05}
+
+\subsection{Role in the data flow and call sites}
+The data-flow trace finds all 18 \code{scripts/*.py} files standalone: the abstract-syntax-tree (AST) import closure from \code{lrekit.cli} never reaches them. \code{scripts/run_nozzle.py} is the S01 compatibility wrapper, and \code{compare_nasa_reference.py} and \code{nasa_wall_probe.py} belong to X04; X05 is the remaining 15 scripts (2{,}593 lines). They run by hand as \texttt{PYTHONPATH=. python scripts/<name>.py}; the wheel ships only \texttt{raosim*} and \texttt{lrekit*} (\code{pyproject.toml:72-73}), so no script is installed. Three scripts touch CLI data:
+(1)~\code{sample_cea_surface.py} wrote the four frozen chamber-property tables in \code{raosim/data/cea_tables/} (commands in \code{docs/audits/CEA_H1_HOST_EVIDENCE_2026-08-22.md}); the MDO loads them through \code{CEA_CATALOG_MANIFEST_RESOURCE} (\code{raosim/mdo/properties.py:64}) and \code{load_cea_catalog_manifest} (\code{:944}) when the chamber-property table is \texttt{catalog}. (2)~\code{rao_existence_scan.py} wrote the B5 domain \code{raosim/data/rao_domains/rao_d_attachment_fixed_slice_gamma1p4_pa0p01_eps_length_v2.json} (command in \code{docs/audits/RAO_B3_B5_HOST_EVIDENCE_2026-08-24.md}); \code{RaoConvergenceDomain.read_json} reads it when a post-solve contour validator is configured (\code{raosim/mdo/job.py:1054}, \code{mdo/postprocess.py:923}, \code{mdo/contour_validation.py:839}). (3)~\code{tvc_sizing_study.py} runs the other way: it reads the \code{contour.csv} files the CLI writes. The other twelve re-run parts of S06 (\code{rao_variational.solve_rao_bvp}, \code{nasa_moc}, \code{moc_topology}) or of S07/S11 (\code{regen_geometry.generate_regen_nozzle}) under research configurations. Several set the module global \texttt{rv.PHYSICS\_WEIGHT = 1.0} before solving.
+
+\subsection{Inputs, outputs and modules}
+The J4/J5 diagnostics hard-code the reference case; the generators take nozzle and channel parameters; \code{sample_cea_surface.py} takes a propellant pair and a $(P_c,O/F)$ grid and needs RocketCEA; \code{rao_existence_scan.py} takes a $\theta_B\times k_{df}$ grid, closure models, kernel policies and optional $\varepsilon\times L_\%$ domain axes. Output paths below are the code defaults.
+
+{\chelevenTables
+\begin{longtable}{P{4.2cm}rP{5.6cm}P{5.3cm}}
+\toprule
+Script (\code{scripts/}) & Lines & Role (header comment) & Default output \\
+\midrule\endhead
+\code{compare_jax_scan_stationarity.py} & 178 & One Rao boundary-value-problem (BVP) solution against existence-scan stationarity metrics & \code{debug_outputs/rao_stationarity_compare.json} \\
+\code{d_attachment_diagnostic.py} & 160 & J4 $3\times10^{-3}$ stationarity floor: DE nodes 0--4 and three D-start variants & console \\
+\code{generate_contour.py} & 177 & Converged Rao BVP plus BDE-region wall & \code{builds/contour_run/}: \code{contour.csv}, \code{contour_3d.stl}, 2 PNGs \\
+\code{generate_regen_nozzle.py} & 92 & 3-D regen wall with axial or helical channels, optional wall-temperature colouring & \code{builds/regen_nozzle.stl}, \code{.png} \\
+\code{j4_gate_wall_probe.py} & 121 & J4 gate configuration with \texttt{wall\_method="bde"}: verdict and wall slopes & \code{builds/j4_gate_wall_probe.json}, \code{j4_solved_bde_wall.npy} \\
+\code{j4_report.py} & 109 & One-shot J0--J4 status on the reference case & console \\
+\code{j5_chart_sweep.py} & 89 & J5 record run of the chart sweep (via X03 \code{benchmarks}) & \code{builds/j5_chart_sweep.json} \\
+\code{jax_convergence_experiment.py} & 122 & Barrier, homotopy, sigmoid Levenberg--Marquardt (LM) strategies & console \\
+\code{plot_reference_topology.py} & 54 & Phase-12.6 fixed-end reference topology & \code{builds/reference_topology.png}, \code{reference_wall.csv} \\
+\code{rao_existence_scan.py} & 401 & NumPy D-attachment scan, root refinement, resolution study, B5 domain & \code{debug_outputs/rao_existence_scan/}: \code{summary.json}, \code{<model>_scan.csv}, domain JSON \\
+\code{sample_cea_surface.py} & 201 & Host-only RocketCEA table sampler with held-out value/gradient gate & \code{.npz} table, JSON report; exit 2 on failure \\
+\code{seed_diagnostic.py} & 175 & Seed-versus-optimizer falsification test for the historical stall & console \\
+\code{theta_b_freeze_sweep.py} & 115 & Frozen-$\theta_B$ sweep with full D-state continuity & \code{builds/theta_b_freeze_sweep.json}, best-wall \code{.npy} \\
+\code{theta_b_picard_probe.py} & 156 & Historical $\theta_B$ Picard refresh, kept for reproducibility & \code{builds/theta_b_picard_probe.json} \\
+\code{tvc_sizing_study.py} & 443 & Thrust-vector-control (TVC) gimbal actuator screens, 11 thrust points at $P_c=3$\,MPa & console; optional \code{--json} \\
+\bottomrule
+\end{longtable}}
+
+\subsection{What the header comments establish}
+\lead{J4/J5 convergence diagnostics (ten scripts)}
+All share the reference case $\varepsilon=10$, $L_\%=80$, $\gamma=1.4$, $p_a/p_0=0.01$ and the gate \texttt{max\_scaled}~$\le2\times10^{-3}$; their headers are the solver's history. \code{seed_diagnostic.py} states two hypotheses for the historical stall at \texttt{max\_scaled}~$\approx8$ with opposite predictions: under the \emph{seed} hypothesis the stalled point is near-stationary ($\lVert J^Tr\rVert\approx0$) and a 3-point Jacobian does not move the floor; under the \emph{optimizer} hypothesis an accurate Jacobian escapes it (sources: the Phase-6 xfail text, \code{docs/audits/legacy_code_audit.md}, the JHU/APL report). \code{j4_report.py} expects \texttt{rrcs == 58} on the NASA M3.5Perf geometry, \texttt{rrcs}~$\gg1$ on the Rao case (pre-fix: 1), equal BD/DE mass and a JAX solve with \texttt{max\_scaled}~$<0.8$.
+
+\code{theta_b_freeze_sweep.py} predicts closure near $\theta_B=25.5659^\circ$, $k_{df}=0.15216$, exit near $11.1^\circ$. \code{j4_gate_wall_probe.py} states the bell criterion: slope peaks at about $25.57^\circ$ (plus about $0.7^\circ$ discretization overshoot) and falls monotonically to about $11.12^\circ$; the historic $35.6^\circ$ flare at 60\,\% length came from the stale characteristic pairing. \code{theta_b_picard_probe.py} keeps 2026-06-11 values that ``must not be interpreted as evidence against smooth D continuity''. \code{j5_chart_sweep.py} records the J5 de-circularization: pre-J5 ``solved'' angles were a chart echo plus a chord, reproduced by pure geometry to about $0.1^\circ$, so its \texttt{*\_gate} fields are findings, not pass/fail criteria; it quotes Rao's 1960 parabola-fit charts ($\gamma=1.23$) at $30^\circ/15.5^\circ$. \code{plot_reference_topology.py} calls its output ``NOT the Rao optimum''.
+
+\lead{Generators and data producers}
+\code{generate_contour.py} fixes \texttt{max\_nfev}~$=4000$, \texttt{wall\_method="bde"}, \texttt{kernel\_d\_fraction\_max}~$=0.7$ (\code{:43-51}) and exits with status 2 if the $2\times10^{-3}$ gate fails, unless \code{--allow-unconverged} (\code{:110-125}); its outputs are ``preliminary design geometry --- NOT hardware-qualified''. \code{generate_regen_nozzle.py} chains \code{bell_nozzle_contour}, Bartz/regen analysis and \code{generate_regen_nozzle} ($\gamma=1.24$, $P_c=7$\,MPa, 80 channels; with \code{--thermal}, a placeholder propellant $M_w=0.022$, $T_c=3500$\,K). \code{sample_cea_surface.py} implements the \S12.2 Phase-2 workflow of \code{docs/subsystems/S13-engine-mdo-and-requirements/DIFFERENTIABLE_ENGINE_MDO_PLAN.md}: \code{--holdout} samples seeded points strictly inside fit-grid cells and compares values \emph{and} gradients with live RocketCEA; \code{--validate-only} applies the same gate to an existing hash-verified table; any breach returns 2 (\code{:197}). \code{rao_existence_scan.py} limits its declared-domain mode to ``fixed-context D-attachment and kernel evidence only'' and refuses to write a domain without both axes, explicit maximum spacings and at least two \code{--resolution-convergence} levels (\code{:278-305}).
+
+\lead{TVC study}
+\code{tvc_sizing_study.py} builds a 316L shell from each \code{contour.csv} (thin-wall hoop thickness $t=\text{FOS}\,P_c r/(k_{\text{hot}}S_y)$), a per-axis torque budget (inertia at $\theta_{\max}\omega_c^2$, flex, bearing friction, misalignment, unbalance) and three actuator screens:
+\[
+N\eta\,\tau_{\text{motor}} \ge \tau_{\text{req}},\qquad
+N\omega_{\text{gimbal}} \le \omega_{\max},\qquad
+N^2 J_{\text{rotor}} \le k\,J_{\text{load}},
+\]
+with $k=10$, 30 or 100 for open-loop steppers, closed-loop steppers and servos. Torque and speed bound the gear ratio $N$ from opposite sides; inertia caps it. Cited sources: Oriental Motor/PMD inertia limits; Cowan \& Weir (NTRS 19940025147) for the 4\,Hz bandwidth, $20$--$25^\circ$ phase lag at 1\,Hz and rotor-inertia dominance; Neugebauer et al.\ (ESMATS 2006) for small bearing friction; \code{raosim/materials.py} for 316L ($\rho=8000$\,kg/m$^3$, $S_y=290$\,MPa, matching \code{materials.py:244-247}). Uncited in code: knockdown 0.50, safety factor 2.0, 1\,mm floor (\code{:61-63}), assembly factor 2.2, bearing coefficient 0.003, $0.5^\circ$ misalignment, $4g$ unbalance, flex torque $0.25\,\tau_J$, margin 2.0, gear efficiency 0.85, a priced vendor catalogue and a 3-D-printer bed check.
+
+\subsection{Governing documents}
+No triage record names X05 as primary stage; these documents cite the scripts or are cited by them.
+
+{\chelevenTables
+\begin{longtable}{P{6.3cm}P{2.2cm}P{7.3cm}}
+\toprule
+Document & Type, status & Relevance \\
+\midrule\endhead
+\code{docs/program/JAX_DIFFERENTIABLE_PLAN.md} & plan, active & J0--J6 record; host queue still lists the J5 record run, then \code{j4_gate_wall_probe.py} and \code{generate_contour.py} for fresh figures. \\
+\code{docs/audits/CEA_H1_HOST_EVIDENCE_2026-08-22.md} & host evidence & Sampler commands and hashes for the four packaged tables. \\
+\code{docs/audits/RAO_B3_B5_HOST_EVIDENCE_2026-08-24.md} & host evidence & Schema-v2 domain command and SHA-256; v1 rejected fail-closed. \\
+\code{docs/literature/LITERATURE_REQUESTS.md} & request, active & TVC sources (SP-8114, MSFC TB-03); asks whether the TVC study was built from sources. \\
+\code{latex-report/Gimbal_TVC_Actuator_Sizing.tex} & report & Companion write-up of the TVC study. \\
+\bottomrule
+\end{longtable}}
+
+\subsection{Verification}
+Tests exercise two of the 15 scripts. \code{tests/test_cea_surface_validation.py} drives \code{scripts.sample_cea_surface.main} with an injected sampler (no RocketCEA) and pins that the gate checks values and gradients, fails a hash-valid table with wrong values, exits nonzero with a hash-linked report, and never reuses a fit node as a held-out point. \code{tests/test_rao_existence_scan.py::test_existence_scan_cli_runs_without_pythonpath} runs the script as a subprocess without \texttt{PYTHONPATH}; \code{tests/test_rao_convergence_domain.py:609} runs it twice (a hash-valid domain; rejection of unpaired axes). Products are pinned elsewhere: \code{tests/test_cea_catalog.py} pins the hashed table catalog; \code{test_rao_convergence_domain.py:542-568} requires v1 to fail closed and pins v2's identity; \code{tests/test_rao_chart_benchmark.py:244-247} still carries the TODO to pin per-corner delta baselines from a de-circularized \code{j5_chart_sweep.py} host run. All these files passed in the 5 November run except one \code{test_rao_chart_benchmark.py} case (\S\ref{sec:x07}). The other 13 scripts have no test; a static check run for this guide found every \code{raosim} name they import or reference as an attribute still resolves --- evidence against import rot, not against numerical drift.
+
+\subsection{Maturity, limitations and known defects}
+\begin{itemize}[nosep]
+  \item \emph{Stale records.} The only archived J4/J5 outputs predate the corrections their headers describe. \code{builds/_archive_2026-11-05/j5_chart_sweep.json} (2026-06-11) has no \texttt{de\_circularized} field and an RMS $\theta_N$ error of $1.2\times10^{-15}$\,deg (the chart echo); \code{j4_gate_wall_probe.json} records a $30.57^\circ$ wall peak at 64\,\% length and a $3.62^\circ$ exit, the flare the current header calls historic. No de-circularized J5 record exists, so the benchmark TODO cannot yet be closed.
+  \item \emph{Chart change.} With the working-tree chart, \code{lookup_angles(10, 80)} returns $(25.74^\circ, 10.49^\circ)$, not the $30^\circ/15.5^\circ$ quoted by \code{j4_gate_wall_probe.py}, \code{j5_chart_sweep.py} and \code{test_rao_chart_benchmark.py}. The J5 ``systematic delta'' narrative must be re-evaluated against the code.
+  \item \emph{Narrow data products.} The B5 domain covers only $\gamma=1.4$, $p_a/p_0=0.01$, $R_t=20$\,mm, $R_d/R_t=0.382$, $R_u/R_t=1.5$; 25 of 65 knots are \texttt{not\_converged}. The CEA tables are frozen-composition surfaces on $P_c\in[1.5,6]$\,MPa with 17 $P_c$ nodes.
+  \item \code{generate_contour.py} writes an open surface of revolution (no end caps), not a watertight solid. \code{tvc_sizing_study.py} copies material values, fixes $P_c=3$\,MPa for every case and defaults to \code{/tmp/tvc}; no TVC subsystem exists (\code{docs/program/PLAN_VALVES_LINES_BRACKETS_GIMBAL.md}). Most scripts write into the archived \code{builds/}, recreating it.
+\end{itemize}
+
+\subsection{Developer notes}
+A new diagnostic goes in \code{scripts/}; take numbers from \code{raosim} instead of restating them and record in the header which repository state they describe. A new CEA table: run \code{sample_cea_surface.py --holdout --holdout-count 0 --report ...} as in the H1 evidence, then update \code{raosim/data/cea_tables/catalog_v1.json} and \code{tests/test_cea_catalog.py} together. A new Rao domain: write a new versioned JSON (never retrofit kernel policies onto an existing artifact; that is why v1 is refused), record command and hash in a host-evidence note, and add a load test. Promoting a script means moving its logic into \code{raosim/} with a model-registry entry and tests; a script result is never a pipeline result.
+
+% =====================================================================
+\section{X06: Knowledge system and source data}\label{sec:x06}
+
+\subsection{Role in the data flow and entry points}
+X06 (63 files) has three parts: the scientific memory in \code{knowledge/} (\code{AGENTS.md}, \code{README.md}, \code{kg.sh}, 38 modules in \code{knowledge/kg/} with 9{,}582 lines, 20 tools in \code{knowledge/tools/} with 3{,}169 lines); the local corpus \code{propulsion_texts/} (296 PDFs, ignored by \code{.gitignore:23}); and \code{raosim/data/} (packaged tables plus a research-source collection with two tools).
+
+No module in \code{raosim/} or \code{lrekit/} imports \code{kg}. Dependence runs the other way: \code{harvest_registry.py:71} and \code{harvest_repo.py:68} import \code{raosim.model_registry.MODEL_REGISTRY}; \code{harvest_constraints.py:110} imports \code{raosim.mdo.constraints.CONSTRAINT_MANIFEST} or, without JAX, reads its literals with \code{ast}; \code{harvest_repo.py:72} globs \code{docs/**/*.md} and \code{:218} globs \code{tests/test_*.py}; \code{harvest_artifacts.py:70-82} walks \code{builds/} for \code{design_report_v2.json} and \code{injector_manufacturing_report.json}. Reviewed knowledge reaches code only through hand-carried artifacts: the \texttt{EVIDENCE} block of the working-tree \code{raosim/rao_top_chart.py} names \code{knowledge/workflows/results/agentic-2026-10-16/p1/sp125_fig4_14_digitized.json}, its SHA-256, a reading uncertainty of $0.3^\circ$ ($0.6^\circ$ near $\varepsilon=5$--6) and \texttt{physical\_validation: NOT\_ESTABLISHED}. Separately, \code{pyproject.toml:75-82} ships \code{data/cea_tables/*} and \code{data/rao_domains/*.json} as package data (\S\ref{sec:x05}).
+
+Entry points: \code{knowledge/kg.sh} picks \code{.venv}, \code{.venv-jax}, \code{.venv-kg} or \texttt{KG\_PYTHON} and runs \texttt{python -m kg} (\code{kg.cli.main}); \texttt{kg rebuild} runs \code{kg.pipeline} under the advisory writer lock (\code{pipeline.py:47-48}); the role tools in \code{knowledge/tools/} and the two \code{raosim/data/tools/} scripts run directly.
+
+\begin{figure}[!tbp]
+\centering
+\begin{tikzpicture}[
+  st/.style={draw=teal, fill=pale, rounded corners=2pt, align=center, font=\scriptsize\sffamily, minimum height=0.95cm, text width=2.45cm, inner sep=2pt},
+  ar/.style={-{Stealth[length=2mm]}, draw=ink},
+  node distance=0.4cm]
+\node[st] (a1) {1 sync check\\ \texttt{latest\_sync.json}};
+\node[st, right=of a1] (a2) {2 manifest\\ \texttt{manifest.json}};
+\node[st, right=of a2] (a3) {3 chunks\\ \texttt{chunks.sqlite} (FTS5)};
+\node[st, right=of a3] (a4) {4 LSA index\\ if fingerprint changed};
+\node[st, right=of a4] (a5) {5 quantities,\\ variable links};
+\node[st, below=0.45cm of a5] (b1) {6 registry harvest\\ \texttt{models}, \texttt{validity}};
+\node[st, left=of b1] (b2) {7 freshness;\\ 8 enrichments};
+\node[st, left=of b2] (b3) {9 repo harvest\\ docs, tests, capabilities};
+\node[st, left=of b3] (b4) {10 standards;\\ 11 constraints};
+\node[st, left=of b4] (b5) {12 build artifacts;\\ 13 parameters};
+\node[st, below=0.45cm of b5] (c1) {14 code locators;\\ 15 constant basis};
+\node[st, right=of c1] (c2) {16 graph\\ \texttt{graph.json}};
+\node[st, right=of c2] (c3) {17 validation\\ \texttt{latest\_}\\\texttt{validation.json}};
+\node[st, right=of c3] (c4) {18 review queue;\\ 19 completion reports};
+\node[st, right=of c4] (c5) {20 \texttt{latest\_ingestion},\\ \texttt{latest\_report.md}};
+\draw[ar] (a1)--(a2); \draw[ar] (a2)--(a3); \draw[ar] (a3)--(a4); \draw[ar] (a4)--(a5);
+\draw[ar] (a5)--(b1); \draw[ar] (b1)--(b2); \draw[ar] (b2)--(b3); \draw[ar] (b3)--(b4); \draw[ar] (b4)--(b5);
+\draw[ar] (b5)--(c1); \draw[ar] (c1)--(c2); \draw[ar] (c2)--(c3); \draw[ar] (c3)--(c4); \draw[ar] (c4)--(c5);
+\end{tikzpicture}
+\caption{Order of the deterministic rebuild in knowledge/kg/pipeline.py (function \_run, lines 51-127). Step 1 returns 1 if the corpus is absent or unsynchronized (unless the skip-sync flag is given). Stores extracted by a large language model (LLM) are preserved and re-linked, never regenerated.}\label{fig:x06-rebuild}
+\end{figure}
+
+\subsection{Inputs and outputs}
+The rebuild reads the PDFs, their generated Markdown and conversion manifest under \code{propulsion_texts/propulsion_texts_for_agents/}, the model registry, the constraint manifest, \code{docs/}, \code{tests/} and the reports under \code{builds/}. It writes the 18 JSON stores of \code{knowledge/kg/store.py:24-43}, \code{vector_index/} and \code{graph/graph.graphml} (both ignored), \code{graph/graph.json} and the reports in \code{knowledge/reports/}. The last report (\code{knowledge/reports/latest_report.md}, 4 November 2026) records 262 unique documents, 20{,}116 chunks, a graph of 5{,}929 nodes and 7{,}453 edges (none without provenance), 61 models, 213 equations, 287 claims, 1{,}792 software links, 1{,}068 test records, 103 capabilities and 378 artifact records. \code{knowledge/reports/packet_queue.json} holds 101 packets: 63 \texttt{FINAL\_AUDIT\_ELIGIBLE}, 35 \texttt{CANDIDATES\_PREPARED}, 2 \texttt{QUEUED}, 1 \texttt{RAW\_CAPTURED}.
+
+\code{raosim/data/} holds four frozen CEA tables (RocketCEA 1.2.3; $P_c$ 1.5--6\,MPa on 17 nodes; every cell checked, \texttt{validation.status} \texttt{passed}, worst tolerance ratio from 0.124 for LOX/LH2 to 0.437 for N2O4/MMH, per \code{catalog_v1.json}); the v1 and v2 Rao domain JSONs; and the research-source collection: \code{catalog/} (sources, receipts, model crosswalk, \code{STATUS.md}), with \code{raw/} and \code{derived/} ignored by \code{raosim/data/.gitignore}. The collection, its README and its tools are untracked in the working tree.
+
+\subsection{Modules}
+{\chelevenTables
+\begin{longtable}{P{6.4cm}P{1.7cm}P{7.6cm}}
+\toprule
+File(s) & Lines & Role (from the header comments) \\
+\midrule\endhead
+\code{knowledge/AGENTS.md}, \code{README.md}, \code{kg.sh} & 354, 164, 15 & Agent manual (authority, startup protocol, states); quick start; interpreter-selecting wrapper \\
+\code{kg/__init__.py}, \code{__main__.py}, \code{cli.py}, \code{api.py} & 17, 3, 246, 791 & Package root, shim, \texttt{kg} command; stable query contract (empty results carry a state, e.g.\ \texttt{NO\_RELEVANT\_SOURCE\_FOUND}) \\
+\code{kg/schema.py}, \code{store.py} & 245, 258 & Ontology (\texttt{ONTOLOGY\_VERSION = "1.2.0"}); atomic, id-sorted JSON stores plus SQLite chunks \\
+\code{kg/ingest.py}, \code{chunker.py}, \code{index.py}, \code{ground.py} & 311, 241, 292, 90 & Manifest and incremental ingestion; structure-aware chunks; FTS5 plus LSA retrieval; verbatim-anchor grounding \\
+\code{kg/quantities.py}, \code{variable_links.py} & 326, 24 & Canonical quantities, ambiguity kept (\texttt{SYSTEM\_INFERS}); conservative aliases \\
+\code{kg/harvest_registry.py}, \code{harvest_constraints.py}, \code{harvest_repo.py}, \code{harvest_survey.py} & 230, 192, 382, 245 & Registry to Model records; constraint manifest to gates; docs, tests, capabilities, \texttt{CITES} edges; survey components verified against the tree \\
+\code{kg/harvest_extraction.py} & 1243 & Banks grounded extractions; only an equivalent structured review creates \texttt{IMPLEMENTS} \\
+\code{kg/harvest_artifacts.py}, \code{harvest_parameters.py} & 341, 400 & Observes two \code{builds/} report formats; AST view of electric-feed defaults \\
+\code{kg/enrichment.py}, \code{candidate_links.py} & 440, 33 & Docling output stays a candidate; identity checks to reviewed objects \\
+\code{kg/freshness.py}, \code{implementation_freshness.py}, \code{verification_freshness.py} & 77, 273, 110 & Invalidate changed evidence; refresh AST locators without importing; bind verdicts to source and content hashes \\
+\code{kg/record_identity.py}, \code{constant_basis.py}, \code{execution_reach.py}, \code{standards.py} & 167, 46, 142, 90 & Exact-identity merging; legacy labels kept apart from reviewed basis; bounded static call evidence; standards \texttt{HELD} or \texttt{BLOCKED\_ON\_STANDARD} \\
+\code{kg/graph.py}, \code{validate.py}, \code{coverage.py}, \code{completion.py}, \code{report.py} & 563, 262, 160, 438, 97 & Graph view from stores; quality control; coverage; completeness products (stay \texttt{NOT\_ESTABLISHED}); Markdown report \\
+\code{kg/pipeline.py}, \code{locks.py}, \code{packet_queue.py}, \code{work_queue.py}, \code{work_journal.py} & 131, 133, 330, 114, 99 & Deterministic rebuild; advisory \texttt{flock} locks; role-gated packet state machine; resumable queue; append-only journal \\
+\code{tools/pdf_to_markdown.py}, \code{text_layout.py}, \code{sync_corpus.py}, \code{triage_pdfs.py} & 427, 109, 266, 110 & PDF to Markdown with page markers and honest status; fallback renderer; sync with ranked mapping evidence; native-text triage \\
+\code{tools/docling_enrich.py}, \code{docling_batch.py}, \code{docling_formula_regions.py} & 221, 182, 111 & One bounded local Docling enrichment; checkpointed batch; formula-region re-enrichment \\
+\code{tools/bank_extraction.py}, \code{agentic_packet.py}, \code{packet_queue.py}, \code{work_journal.py} & 173, 571, 103, 54 & Idempotent banking after grounding; S1--S3 role operations; queue and journal CLIs \\
+\code{tools/session_replay_check.py}, \code{session_completion_report.py}, \code{validate_audit_replay_2026_10_16.py} & 198, 171, 162 & Replay must leave stores unchanged; recomputed session report; replay of twelve audit journals \\
+\code{tools/fresh_checkout_check.py}, \code{trace_flow.py}, \code{build_audit_inventory.py}, \code{build_completion_reports.py}, \code{kg_pipeline.py}, \code{__init__.py} & 87, 105, 90, 18, 10, 1 & \texttt{HEAD} export plus overlay running the corpus-free suite; end-to-end object trace; evidence-debt inventory; audit JSON writer; rebuild shim; marker \\
+\code{raosim/data/tools/acquire_sources.py}, \code{verify_collection.py} & 165, 186 & Resumable acquisition with SHA-256 receipts; integrity and coverage check writing \code{catalog/STATUS.md} \\
+\bottomrule
+\end{longtable}}
+\noindent\code{kg/} stands for \code{knowledge/kg/} and \code{tools/} for \code{knowledge/tools/}.
+
+\subsection{What the header comments establish}
+\lead{Authority and provenance}
+\code{knowledge/AGENTS.md} ranks sources: the PDF is authoritative; generated Markdown is a derivative, and the graph ``never outranks the PDF it points to''; repository documents and the model registry carry implementation-state authority only (``existing code is not scientific authority merely because it exists''). Every stored object has one provenance kind (\texttt{SOURCE\_STATES}, \texttt{PROJECT\_DERIVES}, \texttt{CODE\_STATES}, \texttt{SYSTEM\_INFERS}, \texttt{IMPLEMENTATION\_CHOICE}, \texttt{EMPIRICALLY\_CALIBRATED}); every model and hard-coded constant carries a \texttt{basis\_class}, and \texttt{UNKNOWN\_BASIS} is never promoted. Registry models keep \texttt{hardware\_qualified: false} (``never asserted''), and ``a numerical parity test is not physical validation''.
+
+\lead{Grounding and retrieval}
+\code{ground.py} stores an extraction only if its quote is found as a contiguous, order-preserving anchor within $\pm2$ pages of the stated page (\texttt{GROUNDED} or \texttt{GROUNDED\_PAGE\_SHIFTED}); otherwise it is \texttt{UNGROUNDED}, reported and not stored: ``Token overlap is not proof that a source states a claim.'' \code{index.py} fuses SQLite FTS5 (BM25) with a latent-semantic-analysis (LSA) space --- a truncated SVD of TF-IDF weights, $k=256$, 40{,}000 terms, \texttt{min\_df}~$=3$ (\code{index.py:86}) --- by reciprocal-rank fusion with $K=60$ (\code{:270}). The header's reasons: the system must run offline with only NumPy/SciPy, and the lexical channel keeps symbols such as \texttt{c*} and \texttt{T\_wg} findable. \code{chunker.py} keeps each equation with its introducing sentence and never splits a table; \code{ingest.py} merges identical PDF payloads into one Document with \texttt{alternate\_paths}.
+
+\lead{Review protocol}
+\code{packet_queue.py} enforces \texttt{QUEUED} $\rightarrow$ \texttt{DOCLING\_RUNNING} $\rightarrow$ \texttt{RAW\_CAPTURED} $\rightarrow$ \texttt{CANDIDATES\_PREPARED} $\rightarrow$ \texttt{OPUS\_SOURCE\_REVIEW} $\rightarrow$ \texttt{VERIFIED}$\mid$\texttt{REJECTED}$\mid$\texttt{BLOCKED} $\rightarrow$ \texttt{GRAPH\_INTEGRATED} $\rightarrow$ \texttt{TESTED} $\rightarrow$ \texttt{FINAL\_AUDIT\_ELIGIBLE}. Its transition table (\code{packet_queue.py:28-39}) lets only the reviewer role F enter \texttt{VERIFIED}; mechanical roles S1--S3 run Docling, prepare candidates and integrate. \code{work_journal.py} refuses \texttt{ACCEPTED\_SCIENCE}, \texttt{REJECTED\_SCIENCE} and \texttt{FIXED\_VERIFIED} from S1--S3; \code{locks.py} refuses, rather than queues, a second Docling process; \code{session_replay_check.py} requires both unchanged stores and fully resolved steps.
+
+\lead{Limits on each harvest and tool}
+\code{harvest_registry.py} resolves PDFs by exact path, never by name similarity. \code{harvest_constraints.py} never relabels a row (\texttt{hard} $\rightarrow$ \texttt{optimizer\_constraint}, \texttt{final\_gate} $\rightarrow$ \texttt{postsolve\_gate}, \texttt{report\_only} $\rightarrow$ \texttt{diagnostic}); unsourced rows become \texttt{SCIENTIFIC\_BASIS\_UNKNOWN} or \texttt{DECLARED\_<BASIS>}. \code{harvest_artifacts.py}: a STEP hash proves current bytes only, and no Measurement, Experiment or Calibration is inferred. \code{standards.py}: holding a PDF is not compliance. \code{quantities.py} stores no values; \texttt{resolve\_symbol("k")} returns several candidates. \code{acquire_sources.py} records byte identity, ``never training eligibility''; \code{verify_collection.py} must ``never certify model validity'', and its \code{catalog/STATUS.md} reports PASS for identity and coverage with zero sources eligible for training.
+
+\subsection{Governing documents}
+No triage record in \code{docs/} names X06 as primary stage; the governing texts live mostly in \code{knowledge/}.
+
+{\chelevenTables
+\begin{longtable}{P{6.6cm}P{2.1cm}P{7.1cm}}
+\toprule
+Document & Type, status & One line \\
+\midrule\endhead
+\code{knowledge/AGENTS.md} & manual, active & Authority, provenance kinds, states, escalation, resume protocol. \\
+\code{knowledge/README.md} & guide, active & Commands, refresh, Docling pilot, verification. \\
+\code{knowledge/reports/NEXT_KNOWLEDGE_SESSION.md} & resume point & 2026-10-17 continuation; open K-items; next packet. \\
+\code{knowledge/reports/REMAINING_SCIENTIFIC_GAPS.md} & audit & Code-versus-source discrepancies G1--G34 left for engineering decision. \\
+\code{knowledge/reports/SUBSYSTEM_LITERATURE_STATUS_2026-10-17.md} & audit & 7 of 61 models have current structured code/source reviews; no subsystem comprehensively verified. \\
+\code{knowledge/workflows/AGENTIC_ROLES_2026-10-16.md} & protocol & Roles S1--S3, F, A and what mechanical roles may not do. \\
+\code{docs/agents/AGENTS.md} & agent prompt & Repository-level pointer to \code{knowledge/AGENTS.md}. \\
+\code{docs/literature/LITERATURE_REQUESTS*.md} (3) & requests, active & Harvested as \texttt{BLOCKED\_ON\_LITERATURE} capabilities (\code{harvest_repo.py:291}). \\
+\code{docs/literature/} provenance and inventories (4) & provenance & Thermofluid, chamber, pintle and MDO-remediation source maps. \\
+\code{raosim/data/README.md}, \code{catalog/STATUS.md} & plan, status & Acquisition only; nothing trained, no gate changed. \\
+\code{docs/program/COMPONENT_DATA_AND_MULTIFIDELITY_PLAN_2026-11-03.md} & plan, proposed & Component evidence interface the collection serves. \\
+\bottomrule
+\end{longtable}}
+
+\subsection{Verification}
+\code{knowledge/tests/} holds 37 files, 290 test functions and 468 collected cases (Table~\ref{tab:kgtests}). In the 5 November root run (\S\ref{sec:x07}) all passed except one skip: \code{test_kg_artifacts.py::test_real_report_examples_dry_collect} hard-codes two producer reports under \code{builds/} that the archive moved into \code{builds/_archive_2026-11-05/}. \code{test_kg_system.py} (35 cases) skips without the ignored \code{vector_index/chunks.sqlite} (\code{:31-32}), so its acceptance queries never run in CI (defect~9 of the 7 October consolidated technical review); \code{test_kg_minicorpus.py} runs the real rebuild on synthetic fixtures but not those queries. The fresh-checkout proof without the corpus was 428 passed, 39 skipped (\code{knowledge/reports/CONTINUATION_2026-10-17.md}). \code{raosim/data/tools/} has no tests.
+
+\begin{table}[H]
+\centering\footnotesize
+\begin{tabularx}{\linewidth}{P{3.3cm}rrrY}
+\toprule
+Family & Files & Fns & Cases & What the family pins \\
+\midrule
+Authority and evidence classes & 10 & 48 & 65 & A citation is a route, not support; a resolved report key cannot validate a threshold; tuning constants are not calibration; static call evidence is not runtime evidence; simulated artifacts never become physical evidence; overloaded symbols stay distinct \\
+Source-review provenance & 5 & 54 & 86 & Reviewer identity and refusal of self-verification; multi-source review retention; parser candidates without authority; immutable Docling attempts \\
+Freshness and history & 9 & 50 & 83 & Verdicts scoped to content hashes; AST locators without importing code; retired relations kept as history; duplicates cannot overwrite \\
+Ingestion and retrieval & 6 & 63 & 104 & Real rebuild on a synthetic mini-corpus; incremental preservation; per-page OCR eligibility; acceptance queries return a state, never a silent empty list \\
+Agentic controls & 6 & 72 & 127 & Concurrency and role gates; S3 integrates only exact reviewed bytes; bank failures block integration; replay; audit findings A-01 to A-11 \\
+Checkout integrity & 1 & 3 & 3 & Every knowledge module, test, tool and reviewed journal is tracked \\
+\bottomrule
+\end{tabularx}
+\caption{Knowledge-system tests by what they pin (37 files).}\label{tab:kgtests}
+\end{table}
+
+\subsection{Maturity, limitations and known defects}
+\code{latest_report.md} states the maturity plainly: equation and concept completeness \texttt{NOT\_ESTABLISHED}; 30 of 258 canonical publications with extracted objects; Docling on 157 of 11{,}753 pages; 12 of 61 models with source-fingerprinted reviews; registry support 4 \texttt{SUPPORTED}, 15 \texttt{PARTIALLY\_SUPPORTED}, 1 \texttt{NOT\_FOUND\_IN\_SOURCE}, 41 \texttt{NOT\_CHECKED}; 244 of 262 conversions \texttt{needs\_review}; and ``A confirmed source transcription does not validate an implementation or hardware.'' It lists 257 hard-coded constants as \texttt{UNKNOWN\_BASIS} in one section and 274 in its validation statistics, without stating the difference in scope. Retrieval is LSA over this corpus only, so recall is weak for concepts the corpus lacks.
+
+\caution{The stores were last rebuilt on 4 November 2026, before \code{docs/} was reorganized: \code{knowledge/repo_documents.json} still lists 66 of its 68 documents under the old flat \code{docs/<name>.md} paths (three under \code{docs/audit_work/}), none of which exists now. \code{harvest_repo.py} already globs recursively, so the next \texttt{kg.sh rebuild} should correct them; it was not run for this guide. The same rebuild will find the archived build reports under \code{builds/_archive_2026-11-05/}, while the CAD references inside them are root-relative \code{builds/...} paths (\code{harvest_artifacts.py:104-106}) that no longer resolve.}
+
+Other drift: \code{docs/architecture/CODE_MAP.md} gives 0 lines for 54 knowledge files; the \code{kg/cli.py} header omits six parser subcommands (\texttt{artifacts}, \texttt{artifact}, \texttt{coverage}, \texttt{enrichments}, \texttt{pending}, \texttt{packet}); the \code{pipeline.py} header lists 10 of the 20 steps in Figure~\ref{fig:x06-rebuild}; \code{knowledge/AGENTS.md} \S1 names 3 of the 20 tools; \code{NEXT_KNOWLEDGE_SESSION.md} reports ``63 FINAL\_AUDIT\_ELIGIBLE and 38 QUEUED'' although the queue has since moved 36 packets to later mechanical states; \code{raosim/thermal_correlations.py} cites \code{knowledge/reports/THERMAL_VERIFICATION_IMPLEMENTATION_2026-10-17.md}, which does not exist; and 21 PDFs under \code{propulsion_texts/} remain tracked by git despite the ignore rule.
+
+\subsection{Developer notes}
+New literature: add the PDF under \code{propulsion_texts/}, run \texttt{kg.sh sync --convert} and \texttt{kg.sh rebuild}; equations and claims enter only through \code{tools/bank_extraction.py} with quote, page and source hash. New physics: update \code{raosim/model_registry.py} (harvested) and cite \texttt{model\_id}, \texttt{equation\_id} and \texttt{source} beside the code; if the basis is missing, add a request in \code{docs/literature/LITERATURE_REQUESTS*.md} and keep the feature unavailable. New constraint: add it to \texttt{CONSTRAINT\_MANIFEST} in \code{raosim/mdo/constraints.py} with \texttt{optimizer\_role}, \texttt{basis\_class} and \texttt{source\_id}. Knowledge code: edit \code{knowledge/kg/} with a corpus-free test that relocates the store root. A reviewed digitization that feeds code (as \code{rao_top_chart.py} does) must be committed with its \texttt{EVIDENCE} targets and the tests that pin its values. Packaged data changes only through the X05 producers; research sources through \code{raosim/data/catalog/sources.json}, \code{acquire_sources.py} and \code{verify_collection.py}.
+
+% =====================================================================
+\section{X07: Test harness}\label{sec:x07}
+
+\subsection{Role in the data flow and call sites}
+X07 is 174 files --- 131 \code{tests/test_*.py} and 37 \code{knowledge/tests/test_kg_*.py} modules, four CLI argument files in \code{examples/cli/}, two GitHub Actions workflows --- plus \code{pytest.ini}. There is no \code{conftest.py}. \code{pytest.ini} sets \texttt{pythonpath = .} and declares the markers \texttt{slow} and \texttt{smoke}; it has no \texttt{testpaths}, so a root-level \texttt{pytest} collects both trees (2{,}416 + 468 = 2{,}884 cases). Argument files enter the CLI through \texttt{@file} expansion in \code{_expand_arg_files} (\code{raosim/run_nozzle.py:562}, called at \code{:3785}); later flags override earlier ones.
+
+\code{.github/workflows/test.yml} runs three jobs: \texttt{knowledge} (only \texttt{numpy}, \texttt{scipy}, \texttt{pytest}; \texttt{pytest knowledge/tests}), \texttt{non-slow} (\texttt{pip install -e ".[dev,cad]"}, \texttt{pytest -m "not slow"} from the root, so the knowledge suite runs a second time there) and \texttt{slow-nozzle} (\texttt{-m slow}). JAX, Optimistix and Equinox are core dependencies (\code{pyproject.toml:41-50}), so the JAX tests run in CI; the \texttt{cea} extra (RocketCEA) is never installed. \code{publish.yml} builds, checks the tag against the version and publishes; it does not run or depend on the Test workflow.
+
+\subsection{Inputs and outputs}
+Tests write to \texttt{tmp\_path}, except \code{tests/test_design_workflow.py:180-200}, which runs legacy \code{main.py} in the working directory so that \code{raosim/build_log.py} creates \code{builds/vNNN_<stamp>/} (\code{v455}--\code{v463} reappeared on 5 November). The argument files write to \code{builds/samples/} and \code{builds/tests/}.
+
+\subsection{Test counts by stage}
+Each \code{tests/} file is assigned to the stage of its principal module under test (module-stage map, imports, manual review of mixed cases; approximate). ``Fns'' counts \texttt{def test*} functions, ``Cases'' collected cases, ``Slow'' collected \texttt{slow} cases, ``Fail'' the 5 November run.
+
+{\chelevenTables
+\begin{longtable}{lrrrrrrP{6.9cm}}
+\toprule
+Stage & Files & Lines & Fns & Cases & Slow & Fail & Files (\code{tests/test_*.py}) \\
+\midrule\endhead
+S01 & 2 & 1222 & 44 & 57 & 0 & 1 & run\_nozzle, cli\_module\_exit \\
+S02 & 8 & 1452 & 98 & 156 & 0 & 0 & input\_validation, units, two \texttt{lrekit\_*}, mdo\_job, mdo\_metrics, fidelity\_scope\_gates, job\_execution\_integrity \\
+S03 & 2 & 816 & 24 & 46 & 0 & 0 & cea\_pinned, frozen\_flow \\
+S04 & 3 & 372 & 39 & 39 & 0 & 0 & engine, gas\_dynamics, v2\_features \\
+S05 & 3 & 550 & 33 & 43 & 0 & 6 & chamber\_geometry, nozzle\_geometry, design\_workflow \\
+S06 & 21 & 6760 & 247 & 279 & 23 & 4 & ten \texttt{rao\_*}, three \texttt{moc*}, four \texttt{nasa\_*}, characteristic\_pairing, jax\_convergence, phase6\_coupled\_wall, transonic\_kernel \\
+S07 & 10 & 2003 & 114 & 135 & 0 & 0 & advanced\_thermofluids, bartz\_heat\_flux, fatigue, joint\_design, materials, regen\_cooling, regen\_profile, thermal\_design, two \texttt{wall\_*} \\
+S08 & 3 & 1858 & 114 & 120 & 0 & 0 & injector, movable\_pintle, spray\_coupling \\
+S09 & 1 & 218 & 12 & 12 & 0 & 0 & electric\_technology \\
+S10 & 3 & 1239 & 49 & 56 & 0 & 0 & interface, mass\_ledger, regen\_volumes \\
+S11 & 5 & 2305 & 103 & 108 & 0 & 1 & injector\_export, pump\_cad\_brep, pumps, regen\_cad, regen\_geometry \\
+S12 & 3 & 647 & 37 & 37 & 0 & 0 & flow\_viz, moc\_diagrams, plotting \\
+S13 & 31 & 6342 & 319 & 424 & 0 & 8 & requirements, cea\_catalog and 29 \texttt{mdo\_*} block, gate and contract files \\
+S14 & 9 & 4884 & 161 & 181 & 1 & 2 & design\_v2, job\_reference\_parts, five \texttt{mdo\_*} (build, contour\_validation, execute, resolved\_inputs, snapshot), model\_registry, release\_readiness \\
+X01 & 6 & 1102 & 51 & 506 & 3 & 0 & six of the nine \texttt{jax\_*} files (others under S06, X08); jax\_primitives has 460 cases \\
+X02 & 11 & 2784 & 107 & 150 & 0 & 0 & openfoam\_export, openfoam\_handoff, nine \texttt{spray\_*} files \\
+X03 & 3 & 341 & 26 & 26 & 0 & 2 & benchmarks, comparison, conical \\
+X04 & 2 & 235 & 8 & 8 & 0 & 0 & compare\_nasa\_reference, legacy\_io \\
+X05 & 1 & 217 & 7 & 7 & 0 & 0 & cea\_surface\_validation \\
+X08 & 4 & 576 & 26 & 26 & 0 & 0 & flange\_cad, trajectory, jax\_bvp, jax\_thermal\_design\_opt (test-only modules) \\
+\midrule
+Total & 131 & 35923 & 1619 & 2416 & 27 & 24 & plus \code{knowledge/tests}: 37 files, 290 functions, 468 cases \\
+\bottomrule
+\end{longtable}}
+Seven files carry \texttt{slow} (moc holds 17 of the 27 cases); run\_nozzle and rao\_variational\_moc carry \texttt{smoke}; 31 files have a skip path, mostly for JAX, Optimistix, CadQuery or RocketCEA; no \texttt{xfail} remains.
+
+\subsection{What the header comments establish, by test family}
+\lead{Literature and closed-form anchors}
+\code{test_gas_dynamics.py} checks a worked example ($\varepsilon=10$, $\gamma=1.4$: $M_e\approx3.9226$, $\nu(M_e)\approx64.75^\circ$, $C_{F,\text{vac}}\approx1.647$). Pinned formulas: full Bartz (1957) with its $\sigma$ factor (\code{test_bartz_heat_flux.py}); Sieder--Tate (1936) and the series wall circuit of SP-125 \S4 (\code{test_regen_cooling.py}); SP-125 eqs.\ 4-28/4-29, with 4-29 reducing to $Et/(r\sqrt{3(1-\nu^2)})$ when $E_t=E_c=E$ (\code{test_wall_physics.py}); eq.\ 4-31 (\code{test_materials.py}, \code{test_wall_profile.py}); eq.\ 4-32 Darcy--Weisbach with helix length (\code{test_regen_profile.py}); Coffin--Manson as ``sourced screening gates, not a claim of hardware qualification'' (\code{test_fatigue.py}); Rao--Beck--Booth 1999 Eq.~(5) (\code{test_rao_valid_region.py}); Nasuti \& Pizzarelli 2021 Eq.~(9), $K=0.187$, which must return unavailable while coolant properties are constant (\code{test_mdo_coolant_htd.py}).
+
+\lead{External-oracle parity (NASA/JHU M3.5Perf)}
+\code{test_transonic_kernel.py}: throat-plane wall Mach 1.17779 against \code{wall.out}. \code{test_nasa_port.py}: wall $r(x)$ RMS below $10^{-3}$ (measured $1.8\times10^{-4}$). \code{test_moc_bounded_net.py}: uniform $M=3.5$ at exit against the 2518.05\,lbf exit stream thrust, warning that the 1971.99\,lbf ``2-D Gross Thrust'' is the throat-plane figure. \code{test_characteristic_pairing.py}: the 2026-06-11 correction, C$^-$: $d(\theta+\nu)=+S\,ds$, C$^+$: $d(\theta-\nu)=-S\,ds$, $S=\sin\theta\sin\mu/r$ (Anderson \S11.4; Zucrow \& Hoffman). \code{test_nasa_kernel_march_parity.py} reproduces the C++ integer division as a compatibility mode that ``does not authorize a \texttt{NASA\_REFERENCE\_MATCHED} reliability promotion''.
+
+\lead{NumPy/JAX parity and AD-versus-FD gates}
+J1 primitives match to $10^{-10}$; J2 residual leaves and assembly to $10^{-8}$; the J3b kernel march at bit parity ($|\Delta M|\le5\times10^{-10}$); MDO cooling and pump blocks against NumPy oracles to about $10^{-9}$ and $10^{-10}$; automatic differentiation (AD) against re-solved central finite differences (FD) to about $10^{-4}$ in the \code{test_mdo_*_gate.py} files. \code{test_jax_assembly_parity.py}: passing ``proves the JAX port changed numerics, not physics''.
+
+\lead{Honesty and fail-closed contracts}
+A unit is never guessed (\code{test_units.py}); verdicts are four-valued and a failed solve is not a violated requirement (\code{test_mdo_execute.py}); a partially screened requirement is never reported as met (\code{test_requirements.py}); a partial assembly is never a complete engine (\code{test_mdo_build.py}); the default engine release is blocked (\code{test_release_readiness.py}); both pipelines share one electric-technology set and one resolved input contract (\code{test_electric_technology.py}, \code{test_mdo_resolved_inputs.py}); every bound is sourced or labelled \texttt{literature=False} (\code{test_mdo_bounds.py}); OpenFOAM exports and spray handoffs fail closed.
+
+\lead{Regression floors, negative applicability and end-to-end smokes}
+\code{test_jax_convergence.py} asserts \texttt{max\_scaled}~$\le2\times10^{-3}$; \code{test_rao_chart_benchmark.py} keeps the old chart-agreement target as a \emph{negative}-applicability regression; \code{test_moc.py} pins the deprecated \texttt{march\_coupled\_net} ``only for its documented (defective) behaviour''. \code{test_pumps.py} requires watertight, positive-volume pump STLs; \code{test_mass_ledger.py} treats mass as integrated geometry ``checkable by hand''. \code{test_run_nozzle.py} runs the pipeline with \code{--max-nfev 0} and runs \code{examples/cli/lox_rp1_13kn_copper_316l_full_engine.args} end to end (\code{:1028-1062}), asserting 13\,kN thrust, OFHC Copper/316L, a feasible injector and pump, and 11 outputs.
+
+\lead{Regression argument files}
+The header of \code{test_13kn_sealevel_regen_allstl.args} sources each parameter: LOX/RP-1 from Sutton \& Biblarz Table~5-5; $P_c=3$\,MPa because 7\,MPa ``was probed thermally infeasible for every catalog liner at 13\,kN''; matched expansion, $\varepsilon=4.524$; GRCop-84 liner with Inconel~718 closeout; $R_u=1.5R_t$ at the SP-8120 bound (Hall $C_d=0.98963$ at $\gamma=1.24$). The movable-pintle variant expects evidence-blocked release gates; the \code{rao-bvp} variant minutes of JAX runtime.
+
+\subsection{Governing documents}
+{\chelevenTables
+\begin{longtable}{P{6.6cm}P{2.1cm}P{7.1cm}}
+\toprule
+Document & Type, status & One line \\
+\midrule\endhead
+\code{docs/agents/TEST_PROMPT.md} & agent prompt, active & Seven-step manual regression on the sea-level argument file; drift rule $>0.5\,\%$; reference snapshot of 2026-07-02. \\
+\code{docs/program/JAX_DIFFERENTIABLE_PLAN.md} & plan, active & Defines the J1--J6 gates behind the \code{test_jax_*} files. \\
+\code{docs/subsystems/S06-rao-moc-bvp-contour/MOC_MARCH_TOPOLOGY_REMEDIATION_2026-09-21.md}, \code{docs/architecture/PHYSICAL_RELEASE_GATES.md} & remediation, architecture & Phase 0/2 gates of \code{test_moc_bounded_net.py}; evidence manifest of \code{test_release_readiness.py}. \\
+\code{docs/audits/INPUT_EXECUTION_INTEGRITY_2026-09-09.md} & remediation & 281 focused tests; smoke record \code{INPUT_EXECUTION_SMOKE_2026-09-09.json}. \\
+\code{docs/audits/RAO_B3_B5_HOST_EVIDENCE_2026-08-24.md} & host evidence & Last recorded full non-slow run before this guide: 2183 passed, 26 deselected, 1542.89\,s. \\
+\code{knowledge/reports/KNOWLEDGE_INTEGRITY_TESTS.md} & record & Knowledge-suite history and fresh-checkout proofs. \\
+\bottomrule
+\end{longtable}}
+
+\subsection{Verification of the harness itself}
+A root-level \texttt{pytest -m "not slow"} run of the working tree (the scope of the CI \texttt{non-slow} job) completed on 5 November 2026 in 2{,}761\,s: \textbf{2{,}832 passed, 24 failed, 1 skipped, 27 deselected}. All failures are in \code{tests/}; the skip is the knowledge artifact check above. Table~\ref{tab:x07-failures} groups the failures by the evidence in their error output; ``not isolated'' means no root cause was established for this guide.
+
+\begin{table}[H]
+\centering\footnotesize
+\begin{tabularx}{\linewidth}{P{5.3cm}rY}
+\toprule
+Group & Fail & Evidence \\
+\midrule
+Chart-domain refusal (\code{nozzle_geometry.py:67}) & 9 & \texttt{ValueError} ``outside the held SP-125 chart domain epsilon=[5.0, 50.0]'': design\_v2 (2), design\_workflow (2), mdo\_engine $\varepsilon=4$ corners (2), nozzle\_geometry (2), run\_nozzle (1, expects exit 2, gets 1) \\
+Old chart values or domain asserted & 4 & mdo\_bounds (lower $\varepsilon$ bound 5 vs 4), mdo\_engine clipping, nozzle\_geometry known point, rao\_chart\_benchmark (chart $25.74^\circ$ now within $0.23^\circ$ of solved $\theta_N=25.51^\circ$) \\
+Bell length changed & 2 & nozzle\_geometry bell length and phase6 wall-guess endpoint: 0.12992\,m vs 0.12912\,m \\
+LEA TOP B\'ezier benchmark & 2 & benchmarks: \texttt{overall\_status} \texttt{fail} (one failing metric); not isolated \\
+Bounded MOC net & 2 & moc\_bounded\_net: throat-arc end 0.00382 vs bell start 0.00332; coalescence location off by 0.0037 (limit 0.003); not isolated \\
+NLP robustness & 4 & mdo\_nlp\_robustness: injected failures not counted, multistart basin; not isolated \\
+CAD Boolean & 1 & regen\_cad: ``Boolean result is not one dominant valid solid (solid\_count=12)'' \\
+\bottomrule
+\end{tabularx}
+\caption{Failures in the 5 November 2026 non-slow run, grouped by error evidence.}\label{tab:x07-failures}
+\end{table}
+
+\caution{\texttt{python -m raosim @examples/cli/test\_13kn\_sealevel\_regen\_allstl.args --max-nfev 0} now exits with status~1 and an unhandled \texttt{ValueError} traceback at ``Constructing contour'', before any output is written: $\varepsilon=4.524$ lies below the new chart domain. The authoritative regression file and the movable-pintle variant (same operating point) are broken, and the refusal is not a clean argument error.}
+
+\subsection{Maturity, limitations and known defects}
+\begin{itemize}[nosep]
+  \item Every test is software verification; ``a numerical parity test is not physical validation'' (\code{knowledge/AGENTS.md} \S6).
+  \item The suite lags the working tree (15 of 24 failures directly from the chart change, two more plausibly), and \code{raosim/rao_top_chart.py} is untracked: committing only tracked changes would break the import of \code{nozzle_geometry}. \code{test_kg_repository_tracking.py} guards tracking for \code{knowledge/} only.
+  \item Only the copper argument file is run by a test. It passes BVP flags the B\'ezier path ignores (\code{--max-nfev 0 --n-control 8 --n-kernel 12}), uses the repository-only $R_u/R_t$ extension (\code{--cd-target 0.99 --allow-throat-radius-extension}), runs at the 7\,MPa the sea-level header calls infeasible, and its test does not assert wall feasibility.
+  \item \code{docs/agents/TEST_PROMPT.md} calls the sea-level run ``the full benchmark contour (\texttt{--max-nfev 4000})'', but without \code{--contour-method rao-bvp} the flag is inert; its baseline \code{builds/tests/13kn_sl_baseline_summary.json} does not exist, even in the archive. The argument file's claim that spray/$c^*$ coupling is ``blocked with \texttt{--regen}'' no longer holds when the coolant is the cycle fuel (\code{run_nozzle.py:4148-4157}).
+  \item \code{test_jax_convergence.py}'s header still describes a ``remaining gap to the 2e-3 gate'' that its assertions contradict, and it runs \texttt{max\_nfev=4000} solves without the \texttt{slow} marker. \code{test_transonic_kernel.py:195-196} cites a pre-reorganization \code{docs/} path.
+  \item \code{test_design_workflow.py} batch tests write \code{builds/vNNN} folders (the data-flow trace attributes most of the 454 archived ones to tests driving \code{main.py}). \code{publish.yml} can publish a tag on which the Test workflow has not passed.
+\end{itemize}
+
+\subsection{Developer notes}
+Module tests go in \code{tests/test_<module>.py}: write only to \texttt{tmp\_path}, guard optional dependencies with \texttt{pytest.importorskip}, mark minute-scale solves \texttt{slow}, and cite corpus PDF and page for literature anchors (\code{harvest_repo.py} classifies a test above \texttt{unit\_test} only on that evidence). A JAX port needs a NumPy-oracle parity test plus an AD-versus-FD \code{*_gate.py}. A CLI regression case is an \code{examples/cli/*.args} file with a provenance header plus a subprocess test with \code{--out} under \texttt{tmp\_path}. CI lives in \code{.github/workflows/test.yml}; a \texttt{testpaths} entry in \code{pytest.ini} would make root collection explicit.

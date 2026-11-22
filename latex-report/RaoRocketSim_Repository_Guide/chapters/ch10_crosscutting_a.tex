@@ -1,0 +1,428 @@
+\chapter{Cross-cutting groups I: differentiable core, spray handoff, legacy CLI, NASA reference, unreachable code}\label{ch:crosscutting-a}
+% Local table style for this chapter only (scoped by \begingroup ... \endgroup).
+\newcommand{\chtenTables}{\footnotesize\renewcommand{\code}[1]{{\footnotesize\path{##1}}}\setlength{\tabcolsep}{4pt}}
+
+The fourteen pipeline stages S01--S14 in the preceding chapters follow one run of \code{raosim.run_nozzle.main} from argument parsing to \code{summary.json}. Five groups of code sit beside that pipeline rather than inside it, so for each the first question is \emph{how it relates to the pipeline at all}. The answers come from the static import closure in the data-flow trace (161 in-scope modules: 125 reachable from \code{lrekit.cli}, 7 only through the legacy entry, 11 from no CLI) and from the call sites (Figure~\ref{fig:x-relations}). X01 is a \emph{parallel solver backend} and leaf library, reached only by \code{--contour-method}~\code{rao-bvp} and the S13 MDO branches; X02 is a \emph{handoff contract} plus one export verb; X03 is the \emph{legacy} front end with its own console script, units and output tree; X04 is an \emph{oracle} that the rao-bvp path hashes but never executes; X08 is \emph{orphaned} library code. None of the five executes physics on a default \code{lrekit} run.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[scale=0.92, transform shape,
+  font=\sffamily\scriptsize,
+  >={Stealth[length=2.2mm]},
+  ent/.style={draw=ink, fill=pale, rounded corners=2pt, align=center, inner sep=3pt, text width=2.7cm, minimum height=0.8cm},
+  stg/.style={draw=ink, rounded corners=2pt, align=center, inner sep=3pt, text width=4.0cm, minimum height=0.8cm},
+  grp/.style={draw=teal, line width=0.8pt, rounded corners=2pt, align=center, inner sep=3pt, text width=4.6cm, minimum height=0.8cm},
+  orph/.style={draw=warn, dashed, rounded corners=2pt, align=center, inner sep=3pt, text width=4.6cm, minimum height=0.8cm},
+  lab/.style={font=\sffamily\tiny, fill=white, inner sep=1pt}
+]
+\node[ent] (e1) at (0,0) {\texttt{lrekit} / \texttt{raosim} /\\ \texttt{RaoRocketSim}};
+\node[ent] (e2) at (0,-2.9) {\texttt{lrekit export-}\\\texttt{openfoam-spray}};
+\node[ent] (e3) at (0,-4.2) {\texttt{RaoRocketSimLegacy}};
+\node[stg] (x4) at (4.6,2.45) {\textbf{X04} vendored NASA/JHU tree\\ + \texttt{legacy\_io} (oracle)};
+\node[stg] (s06) at (4.6,1.0) {S06 contour, only with\\ \texttt{-{}-contour-method rao-bvp}:\\ \texttt{solve\_rao\_bvp}};
+\node[stg] (s13) at (4.6,-0.3) {S13 engine MDO (\texttt{mdo.grid},\\ \texttt{cooling}, \texttt{engine}, \texttt{assembly})};
+\node[stg] (s08) at (4.6,-1.6) {S08 spray/$c^*$ fixed point\\ (\texttt{source="legacy\_screen"})};
+\node[stg] (leg) at (4.6,-4.2) {\texttt{main.py}: batch, sweep,\\ benchmark, interactive};
+\node[grp] (x1a) at (10.6,1.0) {\textbf{X01} LM backend: \texttt{api}, \texttt{theta\_b\_solve},\\ \texttt{assembly}, \texttt{moc\_kernel}, \texttt{sensitivities}};
+\node[grp] (x1b) at (10.6,-0.3) {\textbf{X01} leaf library:\\ \texttt{primitives}, \texttt{thermal}};
+\node[orph] (x2a) at (10.6,-1.6) {\textbf{X02} \texttt{raosim.spray}: types imported,\\ \texttt{march\_parcels} never called};
+\node[grp] (x2b) at (10.6,-2.9) {\textbf{X02} \texttt{raosim.openfoam}: writes case\\ + \texttt{raosim\_openfoam\_manifest.json}};
+\node[grp] (x3) at (10.6,-4.2) {\textbf{X03} \texttt{build\_log}, \texttt{trade\_study}, \texttt{conical},\\ \texttt{benchmarks}, \dots\ $\rightarrow$ \texttt{builds/vNNN\_*}};
+\node[orph] (x8) at (10.6,-5.5) {\textbf{X08} orphans: imported by tests only\\ (or by nothing)};
+\draw[->] (e1.east) -- ++(0.3,0) |- (s06.west);
+\draw[->] (e1.east) -- ++(0.3,0) |- (s13.west);
+\draw[->] (e1.east) -- ++(0.3,0) |- (s08.west);
+\draw[->] (s06) -- (x1a);
+\draw[->] (s13) -- (x1b);
+\draw[->,dashed] (s08) -- node[lab,above]{types only} (x2a);
+\draw[->] (e2.east) -- (x2b.west);
+\draw[->,dashed] (x2b.north) -- node[lab,right]{fixture loader} (x2a.south);
+\draw[->] (e3) -- (leg);
+\draw[->] (leg) -- (x3);
+\draw[->,dashed] (s06.north) -- node[lab,right]{reads, SHA-256 check} (x4.south);
+\end{tikzpicture}
+\caption{How the five groups attach to the CLI. Solid arrows are executed call paths; dashed arrows are imports or file reads that do not execute the group's physics. Sources: \texttt{raosim/cli.py}, \texttt{lrekit/cli.py}, \texttt{rao\_variational.py:6021-6071}, \texttt{spray\_coupling.py:19,32}, \texttt{openfoam/case.py:470}, \texttt{main.py:1265}.}\label{fig:x-relations}
+\end{figure}
+
+\section{X01 Differentiable JAX core}\label{sec:x01-jax}
+
+\subsection{Role in the data flow, call site, inputs and outputs}
+
+\code{raosim/jax} is, in its package docstring's words, ``a \emph{separate solver backend} living inside the same repo'' that re-expresses the throat-to-contour numerics of \code{raosim.rao_variational} in JAX so that the Rao boundary-value-problem (BVP) residual is differentiable end to end. It has two independent consumers.
+
+\textbf{The S06 Rao BVP (opt-in).} \code{rao_variational.solve_rao_bvp} (\code{:5901}) keeps seeding, the NumPy kernel, reliability gating and output assembly, and delegates only the inner least-squares step. At \code{:6021-6071} it branches on \code{config.solver_backend} (default \code{"jax"}, \code{:641}): with \code{solve_theta_b=True} it calls \code{theta_b_solve.least_squares_jax_theta_b} (\code{:6029}), otherwise \code{api.least_squares_jax} (\code{:6069-6071}); \code{"numpy"} selects SciPy \code{least_squares} with finite-difference Jacobians. From the CLI this runs only when \code{run_nozzle._solve} (\code{run_nozzle.py:1464}) receives \code{--contour-method}~\code{rao-bvp}; \code{--backend} defaults to \code{jax} (\code{:2953}). The same \code{"jax"} default is set in the v2 design spec (\code{design.py:170}) and in the MDO post-solve check \code{mdo.contour_validation} (\code{:183}).
+
+\textbf{The S13 engine MDO.} \code{mdo.grid}, \code{cooling}, \code{engine} and \code{assembly} import the closed-form leaves \code{jax.primitives} (\code{mach_from_area_ratio}, \code{isentropic_pressure_ratio}) and \code{jax.thermal} (\code{bartz_hg}, \code{recovery_temperature}, \code{sieder_tate_hc}, \code{schmucker_separation_margin}, \code{ambient_thrust_coefficient}). The MDO does not call the BVP: \code{run_nozzle._mdo_contour_request_error} (\code{:1866}) states that ``the differentiable MDO core remains on its fixed-topology Rao/TOP chart wall''. Ten further \code{mdo} modules and \code{regen_volumes.py:229} import \code{raosim.jax} only for its side effect, the ``repository-wide float64 policy''.
+
+The default contour (\code{--contour-method}~\code{bezier}) never reaches the BVP backend, which is why X01 is cross-cutting rather than a stage. Figure~\ref{fig:x01-flow} shows one inner solve.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[font=\sffamily\scriptsize, >={Stealth[length=2mm]},
+  b/.style={draw=ink, rounded corners=2pt, align=center, inner sep=3pt, text width=3.3cm, minimum height=0.75cm},
+  j/.style={draw=teal, line width=0.8pt, rounded corners=2pt, align=center, inner sep=3pt, text width=3.6cm, minimum height=0.75cm}]
+\node[b] (sh) at (0,0) {NumPy shell \texttt{solve\_rao\_bvp}: seed, kernel BD, bounds $u_0,\ell,h$};
+\node[j] (api) at (4.6,0.65) {\texttt{api.least\_squares\_jax}: sigmoid box, LM, weight ladder};
+\node[j] (tb) at (4.6,-0.65) {\texttt{theta\_b\_solve}: $\theta_B$ appended, BD rebuilt in-graph};
+\node[j] (asm) at (9.4,0.65) {\texttt{assembly.make\_residual}: pure $r(u)$};
+\node[j] (mk) at (9.4,-0.65) {\texttt{moc\_kernel.march\_kernel}: padded \texttt{lax.scan}};
+\node[j] (pr) at (9.4,-1.95) {\texttt{primitives}: $\nu(M)$, $\mu(M)$, isentropic ratios};
+\node[b] (out) at (0,-1.95) {back in NumPy: unpack, gates, \texttt{RaoSolution}};
+\draw[->] (sh) -- (api); \draw[->] (sh) -- (tb);
+\draw[->] (api) -- (asm); \draw[->] (tb) -- (asm); \draw[->] (tb) -- (mk);
+\draw[->] (asm.south east) to[bend left=20] (pr.north east); \draw[->] (mk) -- (pr);
+\draw[->] (api.south west) to[bend right=10] (out.north east);
+\end{tikzpicture}
+\caption{Internal flow of one X01 inner solve. \texttt{sensitivities.rao\_sensitivities} re-uses \texttt{assembly} after a solve but has no production caller.}\label{fig:x01-flow}
+\end{figure}
+
+\lead{Inputs and outputs}
+\code{least_squares_jax(config,u0,lower,upper)} takes the solve-time \code{RaoSolverConfig} (already carrying \code{kernel_bd}), the packed seed and its box, and returns \code{x}, \code{success}, \code{message}, \code{cost}, \code{nfev}, \code{max_abs_residual} and \code{backend="jax"} (\code{api.py:119-132}). The $\theta_B$ variant also returns the solved angle, at which the shell re-freezes the NumPy kernel with provenance \code{"bvp_solved"} (\code{rao_variational.py:6036-6066}). X01 writes no files. The CLI passes \code{--backend} into the solver configuration (\code{run_nozzle.py:1494}; the MDO post-solve hand-off does the same at \code{:1900}) and records it under \code{contour_reliability} in \code{summary.json} (\code{:4623}). The archived run \code{builds/_archive_2026-11-05/tests/13kn_rao_bvp_flowfield/summary.json} records backend \code{jax}, \code{max_scaled} $=1.41\times10^{-4}$, reliability \code{rao_variational_residual_solved} and \code{hardware_qualified} false.
+
+\subsection{Modules}
+
+\begingroup\chtenTables
+\begin{longtable}{@{}P{4.2cm}P{0.8cm}P{11.4cm}@{}}
+\caption{X01 modules reached from the CLI (the five unreached \texttt{raosim/jax} files are in Section~\ref{sec:x08-unreachable}).}\label{tab:x01-modules}\\
+\toprule File & Lines & Role \\ \midrule\endfirsthead
+\toprule File & Lines & Role \\ \midrule\endhead
+\code{raosim/jax/__init__.py} & 28 & Enables float64 at import; run tag \code{BACKEND} is \code{"jax"} \\
+\code{raosim/jax/api.py} & 164 & Optimistix Levenberg--Marquardt (LM) inner solve with sigmoid bounds; \code{solve_rao_bvp_jax}; \code{rao_sensitivities} re-export \\
+\code{raosim/jax/assembly.py} & 644 & Full assembled Rao BVP residual, parity-gated against NumPy \\
+\code{raosim/jax/moc_kernel.py} & 828 & Differentiable throat-arc kernel march (padded \code{lax.scan}) \\
+\code{raosim/jax/primitives.py} & 178 & Gas-dynamics closed forms with sonic-safe guards \\
+\code{raosim/jax/sensitivities.py} & 252 & J6 v1: node-level $\partial C_F/\partial u$ fields, explicit partials, Jacobian conditioning \\
+\code{raosim/jax/thermal.py} & 154 & Bartz, Sieder--Tate, throat wall-temperature circuit, Schmucker margin, ambient $C_F$ \\
+\code{raosim/jax/theta_b_solve.py} & 243 & $\theta_B$ as a solved BVP unknown, BD recomputed in-graph \\
+\bottomrule
+\end{longtable}
+\endgroup
+
+\subsection{What the header comments establish}
+
+\lead{Package contract and primitives.} Float64 is mandatory ``for bit-parity with the NumPy primitives''; x64 is switched on at import, so \code{raosim.jax} must be imported before any JAX array is created. The primitives ``mirror, term for term'' the calorically perfect closed forms in \code{raosim.gas_dynamics}, which are cross-checked against \code{propulsion_texts/prmeyer.pdf} and \code{rao1999.pdf}. The J1 gate is $10^{-10}$ parity on closed forms plus round-trip consistency of the two iterative inverses; \code{mach_angle} and \code{prandtl_meyer} guard their \code{sqrt}/\code{asin} arguments so that values and first derivatives stay finite at $M\to1$.
+
+\lead{Residual assembly.} \code{assembly.py} is the JAX form of \code{_unpack_bvp} $\rightarrow$ \code{_rao_bvp_residual_groups} $\rightarrow$ \code{flat()}, exactly what SciPy minimizes; its J2 gate is $10^{-8}$ parity with \code{_scaled_rao_bvp_residual}, ``proving the port changes numerics, not physics''. Its faithfulness notes matter physically: two Mach floors are deliberately not unified ($M=1.001$ for control-surface (CE) nodes and CE mass-flux midpoints, $1.000001$ for kernel-BD, wall-interpolation and left-Mach nodes); CE $x$ is rebuilt from $dx=dr/\tan(\theta+\mu)$ with a $10^{-9}$ fallback step; the kernel BD is a \emph{static} polyline from the NumPy seed, only \code{kernel_d_fraction} is unknown, and the B$\to$D mass flux is a masked partial-segment sum smooth in that fraction. The finite-difference blocks \code{stationarity} and \code{transversality}, and any \code{angle_boundary_mode} other than \code{"free"}, raise at build time; the supported set is the 13-entry \code{SUPPORTED_BLOCKS} (\code{assembly.py:65-69}).
+
+\lead{Inner solve.} ``Two layers, one boundary'': JAX owns only the LM step with the exact autodiff Jacobian. Optimistix LM has no box bounds, so unknowns are mapped by $u=\ell+(h-\ell)\,\sigma(z)$ and every iterate stays inside the box; the header insists that the 0.7 cap on \code{kernel_d_fraction} (``the Option-2 valid-region workaround'') must hold during iteration. Seeds on a bound are nudged by $10^{-3}$, and convergence is judged on the reparametrization-invariant residual. The code adds LM tolerances $10^{-8}$/$10^{-10}$ (\code{api.py:45-46}) and a continuation over \code{jax_constraint_weight_ladder} (default $(1,10,30,100)$, \code{rao_variational.py:676-678}) that up-weights the mass, length and endpoint-pin rows while reporting the unweighted residual.
+
+\lead{Kernel march.} The header records the corrected characteristic pairing (2026-06-11; Anderson, \emph{Modern Compressible Flow} \S11.4; Zucrow and Hoffman Vol.~2 Ch.~17; oracle-proven in \code{tests/test_characteristic_pairing.py}):
+\begin{gather*}
+\text{along } C^- \ (\text{slope } \theta-\mu):\quad d(\theta+\nu)=+S\,ds,\qquad
+\text{along } C^+ \ (\text{slope } \theta+\mu):\quad d(\theta-\nu)=-S\,ds,\\
+S=\frac{\sin\theta\,\sin\mu}{r}.
+\end{gather*}
+The march reaches bit-parity with the NumPy oracle \code{build_kernel} at the BD level because it ports NASA's row policy and $d\theta$-form unit processes; the Anderson-form processes remain tested references but converge ``to a \emph{different} continuum near the axis: axis Mach +9\,\%''. NASA mixes about 5\,\% \emph{raw} rows (the C$^+$ from \code{prev[1]} ends on the throat arc) with about 95\,\% \emph{special} rows (wall point at $\min(\theta_B,\theta_{\text{prev}}+\Delta\theta_{\lim}/2)$); skipping raw rows starves the wall strip ($\nu_w-\theta_w=-0.67^\circ$ at B against the oracle's $+0.68^\circ$). The landed march (after two failed static-shape designs) uses padded shapes $W=n_0+n_{\text{rows}}$ with traced width and pairing offset. Because the pre-clamp wall grid is $\theta_B$-independent, $d(\text{BD})/d\theta_B$ is exact within a row-count window. The start line is a frozen input, and \code{build_start_line} raises \code{NotImplementedError} (``differentiable Kliegel--Levine'', \code{moc_kernel.py:823}), so there are no derivatives with respect to $R_t$ or $\gamma$. Default wall-step limit: $0.5^\circ$ (\code{moc_kernel.py:95}).
+
+\lead{$\theta_B$ as an unknown.} \code{theta_b_solve.py} appends $\theta_B$ to the unknowns and rebuilds BD by \code{march_kernel} on every evaluation, injecting the traced arrays through \code{StaticParams._replace} into the unchanged J2-gated assembly; padding segments have $ds=0$ and are masked. Gate: at the seed angle the live-BD residual equals the static one to about $10^{-8}$. Crossing a grid interval changes the clamp-row index (``a small discontinuity''), so the bounds are $\pm\Delta\theta_{\lim}/4$ around the seed (\code{:166-167}) and are re-centred per ladder rung.
+
+\lead{Gradient API.} J6 v1 gives exact node fields $\partial C_F/\partial M_i$, $\partial\theta_i$, $\partial r_i$ on the solved control surface (a ``manufacturing-tolerance map'' without re-solve), the multiplier tail (about 0 at an optimum), explicit \emph{partial} derivatives at fixed $u^*$ with $\partial C_F/\partial p_a=-(r_E^2-r_D^2)/R_t^2$ pinned as a known-sign gate, and the Jacobian's extreme singular values. $C_F$ follows \code{nasa_moc.surface_thrust_coefficient} normalized by $\pi R_t^2p_0$. Total design derivatives via the implicit function theorem (IFT), bell-wall node maps and the Hessian are deferred to v2; only \code{couple_wall=False} is supported (\code{sensitivities.py:183-187}).
+
+\lead{Thermal leaves.} \code{thermal.py} ports the full Bartz (1957) coefficient with property factor $\sigma$ ($\omega=0.6$),
+\[
+h_g=\frac{0.026}{D_t^{0.2}}\left(\frac{\mu^{0.2}c_p}{\mathrm{Pr}^{0.6}}\right)\left(\frac{p_c}{c^*}\right)^{0.8}\left(\frac{D_t}{R_c}\right)^{0.1}\left(\frac{A_t}{A}\right)^{0.9}\sigma,
+\]
+Sieder--Tate $\mathrm{Nu}=0.027\,\mathrm{Re}^{0.8}\mathrm{Pr}^{1/3}(\mu_b/\mu_w)^{0.14}$, recovery factor $\mathrm{Pr}^{1/3}$, the series circuit $q=(T_{aw}-T_c)/(1/h_g+t_w/k_w+1/h_c)$ solved by eight unrolled fixed-point passes at the throat (\code{n_iter=8}), Schmucker $p_{\text{sep}}/p_a=(1.88M_e-1)^{-0.64}$ (\"Ostlund 2002 Eq.~30; corrected 2026-07-22 from a variant ``$\sim1.75\times$ off'' at $M_e=3$), and ambient $C_F$. Constraints sit at closed-form stations (throat, isentropic exit), so no contour march is differentiated; parity with the NumPy twins is the acceptance gate.
+
+\subsection{Governing documents}
+
+No triage record names X01 as primary stage; the plan is filed as S06 and the two evaluations as S13.
+
+\begingroup\chtenTables
+\begin{longtable}{@{}P{5.6cm}P{1.7cm}P{2.0cm}P{6.8cm}@{}}
+\toprule Document & Type & Status & Content \\ \midrule\endhead
+\code{docs/program/JAX_DIFFERENTIABLE_PLAN.md} & plan, project record & active & J0--J6 plan; STATUS blocks log the bit-parity march, $\theta_B$ in the BVP, the JAX default flip and the ``physics-coupled design'' loop \\
+\code{docs/architecture/IMPLICIT_RAO_JAX_MDO_ARCHITECTURE.md} & architecture & ``design checkpoint only; not implemented'' & Do not call \code{solve_rao_bvp_jax()} from \code{mdo/grid.py}; staged pure-array KKT/IFT plan \\
+\code{docs/audits/DIFFERENTIABLE_MDO_PLAN_EVALUATION_2026-07-22.md} & audit & historical & Found the cross-labelled separation criterion (\S A.2.1) corrected in \code{thermal.py} and \code{separation.py} \\
+\bottomrule
+\end{longtable}
+\endgroup
+
+\subsection{Verification}
+
+All X01 tests call \code{pytest.importorskip("jax")}. In the full-suite run of 2026-11-05 in \code{.venv-jax} (Python 3.12.14, jax 0.6.2, optimistix 0.0.11; 2832 passed, 24 failed, 1 skipped, 27 deselected), no X01 test file failed. The files pin, in order: closed-form parity, x64 and sonic safety (\code{test_jax_primitives.py}); J2 parity at seed and perturbed states, jit against eager, the Jacobian against finite differences (FD) and rejection of unsupported blocks (\code{test_jax_assembly_parity.py}); unit-process parity, BD bit-parity and FD-checked $d\text{BD}/d\theta_B$ (\code{test_jax_moc_kernel.py}); live/static parity and FD-exact $\partial r/\partial\theta_B$ (\code{test_jax_theta_b_solve.py}); and in \code{test_jax_convergence.py} the J4 gate (\code{max_scaled} $\le2\times10^{-3}$ at $R_t=20$\,mm, $\varepsilon=10$, 80\,\% length, $\gamma=1.4$, coupled wall), the JAX default and a closed monotone BDE wall, plus \code{test_bde_wall_is_bell_shaped}, which carries no \code{xfail} marker; \code{test_jax_sensitivities.py} $C_F$ parity and the analytic $\partial C_F/\partial p_a$; \code{test_jax_thermal_design_opt.py} the Bartz $\sigma$ and Schmucker parity that protects the MDO. The end-to-end solves marked \code{slow} (two in \code{test_jax_theta_b_solve.py}, one in \code{test_jax_sensitivities.py}) are not part of this evidence.
+
+\subsection{Maturity, limitations and known defects}
+
+The rao-bvp path is experimental: README ``Known limitations'' item~5 notes that release-level literature promotion is disabled (\code{BENCHMARK_VALIDATED_AT_RELEASE} is \code{False}, \code{rao_variational.py:862}), and the J4 test pins reliability \code{GEOMETRIC_APPROXIMATION} with the optional MOC wall audit skipped.
+\begin{itemize}
+\item \textbf{Frozen start line}: no derivative with respect to $R_t$, $\gamma$ or throat curvature through the kernel.
+\item \textbf{Capabilities without a production caller}: \code{rao_sensitivities} and \code{plotting.plot_sensitivity_field} (\code{plotting.py:703}) are exercised only by tests; \code{solve_theta_b} has no CLI flag.
+\item \textbf{Header drift (code wins)}: \code{__init__.py} calls JAX ``the default for \code{solve_rao_bvp}'', true for the configuration but not for a default CLI run; \code{thermal.py} names \code{jax.design_opt} as its consumer and \code{tests/test_jax_thermal.py} as its gate, but the live consumer is \code{raosim/mdo} and that test file does not exist; \code{assembly.py} cites \code{rao_variational.py:3559} for the SciPy call, which is now at \code{:4682} and \code{:6079}.
+\item \textbf{Chart-angle test premise broken}: \code{test_rao_chart_benchmark.py::test_reported_angles_are_solver_outputs_not_chart} fails because the uncommitted SP-125 re-digitization (\code{raosim/rao_top_chart.py}) moved the chart $\theta_n$ at $(\varepsilon,L)=(10,80\,\%)$ from 30.0$^\circ$ to 25.74$^\circ$, within 0.23$^\circ$ of the solver's 25.51$^\circ$.
+\item \textbf{Plan direction unmet}: DIRECTION item~1 (``\code{raosim/jax} becomes the only core package'') is not done; NumPy owns the shell and five \code{raosim/jax} files are orphans. (The plan's flip checklist records \code{pin_d_theta=False}; a later STATUS entry records the re-baseline to \code{True}, which matches \code{rao_variational.py:686}.)
+\end{itemize}
+
+\subsection{Developer notes}
+
+A new residual block is written in \code{rao_variational.py} first, mirrored in \code{assembly.py}, added to \code{SUPPORTED_BLOCKS}, and covered in \code{test_jax_assembly_parity.py}. LM tolerances and the ladder live in \code{api.py} and \code{RaoSolverConfig}. Kernel changes go to \code{nasa_moc.build_kernel} and \code{moc_kernel.py} together under the BD parity test. Thermal or separation correlations change in the NumPy twin and \code{jax/thermal.py} in lock-step (\code{separation.py:34} says so); the MDO inherits them.
+
+\section{X02 Spray-parcel mid-tier and OpenFOAM handoff}\label{sec:x02-spray}
+
+\subsection{Role in the data flow, call site, inputs and outputs}
+
+\textbf{OpenFOAM export (a CLI verb).} \code{raosim.cli.main} intercepts the first argument \code{export-openfoam-spray} (\code{raosim/cli.py:11-14}) before the runner; \code{lrekit} reaches it because \code{lrekit.cli.main} forwards every non-job verb. The chain is \code{openfoam.case.cli_main} (\code{case.py:1611}) $\rightarrow$ \code{build_radhakrishnan2018_sheet_vof_case} (\code{:456}) $\rightarrow$ \code{write_openfoam_case} (\code{:1520}). The builder loads its fixture through \code{spray.benchmarks.load_spray_benchmark} (\code{:470}), so this verb is the one CLI path that executes code in \code{raosim/spray}. Nothing from S01--S14 feeds it.
+
+\textbf{Lagrangian parcel package (API only).} All 14 \code{raosim/spray} modules are statically reachable, but from the runner only through \code{spray_coupling.py:19} (imported lazily by \code{run_nozzle.py:3919}/\code{:5929} and at module level by \code{design.py:57}), which imports the type \code{SprayCycleHandoff}. The S08 fixed point accepts a Lagrangian observation only when \code{SprayCStarCouplingSpec.source} is \code{"lagrangian"}; the default is \code{"legacy_screen"} (\code{:32}), and \code{run_nozzle.py} builds the specification at \code{:3921} and \code{:5934} without setting it. \code{spray.solver.march_parcels} (\code{solver.py:407}) therefore never runs from the CLI; the package is a \emph{handoff contract} for a future fixed point.
+
+\lead{Inputs and outputs}
+\textbf{Export.} Inputs: destination, \code{--case-row}~\code{case_1..case_4} of the \code{radhakrishnan2018_water_air} fixture (\code{raosim/benchmark_data/cases/}), \code{--wedge-angle-deg} 5, \code{--opening-cells} 6, \code{--radial-cells} 240 (defaults, \code{case.py:1623-1627}). Output: the 18 text files of \code{_SAFE_ARTIFACTS} (\code{case.py:50-69}: six \code{0/*} fields, five \code{constant/*} files, four \code{system/*} dictionaries, \code{Allrun}, \code{Allclean}, \code{README.md}) plus \code{raosim_openfoam_manifest.json}. The writer is atomic, refuses symlinked destination components, accepts an existing case only if byte-identical, and prints ``OpenFOAM was not run; execution and validation gates remain false.''
+
+\textbf{Parcel API.} Explicit SI objects in (liquid properties, source geometry, carrier field, domain, solver, march and breakup configuration; nothing inferred); an in-memory \code{SprayMarchResult} and, through \code{build_cycle_handoff} (\code{spray/handoff.py:260}), a fingerprinted \code{SprayCycleHandoff} out. No files.
+
+\subsection{Modules}
+
+\begingroup\chtenTables
+\begin{longtable}{@{}P{3.3cm}P{0.7cm}P{3.9cm}@{\hspace{12pt}}P{3.3cm}P{0.7cm}P{3.5cm}@{}}
+\caption{X02 modules (two entries per row; paths relative to \texttt{raosim/}).}\label{tab:x02-modules}\\
+\toprule File & Lines & Role & File & Lines & Role \\ \midrule\endfirsthead
+\toprule File & Lines & Role & File & Lines & Role \\ \midrule\endhead
+\code{openfoam/__init__.py} & 54 & Facade; never runs OpenFOAM & \code{spray/drag.py} & 141 & Schiller--Naumann drag \\
+\code{openfoam/case.py} & 1642 & v13 VOF case builder, writer, CLI & \code{spray/dispersion.py} & 161 & Seeded random walk \\
+\code{openfoam/handoff.py} & 869 & Fail-closed VOF-to-parcel contract & \code{spray/evaporation.py} & 354 & Spalding evaporation \\
+\code{spray/__init__.py} & 124 & Opt-in facade & \code{spray/carrier.py} & 354 & Prescribed carrier fields \\
+\code{spray/types.py} & 342 & Frozen SI contracts & \code{spray/domain.py} & 215 & Wall and outlet events \\
+\code{spray/primary.py} & 994 & Primary parcel sources & \code{spray/solver.py} & 944 & One-way parcel march \\
+\code{spray/breakup.py} & 703 & WAVE/KH, optional RT & \code{spray/ledger.py} & 223 & Mass/momentum reservoirs \\
+\code{spray/benchmarks.py} & 735 & SHA-pinned fixtures & \code{spray/statistics.py} & 215 & SMD, Rosin--Rammler \\
+\code{spray/handoff.py} & 513 & Parcel-to-cycle handoff & & & \\
+\bottomrule
+\end{longtable}
+\endgroup
+
+\subsection{What the header comments establish}
+
+\lead{OpenFOAM export.} \code{case.py} separates two stages of Radhakrishnan et al.\ (2018): Section~2.3 used volume-of-fluid (VOF) with a \emph{water-only} inlet into quiescent air to obtain sheet thickness; Section~2.4 used the 3.03\,g/s annular air as the Eulerian carrier for the Lagrangian droplets. The template is a ``reduced external-gap wedge'' that maps the mechanical opening onto a radial water boundary and ``does not contain the paper's internal center-gap turning passage, so it cannot claim to predict the sheet at formation''; every manifest says so (\code{geometry_fidelity}: \code{reduced_external_gap_not_internal_turning_passage}, \code{case.py:552}). Builders are pure; the target is OpenFOAM Foundation v13, patch \code{20260624}, \code{foamRun} with \code{incompressibleVoF}. The author's sheet thickness and water velocity are targets ``never prescribed'' (\code{:464}); $U_r=\dot m_{360}/(\rho\,2\pi r_{\text{tip}}L_{\text{open}})$, with wedge mass closure to $10^{-12}$ (\code{case.py:503-518}). \code{openfoam/handoff.py} records evidence from a separate VOF extraction; \code{full_sheet_thickness_mean_m} is the \emph{full} thickness, and the handoff is usable only when every gate passes.
+
+\lead{Parcel physics.} The package is ``intentionally opt-in'', and parcel results ``are not eligible for cycle coupling until their conservation and declared literature-validation gates pass''.
+\begin{itemize}
+\item \emph{Primary sources}: only the movable-pintle \emph{radial sheet} may use the literature-calibrated primary path; annuli, slots and holes become secondary-breakup blobs, and the module ``deliberately does not invent LISA, slot-sheet, or round-jet primary-breakup correlations''. Convention: $\alpha=0$ is radial, $u_x=U\sin\alpha$, $u_r=U\cos\alpha$.
+\item \emph{Breakup}: Reitz WAVE/Kelvin--Helmholtz with three coefficient sets that are never blended: \code{reitz_1987} (0.4, 0.865; OpenFOAM ReitzKHRT), \code{radhakrishnan_2018} (0.4, 0.87; their Eq.~5), \code{radhakrishnan_2021} (0.45, 0.87; their Eq.~3). The Rayleigh--Taylor branch copies OpenFOAM's equations and timer but is off by default. Breakup sets the parcel multiplicity so that represented mass is constant and leaves velocity unchanged, so represented mass and parcel momentum are identities.
+\item \emph{Drag, dispersion, evaporation}: $C_D=24/\mathrm{Re}\,(1+0.15\,\mathrm{Re}^{0.687})$ for $0<\mathrm{Re}\le1000$, 0.44 above (\code{drag.py:14-33}); eddy life $\tau_e=C_Lk/\varepsilon$, fluctuation $\sqrt{2k/3}$, local generator only; Radhakrishnan, Lee and Koo (2021) Eq.~16, $\dot m=k_cA_d\rho_g\ln(1+B_m)$ applied with negative sign and closed by a caller-named Sherwood model.
+\item \emph{Carrier, domain, solver, ledger}: prescribed fields ``without hidden extrapolation''; first-crossing wall/outlet events; ``a mid-tier engineering model rather than a CFD solver'' in which the carrier consumes no sources and droplet temperature and carrier energy are not solved; the ledger closes \emph{parcel} momentum and reports the carrier impulse only as a source demand.
+\item \emph{Statistics and fixtures}: $d_{32}=\sum wd^3/\sum wd^2$ by number; Rosin--Rammler by mass, with Radhakrishnan's $\exp(-(d/\bar d)^n)$ named a mass \emph{survival} fraction; Radhakrishnan 2021 Tables~7 and 8 are author CFD, ``never promoted to experimental evidence''.
+\end{itemize}
+
+\subsection{Governing documents}
+
+The four subsystem documents are under \code{docs/subsystems/S08-injector-and-spray-coupling/}, because the eventual consumer is the S08 fixed point; no triage record names X02 as primary stage.
+
+\begingroup\chtenTables
+\begin{longtable}{@{}P{4.6cm}P{1.8cm}P{1.2cm}P{8.5cm}@{}}
+\toprule Document & Type & Status & Content \\ \midrule\endhead
+\code{LAGRANGIAN_SPRAY_MODEL.md} & subsystem basis & active & Data flow, equations, coefficient variants, determinism, fixtures; a CLI cycle switch ``should not be exposed until those gates can pass'' \\
+\code{OPENFOAM_SPRAY_EXPORT.md} & subsystem basis & active & Pinned solver, the two CFD stages, reduced geometry, flux closure; ``Evidence still required'' list \\
+\code{SPRAY_CSTAR_COUPLING.md} & subsystem basis & active & The fixed point that would consume the handoff; the Lagrangian tier ``is not exposed as a CLI cycle source'' \\
+\code{MOVABLE_PINTLE_MODEL.md} & subsystem basis & active & Sheet-handoff evidence contract; the external wedge is a screen only \\
+\code{docs/literature/pintle_injector_literature_inventory.md} & literature & active & Radhakrishnan 2018 source entries \\
+\bottomrule
+\end{longtable}
+\endgroup
+
+\subsection{Verification}
+
+Twelve test files (ten \code{tests/test_spray_*.py}, two \code{tests/test_openfoam_*.py}) all passed in the 2026-11-05 run. The export tests pin a water-only v13 tree written without running tools, byte determinism, opening-as-input versus sheet-as-target, wedge flux closure, symlink-safe atomic writing, and that the manifest ``never promotes static export to validation''. The spray tests pin non-blended WAVE variants, conservation through breakup and evaporation, the analytic $d^2$ law, drag limits, seed reproducibility, radial-sheet-only primary eligibility, rejection of fixture hash, unit and relabelling drift, and (\code{test_spray_coupling.py}) rejection of an $\eta$-like duck type and of a failed handoff.
+
+\subsection{Maturity, limitations and known defects}
+
+The model registry states maturity per model, for example \code{spray.deterministic_parcel_march}: \code{software_verified_one_way_march_not_cfd_or_physically_validated}, and \code{spray.openfoam13_external_gap_vof}: \code{software_template_static_verified_not_openfoam_run_or_physically_validated} (\code{model_registry.py:290-325}).
+\begin{itemize}
+\item \textbf{The cycle handoff cannot pass.} Two of the nine gates in \code{build_cycle_handoff} are literal failures, \code{phase_and_critical_pressure_applicability} (\code{spray/handoff.py:430}) and \code{carrier_momentum_and_energy_closure} (\code{:452}); \code{strict_target_benchmark} cannot pass with the shipped fixtures; \code{non_regenerative_scope} fails whenever regeneration is selected. The header calls this ``an evidence result, not a hard-coded caller-selectable flag'', but no input can flip the first two.
+\item \textbf{Geometry mismatch}: \code{raosim.injector} builds an annulus plus slots or holes, which are secondary-only here.
+\item \textbf{OpenFOAM never executed}: patch \code{20260624} unverified (\code{foamVersion} reports only the major release), no mesh, convergence, phase-mass or author-VOF comparison evidence, internal passage not meshed.
+\item \textbf{Undocumented verb}: README's command-line section does not mention \code{export-openfoam-spray}.
+\end{itemize}
+
+\subsection{Developer notes}
+
+New VOF profiles go in \code{openfoam/case.py} under a new template or profile name (a two-stream case must not be labelled the paper's Section~2.3 run). Primary models for other geometries go in \code{spray/primary.py} with updated gates. A CLI \code{source="lagrangian"} switch is deferred by \code{LAGRANGIAN_SPRAY_MODEL.md} until the gates can pass. New fixtures go in \code{raosim/benchmark_data/cases/} with \code{benchmark_kind} set, so that the X03 nozzle benchmark runner keeps excluding them (\code{benchmarks.py:45-66}).
+
+\section{X03 Legacy toolbox CLI}\label{sec:x03-legacy}
+
+\subsection{Role in the data flow, call site, inputs and outputs}
+
+X03 is the \emph{legacy} front end. \code{RaoRocketSimLegacy} maps to \code{raosim.cli.legacy_main} (\code{raosim/cli.py:21-24}), which imports the top-level py-module \code{main} (\code{pyproject.toml:69}) and calls \code{main.main} (\code{main.py:1265}). It dispatches: \code{--benchmark-case} $\rightarrow$ \code{run_benchmark_cli} (\code{:960}); \code{--sweep}~\texttt{VAR MIN MAX N} $\rightarrow$ \code{run_sweep} (\code{:873}); a complete batch set (\code{is_batch}, \code{:358}) $\rightarrow$ \code{run_batch} (\code{:609}), which hands over to \code{run_batch_v2} (\code{:402}, via \code{design.design_nozzle_v2}) when any v2 field leaves its default (\code{_should_use_v2}, \code{:366}); otherwise \code{run_interactive} (\code{:1022}). Units are bar, kPa and mm (\code{main.py:120-125}), not the SI flags of \code{run_nozzle}. The contour methods also differ: \code{--method}~\code{moc} calls \code{rao_optimizer.moc_bell_nozzle} and \code{--method}~\code{rao} the ``legacy experimental variational path'' \code{rao_variational.rao_variational_contour} (\code{nozzle_geometry.py:212-236}, \code{main.py:132-135}), neither of which the main runner uses. The seven modules of Table~\ref{tab:x03-modules} are reachable only this way, although \code{benchmarks.rao_variational_chart_benchmark} (\code{:962}) also serves \code{scripts/j5_chart_sweep.py} and \code{tests/test_rao_chart_benchmark.py}.
+
+\lead{Inputs and outputs}
+Batch, sweep and interactive modes call \code{build_log.create_build_dir} and \code{write_metadata} (\code{main.py:407/598}, \code{741/832}, \code{929/952}, \code{1152/1199}) and write \code{builds/vNNN_YYYYMMDD_HHMMSS/} with a contour CSV (default \code{rao_nozzle_profile.csv}), optional STL/STEP, sweep CSVs and \code{metadata.txt}; the v2 path adds \code{design_report_v2.json}. Benchmark mode creates no versioned directory: it writes \code{<case>_<method>_benchmark.json}/\code{.md} to \code{builds/benchmarks/} (\code{benchmarks.py:39}, \code{:747-767}) or to \code{--benchmark-report}, and \code{--benchmark-strict} exits 2 unless every method passes.
+
+\subsection{Modules}
+
+\begingroup\chtenTables
+\begin{longtable}{@{}P{5.2cm}P{0.8cm}P{10.4cm}@{}}
+\caption{X03 modules.}\label{tab:x03-modules}\\
+\toprule File & Lines & Role \\ \midrule\endfirsthead
+\toprule File & Lines & Role \\ \midrule\endhead
+\code{main.py} & 1280 & Legacy interactive, batch, sweep and benchmark CLI \\
+\code{raosim/build_log.py} & 139 & Versioned \code{builds/vNNN_*} directories and \code{metadata.txt} \\
+\code{raosim/trade_study.py} & 165 & One-variable sweeps and multi-panel plots \\
+\code{raosim/altitude_performance.py} & 163 & Thrust, Isp, $C_F$ versus altitude with separation markers \\
+\code{raosim/conical.py} & 187 & 15\textdegree{} cone contour and divergence factor \\
+\code{raosim/nozzle_comparison.py} & 274 & 2-D divergence loss, $\eta_n$, comparison tables and overlays \\
+\code{raosim/benchmarks.py} & 1159 & Literature benchmark runner; J5 chart benchmark \\
+\code{docs/archive/Rocket_nozzle_sim_phase2.py} & 375 & Original monolithic prototype, archived, not imported \\
+\bottomrule
+\end{longtable}
+\endgroup
+
+\subsection{What the header comments establish}
+
+\code{conical.py}: the cone is the length baseline of the ``80\,\% bell'' convention; Rao (1961) divergence correction $\eta_{\text{div}}=(1+\cos\alpha)/2=0.9830$ at $15^\circ$, a 1.7\,\% $C_F$ decrement (references: Rao, ARS Journal 1961; NASA SP-8120, 1976). \code{nozzle_comparison.py}: 2-D divergence loss and $\eta_n=C_{F,\text{net}}/C_{F,\text{ideal}}$, citing NASA ``Perfect Bell Nozzle Parametric Optimization Curves'' (1983) and Rao (1961). \code{benchmarks.py} is ``evidence-first'': it separates strict checks from diagnostic xfail/report-only gaps. Its four nozzle manifests and their strict methods are \code{rao1958_nozzle_b} (rao strict), \code{lea_top_schomberg_2014} (bezier strict), \code{rao_scarfed_moc_1990} (moc and rao unsupported) and \code{vulcain_s1_separation_similarity} (report only); the three spray manifests in the same folder are excluded by \code{benchmark_kind} (\code{:45-66}). \code{altitude_performance.py} sweeps sea level to vacuum and marks separation onset; its result carries the model label \code{quasi_1d_attached_flow_no_separation_loss} (\code{:94}), which \code{test_v2_features.py} pins. \code{build_log.py} promises a ``monotonically increasing versioned directory''. \code{main.py} calls itself the ``legacy CLI'', but its usage block still shows \texttt{lrekit --Rt 25 --Pc 60} and \texttt{lrekit --sweep}, which now work only as \code{RaoRocketSimLegacy}. The archived prototype (``\code{rao_bell_toolbox.py}'') solved $\varepsilon$ from $p_c/p_a$ and optimized $\theta_n$, $\theta_e$ ``for axial thrust (Rao 1961)''.
+
+\subsection{Governing documents}
+
+\begingroup\chtenTables
+\begin{longtable}{@{}P{5.6cm}P{1.4cm}P{1.8cm}P{7.3cm}@{}}
+\toprule Document & Type & Status & Content \\ \midrule\endhead
+\code{README.md} (Legacy sweeps and benchmark commands; Outputs) & guide & active, partly stale & Legacy commands correct; Outputs still says ``Normal CLI runs create \code{builds/vNNN_...}'' \\
+\code{docs/audits/FEATURE_DATAFLOW_AUDIT_2026-07-11.md} & audit & historical & Legacy flow; wrongly routes the packaged CLI through \code{build_log} \\
+\code{docs/audits/PROJECT_AUDIT_2026-08-25.md} & audit & historical & Labels \code{main.py} and the prototype as retained legacy surface \\
+\code{builds/_archive_2026-11-05/BUILDS_ARCHIVE_INDEX.md} & index & 2026-11-05 & 454 versioned builds with their gate results \\
+\code{docs/archive/rao_nozzle_profile.csv}, \code{docs/data/rao_nozzle.csv} & data & no provenance & Sample contour outputs of legacy tools \\
+\bottomrule
+\end{longtable}
+\endgroup
+
+\subsection{Verification}
+
+\code{tests/test_conical.py}, \code{test_comparison.py}, \code{test_v2_features.py} (sweeps, altitude map, separation criteria against \"Ostlund), \code{test_benchmarks.py} (manifests, reports, CLI subprocess, unsupported scarfed case, strict Rao~1958 Nozzle~B), \code{test_rao_chart_benchmark.py} and \code{test_design_workflow.py} (one batch subprocess per method). \code{build_log} has no dedicated test. Three tests in these files failed on 2026-11-05:
+\begin{itemize}
+\item \code{test_lea_top_bezier_benchmark_passes_explicit_geometry} and \code{test_benchmark_cli_writes_reports}: the strict metric \code{length_over_rt} is 15.0448 against $15.0\pm0.02$ (re-run confirmed). The uncommitted \code{nozzle_geometry._full_cone_length} now uses the rounded-throat SP-125 Eq.~4-7 cone, adding $R_d(1/\cos15^\circ-1)/\tan15^\circ$; with $R_d=0.382R_t$ the cone grows by $0.0503R_t$, and at the manifest's \code{length_pct} of 89.118 the bell length grows by exactly $0.0448R_t$, so the manifest was derived for a sharp-corner cone.
+\item \code{test_reported_angles_are_solver_outputs_not_chart}: see the chart-angle bullet in Section~\ref{sec:x01-jax}.
+\end{itemize}
+The two \code{test_design_workflow.py} failures in the same run use $\varepsilon=4$, which the new chart lookup rejects; they test S05 and the design API, not the legacy CLI, whose batch subprocess tests passed.
+
+\subsection{Maturity, limitations and known defects}
+
+Every archived versioned build states \code{hardware_qualified} false, with design status \code{preliminary_top_geometry}, \code{experimental_moc_geometry} or \code{experimental_variational_geometry} (archive index, summary section).
+\begin{itemize}
+\item \textbf{Tests write into the real \code{builds/}.} \code{build_log.BUILDS_DIR} is hard-coded (\code{build_log.py:21-22}), and \code{test_design_workflow.py::test_batch_cli_methods_complete_without_theta_metadata_crash} runs \code{main.py} for \texttt{bezier}, \texttt{moc} and \texttt{rao} with LOX/RP-1, $p_c=45$\,bar, $R_t=20$\,mm, $\varepsilon=6$: the configuration of the archive's 436-build ``versioned-cli-contour'' family. Nine new directories, \code{v455} to \code{v463}, appeared between 07:03 and 07:18 on 2026-11-05, after the archive was made.
+\item \textbf{Legacy \texttt{rao} output is non-physical and only weakly flagged.} Every \texttt{rao} build in the archive reports $\theta_n=20^\circ$ with a non-physical exit angle $\theta_e$ (between $-79.97^\circ$ and $88.3^\circ$ by epoch; $88.16^\circ$ in most builds since \code{v299}), and the new \code{v457}, \code{v461}, \code{v463} repeat $88.16^\circ$ in \code{metadata.txt} with ``Optimizer did not converge''. Since \code{v278} the only failing gate is \code{solver/method_status}, while \code{solver/exit_flow_angle} is ``not traced'' and passes as informational. The test asserts only that the subprocess exits 0.
+\item \textbf{Stale documentation}: README Outputs and the \code{main.py} usage block.
+\item \textbf{Counter width}: \code{_next_version} matches \verb|^v(\d{3})_| (\code{build_log.py:29}), so once \code{v1000} exists it is never counted and every later build is numbered 1000 (only the timestamp keeps names distinct).
+\item \textbf{No command record} in any versioned build: \code{metadata.txt} lists inputs, not the invocation.
+\end{itemize}
+
+\decision{Recommendation for X03: keep as a frozen compatibility surface and add no capabilities to \code{main.py}. Give \code{build_log} an output-root override and point the subprocess tests at \code{tmp_path}; re-derive the LEA manifest once S05 settles the cone-length definition; either make the legacy \texttt{rao} method fail closed or remove it from \code{--method}.}
+
+\subsection{Developer notes}
+
+Changes to legacy flags or units go only in \code{main.py}; new physics belongs in the stage modules that \code{run_nozzle} uses. A new literature benchmark is a manifest in \code{raosim/benchmark_data/cases/} with a \code{status_policy} per method, plus a test in \code{test_benchmarks.py}.
+
+\section{X04 NASA/JHU reference port}\label{sec:x04-nasa}
+
+\subsection{Role in the data flow, call site, inputs and outputs}
+
+X04 is the \emph{oracle}. The vendored \code{Three-Dimensional-Nozzle-Design-Code-master/} (153 files, 60\,MB, 18{,}622 lines of C/C++) is never compiled or run. It is used three ways. (1) \code{rao_variational._nasa_reference_validation_diagnostics} (\code{:355}, called at \code{:6667} inside \code{solve_rao_bvp}) hashes \code{MOC_Grid_BDE/MOC_GridCalc_BDE.cpp} against the pinned SHA-256 \texttt{cc4c0bc6}\ldots\texttt{20b4} (the file currently matches) and checks four files in \code{outputs_M3.5Perf}; the result always has \code{eligible} and \code{fixture_overlay_is_promotion_authority} set to \code{False}. The tree is not in \code{tool.setuptools.package-data}, so an installed wheel reports \code{reference_assets_unavailable_or_changed}. (2) \code{raosim.legacy_io} parses the fixtures; its importers are tests, the two scripts below and \code{plotting.plot_nasa_overlay} (\code{plotting.py:659}), which only \code{tests/test_plotting.py} calls. (3) \code{scripts/compare_nasa_reference.py} writes \code{report.json}, \code{metrics.csv} and per-file diff CSVs; \code{scripts/nasa_wall_probe.py} prints a wall comparison.
+
+\lead{Inputs and outputs}
+Inputs are the M3.5Perf outputs (\code{wall.out}, \code{center.out}, \code{rao.dat}, \code{summary.out}, \code{ThetaB.out}, \code{TT'.out}, kernel dumps, Tecplot \code{.plt}). The case, per \code{summary.out}: perfect axisymmetric nozzle, $R^*=1$\,in, upstream and downstream throat radii $1R^*$, $\gamma=1.4$, $M_e=3.5$, 101 throat characteristics, $0.5^\circ$ wall limit, $\theta_B=15.2196^\circ$, $L/R^*=12.5363$, stream thrust 2518.05\,lbf; \code{lastKernelJ} $=57$ is recorded in \code{raosim/jax/reference.py}. \code{legacy_io} returns \code{LegacyTable}, \code{TecplotFile} and \code{SummaryReport} objects and writes nothing.
+
+\subsection{Modules}
+
+\begingroup\chtenTables
+\begin{longtable}{@{}P{6.6cm}P{1.3cm}P{8.5cm}@{}}
+\caption{X04 files (principal C++ sources shown; \texttt{...} is \texttt{Three-Dimensional-Nozzle-Design-Code-master}).}\label{tab:x04-modules}\\
+\toprule File & Lines & Role \\ \midrule\endfirsthead
+\toprule File & Lines & Role \\ \midrule\endhead
+\code{raosim/legacy_io.py} & 415 & Parsers for whitespace tables and multi-zone Tecplot files \\
+\code{scripts/compare_nasa_reference.py} & 904 & Visibility report, not a gate \\
+\code{scripts/nasa_wall_probe.py} & 72 & Phase 12.5 BDE wall vs \code{wall.out} probe \\
+\code{.../MOC_Grid_BDE/MOC_GridCalc_BDE.cpp} & 3754 & 2-D/axisymmetric MOC grid and contour class (SHA-pinned) \\
+\code{.../MOC_Grid_BDE/MOC_GridCalc_BDE_IO.cpp} & 760 & Output half: kernel, wall, summary, Tecplot, TDK \code{rao.dat} \\
+\code{.../MOC_Grid_BDE/MOC_GridDlg.cpp} & 731 & Microsoft Foundation Classes (MFC) dialog; writes a \texttt{\$\$.bat} file to launch STT2001 \\
+\code{.../STT2001/STT2001Dlg.cpp}; \code{.../3D_MOC/3D_MOCGrid.cpp} & 3117; 2789 & Streamline Tracing Tool (README); 3-D reference-plane MOC \\
+\code{.../license.txt} & 241 & NASA Open Source Agreement (NOSA) 1.3 \\
+\bottomrule
+\end{longtable}
+\endgroup
+
+\subsection{What the header comments establish}
+
+The C++ banners identify Johns Hopkins University Applied Physics Laboratory (JHU/APL) work by Tharen Rice under NASA Glenn Research Center (GRC) sponsorship (``NASA GRC PDE Work'', ``NASA GRC Nozzle Work'', later ``URETIS''). \code{MOC_GridCalc_BDE.cpp} (7/27/01--3/11/02) ``will calculate the MOC grid for a nozzle''; its IO half added ``a TDK rao.dat data file output'' on 2.23.03. \code{3D_MOCGrid.cpp} uses the reference-plane method of W.~C.~Armstrong, AEDC-TR-78-68. The README names the three MFC programs and the report Rice, ``2D and 3D Method of Characteristic Tools for Complex Nozzle Development'', JHU/APL RTDC-TPS-481, 2003; the license is NOSA~1.3, designation LEW-20180; the chart controls are third-party (``Use with your own risk !!'') and hold no nozzle physics. On the Python side, \code{legacy_io} ``intentionally preserve[s] the raw numeric data'' with normalized column names; \code{compare_nasa_reference.py} is ``a visibility tool, not a pass/fail gate'' that reports unavailable metrics explicitly; \code{nasa_wall_probe.py} runs the perfect-nozzle branch (D at the axis end of BD, $\dot m_{BD}$ equal to the kernel mass, DE as the uniform-state characteristic from the C++ \code{FindPointE} closed form) and compares \code{calc_bde_region} with the $i=0$ trace of \code{wall.out}.
+
+\subsection{Governing documents}
+
+The X04 documents are filed under S06, the stage they certify; no triage record names X04 as primary stage.
+
+\begingroup\chtenTables
+\begin{longtable}{@{}P{6.0cm}P{1.5cm}P{1.8cm}P{6.8cm}@{}}
+\toprule Document & Type & Status & Content \\ \midrule\endhead
+\code{docs/subsystems/S06-rao-moc-bvp-contour/rice_jhu_moc_topology_map.md} & basis & active, pre-2026-09-21 & Regions TT$'$, B, BD, D, DE, E, BFE; C++ routine to Python map \\
+\code{docs/subsystems/S06-rao-moc-bvp-contour/nasa_tt_prime_provenance.md} & provenance & active & TT$'$ generator unresolved; visible source is canonical; ``do not tune'' rule \\
+\code{docs/subsystems/S06-rao-moc-bvp-contour/MOC_MARCH_TOPOLOGY_REMEDIATION_2026-09-21.md} & remediation & active & Oracle~B: exit $M=3.5009\pm0.0017$; stream thrust 2517.72 vs 2518.05\,lbf \\
+\code{docs/audits/legacy_code_audit.md} & audit & historical & Early port audit; self-labelled ``historical development snapshot'' \\
+\code{docs/data/nasa_jhu_file_list.txt} & data & active & File inventory with the parser for each file \\
+\bottomrule
+\end{longtable}
+\endgroup
+
+\subsection{Verification}
+
+\code{tests/test_legacy_io.py} (every M3.5Perf file parses), \code{test_compare_nasa_reference.py} (overlay provenance declared, no promotion), \code{test_nasa_port.py} (wall $R/R_t$ RMS $<10^{-3}$; its two topology tests are \code{slow}), \code{test_nasa_kernel.py}, \code{test_nasa_kernel_march_parity.py} (TT$'$ pointwise, row-1 unit process, last kernel; tolerances listed at \code{rao_variational.py:402-421}), \code{test_characteristic_pairing.py}, \code{test_jax_moc_kernel.py} and \code{test_moc_bounded_net.py}. All X04-specific files passed on 2026-11-05. Two \code{test_moc_bounded_net.py} cases failed (fold location moved 3.7\,mm between resolutions against a 3\,mm tolerance; \code{arc.x_end=0.00382} vs \code{bell.x_start=0.00331796}). Both build the S05 B\'ezier wall from the chart and hard-code a 30$^\circ$ arc, and the uncommitted chart change moved $\theta_n$ at $(10,80\,\%)$ to 25.74$^\circ$; the NASA parsers are not involved.
+
+\subsection{Maturity, limitations and known defects}
+
+The oracle certifies one configuration, the M3.5 perfect nozzle at $\gamma=1.4$. \code{rao_variational} lists its own blockers: the certificate ``covers only the pinned M3.5 perfect-nozzle case'', ``historical fixture-generator provenance remains unresolved'', and for general contours ``CropNozzleToLength is not ported for exported interior grids''.
+\begin{itemize}
+\item \textbf{TT$'$ provenance.} No executable is checked in, and searches of the upstream repository and NASA Software Catalog (2026-06-09) found no other generator. Theory-correct Kliegel--Levine gives the axis point $x\approx0.679$, $M\approx1.268$ where the fixture has $x=0.724$, $M=1.5$; the separate \code{nasa_visible_kliegel_levine} path, which keeps the C++ integer-division semantics and its $M\le1.5$ loop, reproduces the fixture within the parity tolerances. The open question is provenance, not numerics.
+\item \textbf{Licence notices.} The tree carries \code{license.txt}, but the Python port (\code{raosim/nasa_moc.py}) has no NOSA agreement text, NASA copyright notice or dated modification record, and the repository has no licence file; the 7 October 2026 review lists all three NOSA conditions as open before any public release.
+\item \textbf{Stale map.} The topology map predates \code{moc_bounded.py} (2026-09-21), so its ``not yet'' statements need re-checking. Of the 60\,MB tree, only \code{MOC_GridCalc_BDE.cpp} and \code{outputs_M3.5Perf/} are read by code.
+\end{itemize}
+
+\subsection{Developer notes}
+
+Do not edit the vendored tree: any byte change flips \code{source_identity_verified}. New parsers go in \code{legacy_io.py} with a fixture test. Do not tune Kliegel--Levine to match TT$'$.out (rule in \code{nasa_tt_prime_provenance.md}). Trimming STT2001 and 3D\_MOC (unread by any code) would shrink the tree, but should wait for the NOSA review, since redistributing a subset may itself count as a modification; \code{MOC_Grid_BDE/}, \code{license.txt} and the README must stay.
+
+\section{X08 Library code not reachable from the CLI}\label{sec:x08-unreachable}
+
+\subsection{Role, inputs and outputs}
+
+No CLI path imports these modules: the AST closure from \code{lrekit.cli}, including function-level imports and the legacy \code{main.py} edge, never reaches them. They write no artifacts. Most duplicate or precede something a stage now does. (\code{raosim/__main__.py} is also unimported, but it is the \texttt{python -m raosim} wrapper around \code{raosim.cli.main}; \code{raosim/data/tools/*} belong to X06.)
+
+\subsection{What the header comments establish}
+
+\begin{itemize}
+\item \code{flange_cad.py} (354 lines) claims to close a gap: ``the chamber-side flange was not modelled at all -- no ring, no holes''. It builds the ring and an ``orderable'' fastener callout: preload $0.75\times$ proof load for reusable joints (0.90 permanent in code), torque $T=KF_id$ with $K=0.20$ dry and 0.15 lubricated (the code adds 0.18 plated), after Shigley, labelled \code{screening_sized}; ``$K$ \ldots\ scatters by 20--30\,\%''; ``not a qualified joint design'' (no gasket seating stress, flange rotation, preload scatter, thermal gradient or fatigue).
+\item \code{thermal_correlations.py} (100 lines, untracked in git): ``source-scoped thermal correlation choices and applicability reports''; bounds are ``Bartz's preliminary-estimation guidance, not a physical validation envelope''. In code: contraction 15--45\textdegree, expansion 7.5--22.5\textdegree, $D_t/R_c$ up to ``about 3''; a curved bell has no single expansion angle, so a missing angle yields \code{UNKNOWN}; it carries Bartz's 40--50\,\% chamber under-prediction warning and refuses to guess a coolant $C_1$ (only RP-1, 0.0214, is built in).
+\item \code{trajectory.py} (111): ``simple 1-D point-mass simulation with gravity, drag, and atmospheric density''.
+\item \code{jax/bvp.py} (102), \code{pack.py} (62), \code{residuals.py} (261), \code{reference.py} (38): J2/J3 scaffolding (LM wrapper with implicit differentiation, CE layout $[x\,|\,r\,|\,M\,|\,\theta\,|\,\log C]$, vmapped residual leaves at $10^{-10}$ parity, M3.5Perf constants sizing static shapes, \code{MAX_KERNEL_ROWS} $=64$).
+\item \code{jax/design_opt.py} (460): maximize $C_F(\varepsilon;p_c,p_a)$ over $(\varepsilon,R_d/R_t)$ subject to a Schmucker margin and a Bartz/Sieder--Tate throat wall limit, with exact gradients (Optimistix BFGS, ramped penalty); ``the differentiable successor to the NumPy feedback loop in \code{raosim.thermal_design}''.
+\end{itemize}
+
+\subsection{Evidence and recommendation per module}
+
+\begingroup\chtenTables
+\begin{longtable}{@{}P{2.4cm}P{2.6cm}P{1.7cm}P{9.4cm}@{}}
+\caption{X08 modules: importers, verdict (wire, keep as library, retire) and evidence.}\label{tab:x08-recs}\\
+\toprule Module & Importers & Verdict & Evidence \\ \midrule\endfirsthead
+\toprule Module & Importers & Verdict & Evidence \\ \midrule\endhead
+\code{thermal_correlations} & none & Wire, report-only, after adding a test & S07 has no applicability report, and \code{physics.bartz_heat_flux} consults nothing similar. The module holds the exact viscosity conversion $46.6\times10^{-10}(0.45359237/0.0254)\,1.8^{0.6}=1.1841\times10^{-7}$, while the live \code{physics.combustion_gas_viscosity} uses $1.1929\times10^{-7}$ (\code{physics.py:125}), 0.75\,\% high (about 0.15\,\% in $h_g$ through $\mu^{0.2}$); the two files cite different SP-125 equation numbers for it (4-16 and 4-23). It has no test, and the report it cites, \code{knowledge/reports/THERMAL_VERIFICATION_IMPLEMENTATION_2026-10-17.md}, does not exist in the working tree or in git history. \\
+\code{flange_cad} & \code{test_flange_cad.py} & Wire the callout, retire the solid & The claimed gap is closed: \code{export.export_step} (\code{export.py:670}; bolt holes at \code{:436-458}) cuts the flange bolt pattern passed at \code{run_nozzle.py:6747-6754}, and \code{interface.resolve_bolted_interface_geometry} sizes it. The unique value is the preload and torque callout: \code{interface.py} selects ISO 898-1 property classes (\code{:646}) but computes no torque, and \code{fastener_callout} consumes \code{interface.BoltedInterfaceSizing}, so it can feed \code{summary["injector_interface"]}. \\
+\code{trajectory} & \code{test_trajectory.py} & Keep as library & Registered as \code{trajectory.vertical_point_mass} (\code{software_verified_mission_screen}, \code{model_registry.py:705}) and described in README; no stage needs it, so README should call it API-only. \\
+\code{jax/bvp}, \code{jax/pack} & \code{test_jax_bvp.py} & Retire & Superseded by \code{api.least_squares_jax} and \code{assembly.unpack}, whose layout is $[M\,|\,\theta\,|\,r\,|\ldots|\,\lambda_2,\lambda_3,\log C,k_{df}]$, not \code{pack}'s; their line references (\code{rao_variational.py:2965/3559}, \code{:1787/1844}) are stale. Move \code{make_differentiable_solution} into \code{sensitivities} only if IFT totals are built. \\
+\code{jax/residuals} & \code{test_jax_bvp.py}, \code{test_jax_residual_parity.py} & Retire or move to tests & Serves only leaf-parity tests; the live residual \code{assembly.py} has its own parity tests. \\
+\code{jax/reference} & none & Retire & Shape sizing is now \code{theta_b_solve._n_rows_bound} (special-step count + 8, \code{:82-89}). \\
+\code{jax/design_opt} & \code{test_jax_thermal_design_opt.py} & Keep as library for now & Functionally superseded by the S13 MDO on the same \code{jax.thermal} leaves, but it has nine design tests (interior optimum, FD-checked gradients, constraint activity, thrust targeting). If retired, first move \code{test_bartz_sigma_parity} and \code{test_schmucker_parity} into the \code{tests/test_jax_thermal.py} that \code{thermal.py} already names. \\
+\bottomrule
+\end{longtable}
+\endgroup
+
+\subsection{Verification}
+
+\code{test_flange_cad.py} (callout, preload and torque relations, re-import gate), \code{test_trajectory.py} (burnout $\Delta v$), \code{test_jax_bvp.py}, \code{test_jax_residual_parity.py} and \code{test_jax_thermal_design_opt.py} passed on 2026-11-05; \code{thermal_correlations.py} and \code{jax/reference.py} have no test.
+
+\subsection{Maturity, limitations and known defects}
+
+None of these modules changes a CLI result; the risks are documentary.
+\begin{itemize}
+\item README and the model registry advertise \code{trajectory}, and every \code{summary.json} carries the whole registry (\code{summary["model_provenance"]=model_provenance_dict()}, \code{run_nozzle.py:4974}), so each run lists \code{trajectory.vertical_point_mass} and the spray-march models although it executed neither.
+\item \code{flange_cad} describes a gap that is closed; the JAX plan's head record presents \code{jax/design_opt.constrained_nozzle_design} as landed ``physics-coupled design'' although no stage calls it.
+\item \code{docs/audits/PROJECT_AUDIT_2026-08-25.md} states that ``every \code{raosim} module checked is imported by at least one other source file and covered by at least one test''; \code{thermal_correlations} and \code{jax/reference} now contradict it.
+\end{itemize}
+
+\caution{Unreachable does not mean unused by tests. Retiring \code{jax/design_opt.py} without moving its two parity tests would leave the \code{jax.thermal} functions that the S13 MDO uses without a parity gate.}
+
+\subsection{Developer notes}
+
+To wire a module, import it at the stage call site named in Table~\ref{tab:x08-recs}, add a summary key, and add an integration test through \code{run_nozzle.main}. To retire one, delete it with its test, update \code{docs/architecture/CODE_MAP.md}, and check \code{knowledge/*.json} for references (\code{thermal_correlations} appears in \code{knowledge/provenance.json}, \code{capabilities.json} and \code{graph/graph.json}).

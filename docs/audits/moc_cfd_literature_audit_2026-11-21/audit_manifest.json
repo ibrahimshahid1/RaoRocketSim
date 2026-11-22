@@ -1,0 +1,280 @@
+{
+  "scope": "Completed supplied-source ingestion, source-anchored phase review, and conservative KG locator repair for canonical src/lrekit. No production physics/default or plan text edits.",
+  "findings_count": 28,
+  "finding_count_note": "Related acceptance and scope findings may overlap; this is not a count of observed production failures.",
+  "reports": [
+    {
+      "report": "docs/audits/moc_cfd_literature_audit_2026-11-21/thermo_startline.md",
+      "structured_report": "docs/audits/moc_cfd_literature_audit_2026-11-21/thermo_startline.json",
+      "findings": 5
+    },
+    {
+      "report": "docs/audits/moc_cfd_literature_audit_2026-11-21/shock_differentiability.md",
+      "structured_report": "docs/audits/moc_cfd_literature_audit_2026-11-21/shock_differentiability.json",
+      "findings": 5
+    },
+    {
+      "report": "docs/audits/moc_cfd_literature_audit_2026-11-21/cfd_uncertainty.md",
+      "structured_report": "docs/audits/moc_cfd_literature_audit_2026-11-21/cfd_uncertainty.json",
+      "findings": 12
+    },
+    {
+      "report": "docs/audits/moc_cfd_literature_audit_2026-11-21/architecture_viscous.md",
+      "structured_report": "docs/audits/moc_cfd_literature_audit_2026-11-21/architecture_viscous.json",
+      "findings": 6
+    }
+  ],
+  "findings": [
+    {
+      "id": "TS-01",
+      "severity": "P1",
+      "title": "T1 needs a separate error gate for approximate transonic starting data",
+      "report": "thermo_startline.md"
+    },
+    {
+      "id": "TS-02",
+      "severity": "P2",
+      "title": "Restore TDK nondimensional coordinates before using its chemistry source",
+      "report": "thermo_startline.md"
+    },
+    {
+      "id": "TS-03",
+      "severity": "P2",
+      "title": "Distinguish thermodynamic smoothing from legacy parity",
+      "report": "thermo_startline.md"
+    },
+    {
+      "id": "TS-04",
+      "severity": "P2",
+      "title": "Define the finite-rate equilibrium-limit test as a singular relaxation limit",
+      "report": "thermo_startline.md"
+    },
+    {
+      "id": "TS-05",
+      "severity": "P3",
+      "title": "Apply CD<=1 at the geometric throat and bind curved-start flux to it",
+      "report": "thermo_startline.md"
+    },
+    {
+      "id": "SA-01",
+      "severity": "P2",
+      "title": "Distinguish a discrete AD derivative from convergence to the shock-sensitive continuum derivative",
+      "report": "shock_differentiability.md"
+    },
+    {
+      "id": "SA-02",
+      "severity": "P2",
+      "title": "A finite-grid fold is not yet a physical shock-onset bound",
+      "report": "shock_differentiability.md"
+    },
+    {
+      "id": "SA-03",
+      "severity": "P1",
+      "title": "S0 needs branch admissibility and model closure tests before its general-EOS result feeds S1",
+      "report": "shock_differentiability.md"
+    },
+    {
+      "id": "SA-04",
+      "severity": "P1",
+      "title": "N2 needs primal convergence and conditioning admission, even when topology flags stay fixed",
+      "report": "shock_differentiability.md"
+    },
+    {
+      "id": "SA-05",
+      "severity": "P2",
+      "title": "A weak-shock entropy asymptotic does not justify marching through an arbitrary fold",
+      "report": "shock_differentiability.md"
+    },
+    {
+      "id": "CFD-01",
+      "severity": "P1",
+      "title": "The inviscid case enables a force monitor that requires a transport model",
+      "report": "cfd_uncertainty.md"
+    },
+    {
+      "id": "CFD-02",
+      "severity": "P2",
+      "title": "The displayed shock criterion discards compression direction",
+      "report": "cfd_uncertainty.md"
+    },
+    {
+      "id": "CFD-03",
+      "severity": "P1",
+      "title": "A two-level MOC delta is promoted into an uncertainty bound",
+      "report": "cfd_uncertainty.md"
+    },
+    {
+      "id": "CFD-04",
+      "severity": "P1",
+      "title": "The comparison tests different starting-flow problems using discretization-only tolerance",
+      "report": "cfd_uncertainty.md"
+    },
+    {
+      "id": "CFD-05",
+      "severity": "P2",
+      "title": "The GCI prescription permits zero or negative apparent orders and singular relative errors",
+      "report": "cfd_uncertainty.md"
+    },
+    {
+      "id": "CFD-06",
+      "severity": "P2",
+      "title": "The proposed asymptotic-ratio check is not independent evidence of the asymptotic range",
+      "report": "cfd_uncertainty.md"
+    },
+    {
+      "id": "CFD-07",
+      "severity": "P2",
+      "title": "Fixed mass-balance and thrust-drift thresholds do not control iterative error in every reported output",
+      "report": "cfd_uncertainty.md"
+    },
+    {
+      "id": "CFD-08",
+      "severity": "P2",
+      "title": "Wall faceting and wedge-angle error are outside the three-grid uncertainty estimate",
+      "report": "cfd_uncertainty.md"
+    },
+    {
+      "id": "CFD-09",
+      "severity": "P2",
+      "title": "CFD1 promises TOP shocks and variable-cp fields that the current case family cannot generate",
+      "report": "cfd_uncertainty.md"
+    },
+    {
+      "id": "CFD-10",
+      "severity": "P2",
+      "title": "Mass-averaged Mach on C-D-E is not the exit-plane mass-averaged Mach",
+      "report": "cfd_uncertainty.md"
+    },
+    {
+      "id": "CFD-11",
+      "severity": "P2",
+      "title": "The wall-force cross-check needs an outward-normal sign and inlet pressure term",
+      "report": "cfd_uncertainty.md"
+    },
+    {
+      "id": "CFD-12",
+      "severity": "P2",
+      "title": "The return-data plan has no implemented field/flux extractor or reproducible shock-region estimator",
+      "report": "cfd_uncertainty.md"
+    },
+    {
+      "id": "AV-01",
+      "severity": "P1",
+      "title": "The displayed TDK delivered-performance equation changes the placement of the combustion-efficiency factor",
+      "report": "architecture_viscous.md"
+    },
+    {
+      "id": "AV-02",
+      "severity": "P2",
+      "title": "E11b does not establish that an integral boundary-layer/TDK coupling works at scale one",
+      "report": "architecture_viscous.md"
+    },
+    {
+      "id": "AV-03",
+      "severity": "P1",
+      "title": "A thrust-only MOC correction does not define a consistent engine mass-flow closure",
+      "report": "architecture_viscous.md"
+    },
+    {
+      "id": "AV-04",
+      "severity": "P2",
+      "title": "The M0a table needs a declared geometry and ambient-pressure domain",
+      "report": "architecture_viscous.md"
+    },
+    {
+      "id": "AV-05",
+      "severity": "P2",
+      "title": "The new roadmap weakens some integration requirements present in the superseded one",
+      "report": "architecture_viscous.md"
+    },
+    {
+      "id": "AV-06",
+      "severity": "P2",
+      "title": "A central cited source is still outside the searchable corpus",
+      "report": "architecture_viscous.md"
+    }
+  ],
+  "report_files": [
+    {
+      "path": "docs/audits/moc_cfd_literature_audit_2026-11-21/README.md",
+      "sha256": "282bdcf1d8a714666b897b9b7d18a8b0c0deaea4e8be31170a79f804491c3a71"
+    },
+    {
+      "path": "docs/audits/moc_cfd_literature_audit_2026-11-21/architecture_viscous.json",
+      "sha256": "58c3c07830dc111e2dfd28169563c373dc1635115407dbc693d8919ac53bd674"
+    },
+    {
+      "path": "docs/audits/moc_cfd_literature_audit_2026-11-21/architecture_viscous.md",
+      "sha256": "2d1a1dd136826d90c8ef8a3bae444a8df0802891f103631ed26579987c860de6"
+    },
+    {
+      "path": "docs/audits/moc_cfd_literature_audit_2026-11-21/cfd_uncertainty.json",
+      "sha256": "16c5b25c30d1f949614d16ea40ba235b7be1a6476e7630e15d9ebfd0973828ae"
+    },
+    {
+      "path": "docs/audits/moc_cfd_literature_audit_2026-11-21/cfd_uncertainty.md",
+      "sha256": "6968c66d2bee071df161f3675a85f274fdffc716f03151d8f0d9f37514021afc"
+    },
+    {
+      "path": "docs/audits/moc_cfd_literature_audit_2026-11-21/shock_differentiability.json",
+      "sha256": "562e7c36089fe6db9d6843b189dc2135da3a2e35667dd743f7acb07855f77d61"
+    },
+    {
+      "path": "docs/audits/moc_cfd_literature_audit_2026-11-21/shock_differentiability.md",
+      "sha256": "ae3657a2c7798fc85a95b05e6700a353bd2555c979e333a8119b3dfd33390b0f"
+    },
+    {
+      "path": "docs/audits/moc_cfd_literature_audit_2026-11-21/thermo_startline.json",
+      "sha256": "2e311f02855029c2e9fb33b0b327db8355b846a32946f657a44a9986e304fe95"
+    },
+    {
+      "path": "docs/audits/moc_cfd_literature_audit_2026-11-21/thermo_startline.md",
+      "sha256": "4a369f5397afc32a267eeaf1d4aea848dbcfe1d0b4e8365e7256bc5e9a199856"
+    }
+  ],
+  "ingestion_report": "knowledge/reports/moc_cfd_docling_import_2026-11-21.json",
+  "refactor_repair": "builds/moc_cfd_literature_audit_2026-11-21/knowledge_relocation_repair_result.json",
+  "final_knowledge_tests": {
+    "command": ".venv-jax/bin/python -m pytest knowledge/tests -q",
+    "exit_code": 0,
+    "log": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim/builds/moc_cfd_literature_audit_2026-11-21/knowledge_tests_relocation_repaired.log",
+    "tail": ".........................s.............................................. [ 15%]\n........................................................................ [ 30%]\n........................................................................ [ 45%]\n........................................................................ [ 61%]\n........................................................................ [ 76%]\n........................................................................ [ 91%]\n.......................................                                  [100%]\n470 passed, 1 skipped in 9.03s\n"
+  },
+  "final_writer_tests": {
+    "command": ".venv-jax/bin/python -m pytest tests/components/nozzle/test_moc_ext_shockfluid_case.py -q",
+    "exit_code": 0,
+    "result": "4 passed in 2.38s",
+    "test_file_sha256": "fb6d11c32a7a95072b5131eec2674fcead950f9d948507acdf7a3591a231594e",
+    "writer_sha256": "8daf42050bfc252eff5441bd04887c744b3886cdf808086d291961174da87299"
+  },
+  "hyperlinks_verified": true,
+  "plan_snapshot": "builds/moc_cfd_literature_audit_2026-11-21/plan_snapshot_manifest.json",
+  "final_rebuild": {
+    "exit_code": 0,
+    "log": "builds/moc_cfd_literature_audit_2026-11-21/final_knowledge_rebuild.log",
+    "sha256": "7e548511d4de3f732051826c588988cfc1ea22caa6576d46a789a9a4c8ca423f",
+    "graph": {
+      "ontology_version": "1.2.0",
+      "generated_at": "2026-11-21T23:24:35.407649+00:00",
+      "n_nodes": 7049,
+      "n_edges": 8332,
+      "n_dangling_dropped": 0,
+      "n_candidate_link_issues": 54
+    },
+    "repository_relocations": {
+      "software_links": 0,
+      "tests": 0
+    },
+    "synchronization": {
+      "pdf_count": 305,
+      "manifest_rows": 305,
+      "synchronized": 305,
+      "missing_markdown": 0,
+      "stale_markdown": 0,
+      "orphan_markdown": 1,
+      "mirrored_reference_notes": 1,
+      "weak_mapping": 0,
+      "duplicate_payloads": 27
+    }
+  }
+}

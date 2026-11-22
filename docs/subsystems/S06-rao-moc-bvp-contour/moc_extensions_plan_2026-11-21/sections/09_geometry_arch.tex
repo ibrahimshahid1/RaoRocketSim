@@ -1,0 +1,65 @@
+\section[Geometry and architecture]{Geometry conventions and engine architecture (LEA/TOP, ARCH)}
+\label{sec:geometry-arch}
+\input{figures/tikz_moc_mdo_flow.tex}
+\textbf{SP-125 length.} SP-125 measures bell length against a $15^\circ$ cone with
+the same throat area, radius below the throat and area ratio
+\cite[PDF p.~100, printed p.~91]{huzel1967}:
+\begin{equation}
+L_n=\frac{R_t(\sqrt{\epsilon}-1)+R(\sec\alpha-1)}{\tan\alpha}
+\end{equation}
+\cite[PDF p.~99, printed p.~90, Eq.~4-7]{huzel1967}, with $R=0.382R_t$ in the worked
+example (PDF p.~107, printed p.~98).
+
+\textbf{Diagnosis (E02).} The working-tree TOP/B\'ezier contour now uses this rounded
+cone. The LEA case, however, keeps \code{length_pct} $=1500/L_{\mathrm{sharp}}$,
+derived from the sharp-corner cone, so the host gives $L/R_t=15.044818739$ against
+$15\pm0.02$.
+
+Of 20 $\tan15^\circ$ sites (12 in \code{raosim/}, 8 in tests), 19 use the sharp corner.
+In \code{raosim/} 11 of 12 do, including the MDO grid, the engine collapse screen, the
+Rao BVP and the optimiser. \code{tests/test_nozzle_geometry.py} has four working-tree
+failures: one from the convention and three from chart changes.
+
+\textbf{The source reference.} Schomberg et al.'s Table~3 gives $x_{mn}=15.0r_t$ without
+defining it. Their Fig.~5 suggests it is measured from the end of a $0.5y_t$ throat arc
+\cite[PDF pp.~5--6 of the held EUCASS 2015 copy]{schomberg2019}; this is an inference.
+The restated geometry ($R_d=0.5R_t$, $x_E-x_N=15.0$) is $15.2796R_t$ from throat to
+exit.
+
+Its contour fit is better in the throat-origin alignment (RMS 0.0714 against 0.0870,
+E02b). With $x$ measured from N the two are almost equal (0.148 against 0.152), so this
+evidence is weak. The $15\pm0.02$ check was circular (MOC-30).
+
+\textbf{Thrust closure (ARCH).} The engine residual uses
+$C_F=\eta_{C_F}C_{F,\mathrm{1D}}$ and the margin $P_e/p_{\mathrm{sep}}(M_e)-1.2$ from
+the Q1D exit state, so it is blind to bell length and shape (Fig.~\ref{fig:moc_mdo_flow}).
+
+E04 gives $\lambda=C_{F,\mathrm{MOC}}/C_{F,\mathrm{1D}}=0.9672$ for Nozzle-B with the
+production start line ($C_D=1.0075$), and about 0.955 in the KL-V3 replay. The MDO
+instead uses fixed $\eta_{C_F}$ values of 0.98--0.99. The MOC wall exit pressure is
+$0.0465p_0$ against $0.0302p_0$ from Q1D.
+
+\begingroup\footnotesize
+\par\addvspace{\LTpre}{\centering\begin{tabular}{@{}P{0.30\linewidth}P{0.50\linewidth}P{0.13\linewidth}@{}}
+\toprule\textbf{Approach} & \textbf{Assessment} & \textbf{Verdict}\\\midrule
+Explicit \code{length_convention} helper at every site, defaults kept & Removes the hidden split; JAX-safe & \textbf{G0}\\
+Restate benchmark cases in the source's quantities & Needs D11 for LEA & with G0\\
+Revert host to sharp corner, or switch all to SP-125 & Silent default change & D7 only\\
+Keep Q1D thrust closure & Length-blind & default\\
+MOC correction table $\lambda(\epsilon,L\%,\gamma,R_d)$ (M0a) & Cheap, smooth; must record its start-line method & \textbf{M0a}\\
+Forward net in the residual (M0b) & Consistent; needs N1 & \textbf{M0b}\\
+Rao BVP in the inner loop & About 25 min per accepted pair & reject\\
+\bottomrule
+\end{tabular}\par}\addvspace{\LTpost}
+\endgroup
+
+\begingroup\footnotesize
+\par\addvspace{\LTpre}{\centering\begin{tabular}{@{}P{0.09\linewidth}P{0.36\linewidth}P{0.30\linewidth}P{0.17\linewidth}@{}}
+\toprule\textbf{ID} & \textbf{Numerical verification} & \textbf{Benchmark agreement} & \textbf{Physical validation}\\\midrule
+C0 & Contract round trips; an invalid provider cannot yield accepted performance & n/a & n/a\\
+G0 & Both lengths to $10^{-9}$ (done); per-site and JAX-parity tests & LEA and Vulcain S1 geometry pass unchanged tolerances on the source quantity (after D11) & n/a\\
+M0 & Perturbations reach the right residuals; table holdout error; Taylor tests (M0b) & n/a & none\\
+D0 & Same-context CLI/API/MDO replay & as A0 & as A0\\
+\bottomrule
+\end{tabular}\par}\addvspace{\LTpost}
+\endgroup

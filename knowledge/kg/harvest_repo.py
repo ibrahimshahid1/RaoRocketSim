@@ -26,6 +26,7 @@ from pathlib import Path
 from . import REPO_ROOT
 from .schema import node_id
 from .store import load, save
+from .repository_layout import Layout
 
 DATE_IN_NAME = re.compile(r"(20\d{2}-\d{2}-\d{2})")
 DATE_IN_TEXT = re.compile(r"\b(20\d{2}-\d{2}-\d{2})\b")
@@ -65,7 +66,7 @@ TEST_KIND_RULES = [
 
 def _docs_harvest(now: str) -> tuple[list[dict], list[dict]]:
     docs_dir = REPO_ROOT / "docs"
-    from raosim.model_registry import MODEL_REGISTRY
+    from lrekit.verification.registry import MODEL_REGISTRY
     registry_notes = [REPO_ROOT / m.local_source for m in MODEL_REGISTRY.values()
                       if m.local_source and m.local_source.endswith(".md")]
     corpus_notes = [REPO_ROOT / "propulsion_texts/pintle_injector/PINTLE_LITERATURE_CATALOG.md"]
@@ -215,7 +216,7 @@ def _tests_harvest(now: str, docs_by_path: dict[str, str]) -> list[dict]:
     prior = {t["id"]: t for t in load("tests")}
     out = {}
     functions_by_file = {}
-    for f in sorted(tests_dir.glob("test_*.py")):
+    for f in sorted(tests_dir.rglob("test_*.py")):
         text = f.read_text(encoding="utf-8", errors="replace")
         rel = str(f.relative_to(REPO_ROOT))
         name = f.stem.lower()
@@ -265,11 +266,12 @@ def _subsystem_from_name(name: str) -> str:
 def _capabilities_harvest(now: str, docs_by_path: dict[str, str]) -> tuple[list[dict], list[dict]]:
     caps = []
     cites = []
-    roots = [REPO_ROOT / "raosim", REPO_ROOT / "lrekit", REPO_ROOT / "scripts"]
+    layout = Layout(REPO_ROOT)
+    roots = layout.code_roots()
     for root in roots:
         for f in sorted(root.rglob("*.py")):
             rel = str(f.relative_to(REPO_ROOT))
-            if rel == "raosim/model_registry.py":
+            if rel == layout.path("raosim/model_registry.py"):
                 continue  # its local_source paths are harvested as Model SUPPORTED_BY edges, not CITES
             lines = f.read_text(encoding="utf-8", errors="replace").splitlines()
             for i, ln in enumerate(lines):
@@ -288,7 +290,7 @@ def _capabilities_harvest(now: str, docs_by_path: dict[str, str]) -> tuple[list[
                     cites.append({"file": rel, "line": i + 1, "path": path, "document_id": docs_by_path.get(path, ""),
                                   "resolved": path in docs_by_path, "quote": ln.strip()[:200]})
     # literature requests
-    for f in sorted((REPO_ROOT / "docs").glob("LITERATURE_REQUESTS*.md")):
+    for f in sorted((REPO_ROOT / "docs").rglob("LITERATURE_REQUESTS*.md")):
         rel = str(f.relative_to(REPO_ROOT))
         lines = f.read_text(encoding="utf-8", errors="replace").splitlines()
         cur = None

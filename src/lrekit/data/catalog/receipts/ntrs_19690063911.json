@@ -1,0 +1,79 @@
+{
+  "source_id": "ntrs_19690063911",
+  "acquired_at_utc": "2026-11-04T00:39:08.412488+00:00",
+  "evidence_kind": "published_experimental_report",
+  "status": "ACQUIRED",
+  "files": [
+    {
+      "path": "raw/ntrs_19690063911/ntrs_metadata.json",
+      "bytes": 2218,
+      "sha256": "08134bdf0118de089baed3149a45b49e277ce2fa8feeeca30819e801cc149ca4",
+      "origin": "publisher_metadata",
+      "requested_url": "https://ntrs.nasa.gov/api/citations/19690063911",
+      "resolved_url": "https://ntrs.nasa.gov/api/citations/19690063911",
+      "headers": {
+        "Content-Type": "application/json; charset=utf-8",
+        "ETag": "W/\"8aa-mJT9JqLFhpYScKKoH8TKsC7pvlQ\"",
+        "Last-Modified": null
+      }
+    },
+    {
+      "path": "raw/ntrs_19690063911/source.pdf",
+      "bytes": 494836,
+      "sha256": "345e01f255444400a9615df4c6f9f85e0bc8d023255fb74d2340dd611fa85f33",
+      "origin": "original_paper_on_third_party_host",
+      "requested_url": "https://drahmednagib.com/onewebmedia/SPC407/CUFFEL_1969.pdf",
+      "resolved_url": "https://drahmednagib.com/onewebmedia/SPC407/CUFFEL_1969.pdf",
+      "headers": {
+        "Content-Type": "application/pdf",
+        "ETag": "\"78cf4-5402dbc52c2a0\"",
+        "Last-Modified": "Mon, 31 Oct 2016 18:54:20 GMT"
+      }
+    },
+    {
+      "path": "derived/ntrs_19690063911/source.txt",
+      "bytes": 56937,
+      "sha256": "6e4ca0652d34be7135cc6bee4fcca73030af48e65c15fd272df6aab9fe157e48",
+      "origin": "unreviewed_pdf_text_derivative"
+    }
+  ],
+  "review_state": "NOT_REVIEWED_FOR_TRAINING",
+  "training_eligible": false,
+  "hardware_qualified": false,
+  "limitations": [
+    "NTRS has no full-text download. An original-paper copy was located on a third-party host; reuse rights remain unknown. Full plotted profiles still need reviewed digitization; existing numeric fixture contains only two rounded anchors."
+  ],
+  "previous_attempts": [
+    {
+      "acquired_at_utc": "2026-11-04T00:34:45.601233+00:00",
+      "status": "METADATA_ONLY_NO_PUBLISHER_DOWNLOAD",
+      "error": null
+    }
+  ],
+  "publisher_title": "Transonic flowfield in a supersonic nozzle with small throat radius of curvature.",
+  "publisher_copyright": {
+    "thirdPartyPermissionsProduced": false,
+    "disclosedToPublic": false,
+    "containsIndication": false,
+    "publisherPermissionOrRightsToDistribute": false,
+    "belongsToUsGov": false,
+    "determinationType": "OTHER",
+    "thirdPartyContentCondition": "NOT_SET",
+    "belongsToContractor": false,
+    "disclosedInvention": false,
+    "submissionId": 19690063911,
+    "containsThirdPartyMaterial": false,
+    "belongsToPublisher": false,
+    "id": "7692d1b25bd241b3b1acbff56cf0ca5d",
+    "belongsToAuthors": false
+  },
+  "publisher_distribution": "PUBLIC",
+  "publisher_fulltext_available": false,
+  "alternate_copy_identity_check": "Original three-page AIAA paper; title, authors, journal pages and DOI 10.2514/3.5349 inspected against NTRS identity. Scientific data extraction not reviewed.",
+  "alternate_copy_reuse_rights": "NOT_ESTABLISHED; local research copy only; no license inferred from hosting",
+  "pdf_info": "Title:           Transonic flowfield in a supersonic nozzle with small throat radius of curvature.\nSubject:         AIAA Journal 1969.7:1364-1366\nAuthor:          L. H. BACK, R. F. CUFFEL, and P. F. MASSIER\nCreator:         FineReader\nProducer:        ; modified using iText 4.2.0 by 1T3XT\nCreationDate:    Thu Aug  7 04:15:49 2003 EDT\nModDate:         Mon Oct 31 13:57:45 2016 EDT\nCustom Metadata: no\nMetadata Stream: yes\nTagged:          no\nUserProperties:  no\nSuspects:        no\nForm:            none\nJavaScript:      no\nPages:           3\nEncrypted:       no\nPage size:       577 x 814 pts\nPage rot:        0\nFile size:       494836 bytes\nOptimized:       yes\nPDF version:     1.5\n",
+  "text_extraction": {
+    "status": "DERIVATIVE_TEXT_UNREVIEWED",
+    "warning_excerpt": "Syntax Warning (4302): Badly formatted number\nSyntax Warning (4398): Badly formatted number\nSyntax Warning (4545): Badly formatted number\nSyntax Warning (5221): Badly formatted number\nSyntax Warning (5247): Badly formatted number\nSyntax Warning (5269): Badly formatted number\nSyntax Warning (5298): Badly formatted number\nSyntax Warning (5318): Badly formatted number\nSyntax Warning (5498): Badly for"
+  }
+}

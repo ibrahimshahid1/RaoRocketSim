@@ -1,0 +1,32 @@
+{
+  "source_id": "carlile1992",
+  "acquired_at_utc": "2026-11-04T00:34:48.478382+00:00",
+  "evidence_kind": "published_experimental_report",
+  "status": "ACQUIRED",
+  "files": [
+    {
+      "path": "raw/carlile1992/source.pdf",
+      "bytes": 817898,
+      "sha256": "1532427b372b06dd4213e1082a10fea9b0a84e3db01910b4a44e041fb2ba2576",
+      "origin": "existing_local_literature_copy",
+      "original_path": "propulsion_texts/carlile1992.pdf"
+    },
+    {
+      "path": "derived/carlile1992/source.txt",
+      "bytes": 101143,
+      "sha256": "2773b458126de26014e88afa8a2c6b6778a68ba5745cd11932e24c0d688ef340",
+      "origin": "unreviewed_pdf_text_derivative"
+    }
+  ],
+  "review_state": "NOT_REVIEWED_FOR_TRAINING",
+  "training_eligible": false,
+  "hardware_qualified": false,
+  "limitations": [
+    "Extract matched channel dimensions and boundary conditions before learning an aspect-ratio correction."
+  ],
+  "pdf_info": "Title:           An experimental investigation of high-aspect-ratio cooling passages\nSubject:         CARLILE, JULIE A. (NASA, Lewis Research Center, Cleveland, OH) QUENTMEYER, RICHARD J. (Sverdrup Technology, Inc., Brook Park; NASA, LewisResearch Center, Cleveland, OH)\nProducer:        activePDF Toolkit (www.activepdf.com); modified using iText 4.2.0 by 1T3XT\nCreationDate:    Mon Jun 16 12:25:23 2003 EDT\nModDate:         Tue Jan 29 00:14:32 2019 EST\nCustom Metadata: yes\nMetadata Stream: yes\nTagged:          no\nUserProperties:  no\nSuspects:        no\nForm:            none\nJavaScript:      no\nPages:           12\nEncrypted:       no\nPage size:       610.56 x 791.64 pts\nPage rot:        0\nFile size:       817898 bytes\nOptimized:       no\nPDF version:     1.3\n",
+  "text_extraction": {
+    "status": "DERIVATIVE_TEXT_UNREVIEWED",
+    "warning_excerpt": ""
+  }
+}

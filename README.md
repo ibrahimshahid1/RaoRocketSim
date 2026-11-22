@@ -1,7 +1,7 @@
 # LREKit
 
 For the current path from performance requirements to machinable, testable parts,
-start with the [September readiness review and delivery plan](docs/LREKIT_READINESS_AND_DELIVERY_PLAN_2026-09-05.md).
+start with the [September readiness review and delivery plan](docs/program/LREKIT_READINESS_AND_DELIVERY_PLAN_2026-09-05.md).
 It consolidates repository findings, the implementation backlog, and literature gaps.
 
 The [local scientific memory](knowledge/README.md) provides searchable source passages,
@@ -33,12 +33,12 @@ design-validated or hardware-qualified status.
 > inspection, proof testing, or hot-fire qualification.
 
 Literature-attributed relations in this document are routed to the local
-sources in [`propulsion_texts/`](propulsion_texts/). Repository-created
+sources in [`propulsion_texts/`](propulsion_texts). Repository-created
 heuristics and packaging defaults are labeled as assumptions rather than
 being presented as literature laws; the machine-readable inventory and its
-validity levels live in [`docs/MODEL_REGISTRY.md`](docs/MODEL_REGISTRY.md).
+validity levels live in [`docs/architecture/MODEL_REGISTRY.md`](docs/architecture/MODEL_REGISTRY.md).
 The dated closure map for the audit-driven changes is
-[`docs/PHYSICAL_INTEGRITY_REMEDIATION_2026-07-11.md`](docs/PHYSICAL_INTEGRITY_REMEDIATION_2026-07-11.md).
+[`docs/audits/PHYSICAL_INTEGRITY_REMEDIATION_2026-07-11.md`](docs/audits/PHYSICAL_INTEGRITY_REMEDIATION_2026-07-11.md).
 
 ---
 
@@ -121,7 +121,7 @@ using
 This is the exact completed-run record, not an immutable future test count. A
 provenance-only registry assertion added after that process had collected its
 tests was verified separately with `5 passed` in
-`tests/test_model_registry.py`. For historical comparison, the June 14 normal
+`tests/verification/test_model_registry.py`. For historical comparison, the June 14 normal
 baseline was `784 passed, 4 xfailed, 26 deselected in 350.73 s`.
 
 The repository now has no `@pytest.mark.xfail` literature/reference tests: Rao
@@ -193,7 +193,7 @@ The optional CEA integration supplies a frozen chamber-property *snapshot*.
 $c_p(T)$ data and is restricted to the Bézier geometry route. It does not
 make the MOC/Rao equations variable-property, and it does not model
 equilibrium composition shifting. See
-[`docs/FROZEN_VARIABLE_CP_EXPANSION.md`](docs/FROZEN_VARIABLE_CP_EXPANSION.md).
+[`docs/subsystems/S04-performance-and-off-design/FROZEN_VARIABLE_CP_EXPANSION.md`](docs/subsystems/S04-performance-and-off-design/FROZEN_VARIABLE_CP_EXPANSION.md).
 
 ### Propellant / thermochemistry table
 
@@ -488,7 +488,7 @@ The source term $S=\sin\theta\sin\mu/r$ and the $C^{\pm}$ invariant pairing
 are taken from Anderson (*Modern Compressible Flow* §11.4) and Zucrow &
 Hoffman (*Gas Dynamics* Vol. 2, Ch. 17), and are oracle-validated against the
 NASA M3.5Perf grids (the corrected forms hold at RMS $\sim 10^{-6}$–$10^{-8}$
-on kernel and Deriv characteristics; see `raosim/rao_residuals.py`).
+on kernel and Deriv characteristics; see `src/lrekit/components/nozzle/solvers/residuals.py`).
 
 #### Rao stationarity
 
@@ -607,7 +607,7 @@ and are intentionally **not** collapsed into one implementation.
 
 ## Differentiable (JAX) backend
 
-`raosim/jax/` provides the default inner solver for the Rao BVP and the
+`src/lrekit/numerics/jax/` provides the default inner solver for the Rao BVP and the
 gradient API. The design keeps a single boundary
 (`JAX_DIFFERENTIABLE_PLAN.md` §2): the NumPy shell in
 `rao_variational.solve_rao_bvp` still owns seeding, kernel construction,
@@ -808,7 +808,7 @@ and nonlinear FEA are not yet solved.
   thickness profiles.
 
 The equation provenance, local-PDF inventory, parameter map, and exact CAD
-scope are collected in [`docs/regen_wall_model.md`](docs/regen_wall_model.md).
+scope are collected in [`docs/subsystems/S07-regen-cooling-and-wall-structures/regen_wall_model.md`](docs/subsystems/S07-regen-cooling-and-wall-structures/regen_wall_model.md).
 
 ### Atmosphere and trajectory
 
@@ -869,7 +869,7 @@ python -m pip install -e ".[dev]"
 Core dependencies are NumPy, SciPy, Matplotlib, CoolProp, JAX, JAXlib,
 Optimistix, and Equinox. Optional integrations are not installed by default.
 The PyPI release checklist is in
-[`docs/pypi_release.md`](docs/pypi_release.md).
+[`docs/architecture/pypi_release.md`](docs/architecture/pypi_release.md).
 
 After installation, the toolbox CLI is available as:
 
@@ -943,7 +943,7 @@ independent, geometry-matched, in-domain VOF or measured thickness evidence. Use
 `--injector-cad none`: every movable CAD request fails closed until a swept
 moving assembly with stops, running clearances, seals, and collision checks is
 implemented. See the full model and CLI example in
-[`docs/MOVABLE_PINTLE_MODEL.md`](docs/MOVABLE_PINTLE_MODEL.md).
+[`docs/subsystems/S08-injector-and-spray-coupling/MOVABLE_PINTLE_MODEL.md`](docs/subsystems/S08-injector-and-spray-coupling/MOVABLE_PINTLE_MODEL.md).
 
 The default `--require-brep` policy applies to this request. The CLI will not
 silently substitute a mesh-derived STEP if the five-part package cannot be
@@ -1086,13 +1086,13 @@ tests, and measured maps exist.
 The correlation-based spray screen is report-only by default. An explicit
 fixed point is available with `--spray-cstar-coupling`,
 `--spray-eta-mixing`, and `--spray-eta-combustion`; see
-[`docs/SPRAY_CSTAR_COUPLING.md`](docs/SPRAY_CSTAR_COUPLING.md). The opt-in
+[`docs/subsystems/S08-injector-and-spray-coupling/SPRAY_CSTAR_COUPLING.md`](docs/subsystems/S08-injector-and-spray-coupling/SPRAY_CSTAR_COUPLING.md). The opt-in
 deterministic one-way parcel mid-tier and its validation limits are documented
-in [`docs/LAGRANGIAN_SPRAY_MODEL.md`](docs/LAGRANGIAN_SPRAY_MODEL.md). It is not
+in [`docs/subsystems/S08-injector-and-spray-coupling/LAGRANGIAN_SPRAY_MODEL.md`](docs/subsystems/S08-injector-and-spray-coupling/LAGRANGIAN_SPRAY_MODEL.md). It is not
 a replacement for VOF, reacting CFD, or cold-/hot-fire evidence.
 
 The implemented Son continuous movable-pintle branch is documented in
-[`docs/MOVABLE_PINTLE_MODEL.md`](docs/MOVABLE_PINTLE_MODEL.md). At each
+[`docs/subsystems/S08-injector-and-spray-coupling/MOVABLE_PINTLE_MODEL.md`](docs/subsystems/S08-injector-and-spray-coupling/MOVABLE_PINTLE_MODEL.md). At each
 throttle point it holds the post, rod, center gap, open stop, and axial annulus
 fixed; solves radial center-rod travel; and solves a separately identified
 upstream controller pressure drop for the axial stream. It requires a
@@ -1269,7 +1269,7 @@ legacy-output and Tecplot parsing; and plotting/diagnostic metadata.
 
 ### NASA/JHU reference port
 
-[`Three-Dimensional-Nozzle-Design-Code-master/`](Three-Dimensional-Nozzle-Design-Code-master/)
+[`Three-Dimensional-Nozzle-Design-Code-master/`](Three-Dimensional-Nozzle-Design-Code-master)
 vendors the Rice/JHU 2D MOC, streamline-tracing, and 3D MOC source package
 plus sample outputs. For the pinned M3.5 perfect-nozzle configuration, the
 visible-source reference track is SHA-256 pinned and software-verified for the
@@ -1286,7 +1286,7 @@ The checked-in M3.5 perfect-nozzle wall comparison is within the repository's
 $10^{-3}$ RMS regression gate (the perfect-nozzle pipeline currently measures
 wall $r(x)$ RMS $\approx 1.8\times10^{-4}$ against `wall.out`). However, the
 generator provenance of the historical `TT'.out` fixture is **unresolved**
-(see [`docs/nasa_tt_prime_provenance.md`](docs/nasa_tt_prime_provenance.md)):
+(see [`docs/subsystems/S06-rao-moc-bvp-contour/nasa_tt_prime_provenance.md`](docs/subsystems/S06-rao-moc-bvp-contour/nasa_tt_prime_provenance.md)):
 the visible `MOC_GridCalc_BDE.cpp` source-port workflow is the canonical
 reference track, and the orphaned M3.5Perf fixture is a diagnostic overlay
 only — **not** promotion authority. Consequently the public solver does not
@@ -1313,44 +1313,47 @@ CFD-checked, or experimentally validated by this repository.
 
 ## Repository layout
 
+Reorganized 2026-11-05 around the data flow of the current CLI. The pipeline stages
+(S01 CLI dispatch, S02 inputs/contracts, S03 thermochemistry, S04 performance, S05 nozzle/chamber
+geometry, S06 Rao/MOC/BVP contour, S07 regen/wall/structure, S08 injector/spray, S09 pumps,
+S10 interface/mass ledger, S11 CAD export, S12 plots, S13 engine MDO, S14 re-evaluation/run records)
+are defined in [`docs/architecture/DATAFLOW.md`](docs/architecture/DATAFLOW.md); every code file is assigned
+to a stage in [`docs/architecture/CODE_MAP.md`](docs/architecture/CODE_MAP.md), and the verbatim header
+comment of every file is collected in
+[`docs/architecture/CODE_HEADER_COMMENTS.md`](docs/architecture/CODE_HEADER_COMMENTS.md).
+A readable PDF synthesis is built from `latex-report/RaoRocketSim_Repository_Guide/` into
+`output/pdf/RaoRocketSim_Repository_Guide.pdf`.
+
 ```text
-main.py                         Primary interactive/batch CLI
-raosim/                         Active Python package
-  gas_dynamics.py               Perfect-gas, area-Mach, Prandtl-Meyer relations
-  engine.py                     Ideal performance model (Cf, Isp, c*, m_dot)
-  propellants.py                Combustion-product property database
-  nozzle_geometry.py            Rao/TOP Bezier geometry + chart tables
-  conical.py                    Conical reference contour and divergence factor
-  chamber_geometry.py           L*/CR chamber + convergent sizing
-  design.py                     High-level schemas, gates, artifacts
-  validation.py                 Design-status labels and engineering gates
-  physics.py                    BL, thermal, cooling, structural screens
-  separation.py                 Summerfield / Kalt-Badal / Schmucker screens
-  wall_pressure.py              Quasi-1D wall-pressure distribution
-  atmosphere.py, altitude_performance.py, trajectory.py
-                                ISA atmosphere, altitude sweep, 1-D trajectory
-  moc.py                        General axisymmetric MOC march + starting lines
-  transonic_kernel.py           Kliegel-Levine transonic series
-  nasa_moc.py                   NASA/JHU-style kernel and BDE topology port
-  moc_topology.py               RaoTopology objects (TT', B, BD, D, DE, E, wall)
-  rao_optimizer.py              Direct MOC wall optimization
-  rao_variational.py            Rao functionals, validity, and global BVP
-  rao_residuals.py              Characteristic residual primitives
-  jax/                          Differentiable primitives, residuals, kernel
-                                march, LM solve, and sensitivities
-  cea.py                        Optional RocketCEA thermochemistry
-  benchmarks.py                 Literature benchmark runner
-  benchmark_data/               Manifests and digitized reference curves
-  plotting.py                   Geometry, field, topology, residual plots
-  export.py                     CSV, STL, STEP, IPT-manifest export
-tests/                          Unit, regression, parity, and benchmark tests
-scripts/                        Research diagnostics and artifact generators
-docs/                           NASA provenance, topology, and audit notes
-latex-report/                   Mathematical reference report and figures
-propulsion_texts/               Local source literature used by the project
+src/lrekit/                     The Python package (all engineering code; module -> stage in CODE_MAP.md)
+  cli.py, job_cli.py, guided.py lrekit console entry: job verbs guided/run/validate/catalog, else the design runner
+  application/                  cli.py entry points, runner.py (the ~330-flag runner driving S03-S14), design
+  components/                   nozzle/ (+ solvers/), chamber/, cooling/, injector/ (+ spray/), pump/, electrical/
+  optimization/                 Differentiable engine MDO, job specs, requirements (S13; formerly raosim/mdo)
+  numerics/jax/                 Differentiable primitives, residuals, kernel march, LM solve (formerly raosim/jax)
+  assembly/ performance/ thermochemistry/ core/ geometry/ verification/ mission/ simulation/openfoam/
+  legacy/                       Legacy interactive/batch toolbox (RaoRocketSimLegacy; formerly main.py)
+  benchmark_data/, data/        Packaged manifests, curves, CEA tables, Rao domain maps
+  _compat.py                    Old import names (raosim.*, and flat ones like raosim.cea) alias the modules above
+src/raosim/                     Compatibility package for the former name: __init__.py and __main__.py only
+tests/                          Tests grouped by package area; contracts/ pins import identity and packaging
+  experiments/                  Research diagnostics and MOC experiments (formerly scripts/; not collected as tests)
+scripts/                        User-facing generators: run_nozzle, generate_contour, generate_regen_nozzle, sample_cea_surface
+examples/cli/                   Shipped @argfile examples (see examples/cli for usage)
+docs/                           Documentation, organized by data-flow stage (see docs/README.md)
+  architecture/                 Data flow, code map, header comments, registry, contracts
+  subsystems/Sxx-<slug>/        Physics/design basis per pipeline stage
+  program/                      Plans, roadmaps, REMAINING_WORK_AND_GOALS.md; JAX_DIFFERENTIABLE_PLAN.md = project record
+  audits/ literature/ agents/ data/ archive/
+knowledge/                      Local scientific memory (kg.sh); see knowledge/README.md
+latex-report/                   LaTeX sources of the written reports and the repository guide
+output/pdf/                     Compiled PDFs of the reports
+debug_outputs/                  Tracked scan/diagnostic evidence written by tests/experiments/nozzle/rao_existence_scan.py etc.
+builds/                         Run output (gitignored); _archive_2026-11-05/ holds all earlier builds
+archive/                        Local-only scratch moved out of the tree (gitignored)
+propulsion_texts/               Local source literature (gitignored corpus)
 Three-Dimensional-Nozzle-Design-Code-master/
-                                Vendored Rice/JHU reference source and outputs
-Rocket_nozzle_sim_phase2.py     Legacy monolithic prototype; not the primary API
+                                Vendored Rice/JHU reference source and outputs (used as an oracle by tests)
 ```
 
 ---
@@ -1440,9 +1443,9 @@ labels:
 
 ## References
 
-Primary literature in [`propulsion_texts/`](propulsion_texts/) and the
-reference notes under [`docs/`](docs/) and
-[`raosim/benchmark_data/`](raosim/benchmark_data/):
+Primary literature in [`propulsion_texts/`](propulsion_texts) and the
+reference notes under [`docs/`](docs) and
+[`src/lrekit/benchmark_data/`](src/lrekit/benchmark_data):
 
 - G. V. R. Rao, *Exhaust Nozzle Contour for Optimum Thrust*, Jet Propulsion,
   1958.
@@ -1472,7 +1475,7 @@ reference notes under [`docs/`](docs/) and
 
 See [`latex-report/raosim_reference.pdf`](latex-report/raosim_reference.pdf)
 for the extended mathematical reference and
-[`JAX_DIFFERENTIABLE_PLAN.md`](JAX_DIFFERENTIABLE_PLAN.md) for the
+[`JAX_DIFFERENTIABLE_PLAN.md`](docs/program/JAX_DIFFERENTIABLE_PLAN.md) for the
 differentiable-solver development record. Those documents contain historical
 research notes; **where any status statement conflicts with the executable
 code or the current test suite, the code and tests are authoritative.**

@@ -19,8 +19,10 @@ from . import REPO_ROOT
 from .schema import EXTRACTION_VERSION, node_id
 from .store import load, save
 from .execution_reach import StaticReach
+from .repository_layout import Layout
 
 sys.path.insert(0, str(REPO_ROOT))
+sys.path.insert(0, str(REPO_ROOT / "src"))
 
 
 def _status_to_basis(status: str) -> str:
@@ -68,7 +70,7 @@ def _verification_kind(verification: str, validation_level: str) -> list[str]:
 
 
 def harvest() -> dict:
-    from raosim.model_registry import MODEL_REGISTRY
+    from lrekit.verification.registry import MODEL_REGISTRY
 
     docs_by_path = {}
     for d in load("manifest"):
@@ -77,6 +79,7 @@ def harvest() -> dict:
         for alt in d.get("alternate_paths", []):
             docs_by_path[alt] = canonical
     now = datetime.now(timezone.utc).isoformat()
+    registry_file = Layout(REPO_ROOT).path("raosim/model_registry.py")
     existing_models = {m["id"]: m for m in load("models")}
     execution_reach = StaticReach(REPO_ROOT)
 
@@ -137,7 +140,7 @@ def harvest() -> dict:
             "hardware_qualified": False,
             "experimentally_validated": False,
             "provenance_kind": "PROJECT_DERIVES",
-            "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+            "provenance_note": registry_file + " entry; implementation-state authority. Scientific authority is the cited source document.",
             "extraction_version": EXTRACTION_VERSION,
             "harvested_at": now,
         }
@@ -174,7 +177,7 @@ def harvest() -> dict:
         prov_id = node_id("PROV", f"registry {mid}")
         provenance.append({
             "id": prov_id, "type": "ProvenanceRecord", "kind": "PROJECT_DERIVES",
-            "asserted_by": "raosim/model_registry.py", "subject": model_id,
+            "asserted_by": registry_file, "subject": model_id,
             "statement": f"registry entry {mid}: {m.relation}",
             "source_document_id": src_doc, "local_source": local,
             "confidence": "high" if src_doc else "medium",
@@ -217,7 +220,7 @@ def harvest() -> dict:
                 "source_document_id": m["source_document_id"],
             })
 
-    save("models", models, meta={"generated_at": now, "source": "raosim/model_registry.py", "n": len(models)})
+    save("models", models, meta={"generated_at": now, "source": registry_file, "n": len(models)})
     save("validity", validity, meta={"generated_at": now, "n": len(validity)})
     return {"models": len(models), "links": links, "provenance": provenance, "validity": len(validity),
             "unresolved": unresolved}

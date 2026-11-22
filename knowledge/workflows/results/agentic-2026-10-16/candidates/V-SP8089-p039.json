@@ -1,0 +1,119 @@
+{
+ "packet": "V-SP8089-p039",
+ "kind": "verification",
+ "document_id": "DOC_NTRS_19760023196",
+ "source_pdf": "propulsion_texts/19760023196.pdf",
+ "source_sha256": "5e9db6a6f7860ee51acbf5cbe137005ef259ec3fd87ff0ed5f1ad466d6227c44",
+ "pages": [
+  39,
+  39
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 39,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19760023196/p0039.png",
+   "sha256": "428199a78b138f2b0b8a36379337cc5f43ee6242fbe8cf179a9c6ffb6abcf84f",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_64721e1e7d291ad0717e20c7"
+ ],
+ "candidates": [],
+ "stored_objects": [
+  {
+   "id": "CLM_NTRS_19760023196_7C1A3668",
+   "store": "claims",
+   "type": "Claim",
+   "page": 39,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "For the unlike-impinging triplet the resulting spray pattern is considerably less sensitive to injector flow conditions; the spray direction is always axial and the general fan shape is unchanged.",
+   "quote": "fer the unlike-impinging triplet the resulting spray pattern is considerably less sensitive fo injector flaw conditions. Note that the spray direction will always be axial and that the general shape of the fan is unchaneed.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 39
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_C56D3C55",
+   "store": "claims",
+   "type": "Claim",
+   "page": 39,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "For the unlike doublet the wall-compatibility characteristics are very sensitive to position and operating conditions because the fan spray pattern is sensitive to variations in stream momentum ratio.",
+   "quote": "the wall compatibility characteristics are very sensitive to position and aperatinge conditions, because the fan spray pattern is sensitive fo variations in stream momentum ratio (fig. 9)",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 39
+    }
+   ]
+  }
+ ],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00063",
+   "page_start": 39,
+   "page_end": 39,
+   "section": "2.1.1.2.1 Element Distribution",
+   "text": "poorly mixed sprays.) Typical spray mass distributions for an unlike-impingeme doublet, triplet, and pentad clement at differing flow conditions are shown in figures 9, 10. and 11. Note that wide varlatinns in mixture ratio occur within the spray fans. For several of these elements, judicious placement of elements can result in increased mixing. in others (4-on-1}, the symmetry of the flaw ficld precludes any advantare from iInterclement mixing. In addition. for the unlike doublet. the wall compatibility characteristics are very sensitive to position and aperatinge conditions, because the fan spray pattern is sensitive fo variations in stream momentum ratio (fig. 9). As Hlustrated in fieure 10. fer the unlike-impinging triplet the resulting spray pattern is considerably less sensitive fo injector flaw conditions. Note that the spray direction will always be axial and that the general shape of the fan is unchaneed.\n\nFor the pentad element, if the momentum of the outside streams is too low (fig. 11(a)), the center stream will not be penetrated adequately and gas mixture-ratio gradients will occur, Hf it is too hich (fie. | )(by). the outside streams will impinge at the element centerline, the center stream will be forced outside, and again gas mixture-ratio gradients will result. The 4-on-1 clement is essentially a primary mixer with good symmetry and is almost independent of secondary mixing. so that element spacing becomes relatively unimportant in performance optimization,"
+  },
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00064",
+   "page_start": 39,
+   "page_end": 39,
+   "section": "2.1.1.2.1 Element Distribution",
+   "text": "it is obvious from these examples that rather large variations in mixture ratio can and do occur within a spray fan produced by an element. Even for aptimumdesien configurations, rather large variations in mixture ratio can occur,\n\nThe propelant-mixture-ratio asymmetry of the opposed-impingement doublet normal to the fan axis (fig. 9} allows the use of secondary mixing obtained through interelement spacing to improve the performance of this primary mixing element. Fieure ]2fa} shows an arrangement used to increase secondary mixing and compensate for Incomplete primary mixing: the same basic opposed-doublet element arranged as in figure 12(b) tends to perpetuate any primary mixing deficiencies with resultant loss in performance. With its symmetry normal to the fan axis, the opposed triplet (fie. 10) does not benefit much from secondary mixing: there is little Information available on its performance as a function of interelement orientation. As noted, the 4-on-] element (fie. 11) provides highly uniform primary mixing. and therefore mixing is a very weak function of orientation for reasonably-avell-optimized configurations. The circumferentially symmetric concentric-tube element produces practically all of its performance as a resulf of the individual element configuration, and its performance is almost completely independent of interelement location. Performance for the pure selfimpinging doublet depends completely on secondary mixing. and is strongly dependent on oxidiver-clement-to-fueleclement fan spacing. In general, the more symmetric the element is, the less influence the interclement positioning has on performance. Highly symmetric elements tend to be easier to optimize in terms of performance, since many of the variables involved are essentially eliminated."
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {},
+  "flagged_candidates": 0,
+  "target_objects": 2,
+  "objects_with_anchor_problems": 0
+ }
+}

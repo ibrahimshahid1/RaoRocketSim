@@ -1,0 +1,992 @@
+{
+ "packet": "V-WHITE-p1091-1092",
+ "kind": "verification",
+ "document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+ "source_pdf": "propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf",
+ "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+ "pages": [
+  1091,
+  1092
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 1091,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/p1091.png",
+   "sha256": "2a5d98d48c656e5f2b1f600553b7c951a6ffeb39a2ac71bf883bcffba71bf5f3",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 1092,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/p1092.png",
+   "sha256": "11cfa4cc41ceeca6b26b73f84acc4e53ed28856e48b1ab43d4594c2c8fffb101",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_531cae1201f58933bf2f97ec",
+  "ENR_fcdc16fe7183fcbdfa010106"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_3d6a2c9fb9919009046d8ce7",
+   "kind": "figure",
+   "pages": [
+    1091
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 148.12432861328125,
+     "t": 595.5074157714844,
+     "r": 484.9120178222656,
+     "b": 475.8241271972656,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_fcdc16fe7183fcbdfa010106",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p1091-1091-1ea980e2da3173740c0f9ff4a747a3b39064d6dbba19ac661169c37d62a08f1d.json",
+   "raw_sha256": "8df26f4331b649832ca45284f2cbe27e62cb328724ed55f52ff99edf51caef56",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_4bb1713661746ee7fdcf6311",
+   "kind": "formula",
+   "pages": [
+    1091
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/37",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 202.33333333333331,
+     "t": 141.33333333333337,
+     "r": 431.3333333333333,
+     "b": 114.33333333333337,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "d h = \\frac { d p } { \\rho }",
+   "original_text": "| dh = =2 (9.30) p",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_fcdc16fe7183fcbdfa010106",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p1091-1091-1ea980e2da3173740c0f9ff4a747a3b39064d6dbba19ac661169c37d62a08f1d.json",
+   "raw_sha256": "8df26f4331b649832ca45284f2cbe27e62cb328724ed55f52ff99edf51caef56",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_0f4c4bd05b6910d3600ae653",
+   "kind": "formula",
+   "pages": [
+    1092
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/8",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 164.0,
+     "t": 254.33333333333337,
+     "r": 470.3333333333333,
+     "b": 224.66666666666663,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "V ^ { * } = a ^ { * } = ( k R T ^ { * } ) ^ { 1 / 2 } = \\left ( \\frac { 2 k } { k + 1 } R T _ { 0 } \\right ) ^ { 1 / 2 }",
+   "original_text": "V* = a* = (kRT*)'? = ( 2 k+1 2 ro) (9.33)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_531cae1201f58933bf2f97ec",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p1092-1092-a765a1bae06d9e10f938a821a86a56ff02e6032ded28c0307a04b94aca82490d.json",
+   "raw_sha256": "e507de4ff87e35c4d51a723fe110d30627b968849e8b4854972c5c31ef41e0b3",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_6ce7d5982deac40df62e5bfd",
+   "kind": "formula",
+   "pages": [
+    1092
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/1",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 194.0,
+     "t": 680.0,
+     "r": 440.6666666666667,
+     "b": 669.6666666666666,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\frac { \\frac { T } { } + V \\, d V = 0",
+   "original_text": "—+VdV=0 (9.31)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_531cae1201f58933bf2f97ec",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p1092-1092-a765a1bae06d9e10f938a821a86a56ff02e6032ded28c0307a04b94aca82490d.json",
+   "raw_sha256": "e507de4ff87e35c4d51a723fe110d30627b968849e8b4854972c5c31ef41e0b3",
+   "mechanical_flags": [
+    "UNBALANCED_{}"
+   ]
+  },
+  {
+   "id": "CAND_71960f7c6a825df95f47cd9d",
+   "kind": "formula",
+   "pages": [
+    1092
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/5",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 131.66666666666666,
+     "t": 419.6666666666667,
+     "r": 503.3333333333333,
+     "b": 355.0,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\frac { p ^ { * } } { p _ { 0 } } & = \\left ( \\frac { 2 } { k + 1 } \\right ) ^ { k / ( k - 1 ) } = 0 . 5 2 8 3 \\quad \\frac { \\rho ^ { * } } { \\rho _ { 0 } } = \\left ( \\frac { 2 } { k + 1 } \\right ) ^ { 1 / ( k - 1 ) } = 0 . 6 3 3 9 \\\\ & \\frac { T ^ { * } } { T _ { 0 } } = \\frac { 2 } { k + 1 } = 0 . 8 3 3 3 \\quad \\frac { a ^ { * } } { a _ { 0 } } = \\left ( \\frac { 2 } { k + 1 } \\right ) ^ { 1 / 2 } = 0 . 9 1 2 9",
+   "original_text": "67160 = ( - *) = ~ 7 ZA c 4D 6€t9'0 = (Z¢\"6) ami © 409 0 eees0 = : FE et c aL 1+7\\_ od C87S'0 = CS) er away -",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_531cae1201f58933bf2f97ec",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p1092-1092-a765a1bae06d9e10f938a821a86a56ff02e6032ded28c0307a04b94aca82490d.json",
+   "raw_sha256": "e507de4ff87e35c4d51a723fe110d30627b968849e8b4854972c5c31ef41e0b3",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [
+  {
+   "id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_0344D557",
+   "store": "equations",
+   "type": "Equation",
+   "page": 1091,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "White Eq. (9.28a) isentropic stagnation pressure ratio",
+   "equation_number": "9.28a",
+   "form": "p_0/p = (T_0/T)^(k/(k-1)) = [1+(k-1)*Ma^2/2]^(k/(k-1))",
+   "statement": null,
+   "quote": "If the flow is also _isentropic,_ then for a perfect gas the pressure and density ratios can be computed",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_PERFORMANCE_ISENTROPIC_AREA_MACH"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "p_0",
+     "meaning": "local isentropic stagnation pressure",
+     "units": "Pa",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_P0"
+     ]
+    },
+    {
+     "symbol": "p",
+     "meaning": "local static pressure",
+     "units": "Pa",
+     "role": "source_variable",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "T_0",
+     "meaning": "stagnation temperature",
+     "units": "K",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_T0"
+     ]
+    },
+    {
+     "symbol": "T",
+     "meaning": "local static temperature",
+     "units": "K",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_T_STATIC"
+     ]
+    },
+    {
+     "symbol": "k",
+     "meaning": "specific-heat ratio",
+     "units": "1",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_GAMMA"
+     ]
+    },
+    {
+     "symbol": "Ma",
+     "meaning": "Mach number",
+     "units": "1",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_MACH"
+     ]
+    }
+   ],
+   "assumptions": [
+    "Perfect gas with constant specific-heat ratio for these displayed formulas"
+   ],
+   "validity": [
+    "Isentropic perfect-gas stagnation ratios; sonic condition Ma=1 additionally for9.32",
+    "In adiabatic nonisentropic flow, isentropic stagnation pressure and density retain local rest-state meanings but vary as entropy changes; these relations do not establish globally constant p_0 or rho_0."
+   ],
+   "extraction_note": "Docling targeted region enrichment executed; original PDF checked to correct exponent denominator and preserve the source distinction between adiabatic and isentropic relations. SI units are dimensional interpretations; example k=1.4 numbers are illustrative, not universal bounds.",
+   "same_page_formula_candidates": [
+    "CAND_4bb1713661746ee7fdcf6311"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 1091
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "p"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_648A883F",
+   "store": "equations",
+   "type": "Equation",
+   "page": 1091,
+   "is_target": false,
+   "active": false,
+   "source_state": "SUPERSEDED_EXTRACTION",
+   "verification": null,
+   "label": "White Eqs. (9.26)-(9.28) adiabatic T/T0 and isentropic p/p0, ρ/ρ0 vs Mach number",
+   "equation_number": "9.26-9.28",
+   "form": "T0/T = f(Ma, k) from the energy equation; p/p0 and ρ/ρ0 = powers of the temperature ratio via Eq. (9.9)  [display equations NOT rendered in Markdown]",
+   "statement": null,
+   "quote": "Note that Eqs. (9.26) and (9.27) require only adiabatic flow and hold even in",
+   "confidence": "low",
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "Ma",
+     "meaning": "Mach number",
+     "units": "",
+     "role": "input",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_MACH"
+     ]
+    },
+    {
+     "symbol": "k",
+     "meaning": "specific-heat ratio",
+     "units": "",
+     "role": "parameter",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_GAMMA"
+     ],
+     "normalization_history": [
+      {
+       "resolution_state": "AMBIGUOUS_SYMBOL",
+       "quantity_candidates": [
+        "QTY_GAMMA",
+        "QTY_KCOND"
+       ]
+      }
+     ],
+     "normalization_basis": "SYSTEM_INFERS: symbol, exact canonical units and explicit meaning aliases; no unit conversion or physical validity inferred"
+    },
+    {
+     "symbol": "T/T0",
+     "meaning": "static-to-stagnation temperature ratio",
+     "units": "",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "p/p0",
+     "meaning": "static-to-stagnation pressure ratio",
+     "units": "",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "ρ/ρ0",
+     "meaning": "static-to-stagnation density ratio",
+     "units": "",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [
+    "perfect gas",
+    "Eqs. (9.26)-(9.27): adiabatic flow only",
+    "Eq. (9.28): isentropic flow"
+   ],
+   "validity": [
+    "Eqs. (9.26) and (9.27) require only adiabatic flow and hold even with friction losses or shock waves",
+    "pressure and density ratios (9.28) require the flow to also be isentropic"
+   ],
+   "extraction_note": "Equation bodies missing from the Markdown; only the prose describing them survives.",
+   "same_page_formula_candidates": [
+    "CAND_4bb1713661746ee7fdcf6311"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 1091
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": [
+      "DAMAGE_OR_REPETITION_MARKER"
+     ]
+    },
+    {
+     "check": "variable_symbol_absent_from_form",
+     "symbols": [
+      "T/T0"
+     ]
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "T/T0",
+      "p/p0",
+      "ρ/ρ0"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_8F803DE0",
+   "store": "equations",
+   "type": "Equation",
+   "page": 1092,
+   "is_target": false,
+   "active": false,
+   "source_state": "SUPERSEDED_EXTRACTION",
+   "verification": null,
+   "label": "White Eq. (9.32) critical (sonic) property ratios",
+   "equation_number": "9.32",
+   "form": "p*, ρ*, a*, T* = fixed ratios of p0, ρ0, a0, T0 obtained from Eqs. (9.26)-(9.28) at Ma = 1.0 (numerical values for k = 1.4 given in source)  [display equation NOT rendered in Markdown]",
+   "statement": null,
+   "quote": "asterisks: _p_ <sup>*</sup>, ρ <sup>*</sup>, _a_ <sup>*</sup>, and _T_ <sup>*</sup> . They are certain ratios of the stagnation properties as",
+   "confidence": "low",
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "p*",
+     "meaning": "critical (sonic) pressure",
+     "units": "",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "ρ*",
+     "meaning": "critical density",
+     "units": "",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "a*",
+     "meaning": "critical sound speed",
+     "units": "",
+     "role": "output",
+     "resolution_state": "AMBIGUOUS_SYMBOL",
+     "quantity_candidates": [
+      "QTY_AT",
+      "QTY_SONIC_REFERENCE_AREA"
+     ],
+     "normalization_history": [
+      {
+       "resolution_state": "RESOLVED",
+       "quantity_candidates": [
+        "QTY_AT"
+       ]
+      }
+     ],
+     "normalization_basis": "SYSTEM_INFERS: symbol, exact canonical units and explicit meaning aliases; no unit conversion or physical validity inferred"
+    },
+    {
+     "symbol": "T*",
+     "meaning": "critical temperature",
+     "units": "",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "p0, ρ0, a0, T0",
+     "meaning": "stagnation properties",
+     "units": "",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "k",
+     "meaning": "specific-heat ratio",
+     "units": "",
+     "role": "parameter",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_GAMMA"
+     ],
+     "normalization_history": [
+      {
+       "resolution_state": "AMBIGUOUS_SYMBOL",
+       "quantity_candidates": [
+        "QTY_GAMMA",
+        "QTY_KCOND"
+       ]
+      }
+     ],
+     "normalization_basis": "SYSTEM_INFERS: symbol, exact canonical units and explicit meaning aliases; no unit conversion or physical validity inferred"
+    }
+   ],
+   "assumptions": [
+    "perfect gas",
+    "Ma = 1.0 at the critical point"
+   ],
+   "validity": [
+    "in all isentropic flow, all critical properties are constant; in adiabatic nonisentropic flow a* and T* are constant but p* and ρ* may vary"
+   ],
+   "extraction_note": "Numerical k = 1.4 ratios are in a dropped equation image. Example 9.5 shows the resulting critical pressure is 63.4 kPa for p0 = 120 kPa (p. 1121-1122), which is the only numerical trace of Eq. (9.32) in this rendering.",
+   "same_page_formula_candidates": [
+    "CAND_0f4c4bd05b6910d3600ae653",
+    "CAND_6ce7d5982deac40df62e5bfd",
+    "CAND_71960f7c6a825df95f47cd9d"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 1092
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": [
+      "DAMAGE_OR_REPETITION_MARKER"
+     ]
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "p*",
+      "ρ*",
+      "a*",
+      "T*",
+      "p0, ρ0, a0, T0"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_A8B93868",
+   "store": "equations",
+   "type": "Equation",
+   "page": 1091,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "White Eq. (9.28b) isentropic stagnation density ratio",
+   "equation_number": "9.28b",
+   "form": "rho_0/rho = (T_0/T)^(1/(k-1)) = [1+(k-1)*Ma^2/2]^(1/(k-1))",
+   "statement": null,
+   "quote": "The quantities _p_ 0 and _ρ_ 0 are the isentropic stagnation pressure and density,",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_PERFORMANCE_ISENTROPIC_AREA_MACH"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "rho_0",
+     "meaning": "local isentropic stagnation density",
+     "units": "kg/m^3",
+     "role": "source_variable",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "rho",
+     "meaning": "local static density",
+     "units": "kg/m^3",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_RHO"
+     ]
+    },
+    {
+     "symbol": "T_0",
+     "meaning": "stagnation temperature",
+     "units": "K",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_T0"
+     ]
+    },
+    {
+     "symbol": "T",
+     "meaning": "local static temperature",
+     "units": "K",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_T_STATIC"
+     ]
+    },
+    {
+     "symbol": "k",
+     "meaning": "specific-heat ratio",
+     "units": "1",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_GAMMA"
+     ]
+    },
+    {
+     "symbol": "Ma",
+     "meaning": "Mach number",
+     "units": "1",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_MACH"
+     ]
+    }
+   ],
+   "assumptions": [
+    "Perfect gas with constant specific-heat ratio for these displayed formulas"
+   ],
+   "validity": [
+    "Isentropic perfect-gas stagnation ratios; sonic condition Ma=1 additionally for9.32",
+    "In adiabatic nonisentropic flow, isentropic stagnation pressure and density retain local rest-state meanings but vary as entropy changes; these relations do not establish globally constant p_0 or rho_0."
+   ],
+   "extraction_note": "Docling targeted region enrichment executed; original PDF checked to correct exponent denominator and preserve the source distinction between adiabatic and isentropic relations. SI units are dimensional interpretations; example k=1.4 numbers are illustrative, not universal bounds.",
+   "same_page_formula_candidates": [
+    "CAND_4bb1713661746ee7fdcf6311"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 1091
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "rho_0"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_FCFFF2C0",
+   "store": "equations",
+   "type": "Equation",
+   "page": 1092,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "White Eq. (9.32) sonic critical-to-stagnation property ratios",
+   "equation_number": "9.32",
+   "form": "p_star/p_0 = [2/(k+1)]^(k/(k-1)); rho_star/rho_0 = [2/(k+1)]^(1/(k-1)); T_star/T_0 = 2/(k+1); a_star/a_0 = [2/(k+1)]^(1/2); for k=1.4 these ratios approx 0.5283, 0.6339, 0.8333, 0.9129 respectively",
+   "statement": null,
+   "quote": "given by Eqs. (9.26) to (9.28) when Ma = 1.0; for _k_ = 1.4",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "p_star",
+     "meaning": "sonic critical pressure",
+     "units": "Pa",
+     "role": "source_variable",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "p_0",
+     "meaning": "local isentropic stagnation pressure",
+     "units": "Pa",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_P0"
+     ],
+     "normalization_history": [
+      {
+       "resolution_state": "AMBIGUOUS_SYMBOL",
+       "quantity_candidates": [
+        "QTY_PC",
+        "QTY_P0"
+       ]
+      }
+     ],
+     "normalization_basis": "SYSTEM_INFERS: symbol, exact canonical units and explicit meaning aliases; no unit conversion or physical validity inferred"
+    },
+    {
+     "symbol": "rho_star",
+     "meaning": "sonic critical density",
+     "units": "kg/m^3",
+     "role": "source_variable",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "rho_0",
+     "meaning": "local isentropic stagnation density",
+     "units": "kg/m^3",
+     "role": "source_variable",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "T_star",
+     "meaning": "sonic critical temperature",
+     "units": "K",
+     "role": "source_variable",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "T_0",
+     "meaning": "stagnation temperature",
+     "units": "K",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_T0"
+     ],
+     "normalization_history": [
+      {
+       "resolution_state": "RESOLVED",
+       "quantity_candidates": [
+        "QTY_TC"
+       ]
+      }
+     ],
+     "normalization_basis": "SYSTEM_INFERS: symbol, exact canonical units and explicit meaning aliases; no unit conversion or physical validity inferred"
+    },
+    {
+     "symbol": "a_star",
+     "meaning": "sonic critical speed of sound",
+     "units": "m/s",
+     "role": "source_variable",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "a_0",
+     "meaning": "stagnation speed of sound",
+     "units": "m/s",
+     "role": "source_variable",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "k",
+     "meaning": "specific-heat ratio",
+     "units": "1",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_GAMMA"
+     ]
+    }
+   ],
+   "assumptions": [
+    "Perfect gas with constant specific-heat ratio for these displayed formulas"
+   ],
+   "validity": [
+    "Isentropic perfect-gas stagnation ratios; sonic condition Ma=1 additionally for9.32",
+    "In adiabatic nonisentropic flow the critical sound speed and temperature are constant, while critical pressure and density may vary; constant critical values of all four properties require the source isentropic-flow context."
+   ],
+   "extraction_note": "Docling targeted region enrichment executed; original PDF checked to correct exponent denominator and preserve the source distinction between adiabatic and isentropic relations. SI units are dimensional interpretations; example k=1.4 numbers are illustrative, not universal bounds.",
+   "same_page_formula_candidates": [
+    "CAND_0f4c4bd05b6910d3600ae653",
+    "CAND_6ce7d5982deac40df62e5bfd",
+    "CAND_71960f7c6a825df95f47cd9d"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 1092
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "p_star",
+      "rho_star",
+      "rho_0",
+      "T_star",
+      "a_star",
+      "a_0"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_40C7CD25",
+   "store": "claims",
+   "type": "Claim",
+   "page": 1092,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Combining the differential energy relation with ds = 0 gives exactly the Bernoulli relation for steady frictionless flow with negligible gravity, so the isentropic flow assumption is equivalent to using the frictionless momentum equation.",
+   "quote": "But this is exactly the Bernoulli relation, Eq. (3.54), for steady frictionless",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 1092
+    }
+   ]
+  },
+  {
+   "id": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_656E9739",
+   "store": "claims",
+   "type": "Claim",
+   "page": 1092,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "In all isentropic flow, all critical properties are constant; in adiabatic nonisentropic flow, a* and T* are constant but p* and ρ* may vary.",
+   "quote": "In all isentropic flow, all critical properties are constant; in adiabatic",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 1092
+    }
+   ]
+  },
+  {
+   "id": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_81E433D2",
+   "store": "claims",
+   "type": "Claim",
+   "page": 1091,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Eqs. (9.26) and (9.27) require only adiabatic flow and hold even with friction losses or shock waves; the pressure and density ratios of Eq. (9.28) additionally require isentropic flow of a perfect gas.",
+   "quote": "If the flow is also _isentropic,_ then for a perfect gas the pressure and density",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 1091
+    }
+   ]
+  },
+  {
+   "id": "ASM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_6F0A0B04",
+   "store": "entities",
+   "type": "Assumption",
+   "page": 1091,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "Pressure and density stagnation ratios in Eq9.28 require isentropic perfect-gas relations; the temperature and sound-speed ratios of Eq9.26/27 require adiabatic",
+   "equation_number": null,
+   "form": null,
+   "statement": "Pressure and density stagnation ratios in Eq9.28 require isentropic perfect-gas relations; the temperature and sound-speed ratios of Eq9.26/27 require adiabatic flow and can hold with irreversibilities.",
+   "quote": "Note that Eqs. (9.26) and (9.27) require only adiabatic flow and hold even in the presence of irreversibilities such as friction losses or shock waves.",
+   "confidence": null,
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 1091
+    }
+   ]
+  },
+  {
+   "id": "VAL_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_D24FE46B",
+   "store": "validity",
+   "type": "ValidityEnvelope",
+   "page": 1091,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Eqs. (9.26)-(9.27) hold for adiabatic flow even with friction or shocks; Eq. (9.28) pressure/density ratios require isentropic perfect-gas flow.",
+   "quote": "Note that Eqs. (9.26) and (9.27) require only adiabatic flow and hold even in",
+   "confidence": null,
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 1091
+    }
+   ]
+  }
+ ],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01474",
+   "page_start": 1091,
+   "page_end": 1091,
+   "section": "**Isentropic Pressure and Density Relations**",
+   "text": "Note that Eqs. (9.26) and (9.27) require only adiabatic flow and hold even in\nthe presence of irreversibilities such as friction losses or shock waves.\n\nIf the flow is also _isentropic,_ then for a perfect gas the pressure and density\nratios can be computed from Eq. (9.9) as a power of the temperature ratio:\n\nThese relations are also plotted in Fig. 9.3; at Ma = 5 the density is 1.13\npercent of its stagnation value, and the pressure is only 0.19 percent of\nstagnation pressure.\n\nThe quantities _p_ 0 and _ρ_ 0 are the isentropic stagnation pressure and density,\nrespectively that is, the pressure and density that the flow would achieve if\nbrought isentropically to rest. In an adiabatic nonisentropic flow _p_ 0 and _ρ_ 0 retain\ntheir local meaning, but they vary throughout the flow as the entropy changes\ndue to friction or shock waves. The quantities _h_ 0, _T_ 0, and _a_ 0 are constant in an\nadiabatic nonisentropic flow (see Sec. 9.7 for further details)."
+  },
+  {
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01475",
+   "page_start": 1091,
+   "page_end": 1091,
+   "section": "**Relationship to Bernoulli’s Equation**",
+   "text": "The isentropic assumptions (9.28) are effective, but are they realistic? Yes.\nTo see why, take the differential of Eq. (9.22):\n\nMeanwhile, from Eq. (9.6), if _ds_ = 0 (isentropic process),\n\nCombining (9.29) and (9.30), we find that an isentropic streamtube flow"
+  },
+  {
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01476",
+   "page_start": 1092,
+   "page_end": 1092,
+   "section": "**Relationship to Bernoulli’s Equation**",
+   "text": "must be\n\nBut this is exactly the Bernoulli relation, Eq. (3.54), for steady frictionless\nflow with negligible gravity terms. Thus we see that the isentropic flow\nassumption is equivalent to use of the Bernoulli or streamline form of the\nfrictionless momentum equation."
+  },
+  {
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01477",
+   "page_start": 1092,
+   "page_end": 1092,
+   "section": "**Critical Values at the Sonic Point**",
+   "text": "The stagnation values ( _a_ 0, _T_ 0, _p_ 0, ρ0) are useful reference conditions in a\ncompressible flow, but of comparable usefulness are the conditions where the\nflow is sonic, Ma = 1.0. These sonic, or _critical,_ properties are denoted by\nasterisks: _p_ <sup>*</sup>, ρ <sup>*</sup>, _a_ <sup>*</sup>, and _T_ <sup>*</sup> . They are certain ratios of the stagnation properties as\ngiven by Eqs. (9.26) to (9.28) when Ma = 1.0; for _k_ = 1.4\n\nIn all isentropic flow, all critical properties are constant; in adiabatic\nnonisentropic flow, _a_ <sup>*</sup> and _T_ <sup>*</sup> are constant, but _p_ <sup>*</sup> and _ρ_ <sup>*</sup> may vary.\n\nThe critical velocity _V_ <sup>*</sup> equals the sonic sound speed _a_ <sup>*</sup> by definition and is\noften used as a reference velocity in isentropic or adiabatic flow:\n\nThe usefulness of these critical values will become clearer as we study\ncompressible duct flow with friction or heat transfer later in this chapter."
+  },
+  {
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01478",
+   "page_start": 1092,
+   "page_end": 1093,
+   "section": "**Some Useful Numbers for Air**",
+   "text": "Since the great bulk of our practical calculations are for air, _k_ = 1.4, the\nstagnation property ratios _p_ / _p_ 0 and so on from Eqs. (9.26) to (9.28) are tabulated\n\nfor this value in Table B.1. The increments in Mach number are rather coarse in\nthis table because the values are meant as only a guide; these equations are now\na trivial matter to manipulate on a hand calculator. Thirty years ago every text\nhad extensive compressible flow tables with Mach number spacings of about\n0.01, so that accurate values could be interpolated. Even today, reference books\nare available [20, 21, 29] with tables and charts and computer programs for a\nwide variety of compressible flow situations. Reference 22 contains formulas\nand charts applying to the thermodynamics of _real_ (nonperfect) gas flows.\n\nFor _k_ = 1.4, the following numerical versions of the isentropic and adiabatic\nflow formulas are obtained:\n\nOr, if we are given the properties, it is equally easy to solve for the Mach\nnumber (again with _k_ = 1.4):\n\nNote that these isentropic flow formulas serve as the equivalent of the\nfrictionless adiabatic momentum and energy equations. They relate velocity to\nphysical properties for a perfect gas, but they are _not_ the “solution” to a gas\ndynamics problem. The complete solution is not obtained until the continuity\nequation has also been satisfied, for either one-dimensional (Sec. 9.4) or\nmultidimensional (Sec. 9.9) flow."
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "figure": 1,
+   "formula": 4
+  },
+  "flagged_candidates": 1,
+  "target_objects": 3,
+  "objects_with_anchor_problems": 0
+ }
+}

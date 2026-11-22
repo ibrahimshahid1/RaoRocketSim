@@ -1,0 +1,633 @@
+{
+ "packet": "V-SP8089-p091-093",
+ "kind": "verification",
+ "document_id": "DOC_NTRS_19760023196",
+ "source_pdf": "propulsion_texts/19760023196.pdf",
+ "source_sha256": "5e9db6a6f7860ee51acbf5cbe137005ef259ec3fd87ff0ed5f1ad466d6227c44",
+ "pages": [
+  91,
+  93
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 91,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19760023196/p0091.png",
+   "sha256": "940183773ea1c2a56cbb769d901715bda49a9381d9360511783c906c71dfb838",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 92,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19760023196/p0092.png",
+   "sha256": "eaa075256551e92a97338380b5bbdf8cfc425f08070d47226673305f3a6149e9",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 93,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19760023196/p0093.png",
+   "sha256": "01e1218ff431fe47662219ca71eac37af9bc713c35a592981bccd081b3673d9e",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_2d9bf939dfd814c5425ed013",
+  "ENR_52117a5feb6ab57a9ead8fd7",
+  "ENR_8ff021765d2346aaf2c8cfed"
+ ],
+ "candidates": [],
+ "stored_objects": [
+  {
+   "id": "CLM_NTRS_19760023196_53FD474F",
+   "store": "claims",
+   "type": "Claim",
+   "page": 92,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Cold flow of an orifice or entire injector often yields a Cd different from that produced during hot firing; orifices separated at sea-level back pressure may flow full at high chamber pressure.",
+   "quote": "Cold flow of an orifice or of an entire injector often will result in a Cy other than that produced during hot firing.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 92
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_60F1FFDC",
+   "store": "claims",
+   "type": "Claim",
+   "page": 93,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "To avoid hydraulic flip, orifice L/d should be either short enough to guarantee separation or long enough to guarantee full flow; intermediate L/d values (about 4 to 6) are particularly susceptible to hydraulic flip.",
+   "quote": "To avoid hydraulic flip. the orifice L/d should be either short enough to guarantee separation all the time or long enough fo guarantee full flow all the time. Intermediate values for L/d (e.g.. 4 to 6) are particularly susceptible",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 93
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_72A146EE",
+   "store": "claims",
+   "type": "Claim",
+   "page": 93,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Rounded inlets, which give the lowest ΔP (highest Cd) and best flow-stream control, should have R/d of about 0.3 or more for good reproducibility; an alternative is a chamfered inlet with Ch/d of about 2.0 or above.",
+   "quote": "Rounded inlets, which result in the lowest AP (highest Cy) and the best flow-stream control, should have an R/d ratio of about 0.3 or more for good repraducibility. An alternate choice is chamfered inlets with a Ch/d ratio of about 2.0",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 93
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_7859A4F3",
+   "store": "claims",
+   "type": "Claim",
+   "page": 93,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Under full-flow conditions the orifice Cd decreases as the cross velocity increases (ref. 100).",
+   "quote": "Under full-flow conditions. the orifice Cy will decrease as the cross velocity increases (ref. 100).",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 93
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_9885EEB8",
+   "store": "claims",
+   "type": "Claim",
+   "page": 92,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Separated flow tends to change to full flow, with the discharge coefficient increasing, when orifice L/d is increased, orifice pressure drop is decreased, inlet cross velocity is decreased, or the inlet is rounded or chamfered.",
+   "quote": "Separated flow tends to change to full flow (and the discharge coefficient Cg increases) when the orifice L/d is increased, the orifice pressure drop is decreased, the cross velocity at the inlet is decreased,",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 92
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_A0F9ECDF",
+   "store": "claims",
+   "type": "Claim",
+   "page": 91,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Design criterion 3.1.1.3: the injector design shall provide an adequate interface with injector-mounted suppression devices and sufficient decoupling to preclude feed-system-coupled instabilities.",
+   "quote": "The injector desien shall provide an adequate interface with injector-mounted suppression devices and) shall provide sufficient; decoupling to preclude feed-system-coupled instabilities.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 91
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_A6CED96A",
+   "store": "claims",
+   "type": "Claim",
+   "page": 91,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The injection pressure drop and orifice length should be made as large as possible within practical limits and as needed to prevent low-frequency instabilities.",
+   "quote": "The injection pressure drop and orifice length should be made as large as possible within practical Hmits and as needed to prevent low-frequency instabilities.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 91
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_A832666D",
+   "store": "claims",
+   "type": "Claim",
+   "page": 92,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "To avoid coincidence of fluid-system natural resonances with a high combustion-process or chamber response, estimate the oscillatory response characteristics of the injector, feed-system components, and combustion process, and adjust design parameters accordingly.",
+   "quote": "To avoid coincidence of fluid-system natural resonances with a high combustion-process or combustion- chamber response, estimate the oscillatory response characteristics of the injector, feed-system components, and combustion process",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 92
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_AC4E9177",
+   "store": "claims",
+   "type": "Claim",
+   "page": 92,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Use analytical models (ref. 57) to aid in estimating the oscillatory response characteristics used to avoid feed-system-coupled instabilities.",
+   "quote": "adjust design parameters as necessary to avoid feed-system-coupled instabilities. Use analytical models (ref. 57) to aid in estimating these response characteristics.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 92
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_AECEC0F3",
+   "store": "claims",
+   "type": "Claim",
+   "page": 91,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "If acoustic stability cannot be obtained with suppression devices, adjust the injector design and employ analytical models (ref. 57) to predict the injector-defined parameters necessary for stability.",
+   "quote": "If stability (acoustic) cannot be obtained with suppression devices, adjust the injector design to promote stability. Employ analytical models (ref. 57) to predict the injector-defined parameters necessary for stability.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 91
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_B6637B85",
+   "store": "claims",
+   "type": "Claim",
+   "page": 92,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Flow in a sharp-edged orifice normally either fills the orifice at its exit (full flow) or does not contact the orifice at its exit (separated flow).",
+   "quote": "Flow in a sharp-edged orifice normally fills the orifice at its exit (full flow) or else does not contact the orifice at its exit (separated flow).",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 92
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_C7C1055C",
+   "store": "claims",
+   "type": "Claim",
+   "page": 91,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The injection pressure drop and orifice length should be made as large as possible within practical limits and as needed to prevent low-frequency instabilities; use feed-system models (ref. 60) to select methods.",
+   "quote": "The injection pressure drop and orifice length should be made as large as possible within practical Hmits and as needed to prevent low-frequency instabilities.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 91
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_F03D7EC9",
+   "store": "claims",
+   "type": "Claim",
+   "page": 93,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Rounded inlets, chamfered inlets, and converging orifices produce higher discharge coefficients and lower pressure drops than sharp-edged orifices.",
+   "quote": "Rounded inlets, chamfered inlets, and converging orifices (orifice inlet larger than orifice exit) produce higher Cy’s and lower AP's than do sharp-edged orifices.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 93
+    }
+   ]
+  },
+  {
+   "id": "CONST_NTRS_19760023196_3C7D5D07",
+   "store": "entities",
+   "type": "EmpiricalConstant",
+   "page": 93,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "L/d range susceptible to hydraulic flip = 4 to 6 dimensionless",
+   "equation_number": null,
+   "form": null,
+   "statement": null,
+   "quote": "Intermediate values for L/d (e.g.. 4 to 6) are particularly susceptible to hydraulic flip (ref. 101).",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 93
+    }
+   ]
+  },
+  {
+   "id": "CONST_NTRS_19760023196_6FB306C8",
+   "store": "entities",
+   "type": "EmpiricalConstant",
+   "page": 93,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "recommended rounded-inlet R/d = >= ~0.3 dimensionless",
+   "equation_number": null,
+   "form": null,
+   "statement": null,
+   "quote": "should have an R/d ratio of about 0.3 or more for good repraducibility. An alternate choice is chamfered inlets with a Ch/d ratio of about 2.0 or above.",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 93
+    }
+   ]
+  },
+  {
+   "id": "CONST_NTRS_19760023196_D15A04F8",
+   "store": "entities",
+   "type": "EmpiricalConstant",
+   "page": 93,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "recommended chamfered-inlet Ch/d = >= ~2.0 dimensionless",
+   "equation_number": null,
+   "form": null,
+   "statement": null,
+   "quote": "An alternate choice is chamfered inlets with a Ch/d ratio of about 2.0 or above.",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 93
+    }
+   ]
+  },
+  {
+   "id": "VAL_NTRS_19760023196_AE012195",
+   "store": "validity",
+   "type": "ValidityEnvelope",
+   "page": 92,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Cold-flow Cd often differs from hot-firing Cd; a calibrated Cd must account for the flow regime (full vs separated) at operating back pressure.",
+   "quote": "Cold flow of an orifice or of an entire injector often will result in a Cy other than that produced during hot firing.",
+   "confidence": null,
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 92
+    }
+   ]
+  }
+ ],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00160",
+   "page_start": 91,
+   "page_end": 91,
+   "section": "Eee",
+   "text": "| unlike-impinging elements are used in the core of the injector, then showerhead fuel elements should be utilized in the periphery of the injector. The jets should be directed at a slight angle (= 10°) toward the wall, The exact amount of fuel required should be determined from cold-flow experiments or from an appropriate analytical model such as | LISP (ref. 98).\n\nLike-impinging elements are recommended for use near the chamber walls. The elements should be oriented such that the fuel element is closer to the wall than the oxidizer element: in addition, the elements should be oriented so that the fans are parallel to the wall (fig. 32(a)). The specific amount of propellant mass and relative position of the outer fuel to the outer oxidizer doublet should be determined from either cold-flow tests or an analytical model such as LISP.\n\nNonimpinging elements generally are recommended for use near the chamber wall. The showerhead injector can be used near the wall if the outermost jets carry fuel. The concentric-tube element is excellent for use near the wall since the outer mass generally is fucl. Hybrid elements generally are not recommended for use near the chamber wall because of the mixture-ratio distributions produced. However, if it is desirable to use this type of element. then the mixture-ratio distribution near the outer portion of the spray should be determined from cold-flow experimentation. Select design parameters that provide acceptable mixture-ratio distributions."
+  },
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00161",
+   "page_start": 91,
+   "page_end": 91,
+   "section": "3.1.1.3 COMBUSTION STABILITY CONSIDERATIONS",
+   "text": "The injector desien shall provide an adequate interface with injector-mounted suppression devices and) shall provide sufficient; decoupling to preclude feed-system-coupled instabilities.\n\nAdjust the injector design as necessary to assure compatibility of the injector with any required suppression device. When no suppression device is used initially, select an injector configuration that can readily accommodate a suppression device at a later time. Employ injection elements at the downstream edge of a baffle that is regencratively cooled unless this injection is found to degrade stability.\n\nIf stability (acoustic) cannot be obtained with suppression devices, adjust the injector design to promote stability. Employ analytical models (ref. 57) to predict the injector-defined parameters necessary for stability.\n\nThe injection pressure drop and orifice length should be made as large as possible within practical Hmits and as needed to prevent low-frequency instabilities. Use analytical models"
+  },
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00162",
+   "page_start": 92,
+   "page_end": 92,
+   "section": "3.1.1.3 COMBUSTION STABILITY CONSIDERATIONS",
+   "text": "of the injector and feed system (ref. 60) to select the most efficient methods of achieving stability.\n\nTo avoid coincidence of fluid-system natural resonances with a high combustion-process or combustion- chamber response, estimate the oscillatory response characteristics of the injector, feed-system components, and combustion process; adjust design parameters as necessary to avoid feed-system-coupled instabilities. Use analytical models (ref. 57) to aid in estimating these response characteristics."
+  },
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00163",
+   "page_start": 92,
+   "page_end": 92,
+   "section": "3.1.2 Individual Orifice Geometry",
+   "text": "The individual orifice geometries shall produce the orifice flow characteristics required for the overall propellant flow field.\n\nThe results of many cold-flow and hot-firing programs have shown the following trends that should be used as general guides to the influence of orifice geometry on flow characteristics:\n\n- e Flow in a sharp-edged orifice normally fills the orifice at its exit (full flow) or else does not contact the orifice at its exit (separated flow). Partial attachment (attachment on one side of the orifice but not the other) can occur as a result of cross velocity at the inlet or inlet burrs with orifices of low L/d. Flow can change under some conditions from full flow to separated flow and back (hydraulic flip).\n\n   - Separated flow tends to change to full flow (and the discharge coefficient Cg increases) when the orifice L/d is increased, the orifice pressure drop is decreased, the cross velocity at the inlet is decreased, the inlet is rounded or chamfered, the back pressure into which the stream exits is increased, the vapor pressure of the fluid is decreased, or the amount of dissolved gas is decreased.\n\n- ® The stream will issue concentric to the orifice centerline for very large values of orifice L/d and for low values of L/d when entry conditions are ideal. For low orifice L/d, the stream will exit at an angle to the orifice centerline when there is a cross velocity or local nonsymmetric turbulence. Increasing orifice L/d, decreasing cross velocity, or contouring or chamfering the orifice inlet will reduce this stream misdirection."
+  },
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00164",
+   "page_start": 92,
+   "page_end": 92,
+   "section": "3.1.2 Individual Orifice Geometry",
+   "text": "- ® Cold flow of an orifice or of an entire injector often will result in a Cy other than that produced during hot firing. Orifices that are flowing separated under cold-flow conditions with only sea-level atmospheric back pressure may flow full under hot-firing conditions, particularly during operation at high chamber pressure. In some cases, some of the orifices may flow full and some separated, under either the hot- or cold-flow conditions."
+  },
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00165",
+   "page_start": 93,
+   "page_end": 93,
+   "section": "3.1.2 Individual Orifice Geometry",
+   "text": "- @ Under full-flow conditions. the orifice Cy will decrease as the cross velocity increases (ref. 100).\n\n- ® To avoid hydraulic flip. the orifice L/d should be either short enough to guarantee separation all the time or long enough fo guarantee full flow all the time. Intermediate values for L/d (e.g.. 4 to 6) are particularly susceptible to hydraulic flip (ref. 101).\n\n- @ Rounded inlets, chamfered inlets, and converging orifices (orifice inlet larger than orifice exit) produce higher Cy’s and lower AP's than do sharp-edged orifices. With rounded or chamfered inlets, reproducibility of flow pressure drop becomes more difficult when a small chamfer is used."
+  },
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00166",
+   "page_start": 93,
+   "page_end": 93,
+   "section": "3.1.2.1 ORIFICE INLETS",
+   "text": "The orifice inlet geometry shall pravide reproducible flaw characteristics and preclude unstable separated flow, partially attached flow, or stream misdirection.\n\nRounded, chamfered. or sharp-edged orifice inlets give reproducible flow characteristics. Rounded inlets, which result in the lowest AP (highest Cy) and the best flow-stream control, should have an R/d ratio of about 0.3 or more for good repraducibility. An alternate choice is chamfered inlets with a Ch/d ratio of about 2.0 or above. If sharp-edeed orifice inlets are used, maintain consistent inlet geometry and avoid burrs by using techniques given below.\n\nRounded or chamfered inlets should be used to avoid separated or partially attached flow with low-L/d orifices, especially during operation at low chamber pressure.\n\nIrregular orifice inlet conditions (burrs) that cause separated flow, partially attached flow, or stream misdirection should be avoided. Recommended techniques for burr elimination are summarized below.\n\nAccessible inlets. - Contoured inlets should be machined with mechanical cutters or with the EDM or ECM process. The EDM or FCM process can also be used for sharp-edged inlets. Other acceptable methods for sharp-edged orifices are drill — ream ~ polish, drill - polish -- rod — repolish, or drill-into-metal-backup — deburr. Methods suitable for wider AP tolerance, as listed below for semiblind and blind inlets, can also be used. Semiblind inlets (sharp-edged). — The EDM process is recommended for small orifices and EDM or ECM for large orifices or, alternately, mechanical drilling and alkaline etching for aluminum. For wide AP tolerances, drilling -deburring by polishing — rodding out inward-protecting burrs — repolishing is a satisfactory method. Alternate wide-tolerance methods are drilling and electropolishing, drilling and vapor honing. drilling into a removable backup material such as salt, and drilling and reaming."
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {},
+  "flagged_candidates": 0,
+  "target_objects": 13,
+  "objects_with_anchor_problems": 0
+ }
+}

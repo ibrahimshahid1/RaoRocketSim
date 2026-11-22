@@ -1,0 +1,87 @@
+% MOC -> MDO data flow (current default vs proposed M0a/M0b). Drawn by writer_t.
+% Sources: plan_record avenues.ARCH, planner_findings, milestone M0; raosim/mdo/engine.py (solve_engine, engine_residual).
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[x=1in,y=1in,
+  box/.style={draw=teal,line width=0.5pt,fill=white,rounded corners=2pt,text=ink,
+    font=\sffamily\scriptsize,align=left,inner xsep=3pt,inner ysep=2pt},
+  boxA/.style={box,draw=teal,dash pattern=on 2pt off 1.2pt},
+  boxB/.style={box,draw=accent,dash pattern=on 2pt off 1.2pt},
+  boxR/.style={box,draw=muted,text=muted,dash pattern=on 1pt off 1pt},
+  cur/.style={draw=ink,line width=0.5pt,rounded corners=1.6pt,-{Stealth[length=1.6mm,width=1.1mm]}},
+  ma/.style={draw=teal,line width=0.6pt,rounded corners=1.6pt,-{Stealth[length=1.6mm,width=1.1mm]}},
+  mb/.style={draw=accent,line width=0.6pt,rounded corners=1.6pt,-{Stealth[length=1.6mm,width=1.1mm]}},
+  rep/.style={draw=muted,line width=0.5pt,dash pattern=on 2pt off 1.2pt,-{Stealth[length=1.6mm,width=1.1mm]}},
+  lab/.style={font=\sffamily\scriptsize,inner sep=1pt,align=center}]
+% ---- band: the per-design-point sizing loop (raosim/mdo/engine.py solve_engine) ----
+\fill[pale,rounded corners=3pt] (0,0.55) rectangle (6.8,-1.34);
+\node[font=\sffamily\scriptsize\bfseries,text=teal,anchor=west,inner sep=0pt] at (0.05,0.465) {Sizing loop};
+\node[font=\sffamily\scriptsize\bfseries,text=muted,anchor=west,align=left,inner sep=0pt] at (0.05,0.86)
+  {Outside the\\sizing loop};
+% ---- outside the loop ----
+\node[boxA,text width=1.25in-6pt,minimum height=0.46in] (tab) at (2.00,0.86)
+  {\textbf{M0a tables}\\ $\lambda=C_{F,\mathrm{MOC}}/C_{F,1D}$\\ $p_{w,e}$; $(\varepsilon,L\%,\gamma,R_d)$};
+\node[boxA,text width=1.0in-6pt,minimum height=0.46in] (swp) at (3.64,0.86)
+  {\textbf{Offline sweeps}\\ N0 forward net\\ approval: D10};
+\node[boxR,text width=1.1in-6pt,minimum height=0.46in] (post) at (4.95,0.86)
+  {\textbf{MOC post-solve}\\ Rao BVP or\\ forward net};
+\node[font=\sffamily\scriptsize,text=muted,anchor=west,align=left] at (5.55,0.92) {comparison and\\report only; nothing\\returns to sizing};
+% ---- inside the loop: main row ----
+\node[box,text width=0.85in-6pt,minimum height=0.74in] (in) at (0.425,0)
+  {\textbf{Design point}\\ $P_c$, $\varepsilon$, O/F\\ $F$, $p_a$\\ $\gamma$, $c^*$, $T_c$};
+\node[box,text width=1.3in-6pt,minimum height=0.74in] (cf) at (2.00,0)
+  {\textbf{Thrust coefficient}\\
+   now: $C_F=\eta_{CF}\,C_{F,1D}$\\
+   $\eta_{CF}$ fixed, 0.98--0.99\\
+   {\color{teal}M0a: $C_F=\lambda\,C_{F,1D}$}\\
+   {\color{accent}M0b: $C_F=C_{F,\mathrm{MOC}}$}};
+\node[box,text width=1.15in-6pt,minimum height=0.74in] (res) at (3.525,0)
+  {\textbf{Sizing residuals}\\ $R_1=F-C_F P_c A_t$\\ $R_2=\dot m-P_c A_t/c^*$\\ Newton, IFT\\ $\to R_t,\ \dot m$};
+\node[box,text width=1.1in-6pt,minimum height=0.74in] (geo) at (4.95,0)
+  {\textbf{Contour provider}\\ TOP/B\'ezier default\\ $r(x)$, station grid\\ convention: G0};
+\node[box,text width=0.9in-6pt,minimum height=0.46in] (th) at (6.35,0)
+  {\textbf{Thermal}\\ Bartz heat flux,\\ regen cooling};
+% ---- inside the loop: lower row ----
+\node[box,text width=1.05in-6pt,minimum height=0.6in] (sep) at (1.875,-1.00)
+  {\textbf{Separation}\\ now: Schmucker,\\ Q1D exit state\\ opt-in: wall, V1};
+\node[boxB,text width=1.2in-6pt,minimum height=0.6in] (fn) at (3.66,-1.00)
+  {\textbf{M0b forward net}\\ N0 primal, N1 totals\\ gas mode, geometry\\ typed fallback};
+\node[box,text width=0.9in-6pt,minimum height=0.46in] (st) at (6.35,-1.00)
+  {\textbf{Structure}\\ wall loads, mass};
+% ---- current default (ink) ----
+\draw[cur] (in.east) -- node[lab,above,text=ink,pos=0.34]{$\varepsilon,\gamma$\\$P_c,p_a$} (cf.west);
+\draw[cur] (cf.east) -- node[lab,above,text=ink]{$C_F$} (res.west);
+\draw[cur] (res.east) -- node[lab,above,text=ink]{$R_t$} (geo.west);
+\draw[cur] ([yshift=0.08in]geo.east) -- node[lab,above,text=ink,pos=0.40]{$r(x)$} ([yshift=0.08in]th.west);
+\draw[cur] ([yshift=0.08in]geo.east) -- (5.78,0.08) -- (5.78,-0.92) -- ([yshift=0.08in]st.west);
+\draw[cur] (1.62,0 |- cf.south) -- node[lab,right,text=ink,align=left]{Q1D exit\\$M_e,\ p_e$} (1.62,0 |- sep.north);
+\draw[rep] (geo.north) -- node[lab,right,text=muted]{contour} (post.south);
+% ---- M0a (teal) ----
+\draw[ma] (swp.west) -- node[lab,above,text=teal]{$C_{F,\mathrm{MOC}}$} (tab.east);
+\draw[ma] (2.25,0 |- tab.south) -- node[lab,right,text=teal]{$\lambda$ replaces $\eta_{CF}$} (2.25,0 |- cf.north);
+\draw[ma] (tab.west) -- (1.27,0.86) -- (1.27,-1.00) -- (sep.west);
+\node[lab,text=teal,anchor=east] at (1.25,-0.78) {$p_{w,e}$};
+% ---- M0b (accent) ----
+\draw[mb] (4.72,0 |- geo.south) -- (4.72,-0.50) -- (3.98,-0.50) -- (3.98,0 |- fn.north);
+\node[lab,text=accent,anchor=north west] at (4.30,-0.53) {wall $r(x)$, $R_d$, $R_u$};
+\draw[mb] (3.30,0 |- fn.north) -- (3.30,-0.58) -- (2.52,-0.58) -- (2.52,0 |- cf.south);
+\node[lab,text=accent,anchor=north,align=center] at (2.76,-0.60) {$C_{F,\mathrm{MOC}}$,\\N1 totals};
+\draw[mb] (fn.west) -- node[lab,below,text=accent,align=center]{wall\\$p$, $M$} (sep.east);
+\coordinate (fnE) at ([yshift=-0.08in]fn.east);
+\draw[mb] (fnE) -- node[lab,below,text=accent,pos=0.47]{wall $p$, $T$, $M$; $\delta^*$ (V0)} (5.66,0 |- fnE) -- ([yshift=-0.08in]st.west);
+\draw[mb] (5.66,0 |- fnE) -- (5.66,-0.08) -- ([yshift=-0.08in]th.west);
+% ---- legend ----
+\begin{scope}[font=\sffamily\scriptsize]
+  \draw[cur] (0.30,-1.52) -- (0.62,-1.52); \node[anchor=west,text=ink] at (0.65,-1.52) {current default (Q1D closure)};
+  \draw[ma]  (2.30,-1.52) -- (2.62,-1.52); \node[anchor=west,text=ink] at (2.65,-1.52) {M0a, opt-in};
+  \draw[mb]  (3.55,-1.52) -- (3.87,-1.52); \node[anchor=west,text=ink] at (3.90,-1.52) {M0b, opt-in after N1};
+  \draw[rep] (5.30,-1.52) -- (5.62,-1.52); \node[anchor=west,text=ink] at (5.65,-1.52) {report only};
+\end{scope}
+\end{tikzpicture}
+\caption{Data flow from the MOC to the MDO. In the current default the loop closes thrust and throat radius with
+$C_F=\eta_{CF}C_{F,1D}$ and evaluates the Schmucker margin at the Q1D exit state before requesting the TOP/B\'ezier contour,
+so the closure is blind to bell length and wall shape; the MOC is a post-solve check only. M0a (teal) replaces $\eta_{CF}$ by
+$\lambda=C_{F,\mathrm{MOC}}/C_{F,1D}$ tabulated offline from forward-net sweeps (E04: 0.9672 for Nozzle-B); M0b (orange)
+moves the forward net into the loop after N1, feeding $C_F$ and wall states to the residual and the consumers.}
+\label{fig:moc_mdo_flow}
+\end{figure}

@@ -1,0 +1,411 @@
+\chapter{Engine MDO, Requirements, Re-evaluation and Run Records (S13--S14)}\label{ch:s13-s14}
+
+\lead{Scope of this chapter}
+Stages \stagetag{S13} and \stagetag{S14} close the data flow. \stagetag{S13} is a parallel branch that replaces the sequential stages S03--S12 with one coupled, differentiable whole-engine evaluation, the multidisciplinary-design-optimization (MDO) layer in \code{raosim/mdo/}, and with a requirement layer (\code{raosim/requirements.py}). \stagetag{S14} turns any result, sequential or MDO, into traceable outputs: the authoritative host re-evaluation through \code{raosim.design.design_nozzle_v2}, versioned snapshots and their comparison, the four-valued job verdict, the hashed run record, the expected-part manifest, the model-provenance audit and the physical-release evidence gate (Figure~\ref{fig:s13-s14-flow}).
+
+Everything below was checked against the working tree on 5 November 2026 (commit \code{d636d85} plus uncommitted edits). Where documents or header comments disagree with the code, the code is reported and the disagreement is listed in Sections~\ref{sec:s13-limits} and~\ref{sec:s14-limits}. No result in either stage is hardware evidence: every report carries \code{hardware_qualified=False}, and the solver vocabulary is \emph{screening} and \emph{preliminary}.
+
+\begin{figure}[tbp]
+\centering
+\begin{tikzpicture}[
+  font=\sffamily\scriptsize,
+  s13/.style={draw=teal, fill=pale, rounded corners=2pt, align=left, inner sep=3pt, text width=#1},
+  s13/.default=15.4cm,
+  s14/.style={draw=ink, fill=white, rounded corners=2pt, align=left, inner sep=3pt, text width=#1},
+  s14/.default=15.4cm,
+  arr/.style={-{Stealth[length=1.8mm]}, draw=muted, thick},
+  node distance=3.5mm]
+\node[s13] (entry) {\textbf{Entry points.} \texttt{-{}-engine-mdo} (\texttt{run\_nozzle.py:2077}); \texttt{-{}-engine-mdo-optimize} (\texttt{:2498}); \texttt{-{}-requirements} (\texttt{:2360}); \texttt{lrekit run JOB} (\texttt{mdo/execute.py:333}). Dispatched before the sequential pipeline (\texttt{run\_nozzle.py:3830--3835}).};
+\node[s13, below=of entry] (setup) {\textbf{Problem setup.} \texttt{MissionSpec} + \texttt{DesignVector} (\texttt{schema}, \texttt{bounds}, \texttt{scaling}, \texttt{material\_map}, \texttt{propellants}); property surfaces \texttt{chamber\_surfaces\_for} (\texttt{engine.py:262}); coverage preflight \texttt{require\_htd\_coverage} (\texttt{coolant\_htd.py:234}). Built by \texttt{\_mission\_from\_mdo\_args} (CLI), \texttt{resolve\_requirement} or \texttt{resolve\_engine\_job}.};
+\node[s13, text width=7.0cm, below=of setup.south west, anchor=north west] (engine) {\textbf{Coupled evaluation} \texttt{solve\_engine} (\texttt{engine.py:282}): outer Newton on $(R_t,\dot m)$ $\rightarrow$ \texttt{grid} $\rightarrow$ \texttt{cooling} (inner IFT on $T_{wg}$) $\rightarrow$ \texttt{injector}, \texttt{pintle} $\rightarrow$ \texttt{pump} + battery $\rightarrow$ \texttt{mass}, \texttt{structures}, \texttt{envelope} $\rightarrow$ constraint dictionary.};
+\node[s13, text width=7.0cm, below=of setup.south east, anchor=north east] (nlp) {\textbf{Optimizer} \texttt{solve\_min\_mass} (\texttt{nlp.py:1249}) / \texttt{pareto\_frontier} (\texttt{:1409}): SLSQP in the unit box, exact \texttt{jacrev} Jacobians, guarded trial points, KKT gate, multi-start; calls \texttt{solve\_engine} at every trial point.};
+\draw[arr] (nlp.west) -- (engine.east);
+\node[s13, below=of engine.south west, anchor=north west] (status) {\textbf{Constraint status.} 36-row \texttt{CONSTRAINT\_MANIFEST} $\rightarrow$ \texttt{constraint\_metadata} + \texttt{status\_from\_rows} $\rightarrow$ pass / fail / unknown $\rightarrow$ console report and \texttt{WorkflowExitCode} (0 MET, 1 CANDIDATE\_VIOLATES, 2 INVALID\_INPUT, 3 INDETERMINATE, 4 SOLVER\_FAILED). S13 writes no files.};
+\draw[arr] (entry) -- (setup);
+\coordinate (cl) at ($(setup.south west)!0.23!(setup.south east)$);
+\coordinate (cr) at ($(setup.south west)!0.77!(setup.south east)$);
+\draw[arr] (cl) -- (cl |- engine.north);
+\draw[arr] (cr) -- (cr |- nlp.north);
+\draw[arr] (cl |- engine.south) -- (cl |- status.north);
+\draw[arr] (cr |- nlp.south) -- (cr |- status.north);
+\node[s14, below=7mm of status] (reev) {\textbf{S14: authoritative re-evaluation} \texttt{reevaluate} (\texttt{postprocess.py:971}), with \texttt{-{}-mdo-export}, per feasible Pareto point, or always inside a job: \texttt{to\_design\_input} $\rightarrow$ \texttt{design\_nozzle\_v2} (\texttt{design.py:565}) $\rightarrow$ \texttt{\_write\_v2\_artifacts} (\texttt{:2589}); optional electric-pump sizing and post-solve Rao contour validation; \texttt{snapshot\_from\_mdo} + \texttt{snapshot\_from\_traditional} (contract 2.0.0) $\rightarrow$ \texttt{compare\_snapshots} $\rightarrow$ \texttt{engine\_analysis\_snapshot\_v1.json}.};
+\node[s14, below=of reev] (exec) {\textbf{S14, jobs only.} Status set $\rightarrow$ \texttt{\_verdict} (\texttt{execute.py:248}) $\rightarrow$ \texttt{RunRecord} (\texttt{run\_record.py}) and, for \texttt{parts=reference\_cad}, \texttt{engine\_build\_manifest.json} (\texttt{mdo/build.py}).};
+\draw[dashed, draw=warn, thick] ($(status.south west)+(-0.1,-0.35)$) -- ($(status.south east)+(0.1,-0.35)$);
+\draw[arr] (status) -- (reev);
+\draw[arr] (reev) -- (exec);
+\end{tikzpicture}
+\caption{Internal flow of S13 (shaded) and S14 (white) as implemented. The traditional pipeline enters S14 only at its final write (Section~\ref{sec:s14}).}
+\label{fig:s13-s14-flow}
+\end{figure}
+
+%======================================================================
+\section{S13: Differentiable whole-engine MDO, optimizer and requirement-driven design}\label{sec:s13}
+
+\subsection{Role in the data flow and call sites}\label{sec:s13-role}
+\code{raosim.run_nozzle.main} dispatches the three MDO flags before any sequential stage runs (\code{run_nozzle.py:3830-3835}); the optimizer-only flags \code{--mdo-multistart}, \code{--mdo-multistart-seed} and \code{--mdo-station-study} are rejected unless \code{--engine-mdo-optimize} is set (\code{:3813-3829}). A bare \code{lrekit} reaches them through menu choices 2 and 3 (\code{:1850}); JAX is imported lazily with 64-bit floats.
+
+{\footnotesize
+\begin{longtable}{@{}P{2.9cm}P{3.6cm}P{5.7cm}P{3.6cm}@{}}
+\caption{S13 entry points.}\label{tab:s13-entry}\\
+\toprule
+Trigger & Function & Core call & Exit / output\\
+\midrule\endfirsthead
+\toprule Trigger & Function & Core call & Exit / output\\ \midrule\endhead
+\code{--engine-mdo} & \code{_run_engine_mdo} (\code{run_nozzle.py:2077}) & one \code{solve_engine} at the CLI point (\code{:2174}); \code{ablation_delta} when c-star coupling is off & \code{WorkflowExitCode} (\code{:2336-2342})\\
+\code{--engine-mdo-optimize} & \code{_run_engine_mdo_optimize} (\code{:2498}) & \code{solve_min_mass} (\code{:2723}); \code{--isp-sweep LO,HI,N}: \code{pareto_frontier} (\code{:2630}); \code{--mdo-station-study}: \code{station_refinement_study} (\code{:2592}) & 0/1/3/4 (\code{:2807-2814}); \code{--isp-min} default 230\,s\\
+\code{--requirements} & \code{_run_requirements} (\code{:2360}) & \code{solve_requirement} (\code{requirements.py:810}) $\rightarrow$ \code{solve_min_mass} (\code{:827}) & 0 met, 1 not met, 2 rejected, 3 unknown, 4 solver failed; console only\\
+\code{lrekit run JOB} & \code{execute_engine_job} (\code{mdo/execute.py:333}) & ANALYZE: job design vector; OPTIMIZE: \code{solve_min_mass}; then S14 & four-valued verdict\\
+\bottomrule
+\end{longtable}
+}
+
+\code{_mission_from_mdo_args} (\code{:1998}) builds the \code{MissionSpec} (13\,kN default, materials via the atomic \code{with_materials}); \code{_resolve_mdo_of_intent} (\code{:1913}) refuses \code{--mdo-of-mode optimize} without a property table; \code{_mdo_contour_request_error} (\code{:1866}) allows \code{--contour-method rao-bvp} only with \code{--mdo-export} and \code{--cad none}.
+
+\subsection{Inputs and outputs}\label{sec:s13-io}
+\textbf{Inputs.} \code{MissionSpec} (\code{schema.py:150}), a frozen dataclass static under \code{jit}, holds thrust, ambient \code{Pa}, \code{burn_time} (120\,s), propellant, \code{eta_cstar}=0.975, \code{eta_CF}=0.985, materials, architecture and every screening limit. \code{DesignVector} (\code{:1117}) is a JAX pytree with a fixed thirteen-value physical contract (\code{Pc}, \code{eps}, \code{dp_f_frac}, \code{dp_o_frac}, \code{D_pintle}, \code{N_rpm}, \code{channel_width}, \code{channel_height}, \code{film_frac}, \code{t_wall}, \code{t_post}, \code{D_cg}, \code{OF}); a static \code{DesignLayout} (\code{:93}) activates O/F only when a sampled property table is loaded and O/F is not pinned.
+\textbf{Outputs.} \code{EngineResult} (\code{engine.py:190}) or \code{EngineState} (schema 3), an \code{NLPResult} (\code{nlp.py:352}) with separate optimizer, numerical, physics, requirements and workflow statuses, a console report and a \code{WorkflowExitCode} (\code{input_validation.py:28}); no files.
+
+\subsection{Modules}\label{sec:s13-modules}
+{\small
+\begin{longtable}{@{}P{3.6cm}r P{11.2cm}@{}}
+\caption{S13 modules (25); paths relative to raosim/.}\label{tab:s13-modules}\\
+\toprule
+File & Lines & Role\\
+\midrule\endfirsthead
+\toprule File & Lines & Role\\ \midrule\endhead
+\code{requirements.py} & 831 & Layer 0: SP-125 sec.~2.1 requirements, coverage statuses, mapping to \code{MissionSpec}\\
+\code{mdo/__init__.py} & 142 & Package rules and phase tracker of the multidisciplinary-feasible (MDF) layer\\
+\code{mdo/schema.py} & 1402 & \code{MissionSpec}, \code{DesignVector}, \code{DesignLayout}, thrust scaling, design space\\
+\code{mdo/scaling.py} & 60 & \code{ScaledSpace}: affine map to the unit box\\
+\code{mdo/bounds.py} & 258 & Pc search windows per feed architecture; $\varepsilon$ window from the chart grid\\
+\code{mdo/material_map.py} & 223 & Atomic catalog-to-traced-property mapper (liner, closeout)\\
+\code{mdo/properties.py} & 1683 & C$^1$ chamber property surfaces over $(P_c,O/F)$; packaged CEA catalog\\
+\code{mdo/propellants.py} & 373 & Five catalog propellants, wall-side mechanism, custom registration\\
+\code{mdo/grid.py} & 468 & Fixed-topology chamber and nozzle station grid: differentiable analytic inner-contour stand-in\\
+\code{mdo/assembly.py} & 289 & Walking-skeleton residual; now supplies \code{StateScales}\\
+\code{mdo/cooling.py} & 545 & 1-D plus fin regen residual, counterflow upwind march, film model\\
+\code{mdo/coolant_htd.py} & 289 & Heat-transfer-deterioration (HTD) criterion and coverage preflight\\
+\code{mdo/injector.py} & 180 & Closed-form pintle flow block\\
+\code{mdo/pintle.py} & 241 & Pintle hardware: post mass, hoop screen, fits, Son opening\\
+\code{mdo/pump.py} & 174 & Pump duty, C$^1$ efficiency, electric chain, battery epigraph\\
+\code{mdo/mass.py} & 259 & Chamber shell mass and closeout hoop sizing\\
+\code{mdo/structures.py} & 288 & Nozzle collapse and liner buckling screens\\
+\code{mdo/envelope.py} & 204 & Enclosing cylinder of the cooled chamber (lower bound)\\
+\code{mdo/engine.py} & 829 & \code{solve_engine} and \code{ablation_delta}\\
+\code{mdo/state.py} & 1062 & Pure-JAX \code{EngineState}; \code{solve_engine_state} (\code{:1006})\\
+\code{mdo/constraints.py} & 593 & \code{CONSTRAINT_MANIFEST}, applicability, tri-state reduction\\
+\code{mdo/objectives.py} & 63 & The two objective identities\\
+\code{mdo/nlp.py} & 1456 & $\varepsilon$-constraint SLSQP, guarded problem, \code{kkt_check}, multi-start, Pareto\\
+\code{mdo/convergence.py} & 396 & Station-refinement evidence\\
+\code{mdo/nozzle.py} & 202 & Contour-provider seam; one provider \code{rao_top_bezier_fixed_topology}\\
+\bottomrule
+\end{longtable}
+}
+
+\subsection{What the header comments establish}\label{sec:s13-comments}
+
+\lead{Package rules (mdo/\_\_init\_\_.py, plan section 0.1)}
+\emph{Pure-numerical}: no CAD, file I/O or host callbacks in the differentiated path; discrete choices enumerated outside the traced core; converged states differentiated by the implicit function theorem (IFT), never by unrolling; smooth conservative envelopes instead of \code{max()} where the nonlinear program (NLP) needs derivatives; authoritative re-evaluation host-side.
+
+\lead{Problem definition: schema, scaling, bounds, material\_map}
+\begin{itemize}
+\item \textbf{schema.} Fixed requirements and architecture constants are separated from the continuous design vector; channel count, bus voltage and pintle architecture are not variables. Electric constants come from one registered technology set shared with \code{raosim.pumps} (default \code{repository_screening_v1}; alternative \code{lee2021_ijass_electric_pump}); \code{pump_specific_mass} remains an MDO-only screening value. \code{for_thrust} scales channel count, pintle diameter (blockage factor mid-band) and pump speed (specific speed) with thrust. O/F is offered only with sampled surfaces, because with constant $\gamma$, $T_c$, $R$ it ``would change the propellant mass split without changing combustion''.
+\item \textbf{scaling.} $z=(x-\mathrm{lo})/(\mathrm{hi}-\mathrm{lo})$ conditions O($10^6$) pressures with O($0.1$) fractions (Martins and Ning 2021, ch.~4).
+\item \textbf{bounds.} Replaces the hard-coded $P_c\in[1.5,6]$\,MPa, $\varepsilon\in[3,40]$ box. Pc windows are search guidance with \code{hard_validity=False}: pressure-fed 0.3--1.8\,MPa (SP-125 ch.~V), electric pump 1.5--6\,MPa (\emph{repository finding}, \code{literature=False}), gas generator 3--15, expander 2--10, staged combustion 5--25\,MPa (Parsley and Zhang 2004). Only \code{electric_pump} is implemented. $\varepsilon$ is bounded by the same chart grid that \code{chart_domain_margin} screens.
+\item \textbf{material\_map.} Liner and closeout are mapped separately (SP-8087 sec.~2.1.3.1) and atomically or not at all; the comment records that \code{--material GRCop-84} once optimized a NARloy-Z-class liner (12\,\% conductivity, 21\,\% modulus and 200\,K allowable-temperature error).
+\end{itemize}
+
+\lead{Thermochemistry and propellants: properties, propellants, coolant\_htd}
+\begin{itemize}
+\item \textbf{properties.} CEA is never differentiated: states are sampled offline (\code{scripts/sample_cea_surface.py}) and interpolated with Fritsch--Carlson (1980) slopes and zero-twist bicubic Hermite patches (C$^1$). Queries are clamped only to stay finite; \code{domain_violation} becomes a constraint. The surfaces are ``a differentiable stand-in, not the truth source''. Hash-pinned tables are packaged for LOX/RP-1, LOX/LCH4, LOX/LH2 and N2O4/MMH (\code{raosim/data/cea_tables/catalog_v1.json}).
+\item \textbf{propellants.} Gases from Sutton Table 5-5 via \code{raosim.propellants}; $L^*$ from SP-125 Table 4-1; wall limits from SP-8087 (RP-1 728\,K; furfuryl alcohol, Aerozine-50 589\,K). Hydrogen has no coking limit (\code{None}); methane values are flagged \code{estimated=True}.
+\item \textbf{coolant\_htd.} Nasuti and Pizzarelli (2021) Eq.~(9), $\frac{q_w}{G f_w}(\beta/c_p)_b>K$, $K=0.187$, Darcy $f_w$, bulk properties. Not live: the march carries four constant coolant properties and no $\beta$, and a constant-property evaluation ``misses precisely the peak''. Methane and hydrogen are therefore reported unavailable until a CoolProp-sampled $(T,p)$ surface exists (Bell et al.\ 2014; Huber et al.\ 2009 for RP-1). The criterion errs toward predicting deterioration; buoyancy is neglected.
+\end{itemize}
+
+\lead{Discipline blocks: grid, cooling, injector, pintle, pump, mass, structures, envelope}
+\begin{itemize}
+\item \textbf{grid.} Fixed-topology analytic contour, default $4+6+13+1=24$ stations. The chamber uses the four-section construction of \code{raosim.chamber_geometry} with the barrel solved so injector-face-to-throat volume equals $L^*A_t$ (SP-125 printed p.~88); the former $L^*/CR$ barrel over-stated the 13\,kN chamber by 20.1\,mm and wetted area by 11.7\,\%. The divergent wall is the Rao/TOP quadratic B\'ezier, not the exact Rao contour.
+\item \textbf{cooling.} Bartz (1957) $h_g$ with the $\sigma$ factor; recovery factor $\mathrm{Pr}^{1/3}$; fin efficiency $\tanh(mH)/(mH)$; Sieder--Tate $0.027\,\mathrm{Re}^{0.8}\mathrm{Pr}^{1/3}$ with $\mu_w=\mu_b$; Darcy losses with $64/\mathrm{Re}$ and Blasius/Swamee--Jain; counterflow first-order upwind march. Residual $R_i=T_{wg,i}-[T_{aw,i}-q''_i/h_{g,i}]$ solved by Newton, differentiated by the IFT. \code{land_min} is reported, not clipped; the coking margin uses $T_{wc}=T_{wg}-q''t_w/k_w$ against 728\,K (SP-8087; Sellers 1961). NumPy twin parity about $10^{-9}$; quasi-2-D comparison deferred (Phase 4b).
+\item \textbf{injector.} Incompressible orifice $G=C_d\sqrt{2\rho\Delta p}$, total momentum ratio (TMR), spray angle $\mathrm{atan2}(m_r\cos\delta,m_a+m_r\sin\delta)$ (Escher $\mathrm{TMR}^{1/2}$ and Son 2015 named as deferred upgrades), blockage factor $\mathrm{BF}=Nw/(\pi D_p)$, Son (2017) two-branch minimum area as a consistency inequality, and $\min(\chi_f,\chi_o)\ge0.2$ from SP-125's 15--20\,\% rule, ``not a universal chug boundary''.
+\item \textbf{pintle.} \code{fixed_slotted} (the five-part coaxial CAD and cold-flow article) or \code{son_movable} (numerical only; host CAD refused). Post mass over a 3$D$ body length minus slots (oracle \code{mass_ledger.injector_mass_ledger}); hoop screen $p\,r_o/t$, which bounds the Lam\'e bore stress, against closeout yield over its SP-8087 factor; wall fit $t\le0.8\,D/2$; Son opening $\ge0.1$\,mm at minimum throttle; centre-gap and module fits.
+\item \textbf{pump.} $N_s=\omega\sqrt Q/(g_0H)^{3/4}$, $N_{ss}$ from NPSH; a C$^1$ log-Gaussian $\eta(N_s)$ replacing the C$^0$ binned estimator, calibrated to SP-125's 60--85\,\% band but ``not a fit to SP-125 Fig.~6-23''; $P_e=P_{hyd}/(\eta_p\eta_m\eta_{inv})$; tip-speed (SP-8109) and suction (SP-8052) margins; Lee (2021) battery epigraph with energy- and power-limited masses kept separate.
+\item \textbf{mass.} Pappus shell volumes for liner, lands (area fraction of the channel annulus) and closeout; SP-125 eq.~8-32, a tank formula, only corroborates the geometry. The docstring says the closeout follows a fixed ratio; the code default \code{closeout_sizing="hoop"} sizes $t_j=\mathrm{FoS}\,p_c r_o/\sigma_y$ per station (SP-125 printed p.~109).
+\item \textbf{structures.} Covers SP-8087 sec.~2.1.3's three jobs: hoop support (in \code{mass}), nozzle collapse under overexpansion (SP-8007 sec.~4.2.3 via NTRS 19690013955) and throat support (reported with a caveat). The rib-supported liner buckling screen is explicitly not SP-125 eq.~4-29; collapse is distinct from separation.
+\item \textbf{envelope.} SP-125 sec.~2.1 item 6 cylinder, computed to the jacket outer radius and from injector face to exit only: a \emph{lower bound}, since the bolted flange (285.5\,mm around a 177\,mm chamber at 13\,kN) is the largest diameter.
+\end{itemize}
+
+\lead{Coupling and output contract: assembly, engine, nozzle, state}
+\code{assembly} keeps the original skeleton residuals only as ``integration scaffolding''. In \code{engine} the outer state $(R_t,\dot m)$ feeds the grid, cooling is an inner IFT solve, and the pump rise closes the hydraulic edge, $\Delta p_{rise}=P_c(1+\chi)+\Delta p_{regen}+\Delta p_{line}-P_{tank}$ (\code{engine.py:370-373}), with \code{line_dp_allowance}=0. The only genuine two-way loop (spray $\rightarrow\eta_{c^*}\rightarrow\dot m$) is off by default and measured by \code{ablation_delta}. \code{nozzle} forbids inferring geometry availability from finite coordinates. \code{state} emits fixed-shape pytrees in which an unsupported quantity is \code{NaN} with a false availability flag, never a physical zero.
+
+\lead{Constraints and objectives}
+The manifest is ``software policy around equations implemented in the discipline modules; it does not invent new physical limits''. Each row declares a \code{basis_class}, and a \code{literature} row must have a \code{source_id}. The code holds 36 rows (28 hard, 7 final gates, 1 report-only; 15 literature, 6 numerical contract, 5 repository rule, 4 requirement, 4 geometric definition, 2 model-validity domain), listed in Table~\ref{tab:s13-manifest}.
+
+{\footnotesize
+\begin{longtable}{@{}P{3.6cm}P{0.9cm}P{2.3cm}P{9.0cm}@{}}
+\caption{The constraint manifest (constraints.py, lines 173--346). Role: H hard SLSQP row, G final gate, R report only.}\label{tab:s13-manifest}\\
+\toprule
+Row & Role & Basis & Limit and source as recorded in code\\
+\midrule\endfirsthead
+\toprule Row & Role & Basis & Limit and source\\ \midrule\endhead
+\code{isp_epsilon} & H & requirement & $I_{sp}\ge$ floor; SP-125 sec.~2.1 item 2\\
+\code{thrust_closure} & R & numerical & thrust residual, closed by the outer Newton\\
+\code{separation} & H & literature & Schmucker margin minus 1.20 reserve; vacuum passes; SP-8120\\
+\code{coking} & H & literature & $T_{wc}\le728$\,K; SP-8087 sec.~3.1.1.5.4; coking coolants only\\
+\code{land_fit} & H & geometric & positive land between channels\\
+\code{chug} & H & literature & $\min(\chi_f,\chi_o)\ge0.20$; SP-125 sec.~4.2, SP-194 sec.~6.2.3.1\\
+\code{pintle_transition} & H & literature & Son 2017 Eq.~1; movable valve only\\
+\code{pump_suction} & H & literature & $N_{ss}\le4.0$; SP-8052\\
+\code{pump_tip_speed} & H & literature & $U_2\le400$\,m/s; SP-8109\\
+\code{aspect_ratio} & H & literature & channel aspect ratio $\le8$; Wadel 1997, Carlile 1992, Mirzamoghadam 1991\\
+\code{blockage_lo} & H & literature & BF $\ge0.30$; Freeberg 2019 relaying TRW; slotted only\\
+\code{blockage_hi} & H & repository rule & BF $\le0.90$; no held source states 0.90\\
+\code{pintle_post_stress} & H & repository rule & outer-radius hoop form vs SP-8087 yield/FoS\\
+\code{pintle_wall_fit} & H & repository rule & $t_{post}\le0.8\,r_o$ (host CAD layout cap)\\
+\code{pintle_min_opening} & H & literature & $\ge0.1$\,mm at minimum throttle; Son 2017; movable only\\
+\code{pintle_center_gap_fit} & H & geometric & $D_{cg}\le D-2t$; movable only\\
+\code{pintle_module_fit} & H & literature & chamber diameter above module diameter; Son 2017 p.~9\\
+\code{structural_stress} & H & literature & static combined stress; SP-125\\
+\code{wall_temp} & H & repository rule & $T_{wg}\le800$\,K; criterion form Mirzamoghadam 1991, value not in source\\
+\code{film_capacity} & H & literature & film fraction within film-system capacity; SP-8087\\
+\code{property_domain} & H & validity domain & inside sampled CEA box; sampled surfaces only\\
+\code{chart_domain} & H & validity domain & inside chart extent; SP-125 Fig.~4-14, SP-8120 Fig.~5(b)\\
+\code{wall_monotonic} & H & geometric & divergent wall does not turn toward the axis\\
+\code{chamber_volume} & H & geometric & non-negative barrel length; SP-125 sec.~4.1\\
+\code{jacket_thin_shell} & H & literature & closeout $t/r$ within 1/15; SP-125 p.~336\\
+\code{nozzle_collapse} & H & literature & SP-8087 sec.~2.1.3 / SP-8007\\
+\code{envelope_diameter}, \code{envelope_length}, \code{dry_mass_partial} & H & requirement & fractional margins, inert unless a requirement is stated; SP-125 sec.~2.1 items 5--6\\
+\code{contour_provider} & G & numerical & provider reports available and feasible\\
+\code{liner_buckling} & G & repository rule & rib-supported long-plate screen; SP-8087 sec.~2.1.1.4; not an SLSQP row\\
+\code{engine_residual}, \code{cooling_residual} & G & numerical & roots solved $\ge100\times$ tighter than feasibility\\
+\code{solver_status}, \code{finite} & G & numerical & solver status ok; all outputs finite\\
+\code{coolant_htd} & G & literature & Nasuti--Pizzarelli Eq.~(9); always unavailable when applicable\\
+\bottomrule
+\end{longtable}
+}
+
+\code{constraint_metadata} (\code{:387}) is host policy: coking applies to coking coolants and HTD to supercritical ones; an uncatalogued propellant makes both applicable and unavailable (\code{COOLANT_UNRESOLVED}). \code{status_from_rows} (\code{:542}) returns \emph{fail} for a known finite negative margin, else \emph{unknown} if any required row is unavailable, else \emph{pass}. \code{objectives} defines \code{min_electric_package_mass} and the default \code{min_dry_mass_partial} (electric branch plus liner, lands, closeout and pintle post): ``electric feed hardware is not an engine dry mass''.
+
+\lead{Optimizer and evidence: nlp, convergence}
+\code{solve_min_mass} minimizes the selected mass subject to $I_{sp}\ge I_{sp,min}$ and every enforced margin $\ge0$; thrust is closed inside each evaluation. The constraint Jacobian uses \code{jax.jacrev} because forward mode through the nested Optimistix solves ``drops the tangent of the geometry-only min-aggregated margins''. Coking is enforced through the film-fraction lever, so the frontier is thermally limited. \code{_GuardedProblem} turns a failed trial point into a finite penalty (central-difference fallback for failed derivatives); \code{kkt_check} recomputes stationarity with non-negative least-squares multipliers (pass at $\le10^{-4}$, feasibility $\le10^{-5}$; repository thresholds) and gates \code{success}; Sobol multi-start counts basins; \code{pareto_frontier} warm-starts only from gate-passing floors. \code{convergence} implements the plan's $<0.5$\,\% station-doubling criterion at a fixed design and re-optimized; its docstring reports a coking-margin shift of about 5\,\% of scale for the fixed 13\,kN design against about 0.26\,\% in the re-optimized objective, and states the studies ``are evidence, not gates''.
+
+\lead{Requirement layer: requirements.py}
+Requirements are SP-125 sec.~2.1's nine parameters; $P_c$, $\varepsilon$ and $L^*$ are outputs. A requirement that cannot be screened ``must say so'' (Table~\ref{tab:s13-coverage}). \code{requirements_met} is \code{True}/\code{False} only when every stated requirement is ENFORCED and the solve passed, otherwise \code{None} (exit 3). Unimplemented feeds and objectives raise \code{NotImplementedError} naming the missing literature (SP-8110, SP-8081, SP-8124).
+
+{\footnotesize
+\begin{longtable}{@{}P{3.6cm}P{3.0cm}P{9.2cm}@{}}
+\caption{Coverage assigned by resolve\_requirement (requirements.py, lines 429--737).}\label{tab:s13-coverage}\\
+\toprule
+Requirement & Coverage & Mechanism and what is missing\\
+\midrule\endfirsthead
+\toprule Requirement & Coverage & Mechanism\\ \midrule\endhead
+thrust and condition & ENFORCED & outer Newton closure; sea level, vacuum (1\,Pa) or altitude via \code{atmosphere.pressure}\\
+Isp floor & ENFORCED / UNSUPPORTED & \code{isp_epsilon} on the thrust-chamber basis; \code{engine_system} basis unsupported\\
+flight duration & ENFORCED & sizes battery energy\\
+qualification duration & UNSUPPORTED & no low-cycle-fatigue model in the traced core\\
+mixture ratio & ENFORCED & nominal, pinned, or optimized with a validated O/F-dependent table\\
+burnout mass & PARTIALLY & \code{dry_mass_partial} is a lower bound; injector hardware, manifolds, valves, lines, gimbal, mounts missing\\
+envelope diameter, length & PARTIALLY & cooled chamber only; flange, injector body, dome, feed package missing\\
+coolant wall limit & UNSUPPORTED & methane/hydrogen: no real-fluid $\beta/c_p$ surface\\
+throttle, restarts, reuse cycles & UNSUPPORTED & single design point, no transient or cycle-count model\\
+\bottomrule
+\end{longtable}
+}
+
+\lead{The job contract: mdo/job.py (1209 lines), metrics.py (382), capabilities.py (69), all S02}
+\code{EngineJobSpec} (\code{job.py:676}, schema 1.1.0) is the one input every front end compiles into: workflow (analyze, optimize, pareto), architecture, models (property table, O/F mode, contour provider, optional post-solve validator, constraint policy), variables with explicit modes (fixed, free, bounded, derived, enumerate), targets with relations, objective, operating points and \code{OutputPolicy}. It refuses more than one operating point, \code{thrust_fraction}$\neq1$, maximization objectives, and \code{reference_cad} unless STEP-only with an output directory and \code{allow_partial_package=true}. The metric registry derives constraint metrics from the manifest and validates entries against the snapshot field manifest; the code registers 64 metrics (2 objective-capable, 18 target-capable, 10 unavailable with reasons, such as engine dry mass and cycles to failure). \code{JOB_CAPABILITIES} is the acceptance gate: schema 1.1.0, feed \code{electric_pump}, injector \code{pintle} (fixed slotted), cooling \code{regenerative}, parts \code{none} or \code{reference_cad}, format \code{step}, fidelity \code{L0_numerical_only}, five report kinds; \code{require_capability} refuses anything else ``without a fallback''.
+
+\subsection{Governing documents}\label{sec:s13-docs}
+{\footnotesize
+\begin{longtable}{@{}P{8.0cm}P{1.8cm}P{1.5cm}P{4.3cm}@{}}
+\caption{Documents governing S13.}\label{tab:s13-docs}\\
+\toprule
+Path & Type & Status & Content\\
+\midrule\endfirsthead
+\toprule Path & Type & Status & Content\\ \midrule\endhead
+\code{docs/subsystems/S13-engine-mdo-and-requirements/MDO_GUIDE.md} & guide & active & module map, 36-row manifest, robustness evidence, ``what is still soft''\\
+\code{docs/subsystems/S13-engine-mdo-and-requirements/DIFFERENTIABLE_ENGINE_MDO_PLAN.md} & plan & active & formulation, ten hard rules, phase tracker\\
+\code{docs/architecture/MDO_REMEDIATION_AND_OUTPUT_CONTRACT.md} & architecture & active & output contract, resolved inputs, job verbs, parity review\\
+\code{docs/architecture/IMPLICIT_RAO_JAX_MDO_ARCHITECTURE.md} & architecture & checkpoint & exact Rao/JAX provider; ``not implemented''\\
+\code{docs/program/GENERALIZATION_PLAN_THRUST_PROPELLANT_FEED.md} & plan & active & thrust/propellant/feed generalization\\
+\code{docs/program/ROADMAP_REQUIREMENTS_TO_PARTS.md} & roadmap & active & R0--R6; R0, R1 done, R3 partial\\
+\code{docs/program/COMPONENT_DATA_AND_MULTIFIDELITY_PLAN_2026-11-03.md} & plan & proposed & component evidence interface; no code\\
+\code{docs/literature/REMEDIATION_LITERATURE_TRACEABILITY.md} & provenance & active & literature vs calculation vs policy\\
+\code{docs/audits/MDO_ISSUES_AND_WORKFLOW_BLOCKERS_2026-10-16.md} & audit & active & robustness repairs, ten workflow blockers\\
+\code{docs/audits/LITERATURE_AUDIT_2026-07-24.md} & audit & historical & VERIFIED / SURROGATE / GAP per choice\\
+\code{docs/audits/DIFFERENTIABLE_MDO_PLAN_EVALUATION_2026-07-22.md} & audit & historical & plan verification, ten amendments\\
+\bottomrule
+\end{longtable}
+}
+
+\subsection{Verification}\label{sec:s13-tests}
+Each discipline block has a NumPy parity test and an AD-versus-finite-difference gate (files \code{tests/test_mdo_X.py} with X in cooling, cooling\_gate, injector, injector\_gate, pump, pump\_gate, pintle\_component, structures, skeleton). Contract suites:
+
+{\footnotesize
+\begin{longtable}{@{}P{6.4cm}P{9.4cm}@{}}
+\toprule
+Test file (tests) & What it pins\\
+\midrule\endfirsthead
+\toprule Test file & What it pins\\ \midrule\endhead
+\code{test_mdo_schema.py} & \code{jit}/\code{jacfwd}/\code{jacrev} clean, no host callbacks\\
+\code{test_mdo_constraints.py} (11) & rows unique and generated from the manifest; RP-1 uses coking, methane needs unavailable HTD; uncatalogued propellants cannot drop the wall-side gate; basis declared\\
+\code{test_mdo_engine.py} (13) & coupled solve converges; hydraulic edge closed; derivatives vs finite differences\\
+\code{test_mdo_nlp.py} (3), \code{test_mdo_nlp_robustness.py} (25) & Jacobian/gradient vs FD; feasible solve with coking; guarded trials, KKT, multi-start, Pareto isolation on analytic engines\\
+\code{test_mdo_convergence.py} (4), \code{test_mdo_bounds.py} (15), \code{test_mdo_envelope.py} (13) & non-default topologies; bounds from architecture and chart; envelope never understates and is labelled a lower bound\\
+\code{test_requirements.py} (40) & mapping and honest coverage; unknown never becomes met\\
+\code{test_mdo_job.py} (26), \code{test_mdo_metrics.py} (10), \code{test_mdo_variable_policies.py} (11), \code{test_mdo_material_map.py} (12), \code{test_mdo_of_variable.py} (11) & explicit intent; registry derived from manifest; pins and bounds govern the solve; material atomicity; O/F only with real surfaces\\
+\code{test_run_nozzle.py} (MDO cases) & dispatch validation, rao-bvp selector rules, O/F intent, 120\,s burn-time default, electric technology reaches the mission\\
+\bottomrule
+\end{longtable}
+}
+
+\textbf{Run on the working tree (\code{.venv-jax}).} Seven fast contract suites gave 76 passed, 1 failed; fifteen heavier suites (requirements, execute, job, job integrity, envelope, NLP, NLP robustness, convergence, job CLI, reference parts, resolved inputs, structures, HTD, material map, variable policies) gave 307 passed, 4 failed in 327\,s. The failing test \code{test_mdo_bounds.py::test_old_hardcoded_eps_box_was_wrong_in_both_directions} expects $\varepsilon\in[4,50]$, but \code{expansion_ratio_bounds()} returns $(5.0,50.0)$ after the uncommitted re-sourcing of the chart grid in \code{raosim/nozzle_geometry.py}. The four failures in \code{test_mdo_nlp_robustness.py} use synthetic engines whose tested region lies below $\varepsilon=5$; their $(4,7)$ bounds are intersected with the mission window, so the returned points sit at $\varepsilon\ge5$, consistent with the same change rather than a defect in the guarded optimizer.
+
+\subsection{Maturity, limitations and known defects}\label{sec:s13-limits}
+\begin{itemize}
+\item \textbf{Maturity.} Plan phases 0, 1, 8 done; 2 partial (coolant surfaces unwired); 3, 4a, 5--7, 9, 11 WIP; 4b (quasi-2-D regen) and 10 (multipoint) not started. All physics is screening; pump-efficiency shape, $\eta_{c^*}(\mathrm{TMR})$ and film effectiveness are surrogates (\code{MDO_GUIDE.md} sec.~9).
+\item \textbf{Scope.} One operating point; electric pump only; TOP/B\'ezier bulk contour; thrust blind to the contour ($C_F=\eta_{CF}C_{F,ideal}$); no line losses, film-injector hardware or fatigue life; methane and hydrogen stop at the coverage preflight unless \code{--allow-incomplete-physics} (physics then \emph{unknown}); partial-mass objective; \code{son_movable} has no host handoff; the audited 13\,kN optimum sat on bounds and edges.
+\item \textbf{Chart-domain drift.} With $\varepsilon\ge5$, the \code{constraints.py} docstring ($\varepsilon\in[4,50]$), the failing tests and the documented 13\,kN optimum at $\varepsilon=4.0$ (26.227\,kg; \code{MDO_GUIDE.md} sec.~4b) are stale; that optimum is now out of bounds and has not been re-established.
+\item \textbf{Header comments behind the code.} \code{mdo/__init__.py} and plan Phase 9 describe a 10-variable vector; the \code{schema.py} docstring lists four variables and \code{of_design_space} says ``10-dimensional''; the code has twelve plus optional O/F. \code{mass.py} describes ratio-based closeout; hoop sizing is the default.
+\item \textbf{Two material mappers.} \code{resolve_requirement} writes liner fields itself (\code{requirements.py:567-585}) rather than through \code{with_materials} as the CLI (\code{run_nozzle.py:2068-2073}) and jobs (\code{job.py:1071}) do; it records no material name and no closeout.
+\end{itemize}
+
+\subsection{Developer notes}\label{sec:s13-dev}
+A new limit or screen is a margin in its discipline block, a key in \code{EngineResult.constraints} and one \code{ConstraintSpec} with \code{basis_class} and \code{source_id}; NLP rows, \code{EngineState}, snapshots and metrics derive from it, and it needs parity and AD/FD tests. A new design variable touches \code{_DESIGN_BASE_FIELDS}, \code{DesignVector}, \code{scaled_design_space}, \code{job.VARIABLE_DIMENSIONS} and the resolved-input contract, followed by the dead-variable check of \code{MDO_GUIDE.md} sec.~8. A propellant needs a \code{PropellantSpec} with its wall-side mechanism and a sampled table in \code{catalog_v1.json} (or \code{register_propellant}). A feed architecture needs \code{requirements._SUPPORTED_FEED}, a \code{JOB_CAPABILITIES} row and a discipline block together; an objective needs a \code{MassObjective} and an \code{execute._OBJECTIVE_IMPLEMENTATIONS} entry (a mismatch raises at import). A contour model implements \code{ContourProvider} and reports failure through \code{ContourOutcome}; a requirement needs an explicit \code{RequirementCoverage} row.
+
+%======================================================================
+\section{S14: Authoritative re-evaluation, provenance, release gates and run records}\label{sec:s14}
+
+\subsection{Role in the data flow and call sites}\label{sec:s14-role}
+\begin{itemize}
+\item \textbf{Traditional run.} Evidence is loaded at \code{run_nozzle.py:4044-4062} (\code{load_evidence_manifest}, \code{release_readiness.py:372}, or \code{evaluate_release_readiness}, \code{:293}); \code{hardware_qualified=False}, the release report, \code{audit_model_registry} (\code{model_registry.py:747}) and \code{model_provenance_dict} (\code{:737}) enter the summary at \code{run_nozzle.py:4967-4974}; \code{summary.json} is written at \code{:6957}.
+\item \textbf{MDO CLI.} \code{--mdo-export} calls \code{reevaluate} (\code{postprocess.py:971}) at \code{run_nozzle.py:2301}, per feasible Pareto point (\code{:2662-2705}) or once after optimization (\code{:2756-2796}); \code{--requirements} has no S14 step.
+\item \textbf{Jobs.} \code{lrekit run} expands discrete choices (\code{expand_architectures}, \code{execute.py:814}), runs \code{execute_engine_job} or \code{execute_engine_job_set} (\code{:856}); \code{_execute_resolved_engine_job} (\code{:463}) calls \code{solve_engine_state}, \code{resolve_engine_inputs} (\code{resolved_inputs.py:369}), \code{reevaluate}, the optional contour validator and \code{_verdict} (\code{:248}), then \code{_attach_part_manifest} (\code{:401}) and \code{RunRecord.finish} (\code{run_record.py:72}).
+\end{itemize}
+
+\subsection{Inputs and outputs, including artifacts}\label{sec:s14-io}
+Inputs are the solved MDO state or design, the \code{MissionSpec}, optimizer metadata and, for jobs, the resolved job. After the snapshot report is written, \code{_attach_snapshot_handoff} (\code{postprocess.py}) appends an \code{authoritative_analysis_snapshot} block with the snapshot path and SHA-256 to every JSON file that \code{design_nozzle_v2} emitted; geometry files are not rewritten.
+
+{\footnotesize
+\begin{longtable}{@{}P{5.6cm}P{4.2cm}P{6.0cm}@{}}
+\caption{Files written by S14.}\label{tab:s14-artifacts}\\
+\toprule
+Artifact & Writer & Condition\\
+\midrule\endfirsthead
+\toprule Artifact & Writer & Condition\\ \midrule\endhead
+\code{summary.json} (traditional) & \code{run_nozzle.py:6957} & every traditional run; early on gate failures\\
+\code{thrust_chamber_profile.csv}, \code{design_report_v2.json}, \code{pintle/} & \code{design._write_v2_artifacts} (\code{design.py:2589}) & re-evaluation with an output directory\\
+\code{thrust_chamber_wall.step} (+ \code{.cad.json}) & same & MDO maps \code{--cad step|ipt|both} to \code{step}; STL is never requested\\
+\code{engine_analysis_snapshot_v1.json} & \code{postprocess._write_snapshot_report} & payload \code{authoritative}, \code{mdo_screening}, \code{comparison}\\
+\code{pareto_NNN/} & \code{_run_engine_mdo_optimize} & \code{--isp-sweep} with \code{--mdo-export}, feasible points\\
+\code{<output_dir>/<uuid>/manifest.json}, \code{job.json} & \code{RunRecord.start} & job with \code{output_policy.output_dir}; nothing otherwise\\
+\code{summary.json}; \code{resolved_inputs}, \code{snapshot}, \code{comparison}, \code{coverage} & \code{RunRecord.finish} & summary always; the other four only if listed in \code{output_policy.reports}\\
+\code{parts/engine_build_manifest.json} & \code{build.write_engine_build} & \code{parts="reference_cad"}\\
+result JSON & \code{lrekit run --out FILE} & on request\\
+\bottomrule
+\end{longtable}
+}
+
+\subsection{Modules}\label{sec:s14-modules}
+{\small
+\begin{longtable}{@{}P{3.9cm}r P{10.9cm}@{}}
+\caption{S14 modules (10); paths relative to raosim/.}\label{tab:s14-modules}\\
+\toprule
+File & Lines & Role\\
+\midrule\endfirsthead
+\toprule File & Lines & Role\\ \midrule\endhead
+\code{design.py} & 2855 & \code{design_nozzle_v2}: gated v2 workflow and artifact writer\\
+\code{mdo/execute.py} & 899 & one job end to end, four-valued verdict, enumeration and ranking\\
+\code{mdo/postprocess.py} & 1475 & MDO-to-\code{DesignInput} bridge, re-evaluation, pump sizing, snapshot report\\
+\code{mdo/snapshot.py} & 3719 & \code{EngineAnalysisSnapshot} 2.0.0, both adapters, \code{compare_snapshots}\\
+\code{mdo/resolved_inputs.py} & 741 & \code{ResolvedEngineInputs} 1.2.0; \code{crosscheck_design_input}\\
+\code{mdo/contour_validation.py} & 1598 & opt-in TOP-versus-Rao variational post-solve comparison\\
+\code{mdo/run_record.py} & 146 & atomic hashed reports and completeness manifest\\
+\code{mdo/build.py} & 363 & 27-part manifest and achieved fidelity ladder\\
+\code{model_registry.py} & 787 & 61 \code{ModelProvenance} entries; \code{audit_model_registry}\\
+\code{release_readiness.py} & 478 & 17 external-evidence release requirements; manifest loader\\
+\bottomrule
+\end{longtable}
+}
+
+\subsection{What the header comments establish}\label{sec:s14-comments}
+
+\lead{design.py}
+A one-line header (``High-level design-gated nozzle workflow''). For the current CLI, \code{design_nozzle_v2} is the authoritative re-evaluation; the sequential runner imports only its spec dataclasses and \code{throat_radius_for_target_thrust}. \code{hardware_qualified} is fixed to \code{False} (\code{design.py:427}); the MDO bridge requests \code{preliminary} mode.
+
+\lead{postprocess.py and resolved\_inputs.py}
+The bridge is ``intentionally outside the differentiated path'' and keeps three rules: shared inputs are mapped, not defaulted; unavailable physics (film-injector hardware, complete engine mass) stays unavailable; the authoritative result and artifacts stay attached. The code adds two facts the header omits. When a versioned \code{EngineState} exists (optimizer, Pareto and job paths), the solved $\gamma$, $T_c$, $R$ and ideal c-star are pinned into \code{design_nozzle_v2} as a \code{PinnedChamberState} and $\eta_{c^*}$ is frozen from the MDO state, so the authoritative pass does not recompute thermochemistry; the \code{--engine-mdo} path passes a legacy \code{EngineResult} without that state, and there the host resolves its own (\code{_pinned_chamber_state_from_mdo}, \code{postprocess.py:762}). And \code{to_design_input} refuses \code{son_movable} (\code{:203-214}). \code{ResolvedEngineInputs} (``remediation item 9'') resolves every shared convention once, in SI, with an explicit \code{None} and reason for a missing value; \code{crosscheck_design_input} turns handoff drift into a named warning and \code{input_integrity=fail}.
+
+\lead{snapshot.py}
+``Missing physics is data, not zero'': unavailable values are \code{SnapshotValue(value=None, availability_reason=...)}, and MDO chamber and injector mass placeholders are never exported as zero mass. \code{compare_snapshots} compares common scalars and normalized profiles across eight sections with \code{abs_tol}$=10^{-9}$, \code{rel_tol}$=10^{-6}$ by default and exact equality for categorical fields.
+
+\lead{contour\_validation.py}
+Not a second inner-loop provider: after optimization it may solve the independent Rao variational/MOC problem at the solved state and fails closed. A convergence-domain artifact must cover the exact context, the solve must pass numerical and MOC closure gates, an independently refined BDE solve must agree at common coordinates, Rao (1999) Eq.~(5) must be valid, performance must come from the direct C--D--E surface integral and every discrepancy must be finite. Missing evidence is \emph{unknown}, an invalid region or exceeded tolerance is \emph{fail}, and the TOP wall is never substituted. The four tolerances are ``project screening policy, not literature qualification limits''; the validator runs only when a job names it.
+
+\lead{execute.py and run\_record.py}
+The flow is ``resolve job $\rightarrow$ solve $\rightarrow$ EngineState v2 $\rightarrow$ resolved inputs $\rightarrow$ authoritative traditional parity pass $\rightarrow$ snapshot $\rightarrow$ targets $\rightarrow$ verdict''. The verdict is four-valued because non-convergence is not evidence of impossibility and an unavailable model is not evidence of soundness (list below). Gates evaluated only by the MDO and gates owned by the traditional pass are merged per key: \emph{fail} dominates, absence gives \emph{unknown}. \code{RunRecord} separates report completeness from feasibility (``a complete report can describe a failed solve''), writes each JSON through a temporary file and atomic replace, records its SHA-256 in \code{manifest.json}, and sets \code{hardware_release: false}.
+
+\code{_verdict} (\code{execute.py:248-272}) reduces the statuses in this order:
+\begin{enumerate}[itemsep=0pt]
+\item SOLVER\_FAILED (exit 4) if \code{workflow}, \code{numerical}, \code{input_integrity} or \code{report_publication} is \emph{fail};
+\item CANDIDATE\_VIOLATES (1) if any other status is \emph{fail} or a target fails;
+\item INDETERMINATE (3) if a required key is missing (\code{workflow}, \code{optimizer}, \code{numerical}, \code{physics}, \code{requirements}, \code{workflow_readiness}, \code{input_integrity}, \code{requirement_coverage}, \code{model_consistency}), a status is neither \emph{pass} nor \emph{not\_applicable}, or a target is unknown;
+\item MET (0) otherwise.
+\end{enumerate}
+
+\lead{build.py}
+Two competing build paths once let the repository report a ``complete'' ledger for an engine missing whole subsystems; this module enumerates the parts, each built and measured or unavailable with a reason, ``never absent and never zero''. The code lists 27 parts, from liner and closeout through pumps, battery, valves, gimbal and harness. Fidelity runs \code{L0_NUMERICAL_ONLY} to \code{L5_QUALIFIED_HARDWARE}; it is achieved, not requested, set by the least complete part, and L5 ``is never awarded automatically''. A path-and-hash artifact is recorded as unverified at L0.
+
+\lead{model\_registry.py and release\_readiness.py}
+The registry ``deliberately distinguishes a published equation from a repository heuristic''; a citation does not validate a particular use. \code{audit_model_registry} fails on a missing declared local source, a published entry without one, empty metadata, or a repository-sourced entry not labelled heuristic, policy or schedule. The release module keeps numerical checks and CAD topology apart from physical release: 17 requirements (ten engine, two injector, two regenerative wall, three pump), each needing a record with result, configuration identifier, artifact SHA-256, reviewer and date. The default report is blocked, and the module ``never sets \code{hardware_qualified}''.
+
+\subsection{Governing documents}\label{sec:s14-docs}
+{\footnotesize
+\begin{longtable}{@{}P{8.0cm}P{1.8cm}P{1.5cm}P{4.3cm}@{}}
+\caption{Documents governing S14.}\label{tab:s14-docs}\\
+\toprule
+Path & Type & Status & Content\\
+\midrule\endfirsthead
+\toprule Path & Type & Status & Content\\ \midrule\endhead
+\code{docs/audits/INPUT_EXECUTION_SMOKE_2026-09-09.json} & data & historical & real \code{lrekit run}: CANDIDATE\_VIOLATES, 5 hashes verified, 17 differences, 79 missing comparisons\\
+\code{docs/audits/INPUT_EXECUTION_INTEGRITY_2026-09-09.md} & remediation & active & report package and manifest contract, roughness migration\\
+\code{docs/architecture/MDO_REMEDIATION_AND_OUTPUT_CONTRACT.md} & architecture & active & snapshot contract, verdict codes, metrics, part manifest, parity gaps\\
+\code{docs/architecture/MODEL_REGISTRY.md} & architecture & active & registry fields, audit rules, validation ladder\\
+\code{docs/architecture/PHYSICAL_RELEASE_GATES.md} & architecture & active & three claims, \code{lrekit.release_evidence.v1}, CAD release rule\\
+\code{docs/audits/CONTRACT_INTEGRITY_REMEDIATION_2026-09-05.md} & remediation & historical & W01--W04; W04 fake STEP earning L2\\
+\bottomrule
+\end{longtable}
+}
+
+\subsection{Verification}\label{sec:s14-tests}
+{\footnotesize
+\begin{longtable}{@{}P{6.4cm}P{9.4cm}@{}}
+\toprule
+Test file (tests) & What it pins\\
+\midrule\endfirsthead
+\toprule Test file & What it pins\\ \midrule\endhead
+\code{test_mdo_execute.py} (20) & verdict, inputs and snapshot from one call; a failed solve is not a violation; unknown never MET; failure outranks unknown; missed target violates; Pareto refused; only MET candidates ranked\\
+\code{test_job_execution_integrity.py} (20) & ambient reaches both paths; unsupported requirements refused; optimizer gets pins and bounds; handoff drift visible; manifest hashes and job replay; failed publication consistent\\
+\code{test_job_reference_parts.py} (6) & \code{reference_cad} STEP lands in the run directory with an honest partial manifest\\
+\code{test_mdo_snapshot.py} (19), \code{test_mdo_resolved_inputs.py} (15), \code{test_mdo_roughness_contract.py} (7) & end-to-end bridge; one resolved input definition; absolute roughness through marches and handoff\\
+\code{test_mdo_contour_validation.py} (20) & fail-closed post-solve validation outcomes\\
+\code{test_mdo_build.py} (11) & all parts appear; unavailable parts carry no mass; path-only artifacts earn no fidelity; L5 never awarded\\
+\code{test_model_registry.py} (13), \code{test_release_readiness.py} (10) & registry audit; default release blocked; complete evidence passes the software gate only; SHA-256 and configuration identity checked\\
+\code{test_design_v2.py} (47) & the v2 workflow used as the authoritative pass\\
+\bottomrule
+\end{longtable}
+}
+\code{RunRecord} has no direct unit test. The S14 suites in the runs of Section~\ref{sec:s13-tests} all passed; snapshot, contour-validation and design-v2 suites were not re-run.
+
+\subsection{Maturity, limitations and known defects}\label{sec:s14-limits}
+\begin{itemize}
+\item \textbf{The authoritative pass is another screening model:} preliminary mode, constant-property or pinned thermochemistry; held-out CEA/CoolProp, quasi-2-D thermal checks and correction iterations remain TODO (Phase 11).
+\item \textbf{MET is effectively unreachable for jobs.} \code{_model_consistency} returns \emph{unknown} whenever any compared field differs or is not comparable, and the comparison applies $10^{-9}$/$10^{-6}$ numerical tolerances to two different screening models. The 2026-09-09 smoke run recorded 17 differences and 79 missing comparisons; \code{MDO_REMEDIATION_AND_OUTPUT_CONTRACT.md} reports about 42\,\% peak wall temperature, 6.5\,\% jacket pressure drop and 22\,\% radius-profile differences at its representative point. Until field-specific tolerances exist (its sec.~11, item 1), a job is at best INDETERMINATE.
+\item \textbf{Release evidence ignored on MDO paths.} The MDO dispatch (\code{run_nozzle.py:3830-3835}) precedes the \code{--require-release-evidence} checks (\code{:3938-3945}) and evidence loading (\code{:4044}), and \code{to_design_input} carries neither \code{release_evidence_manifest} nor \code{configuration_id}; the flags are silently ignored on all three MDO branches and the embedded report always shows the default blocked state.
+\item \textbf{Registry coverage.} None of the 61 entries covers an MDO surrogate (pump efficiency, film effectiveness, battery epigraph, HTD, closeout sizing); their provenance is only in the manifest and comments.
+\item \textbf{Part package always partial.} \code{execute._PART_ARTIFACT_KEYS} is empty, so the uniform-wall \code{thrust_chamber_wall.step} is an unattributed artifact; no part reaches L1 or above.
+\item \textbf{Capability and enumeration drift.} \code{JOB_CAPABILITIES} names \code{raosim.mdo.feed} as the \code{electric_pump} implementer; no such module exists. \code{job.ENUMERABLE_SELECTIONS} lists \code{channel_count}, but nothing reads it; \code{expand_architectures} enumerates only propellant, liner and closeout materials plus any variable requested in \code{enumerate} mode, so there is no channel-count axis.
+\item \textbf{Documentation drift.} \code{MDO_REMEDIATION_AND_OUTPUT_CONTRACT.md} states EngineState schema 2, inputs 1.1.0 and 59 metrics (code: 3, 1.2.0, 64); the taxonomy's ``its own thermochemistry'' holds only for \code{--engine-mdo}.
+\end{itemize}
+
+\subsection{Developer notes}\label{sec:s14-dev}
+A new MDO-to-host mapping goes first into \code{resolve_engine_inputs} (it owns conventions), then into \code{to_design_input}, with \code{crosscheck_design_input} naming any drift. A new compared quantity needs \code{SNAPSHOT_FIELD_MANIFEST}, both snapshot adapters and, if targetable, a metric. A new status goes into \code{_execute_resolved_engine_job} and, if mandatory, \code{_REQUIRED_STATUS_KEYS}, keeping the order of \code{_verdict}. Report kinds need a \code{JobCapability} row and a \code{RunRecord.finish} payload; parts a \code{PartSpec}, and attribution a \code{_PART_ARTIFACT_KEYS} entry plus a producer validation record; models a \code{ModelProvenance} entry; evidence items a \code{ReleaseRequirement}.

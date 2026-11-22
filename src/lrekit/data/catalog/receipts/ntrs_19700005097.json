@@ -1,0 +1,69 @@
+{
+  "source_id": "ntrs_19700005097",
+  "acquired_at_utc": "2026-11-04T00:33:58.856275+00:00",
+  "evidence_kind": "published_experimental_report",
+  "status": "ACQUIRED",
+  "files": [
+    {
+      "path": "raw/ntrs_19700005097/ntrs_metadata.json",
+      "bytes": 2561,
+      "sha256": "f68dcc14eb1e14a4b0a27b9d0875cdd66bbd7fd6b88855befffdf15711813ff3",
+      "origin": "publisher_metadata",
+      "requested_url": "https://ntrs.nasa.gov/api/citations/19700005097",
+      "resolved_url": "https://ntrs.nasa.gov/api/citations/19700005097",
+      "headers": {
+        "Content-Type": "application/json; charset=utf-8",
+        "ETag": "W/\"a01-zcJ6ALfdYXxYLchxkF93YwrxSWQ\"",
+        "Last-Modified": null
+      }
+    },
+    {
+      "path": "raw/ntrs_19700005097/source.pdf",
+      "bytes": 835380,
+      "sha256": "c0c044f6b16aaeaabbd7327eb5269027085d595b6d1c382b3e7b979380516df1",
+      "origin": "publisher_report_pdf",
+      "requested_url": "https://ntrs.nasa.gov/api/citations/19700005097/downloads/19700005097.pdf",
+      "resolved_url": "https://ntrs.nasa.gov/api/citations/19700005097/downloads/19700005097.pdf",
+      "headers": {
+        "Content-Type": "application/pdf",
+        "ETag": "\"1ab82d9daeca3f251255bedc5a87c644\"",
+        "Last-Modified": "Thu, 06 Aug 2020 19:08:12 GMT"
+      }
+    },
+    {
+      "path": "derived/ntrs_19700005097/source.txt",
+      "bytes": 26540,
+      "sha256": "ac29c6671af9ffd705ec91958d11f62846336017e2d831060bc1fe6042a53060",
+      "origin": "unreviewed_pdf_text_derivative"
+    }
+  ],
+  "review_state": "NOT_REVIEWED_FOR_TRAINING",
+  "training_eligible": false,
+  "hardware_qualified": false,
+  "limitations": [
+    "Legacy source-specific pintle geometry and propellants; locate case-level measurements before proposing fitted targets."
+  ],
+  "publisher_title": "Extend the design criteria for the coaxial pintle injector to higher chamber pressures and to gaseous fuel  Monthly progress report, 2-25 jul. 1969",
+  "publisher_copyright": {
+    "thirdPartyPermissionsProduced": false,
+    "disclosedToPublic": false,
+    "containsIndication": false,
+    "publisherPermissionOrRightsToDistribute": false,
+    "belongsToUsGov": false,
+    "determinationType": "GOV_PUBLIC_USE_PERMITTED",
+    "thirdPartyContentCondition": "NOT_SET",
+    "belongsToContractor": false,
+    "disclosedInvention": false,
+    "submissionId": 19700005097,
+    "containsThirdPartyMaterial": false,
+    "belongsToPublisher": false,
+    "id": "214b12763b264a22928cfcc9ec798476",
+    "belongsToAuthors": false
+  },
+  "publisher_distribution": "PUBLIC",
+  "pdf_info": "Title:           \nSubject:         \nKeywords:        \nAuthor:          \nProducer:        Pdf.Capture version 5.2\nCreationDate:    D:00000101000000Z\nModDate:         Wed Jan 12 16:26:24 2005 EST\nCustom Metadata: yes\nMetadata Stream: yes\nTagged:          no\nUserProperties:  no\nSuspects:        no\nForm:            none\nJavaScript:      no\nPages:           17\nEncrypted:       no\nPage size:       670 x 895 pts\nPage rot:        0\nFile size:       835380 bytes\nOptimized:       yes\nPDF version:     1.2\n",
+  "text_extraction": {
+    "status": "DERIVATIVE_TEXT_UNREVIEWED",
+    "warning_excerpt": ""
+  }
+}

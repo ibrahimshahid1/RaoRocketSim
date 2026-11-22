@@ -18,7 +18,7 @@ You are **Opus A**, the independent final auditor for the 2026-10-16 LREKit know
 - Late gaps added by F: G33 (SP-125 p.119/120), K7 (single-document model comparison links) and K8 (rejected candidates without a corrected record).
 
 ## What to audit
-1. **Knowledge-system code diff.** `git status` / `git diff` for `.gitignore`, `knowledge/**` (kg/, tools/, tests/, workflows/), and `docs/LITERATURE_REQUESTS.md`. New untracked modules matter too. `knowledge/reports/KNOWLEDGE_GRAPH_COMPLETION_2026-10-16.md` lists F's 15 journaled repairs (FIXED_VERIFIED rows in `knowledge/reports/agentic_work_journal.jsonl`). For each repair, check that behaviour actually changed and that a regression test fails without it where practical (read the test and the code; you do not need to revert code).
+1. **Knowledge-system code diff.** `git status` / `git diff` for `.gitignore`, `knowledge/**` (kg/, tools/, tests/, workflows/), and `docs/literature/LITERATURE_REQUESTS.md`. New untracked modules matter too. `knowledge/reports/KNOWLEDGE_GRAPH_COMPLETION_2026-10-16.md` lists F's 15 journaled repairs (FIXED_VERIFIED rows in `knowledge/reports/agentic_work_journal.jsonl`). For each repair, check that behaviour actually changed and that a regression test fails without it where practical (read the test and the code; you do not need to revert code).
 2. **Fresh checkout proof.** Run `.venv-jax/bin/python knowledge/tools/fresh_checkout_check.py --output /private/tmp/claude-501/-Users-ibrahimshahid-Documents-Github-RaoRocketSim/b769a29f-6c0c-4b07-8fd9-06e5cdf5f611/scratchpad/auditA/fresh.json` once and confirm proof PASS. Check that the listed files to add make sense (no secrets, no huge generated binaries).
 3. **Scientific promotions against originals.** Independently verify a sample of at least 12 F-transcribed SOURCE_STATES objects against the original pages, across P1–P5. Look them up in `knowledge/equations.json`, `claims.json`, `entities.json` and `validity.json` (F-transcribed records carry `transcribed_by.role == "F"`). The sample must include:
    - Son 2017 Eq. (1) (document `DOC_DOI_10_2514_1_B36301`, PDF p.2) — this completes the traced flow PDF page → Docling candidate → reviewed equation → graph → model review → query;
@@ -48,7 +48,7 @@ You are **Opus A**, the independent final auditor for the 2026-10-16 LREKit know
    - `KNOWLEDGE_INTEGRITY_TESTS.md`
    - `CORPUS_COMPLETENESS.json`, `EQUATION_FIDELITY_AUDIT.json`, `MODEL_SOURCE_AUDIT.json`
    - the P1/P2/P3 comparison records in `knowledge/workflows/results/agentic-2026-10-16/`
-   - `docs/LITERATURE_REQUESTS.md` (new sections at the end)
+   - `docs/literature/LITERATURE_REQUESTS.md` (new sections at the end)
    Spot-check a few gap entries (file:line and PDF page) for accuracy.
 6. **Negative paths.** Confirm tests exist and pass for: rejected OCR/parser candidates, stale source, superseded equation, unsupported citation, missing original, unresolved symbol, relationship collision, interrupted Docling job, self-verification refusal and refuted-record exclusion. Name the test functions; do not write new tests.
 7. **Process integrity.** Check the following against the role rules in `knowledge/workflows/AGENTIC_ROLES_2026-10-16.md`:

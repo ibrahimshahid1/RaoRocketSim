@@ -1,0 +1,66 @@
+\section{G4: A differentiable forward-wall net}
+\label{sec:g4}
+\subsection{Current state and governing results}
+The JAX layer differentiates converged solves implicitly. The installed Optimistix
+0.0.11 defaults to its implicit adjoint; this was checked in the library documentation
+and source, and the library itself is described in \cite{optimistix}.
+
+Three things are missing: the JAX start line (\code{build_start_line}) raises
+\code{NotImplementedError}; the sensitivity API refuses exact-D attachment and wall
+coupling; and \code{lax.while_loop} is not reverse-mode differentiable
+\cite{jaxwhileloop}. Fixed-bound \code{lax.scan} \cite{jaxscan,bradbury2018} is the
+standard alternative; using it is our design choice, to be tested in N1.
+
+For $F(z,x)=0$ with invertible $F_z$, $F_z\,\dd z/\dd x=-F_x$, and only linear solves
+are needed \cite[PDF pp.~3--4, Eqs.~1--3]{blondel}. The error from an approximate root
+is bounded under conditioning assumptions (PDF p.~6).
+
+An event time $t^*$ with $g(z(t^*))=0$ has
+$\dd t^*/\dd\xi=-(\dd g/\dd t)^{-1}(\partial g/\partial z)(\dd z/\dd\xi)$ for a
+transversal first crossing \cite[PDF p.~4, Eqs.~9--11]{chen2021}. This fails once the
+order of events changes.
+
+Tangents of a discontinuous solution need a shock-position equation
+\cite[PDF pp.~5--6, Lemma~2.6]{herty2021}. Giles and Ulbrich's Part~1 gives it as
+Eq.~1.4 \cite[printed pp.~884--885]{giles2010a}; that pointer comes from an
+unarchived copy. Both results are scalar and one-dimensional.
+
+\textbf{Evidence (Section~\ref{sec:exp-derivatives}).} E07b: a diagnostic exit-limited
+harness matches the BVP to $|\Delta C_F|/C_F=8.7\times10^{-6}$. This is code-to-code
+agreement with a shared start line; the production march fails (E07). E12: inside
+event-free $\theta_B$ windows the forward-mode derivative passes the Taylor test
+(remainder slope 2.00--2.09), but E12 is FAIL. $J_1$ and $J_3$ jump 48 and 54 times
+without a row-count change; only 12 are traced to the $\theta_3=\max(\theta_3,0)$
+clamp, leaving 36 and 42 unexplained. The post-hoc E12b fails $J_1$ at event-free
+midpoints. N2 must explain or record these jumps before recorded flags can define
+derivative validity; 70 branch guards are inventoried.
+
+\subsection{Approaches and choice}
+\begingroup\footnotesize
+\par\addvspace{\LTpre}{\centering\begin{tabular}{@{}P{0.28\linewidth}P{0.53\linewidth}P{0.12\linewidth}@{}}
+\toprule\textbf{Approach} & \textbf{Assessment} & \textbf{Verdict}\\\midrule
+Finite differences of the host net & Exact model, noisy at events & reference\\
+JAX replay of a host topology tape with implicit unit processes & Exact discrete derivative inside an event-free window; events explicit & \textbf{N1}\\
+Smoothed switches & Smooth but biased & reject\\
+Adjoint characteristics \cite{ancourt2023} & Research level; shock handling unclear & defer\\
+Differentiable fixed-grid CFD \cite{bezgin2023} & AD through a capturing scheme; plain AD lacks the shock-position terms of the tangent (scalar 1-D theory \cite{herty2021,giles2010a}) & reference\\
+Surrogate of forward outputs & Fast; needs declared error bounds & M0a\\
+\bottomrule
+\end{tabular}\par}\addvspace{\LTpost}
+\endgroup
+\textbf{Plan.} N0 records a topology tape: parents, row widths, raw and special
+insertions, wall and axis events, exit truncation, and every branch-guard flag. N1
+replays it in JAX with implicit unit processes and a differentiable start line (Sauer,
+then K0b). N2 labels a derivative \emph{valid} only if no recorded flag changes within
+the step and the E12 jumps are accounted for; otherwise it is \emph{one-sided} or
+\emph{unavailable}.
+
+\begingroup\footnotesize
+\par\addvspace{\LTpre}{\centering\begin{tabular}{@{}P{0.09\linewidth}P{0.36\linewidth}P{0.30\linewidth}P{0.17\linewidth}@{}}
+\toprule\textbf{ID} & \textbf{Numerical verification} & \textbf{Benchmark agreement} & \textbf{Physical validation}\\\midrule
+N0 & Exit-limited march bit-identical on the oracle (harness done, E07b; production opt-in pending); near-axis closure (MOC-27); weak-coalescence policy (MOC-31) & NASA M3.5Perf parity (existing) & none\\
+N1 & Parity with N0 on the same tape to $10^{-10}$; Taylor order 2 over $\ge2$ decades; finite differences on the oracle & n/a & none\\
+N2 & All E12 jumps explained or recorded; a label at every recorded change & n/a & none\\
+\bottomrule
+\end{tabular}\par}\addvspace{\LTpost}
+\endgroup

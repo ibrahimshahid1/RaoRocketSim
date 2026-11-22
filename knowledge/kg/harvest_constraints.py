@@ -107,21 +107,26 @@ def _parse_manifest(text: str) -> list[dict]:
 
 def _load_manifest():
     try:
-        from raosim.mdo.constraints import CONSTRAINT_MANIFEST  # type: ignore
+        from lrekit.optimization.constraints import CONSTRAINT_MANIFEST  # type: ignore
         return [dict(name=s.name, engine_key=s.engine_key, kind=s.kind, optimizer_role=s.optimizer_role,
                      category=s.category, scale=s.scale, units=s.units, source_id=s.source_id,
                      applicability=s.applicability, basis_class=getattr(s, "basis_class", None))
                 for s in CONSTRAINT_MANIFEST], "import"
     except Exception:
-        text = (REPO_ROOT / "raosim/mdo/constraints.py").read_text()
+        from .repository_layout import Layout
+        text = (REPO_ROOT / Layout(REPO_ROOT).path("raosim/mdo/constraints.py")).read_text()
         return _parse_manifest(text), "source_ast_parse"
 
 
 def harvest() -> dict:
+    from .repository_layout import Layout
+    layout = Layout(REPO_ROOT)
+    constraints_file = layout.path("raosim/mdo/constraints.py")
+    nlp_file = layout.path("raosim/mdo/nlp.py")
     now = datetime.now(timezone.utc).isoformat()
     rows, how = _load_manifest()
     docs = load("manifest")
-    src_text = (REPO_ROOT / "raosim/mdo/constraints.py").read_text().splitlines()
+    src_text = (REPO_ROOT / constraints_file).read_text().splitlines()
     out = []
     for i, r in enumerate(rows):
         if r["kind"] == "availability_gate":
@@ -168,18 +173,18 @@ def harvest() -> dict:
             "subsystem": {"thermal": "cooling", "feed": "pump", "aerodynamics": "performance", "geometry": "nozzle_contour",
                           "structures": "structures", "injector": "injector", "manufacturing": "manufacturing",
                           "requirement": "requirements", "numerical": "mdo", "properties": "thermochemistry"}.get(r["category"], "mdo"),
-            "enforced_by": "raosim/mdo/nlp.py (SLSQP hard rows)" if rkind == "optimizer_constraint" else
-                           ("raosim/mdo/nlp.py (mandatory post-solve gate, no relaxation)" if rkind in ("postsolve_gate", "applicability_gate") else "reported only"),
-            "file": "raosim/mdo/constraints.py", "line": line,
+            "enforced_by": nlp_file + " (SLSQP hard rows)" if rkind == "optimizer_constraint" else
+                           (nlp_file + " (mandatory post-solve gate, no relaxation)" if rkind in ("postsolve_gate", "applicability_gate") else "reported only"),
+            "file": constraints_file, "line": line,
             "detail": f"{r['category']} {r['kind']} row; optimizer_role={r['optimizer_role']}; applicability={r['applicability']}",
             "quantity": r["engine_key"] or r["name"], "model_ids": [], "quantity_ids": [],
             "provenance_id": node_id("PROV", f"constraint manifest {r['name']}"), "harvest_method": how, "harvested_at": now,
         })
-    save("requirements", out, meta={"generated_at": now, "source": "raosim/mdo/constraints.py CONSTRAINT_MANIFEST", "n": len(out), "method": how})
+    save("requirements", out, meta={"generated_at": now, "source": constraints_file + " CONSTRAINT_MANIFEST", "n": len(out), "method": how})
     prov = {p["id"]: p for p in load("provenance")}
     for r in out:
         prov[r["provenance_id"]] = {"id": r["provenance_id"], "type": "ProvenanceRecord", "kind": "CODE_STATES",
-                                    "asserted_by": f"raosim/mdo/constraints.py:{r['line']}", "subject": r["id"],
+                                    "asserted_by": f"{constraints_file}:{r['line']}", "subject": r["id"],
                                     "statement": f"CONSTRAINT_MANIFEST row {r['name']} optimizer_role={r['optimizer_role']}"}
     save("provenance", prov.values(), meta={"generated_at": now, "n": len(prov)})
     from collections import Counter

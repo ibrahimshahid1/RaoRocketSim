@@ -1,0 +1,337 @@
+{
+ "packet": "V-RAD21-p027-029",
+ "kind": "verification",
+ "document_id": "DOC_DOI_10_1080_13647830_2021_1937702",
+ "source_pdf": "propulsion_texts/pintle_injector/radhakrishnan2021.pdf",
+ "source_sha256": "b2550805f9cd9837fcfac67243812665a3a3be832fb32d018638722c63c2c784",
+ "pages": [
+  27,
+  29
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 27,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1080_13647830_2021_1937702/p0027.png",
+   "sha256": "cd49ad00cb8ee966e6f89e5a858e455d17758b0bcafa9c7430d9f36c4df1bd66",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 28,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1080_13647830_2021_1937702/p0028.png",
+   "sha256": "af22dce88f0011c93bf42352b62e9d7536bfaaee1fbe6c075b9274bf6040d935",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 29,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1080_13647830_2021_1937702/p0029.png",
+   "sha256": "559c3457674a0c420fd89d9dae242d9132bf1cf6f9c3a67e3c98fcff59028bfa",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_25650f93a40c0f65542fae86",
+  "ENR_d2ebb2aae68eb9be63661379",
+  "ENR_db06855f101b5184d70c480b"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_d995ae09c9fd0d576e896f44",
+   "kind": "figure",
+   "pages": [
+    27
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [
+    "Figure 20. Mass fraction of OH and evaporation contours of varied at fixed θpt = 20°."
+   ],
+   "bbox": [
+    {
+     "l": 95.64176735529726,
+     "t": 632.6147186131701,
+     "r": 396.75116731268383,
+     "b": 386.2897324677165,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/2\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_d2ebb2aae68eb9be63661379",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_13647830_2021_1937702/b2550805f9cd-p27-27-84cfb060ff8daff2c3eb358a4b7dc90ca02e6c9a8ec1a252d3dae17ebdea7f45.json",
+   "raw_sha256": "f29cd5fa6196f02b6bba1c5a92a7c3c6125480e8d63bdc6df24b4c601134c2c1",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_6d26636b90d42ce25f3ff9c7",
+   "kind": "figure",
+   "pages": [
+    28
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [
+    "Figure 21. Streamline and temperature contours of varied θpt at fixed Lopen = 0.2mm."
+   ],
+   "bbox": [
+    {
+     "l": 83.00671279814561,
+     "t": 633.3036527287143,
+     "r": 408.7854014091955,
+     "b": 437.50042288698546,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/2\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_25650f93a40c0f65542fae86",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_13647830_2021_1937702/b2550805f9cd-p28-28-5a1e7902f36a2d96069d747abbe0350f9e1ecb6cfb196e13c2936e997abc2220.json",
+   "raw_sha256": "98b3578dfc3070a863ecb6d4f08062feff9944f55417655bbc1fb099f6824020",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_9da313c652858d0c84ad2fe9",
+   "kind": "figure",
+   "pages": [
+    29
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [
+    "Figure 22. Mass fraction of OH and evaporation contours of varied θpt at fixed Lopen = 0.2mm."
+   ],
+   "bbox": [
+    {
+     "l": 83.12226984340653,
+     "t": 632.8570559432787,
+     "r": 409.58151860855656,
+     "b": 415.4560570511146,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/2\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_db06855f101b5184d70c480b",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_13647830_2021_1937702/b2550805f9cd-p29-29-1e677e06473801ae9416a00af9ad1f4b45daa530264909567d5257ea03baa537.json",
+   "raw_sha256": "799f66f7de86d0069a2db632f364603a4d482bfd6ba0206bada6b5e8c186d3d1",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_f9ba0aa3e863859e0a1a68f5",
+   "kind": "figure",
+   "pages": [
+    29
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/1",
+   "caption_text": [
+    "Figure 23. Characteristic velocity and combustion efficiency for varied Lopen at fixed θpt."
+   ],
+   "bbox": [
+    {
+     "l": 82.64102845307013,
+     "t": 377.8538238290974,
+     "r": 409.64379905694506,
+     "b": 263.4711838451836,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/29\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_db06855f101b5184d70c480b",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_13647830_2021_1937702/b2550805f9cd-p29-29-1e677e06473801ae9416a00af9ad1f4b45daa530264909567d5257ea03baa537.json",
+   "raw_sha256": "799f66f7de86d0069a2db632f364603a4d482bfd6ba0206bada6b5e8c186d3d1",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [
+  {
+   "id": "CLM_DOI_10_1080_13647830_2021_1937702_202BF3B5",
+   "store": "claims",
+   "type": "Claim",
+   "page": 29,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The overall comparison shows that the pintle injector design with L_open > 0.10, θpt ≤ 20°, and TMR ≥ 1.0 had better performance (characteristic velocity / combustion efficiency) than the other cases.",
+   "quote": "with _L_ open _>_ 0.10, _θpt_ ≤ 20°, and TMR ≥ 1.0 had a better performance than the other",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_D2_EVAPORATION"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 29
+    }
+   ]
+  },
+  {
+   "id": "CLM_DOI_10_1080_13647830_2021_1937702_7C250FB5",
+   "store": "claims",
+   "type": "Claim",
+   "page": 27,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Evaporation depends mainly on the temperature difference between droplets and the surrounding gas and on the fuel vapour concentration; the velocity difference influences the mass transfer coefficient, and micro-mixing does not influence droplet evaporation directly.",
+   "quote": "velocity difference influence the mass transfer coefficient. And also micro-mixing does",
+   "confidence": "medium",
+   "model_ids": [
+    "MODEL_INJECTOR_D2_EVAPORATION"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 27
+    }
+   ]
+  },
+  {
+   "id": "CLM_DOI_10_1080_13647830_2021_1937702_8E849220",
+   "store": "claims",
+   "type": "Claim",
+   "page": 28,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The rate of evaporation depends on the temperature difference and relative velocity between droplet and surrounding gas; as θpt increased the relative velocity decreased, which decreased the rate of evaporation and reduced molecular diffusion.",
+   "quote": "increased, the relative velocity decreased, which decreased the rate of evaporation. Therefore, the molecular diffusion was reduced, which results a low temperature and low OH",
+   "confidence": "medium",
+   "model_ids": [
+    "MODEL_INJECTOR_D2_EVAPORATION"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 28
+    }
+   ]
+  },
+  {
+   "id": "CLM_DOI_10_1080_13647830_2021_1937702_9328FF40",
+   "store": "claims",
+   "type": "Claim",
+   "page": 27,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "A higher evaporation rate was observed in the lower pintle opening case because the smaller droplets evaporated quickly by the temperature difference; the evaporation rate decreased slightly with droplet size in the high pintle opening cases.",
+   "quote": "evaporated quickly by the temperature difference and the evaporation rate was decreased",
+   "confidence": "medium",
+   "model_ids": [
+    "MODEL_INJECTOR_D2_EVAPORATION"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 27
+    }
+   ]
+  }
+ ],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_DOI_10_1080_13647830_2021_1937702#c00037",
+   "page_start": 27,
+   "page_end": 27,
+   "section": "**A detailed modelling on spray atomisation and** **combustion of LOX/GCH4 in variable area pintle** **injector rocket engines** > Nomenclature",
+   "text": "26 _K. Radhakrishnan_ et al.\n\nFigure 20. Mass fraction of OH and evaporation contours of varied at fixed _θpt_ = 20°.\n\n1, which was the opposite for Cases 2–4 due to larger sized of droplets. Because of larger\nsize of droplets in Case 3 and 4, two mass fraction OH gradients were observed, which is\nan evident for obtaining the two high-temperature gradient (A and B) in Figure 20(c,d). In\naddition, the evaporation of LOX droplets for all cases is shown in Figure 20. The LOX\nwas evaporated in a shortest distance for lower pintle opening case than the higher pintle\nopening cases. Also, the larger size of droplets might rebound from the chamber wall. This\ncaused the two temperature gradient at the centre of the chamber as shown in the temperature contour. The evaporation depends mainly on a temperature difference between\nthe droplets and surrounding gaseous medium and concentration of fuel vapour, and the\nvelocity difference influence the mass transfer coefficient. And also micro-mixing does\nnot influence the evaporation of the droplets directly. Figure 20 shows the higher evaporation rate was observed in the lower pintle opening case due to the smaller droplets that\nevaporated quickly by the temperature difference and the evaporation rate was decreased\nslightly with the size of droplets by the pintle opening distance in the high pintle opening\ncases.\n\n5.2.2. _Effect of θpt_ = _0°, 20°, 40° at fixed Lopen_"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1080_13647830_2021_1937702#c00038",
+   "page_start": 27,
+   "page_end": 27,
+   "section": "**A detailed modelling on spray atomisation and** **combustion of LOX/GCH4 in variable area pintle** **injector rocket engines** > Nomenclature",
+   "text": "To study the pintle tip angle effect on the spray combustion characteristics, three different\npintle tip angles ( _θpt_ = 0°, 20°, 40°) were considered. This angle changes the injection\ndirection of LOX into the chamber. Figures 21 and 22 show the streamline, temperature, and mass fraction of OH, DPM particle of LOX evaporation. The size of IRZ was\nincreased and the size of ORZ was increased with _θpt_ . Also, the injection velocity of\nLOX was increased due to the decreased area of LOX exit with the _θpt_ and thereby the"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1080_13647830_2021_1937702#c00039",
+   "page_start": 28,
+   "page_end": 28,
+   "section": "**A detailed modelling on spray atomisation and** **combustion of LOX/GCH4 in variable area pintle** **injector rocket engines** > Nomenclature",
+   "text": "_Combustion Theory and Modelling_ 27\n\nFigure 21. Streamline and temperature contours of varied _θpt_ at fixed _L_ open = 0.2 mm.\n\nrelative velocity was decreased with _θpt_ . As a comparison of all three cases of fixed\n_L_ open = 0.20 mm for varied _θpt_, the high temperature zone near the injector exit moved\ntowards the outer region. Two high-temperature gradient (A and B) zones were observed\nin Case 5 and Case 4 ( _θpt_ = 0°, 20°). But, high temperature zone (A) was observed in Case\n6 ( _θpt_ = 40°). This was due to the decreased velocity of LOX with _θpt_ = 40°, where the\ndroplet impingement direction became inclined. Thereby, the high-temperature zone (B)\nwas diminished eventually with increased _θpt_ . The rate of evaporation depends on the temperature difference and relative velocity between droplet and surrounding gas phase. As _θpt_\nincreased, the relative velocity decreased, which decreased the rate of evaporation. Therefore, the molecular diffusion was reduced, which results a low temperature and low OH\nmass fraction in Case 6 compared to other Cases 5 and 4 in Figures 21 and 22. Due to the\ninjected LOX droplet impingement at an inclined angle of 40° with the GCH4, the droplet\ninteracted with GCH4 and eventually evaporated. Thus, the high temperature region was\nobtained at the outer region of the chamber in Figure 21. The evaporation time for the\ndroplet was longer due to its large size and inclination impingement, so the reaction took\nplace downstream of the chamber, as shown in Figure 22."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1080_13647830_2021_1937702#c00040",
+   "page_start": 28,
+   "page_end": 28,
+   "section": "**A detailed modelling on spray atomisation and** **combustion of LOX/GCH4 in variable area pintle** **injector rocket engines** > Nomenclature",
+   "text": "5.2.3. _Analysis on combustion performance_\n\nThe combustion efficiency for all cases based on the characteristic velocity was calculated in which the characteristic velocity based on the chamber pressure was considered.\nEquation (17) provides the characteristic velocity ratio of simulation to theoretical.\nEquation (18) provides the expression for calculating the characteristic velocity from simulation based on the chamber pressure, throat area and total propellant mass flow rate.\nThe theoretical characteristic velocity was calculated by using NASA’s CAE program.\nFigure 23 shows the comparison of characteristic velocity that calculated based on the\nsimulation results with the theoretical characteristic velocity and also the combustion efficiency for varied _L_ open at fixed _θpt_ = 20°. The combustion efficiency was increased with\n_L_ open in which the combustion efficiency was higher for the higher pintle opening cases"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1080_13647830_2021_1937702#c00041",
+   "page_start": 29,
+   "page_end": 29,
+   "section": "**A detailed modelling on spray atomisation and** **combustion of LOX/GCH4 in variable area pintle** **injector rocket engines** > Nomenclature",
+   "text": "28 _K. Radhakrishnan_ et al.\n\nFigure 22. Mass fraction of OH and evaporation contours of varied _θpt_ at fixed _L_ open = 0.2 mm.\n\nFigure 23. Characteristic velocity and combustion efficiency for varied _L_ open at fixed _θpt_ .\n\n( _L_ open ≥ 1.5) than the lower pintle opening cases ( _L_ open _<_ 1.5). This is due to more evaporation rate due to the more diffusion of LOX from the surrounding of droplet to the gaseous\nphase in the higher pintle opening cases, which had 90% combustion efficiency. This is due\nto the reaction which did not complete within the combustion chamber, still it appeared in\nthe entrance of nozzle as observed from the temperature contours of the respective cases.\nFigure 24 shows that the characteristic velocity was decreased with increased _θpt_ and the\ncombustion efficiency also followed the same as the variation of characteristic velocity.\nAs discussed earlier, the velocity of LOX injection was increased and thereby the relative\nvelocity was decreased with increased _θpt_ . Thus, the rate of evaporation was decreased due\nto the relative velocity and the time delaying in droplet evaporation by increased velocity\nof LOX caused a less molecular diffusion, which results in decreasing combustion efficiency with _θpt_ . In addition, the overall comparison shows that the pintle injector design\nwith _L_ open _>_ 0.10, _θpt_ ≤ 20°, and TMR ≥ 1.0 had a better performance than the other\ncases."
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "figure": 4
+  },
+  "flagged_candidates": 0,
+  "target_objects": 4,
+  "objects_with_anchor_problems": 0
+ }
+}

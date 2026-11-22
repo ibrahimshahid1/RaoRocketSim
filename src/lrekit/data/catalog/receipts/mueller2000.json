@@ -1,0 +1,32 @@
+{
+  "source_id": "mueller2000",
+  "acquired_at_utc": "2026-11-04T00:34:46.853158+00:00",
+  "evidence_kind": "published_experimental_report",
+  "status": "ACQUIRED",
+  "files": [
+    {
+      "path": "raw/mueller2000/source.pdf",
+      "bytes": 1218909,
+      "sha256": "b41b138c5f7e5a8506c51cbba0d4c19a333ee739319ee486aabcb44d810fda99",
+      "origin": "existing_local_literature_copy",
+      "original_path": "propulsion_texts/pintle_injector/mueller2000.pdf"
+    },
+    {
+      "path": "derived/mueller2000/source.txt",
+      "bytes": 46561,
+      "sha256": "d4f0fc3cadad24d9977cf08cf0898bd4a119b8f312364aff874b72ad9786ec34",
+      "origin": "unreviewed_pdf_text_derivative"
+    }
+  ],
+  "review_state": "NOT_REVIEWED_FOR_TRAINING",
+  "training_eligible": false,
+  "hardware_qualified": false,
+  "limitations": [
+    "LOX/RP-1 source engine; no generic geometry transfer; keep test cases and author reductions traceable."
+  ],
+  "pdf_info": "Title:           TRW 40 klbf LOX/RP-1 low cost pintle engine test results\nCreator:         FineReader\nCreationDate:    Sun Feb 11 16:53:01 2001 EST\nModDate:         Mon Feb 19 23:51:29 2001 EST\nCustom Metadata: no\nMetadata Stream: no\nTagged:          no\nUserProperties:  no\nSuspects:        no\nForm:            none\nJavaScript:      no\nPages:           10\nEncrypted:       no\nPage size:       614 x 793 pts\nPage rot:        0\nFile size:       1218909 bytes\nOptimized:       no\nPDF version:     1.2\n",
+  "text_extraction": {
+    "status": "DERIVATIVE_TEXT_UNREVIEWED",
+    "warning_excerpt": "Syntax Warning (10077): Badly formatted number\nSyntax Warning (10113): Badly formatted number\nSyntax Warning (10137): Badly formatted number\nSyntax Warning (10194): Badly formatted number\nSyntax Warning (10448): Badly formatted number\nSyntax Warning (10514): Badly formatted number\nSyntax Warning (10654): Badly formatted number\nSyntax Warning (10771): Badly formatted number\nSyntax Warning (49683): "
+  }
+}

@@ -152,6 +152,11 @@ def candidates(payload: dict, meta: dict) -> list[dict]:
                 "candidate_kind": candidate_kind, "content": content, "original_text": item.get("orig", ""),
                 "run_id": run_id, "json_pointer": f"/{collection}/{i}",
                 "item_ref": item.get("self_ref"), "pages": pages, "page_provenance": prov,
+                # Keep the referenced crop traversable from a Figure node.
+                # The URI is parser metadata, not a claim that its contents were reviewed.
+                **({"image_uri": item["image"].get("uri"),
+                    "image_mimetype": item["image"].get("mimetype")}
+                   if label == "picture" and isinstance(item.get("image"), dict) else {}),
                 "location_state": "LOCATED" if located else "UNRESOLVED_PAGE",
                 "transcription_state": "CANDIDATE_UNVERIFIED" if content else "EMPTY_TRANSCRIPTION",
                 "active": True})

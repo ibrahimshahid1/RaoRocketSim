@@ -1,0 +1,32 @@
+{
+  "source_id": "hong2012",
+  "acquired_at_utc": "2026-11-04T00:34:48.102930+00:00",
+  "evidence_kind": "published_experimental_report",
+  "status": "ACQUIRED",
+  "files": [
+    {
+      "path": "raw/hong2012/source.pdf",
+      "bytes": 1346879,
+      "sha256": "7d25d3126e9def8b5bbc191adfb404e21458bc44abf3736b4fc0b99539ddf2ee",
+      "origin": "existing_local_literature_copy",
+      "original_path": "propulsion_texts/fuel_pump_design/hong-et-al-2012-study-on-inducer-and-impeller-of-a-centrifugal-pump-for-a-rocket-engine-turbopump.pdf"
+    },
+    {
+      "path": "derived/hong2012/source.txt",
+      "bytes": 50953,
+      "sha256": "f16e4bf3c362e3a565e796614460818566378d6a45cae0a4719481733e0a1dd9",
+      "origin": "unreviewed_pdf_text_derivative"
+    }
+  ],
+  "review_state": "NOT_REVIEWED_FOR_TRAINING",
+  "training_eligible": false,
+  "hardware_qualified": false,
+  "limitations": [
+    "Water tests of one rocket-pump design, reduced speed and different pump/inducer speeds; no automatic cryogenic transfer."
+  ],
+  "pdf_info": "Title:           Study on inducer and impeller of a centrifugal pump for a rocket engine turbopump\nSubject:         Proceedings of the Institution of Mechanical Engineers, Part C: Journal of Mechanical Engineering Science 2013.227:311-319\nCreator:         3B2 Total Publishing System 8.07r/W\nProducer:        Adobe LiveCycle PDFG ES; modified using iText 4.2.0 by 1T3XT\nCreationDate:    Tue Jan 15 08:10:04 2013 EST\nModDate:         Mon Jun 29 16:38:45 2026 EDT\nCustom Metadata: no\nMetadata Stream: yes\nTagged:          no\nUserProperties:  no\nSuspects:        no\nForm:            none\nJavaScript:      no\nPages:           9\nEncrypted:       no\nPage size:       595.276 x 793.701 pts\nPage rot:        0\nFile size:       1346879 bytes\nOptimized:       no\nPDF version:     1.4\n",
+  "text_extraction": {
+    "status": "DERIVATIVE_TEXT_UNREVIEWED",
+    "warning_excerpt": ""
+  }
+}

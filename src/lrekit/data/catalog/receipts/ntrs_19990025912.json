@@ -1,0 +1,69 @@
+{
+  "source_id": "ntrs_19990025912",
+  "acquired_at_utc": "2026-11-04T00:33:36.092446+00:00",
+  "evidence_kind": "published_experimental_report",
+  "status": "ACQUIRED",
+  "files": [
+    {
+      "path": "raw/ntrs_19990025912/ntrs_metadata.json",
+      "bytes": 3742,
+      "sha256": "1bd9530fdf1fc250d392cdbc925345296a7350d42d5d46a0b729dcf16a9db024",
+      "origin": "publisher_metadata",
+      "requested_url": "https://ntrs.nasa.gov/api/citations/19990025912",
+      "resolved_url": "https://ntrs.nasa.gov/api/citations/19990025912",
+      "headers": {
+        "Content-Type": "application/json; charset=utf-8",
+        "ETag": "W/\"e9e-zE0KJYKew6vQ0+2yFvp4qDPLukY\"",
+        "Last-Modified": null
+      }
+    },
+    {
+      "path": "raw/ntrs_19990025912/source.pdf",
+      "bytes": 1687076,
+      "sha256": "a4e27fc725d95034c8479082f9a4e0a296d3f1fed4e28b5622a79425c15f959b",
+      "origin": "publisher_report_pdf",
+      "requested_url": "https://ntrs.nasa.gov/api/citations/19990025912/downloads/19990025912.pdf",
+      "resolved_url": "https://ntrs.nasa.gov/api/citations/19990025912/downloads/19990025912.pdf",
+      "headers": {
+        "Content-Type": "application/pdf",
+        "ETag": "\"2ecb444e3f6b5adc498c54d9b420f833\"",
+        "Last-Modified": "Thu, 06 Aug 2020 20:42:19 GMT"
+      }
+    },
+    {
+      "path": "derived/ntrs_19990025912/source.txt",
+      "bytes": 117872,
+      "sha256": "79630f9ba49abec3400826051e53cebc02558e9c4f5d4514c204dd06d4524225",
+      "origin": "unreviewed_pdf_text_derivative"
+    }
+  ],
+  "review_state": "NOT_REVIEWED_FOR_TRAINING",
+  "training_eligible": false,
+  "hardware_qualified": false,
+  "limitations": [
+    "Heat flux reduced using Bartz is not an independent target for calibrating Bartz; prioritize measured wall temperature and an explicit observation model."
+  ],
+  "publisher_title": "Experimental Studies of the Heat Transfer to RBCC Rocket Nozzles for CFD Application to Design Methodologies",
+  "publisher_copyright": {
+    "thirdPartyPermissionsProduced": false,
+    "disclosedToPublic": false,
+    "containsIndication": false,
+    "publisherPermissionOrRightsToDistribute": false,
+    "belongsToUsGov": false,
+    "determinationType": "GOV_PUBLIC_USE_PERMITTED",
+    "thirdPartyContentCondition": "NOT_SET",
+    "belongsToContractor": false,
+    "disclosedInvention": false,
+    "submissionId": 19990025912,
+    "containsThirdPartyMaterial": false,
+    "belongsToPublisher": false,
+    "id": "1ac50947fd9c4dd7a8313ca36a313949",
+    "belongsToAuthors": false
+  },
+  "publisher_distribution": "PUBLIC",
+  "pdf_info": "Title:           \nSubject:         \nKeywords:        \nAuthor:          \nProducer:        Pdf.Capture version 5.2\nCreationDate:    D:00000101000000Z\nModDate:         Mon Dec  2 13:37:33 2002 EST\nCustom Metadata: no\nMetadata Stream: yes\nTagged:          no\nUserProperties:  no\nSuspects:        no\nForm:            none\nJavaScript:      no\nPages:           27\nEncrypted:       no\nPage size:       610 x 792 pts\nPage rot:        0\nFile size:       1687076 bytes\nOptimized:       yes\nPDF version:     1.4\n",
+  "text_extraction": {
+    "status": "DERIVATIVE_TEXT_UNREVIEWED",
+    "warning_excerpt": ""
+  }
+}

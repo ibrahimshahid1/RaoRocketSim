@@ -1,0 +1,210 @@
+{
+ "packet": "V-SP8089-p087",
+ "kind": "verification",
+ "document_id": "DOC_NTRS_19760023196",
+ "source_pdf": "propulsion_texts/19760023196.pdf",
+ "source_sha256": "5e9db6a6f7860ee51acbf5cbe137005ef259ec3fd87ff0ed5f1ad466d6227c44",
+ "pages": [
+  87,
+  87
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 87,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19760023196/p0087.png",
+   "sha256": "da2ccb98f06dc9d5dd863e59f4910c1d172430ab917b3f1337fddb0235262d76",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_cdfd465819028228b1243593"
+ ],
+ "candidates": [],
+ "stored_objects": [
+  {
+   "id": "CLM_NTRS_19760023196_6EA9EC20",
+   "store": "claims",
+   "type": "Claim",
+   "page": 87,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "For standard unlike-impinging elements an included impingement angle of 60° is generally recommended for satisfactory flow characteristics.",
+   "quote": "Unlike-impinging elements. — For the standard unlike-impinging elements, an impingement angle of 60° Gincluded angie) generally is recommended for satisfactory flow characteristics.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 87
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_8DBA0EF6",
+   "store": "claims",
+   "type": "Claim",
+   "page": 87,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "For pintle designs other than the slot-in-pintle type, and for size specification, cold-flow experiments should be conducted to determine the spray distributions.",
+   "quote": "For other pintle designs and for size specification, it is recommended that cold-flow experiments be conducted to determine the spray distributions.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 87
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_CB96E1A8",
+   "store": "claims",
+   "type": "Claim",
+   "page": 87,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Design criterion: the element impingement angle shall provide the required spray distributions without producing unacceptable propellant backsplash.",
+   "quote": "The element impingement angle shall provide the required spray distributions without producing unacceptable propellant backsplash.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 87
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_FED92883",
+   "store": "claims",
+   "type": "Claim",
+   "page": 87,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "For pintle injectors with individual oxidizer slots in the pintle, optimum 'diameter ratios' should be determined from reference 10 for liquid/liquid and reference 38 for gas/liquid injectors.",
+   "quote": "For the pintle injector with individual oxidizer slots located in the pintle. the optimum “diameter ratios” should be determined from reference 10 for liquid ‘liquid injectors and from reference 38 for gas/liquid injectors.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 87
+    }
+   ]
+  },
+  {
+   "id": "VAL_NTRS_19760023196_19646846",
+   "store": "validity",
+   "type": "ValidityEnvelope",
+   "page": 87,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "For pintle designs other than the slot-in-pintle type covered by refs. 10/38, and for size specification, spray distributions must be determined by cold-flow experiment rather than from correlation.",
+   "quote": "For other pintle designs and for size specification, it is recommended that cold-flow experiments be conducted to determine the spray distributions.",
+   "confidence": null,
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 87
+    }
+   ]
+  }
+ ],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00151",
+   "page_start": 87,
+   "page_end": 87,
+   "section": "3.1.1.1.1 Element Types",
+   "text": "pressure drops widely different. However, in some cases, mixing requirements dictate pressure drops that are different. The size of the element generally should be determined from consideration of dropsize requirements rather than mixing. The orifice size should be determined by using the correlations for the specific element type (tables Hand HD. Like-impinging elements. — The relative orifice size generally is not a design parameter for like-donblet elements. The element diameters usually are specified from orifice pressure-drop considerations and drop size. The oxidizer and fuel orifice diameters and, therefore, the diameter ratios (oxidizer to fuel) should be determined by using the dropsize correlations given in reference 4.\n\nNonimpinging elements. — For the showerhead element, the orifice diameter ratio is not a design parameter. The size of the element should be specified from consideration of drop size. The drop size for the showerhead element should be calculated from the correlation provided in reference 9.\n\nFor recommendations on the design of the concentric-tube injector, consult references 5 and 14. The annulus-to-center-jet ratio should be determined from manufacturing limitations, performance. and pressure-drop requirements. Cold-flow characterization of the element is recommended for determining the mixing characteristics and the dropsize distributions for the specific design. Hybrid elements. — For the pintle injector with individual oxidizer slots located in the pintle. the optimum “diameter ratios” should be determined from reference 10 for liquid ‘liquid injectors and from reference 38 for gas/liquid injectors. For other pintle designs and for size specification, it is recommended that cold-flow experiments be conducted to determine the spray distributions. Also, review references 96 and 97 for general data on pintle injectors. For the splash-plate clement. consult references 11 and 40 for the recommended design values. Only a limited amount of data is available, and cold-flow experiments are recommended for determining the actual size necessary fo provide the required distributions."
+  },
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00152",
+   "page_start": 87,
+   "page_end": 87,
+   "section": "3.1.1.1.3 Impingement Angle",
+   "text": "The element impingement angle shall provide the required spray distributions without producing unacceptable propellant backsplash.\n\nUnlike-impinging elements. — For the standard unlike-impinging elements, an impingement angle of 60° Gincluded angie) generally is recommended for satisfactory flow characteristics. For the unlike quadict (Titan), an impingement angle of 100° is recommended. For the"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {},
+  "flagged_candidates": 0,
+  "target_objects": 4,
+  "objects_with_anchor_problems": 0
+ }
+}

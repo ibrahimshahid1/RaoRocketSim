@@ -1,0 +1,362 @@
+\contentsline {chapter}{\numberline {1}Orientation}{12}{chapter.1}%
+\contentsline {section}{\numberline {1.1}What LREKit is}{12}{section.1.1}%
+\contentsline {subsection}{\numberline {1.1.1}Three names for one codebase}{12}{subsection.1.1.1}%
+\contentsline {subsection}{\numberline {1.1.2}Package facts}{13}{subsection.1.1.2}%
+\contentsline {subsection}{\numberline {1.1.3}How far along the project is}{13}{subsection.1.1.3}%
+\contentsline {section}{\numberline {1.2}Console entry points}{14}{section.1.2}%
+\contentsline {section}{\numberline {1.3}Engineering status}{15}{section.1.3}%
+\contentsline {section}{\numberline {1.4}A reader's map of this guide}{16}{section.1.4}%
+\contentsline {section}{\numberline {1.5}Repository layout after the cleanup}{17}{section.1.5}%
+\contentsline {section}{\numberline {1.6}Environments}{19}{section.1.6}%
+\contentsline {section}{\numberline {1.7}Working conventions}{20}{section.1.7}%
+\contentsline {subsection}{\numberline {1.7.1}Code wins over documents; PDFs win over both}{20}{subsection.1.7.1}%
+\contentsline {subsection}{\numberline {1.7.2}STATUS heads are the project record}{20}{subsection.1.7.2}%
+\contentsline {subsection}{\numberline {1.7.3}Numerics changes keep the pairing and oracle tests green}{21}{subsection.1.7.3}%
+\contentsline {subsection}{\numberline {1.7.4}The knowledge system}{21}{subsection.1.7.4}%
+\contentsline {subsection}{\numberline {1.7.5}Units and dialects}{21}{subsection.1.7.5}%
+\contentsline {chapter}{\numberline {2}CLI Surface and End-to-End Data Flow}{22}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Entry points}{22}{section.2.1}%
+\contentsline {section}{\numberline {2.2}CLI surface}{23}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}Job verbs and the OpenFOAM export verb}{23}{subsection.2.2.1}%
+\contentsline {subsection}{\numberline {2.2.2}The flag runner: 330 flags by family}{24}{subsection.2.2.2}%
+\contentsline {section}{\numberline {2.3}Dispatch inside the runner}{27}{section.2.3}%
+\contentsline {section}{\numberline {2.4}The traditional pipeline, stage by stage}{27}{section.2.4}%
+\contentsline {subsection}{\numberline {2.4.1}S01 and S02: defaults, cross-checks, release evidence and interview}{29}{subsection.2.4.1}%
+\contentsline {subsection}{\numberline {2.4.2}S03: propellant and thermochemistry}{29}{subsection.2.4.2}%
+\contentsline {subsection}{\numberline {2.4.3}S04: throat sizing and performance}{30}{subsection.2.4.3}%
+\contentsline {subsection}{\numberline {2.4.4}S05 and S06: nozzle contour and chamber}{30}{subsection.2.4.4}%
+\contentsline {subsection}{\numberline {2.4.5}S12: early figures}{31}{subsection.2.4.5}%
+\contentsline {subsection}{\numberline {2.4.6}S07: regen wall sizing, cooling and wall structure}{31}{subsection.2.4.6}%
+\contentsline {subsection}{\numberline {2.4.7}S08: pintle injector and the optional spray/c* fixed point}{31}{subsection.2.4.7}%
+\contentsline {subsection}{\numberline {2.4.8}S09: electric pump feed}{32}{subsection.2.4.8}%
+\contentsline {subsection}{\numberline {2.4.9}S10 and S11: interface sync, throttle map and injector package}{32}{subsection.2.4.9}%
+\contentsline {subsection}{\numberline {2.4.10}S11: core CAD}{33}{subsection.2.4.10}%
+\contentsline {subsection}{\numberline {2.4.11}S14: final write}{33}{subsection.2.4.11}%
+\contentsline {section}{\numberline {2.5}Early-exit MDO branches}{33}{section.2.5}%
+\contentsline {section}{\numberline {2.6}The job path and its run record}{34}{section.2.6}%
+\contentsline {section}{\numberline {2.7}Artifacts written per stage}{35}{section.2.7}%
+\contentsline {section}{\numberline {2.8}Import closure}{37}{section.2.8}%
+\contentsline {section}{\numberline {2.9}Where the documentation disagrees with the code}{38}{section.2.9}%
+\contentsline {section}{\numberline {2.10}Finding things}{41}{section.2.10}%
+\contentsline {chapter}{\numberline {3}Entry, Dispatch, Inputs and Job Contracts (S01--S02)}{42}{chapter.3}%
+\contentsline {section}{\numberline {3.1}S01: CLI entry points, argument parsing and workflow dispatch}{42}{section.3.1}%
+\contentsline {subsection}{\numberline {3.1.1}Role in the data flow and call sites}{42}{subsection.3.1.1}%
+\contentsline {subsection}{\numberline {3.1.2}Inputs and outputs}{44}{subsection.3.1.2}%
+\contentsline {subsection}{\numberline {3.1.3}Modules}{45}{subsection.3.1.3}%
+\contentsline {subsection}{\numberline {3.1.4}What the header comments establish}{45}{subsection.3.1.4}%
+\contentsline {subsection}{\numberline {3.1.5}Governing documents}{46}{subsection.3.1.5}%
+\contentsline {subsection}{\numberline {3.1.6}Verification}{46}{subsection.3.1.6}%
+\contentsline {subsection}{\numberline {3.1.7}Maturity, limitations and known defects}{47}{subsection.3.1.7}%
+\contentsline {subsection}{\numberline {3.1.8}Developer notes}{48}{subsection.3.1.8}%
+\contentsline {section}{\numberline {3.2}S02: Inputs, units, validation and job contracts}{48}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Role in the data flow and call sites}{48}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.2.2}Inputs and outputs}{49}{subsection.3.2.2}%
+\contentsline {subsection}{\numberline {3.2.3}Modules}{49}{subsection.3.2.3}%
+\contentsline {subsection}{\numberline {3.2.4}What the header comments establish}{50}{subsection.3.2.4}%
+\contentsline {subsection}{\numberline {3.2.5}Governing documents}{53}{subsection.3.2.5}%
+\contentsline {subsection}{\numberline {3.2.6}Verification}{54}{subsection.3.2.6}%
+\contentsline {subsection}{\numberline {3.2.7}Maturity, limitations and known defects}{55}{subsection.3.2.7}%
+\contentsline {subsection}{\numberline {3.2.8}Developer notes}{55}{subsection.3.2.8}%
+\contentsline {chapter}{\numberline {4}Propellant Thermochemistry, Performance and Off-Design Screens}{56}{chapter.4}%
+\contentsline {section}{\numberline {4.1}S03: Propellant identity and chamber thermochemistry}{56}{section.4.1}%
+\contentsline {subsection}{\numberline {4.1.1}Role in the data flow and call site}{56}{subsection.4.1.1}%
+\contentsline {subsection}{\numberline {4.1.2}Inputs and outputs}{58}{subsection.4.1.2}%
+\contentsline {subsection}{\numberline {4.1.3}What the header comments establish}{58}{subsection.4.1.3}%
+\contentsline {subsection}{\numberline {4.1.4}Governing documents}{60}{subsection.4.1.4}%
+\contentsline {subsection}{\numberline {4.1.5}Verification}{61}{subsection.4.1.5}%
+\contentsline {subsection}{\numberline {4.1.6}Maturity, limitations and known defects}{62}{subsection.4.1.6}%
+\contentsline {subsection}{\numberline {4.1.7}Developer notes}{63}{subsection.4.1.7}%
+\contentsline {section}{\numberline {4.2}S04: Throat sizing, delivered performance and off-design screens}{64}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Role in the data flow and call site}{64}{subsection.4.2.1}%
+\contentsline {subsection}{\numberline {4.2.2}Inputs and outputs}{65}{subsection.4.2.2}%
+\contentsline {subsection}{\numberline {4.2.3}What the header comments establish}{66}{subsection.4.2.3}%
+\contentsline {subsection}{\numberline {4.2.4}Governing documents}{67}{subsection.4.2.4}%
+\contentsline {subsection}{\numberline {4.2.5}Verification}{68}{subsection.4.2.5}%
+\contentsline {subsection}{\numberline {4.2.6}Maturity, limitations and known defects}{68}{subsection.4.2.6}%
+\contentsline {subsection}{\numberline {4.2.7}Developer notes}{69}{subsection.4.2.7}%
+\contentsline {chapter}{\numberline {5}Nozzle and Chamber Geometry (S05) and the Rao/MOC Contour Solver (S06)}{70}{chapter.5}%
+\contentsline {section}{\numberline {5.1}S05: Default B\'ezier/TOP nozzle contour, throat and chamber geometry}{70}{section.5.1}%
+\contentsline {subsection}{\numberline {5.1.1}Role in the data flow and call site}{70}{subsection.5.1.1}%
+\contentsline {subsection}{\numberline {5.1.2}Inputs and outputs}{71}{subsection.5.1.2}%
+\contentsline {subsection}{\numberline {5.1.3}Modules}{72}{subsection.5.1.3}%
+\contentsline {subsection}{\numberline {5.1.4}What the header comments establish}{72}{subsection.5.1.4}%
+\contentsline {subsection}{\numberline {5.1.5}Governing documents}{73}{subsection.5.1.5}%
+\contentsline {subsection}{\numberline {5.1.6}Verification}{74}{subsection.5.1.6}%
+\contentsline {subsection}{\numberline {5.1.7}Maturity, limitations and known defects}{74}{subsection.5.1.7}%
+\contentsline {subsection}{\numberline {5.1.8}Developer notes}{75}{subsection.5.1.8}%
+\contentsline {section}{\numberline {5.2}S06: Opt-in Rao variational / method-of-characteristics BVP contour}{75}{section.5.2}%
+\contentsline {subsection}{\numberline {5.2.1}Role in the data flow and call site}{75}{subsection.5.2.1}%
+\contentsline {subsection}{\numberline {5.2.2}Inputs and outputs}{76}{subsection.5.2.2}%
+\contentsline {subsection}{\numberline {5.2.3}Modules}{76}{subsection.5.2.3}%
+\contentsline {subsection}{\numberline {5.2.4}Three ways the repository can produce a bell}{78}{subsection.5.2.4}%
+\contentsline {subsection}{\numberline {5.2.5}What the header comments establish}{78}{subsection.5.2.5}%
+\contentsline {subsection}{\numberline {5.2.6}The bounded MOC net fix and compression coalescence}{79}{subsection.5.2.6}%
+\contentsline {subsection}{\numberline {5.2.7}Reliability ladder and export gates}{80}{subsection.5.2.7}%
+\contentsline {subsection}{\numberline {5.2.8}NASA/JHU oracle suites, the Rao 1958 benchmark, B3/B5 and the chart sweep}{81}{subsection.5.2.8}%
+\contentsline {subsection}{\numberline {5.2.9}Governing documents}{82}{subsection.5.2.9}%
+\contentsline {subsection}{\numberline {5.2.10}Verification}{82}{subsection.5.2.10}%
+\contentsline {subsection}{\numberline {5.2.11}Maturity, limitations and known defects}{83}{subsection.5.2.11}%
+\contentsline {subsection}{\numberline {5.2.12}Developer notes}{84}{subsection.5.2.12}%
+\contentsline {chapter}{\numberline {6}Stage S07: Regenerative Cooling and Wall Structures}{85}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Regenerative wall sizing, cooling analysis and wall structural screens}{85}{section.6.1}%
+\contentsline {subsection}{\numberline {6.1.1}Role in the data flow and call site}{85}{subsection.6.1.1}%
+\contentsline {subsection}{\numberline {6.1.2}Inputs and outputs}{87}{subsection.6.1.2}%
+\contentsline {subsection}{\numberline {6.1.3}Modules}{89}{subsection.6.1.3}%
+\contentsline {subsection}{\numberline {6.1.4}What the header comments establish}{89}{subsection.6.1.4}%
+\contentsline {subsection}{\numberline {6.1.5}Governing documents}{94}{subsection.6.1.5}%
+\contentsline {subsection}{\numberline {6.1.6}Verification}{96}{subsection.6.1.6}%
+\contentsline {subsection}{\numberline {6.1.7}Maturity, limitations and known defects}{96}{subsection.6.1.7}%
+\contentsline {subsection}{\numberline {6.1.8}Developer notes}{98}{subsection.6.1.8}%
+\contentsline {chapter}{\numberline {7}Injector, Spray Coupling, Feed System and Electric Pumps}{100}{chapter.7}%
+\contentsline {section}{\numberline {7.1}S08 -- Pintle injector sizing and the optional spray/c-star fixed point}{100}{section.7.1}%
+\contentsline {subsection}{\numberline {7.1.1}Role in the data flow and call site}{100}{subsection.7.1.1}%
+\contentsline {subsection}{\numberline {7.1.2}Inputs and outputs}{102}{subsection.7.1.2}%
+\contentsline {subsection}{\numberline {7.1.3}Modules}{102}{subsection.7.1.3}%
+\contentsline {subsection}{\numberline {7.1.4}What the header comments establish}{103}{subsection.7.1.4}%
+\contentsline {subsection}{\numberline {7.1.5}Governing documents}{106}{subsection.7.1.5}%
+\contentsline {subsection}{\numberline {7.1.6}Verification}{107}{subsection.7.1.6}%
+\contentsline {subsection}{\numberline {7.1.7}Maturity, limitations and known defects}{107}{subsection.7.1.7}%
+\contentsline {subsection}{\numberline {7.1.8}Developer notes}{108}{subsection.7.1.8}%
+\contentsline {section}{\numberline {7.2}S09 -- Feed-pressure ledger to electric pump, motor, inverter and battery}{108}{section.7.2}%
+\contentsline {subsection}{\numberline {7.2.1}Role in the data flow and call site}{108}{subsection.7.2.1}%
+\contentsline {subsection}{\numberline {7.2.2}Inputs and outputs}{109}{subsection.7.2.2}%
+\contentsline {subsection}{\numberline {7.2.3}Modules}{109}{subsection.7.2.3}%
+\contentsline {subsection}{\numberline {7.2.4}What the header comments establish}{110}{subsection.7.2.4}%
+\contentsline {subsection}{\numberline {7.2.5}Governing documents}{111}{subsection.7.2.5}%
+\contentsline {subsection}{\numberline {7.2.6}Verification}{112}{subsection.7.2.6}%
+\contentsline {subsection}{\numberline {7.2.7}Maturity, limitations and known defects}{112}{subsection.7.2.7}%
+\contentsline {subsection}{\numberline {7.2.8}Developer notes}{113}{subsection.7.2.8}%
+\contentsline {chapter}{\numberline {8}Interface, Mass Ledger, CAD Export and Figures}{114}{chapter.8}%
+\contentsline {section}{\numberline {8.1}S10 Injector/chamber bolted interface and hardware mass ledger}{114}{section.8.1}%
+\contentsline {subsection}{\numberline {8.1.1}Role in the data flow and call sites}{114}{subsection.8.1.1}%
+\contentsline {subsection}{\numberline {8.1.2}Inputs and outputs}{115}{subsection.8.1.2}%
+\contentsline {subsection}{\numberline {8.1.3}Modules}{116}{subsection.8.1.3}%
+\contentsline {subsection}{\numberline {8.1.4}What the header comments establish}{116}{subsection.8.1.4}%
+\contentsline {subsection}{\numberline {8.1.5}Governing documents}{117}{subsection.8.1.5}%
+\contentsline {subsection}{\numberline {8.1.6}Verification}{117}{subsection.8.1.6}%
+\contentsline {subsection}{\numberline {8.1.7}Maturity, limitations and known defects}{118}{subsection.8.1.7}%
+\contentsline {subsection}{\numberline {8.1.8}Developer notes}{119}{subsection.8.1.8}%
+\contentsline {section}{\numberline {8.2}S11 CAD, mesh and geometry deliverables}{119}{section.8.2}%
+\contentsline {subsection}{\numberline {8.2.1}Role in the data flow and call sites}{119}{subsection.8.2.1}%
+\contentsline {subsection}{\numberline {8.2.2}Inputs and outputs}{119}{subsection.8.2.2}%
+\contentsline {subsection}{\numberline {8.2.3}Modules}{120}{subsection.8.2.3}%
+\contentsline {subsection}{\numberline {8.2.4}What the header comments establish}{121}{subsection.8.2.4}%
+\contentsline {subsection}{\numberline {8.2.5}Governing documents}{122}{subsection.8.2.5}%
+\contentsline {subsection}{\numberline {8.2.6}Verification}{123}{subsection.8.2.6}%
+\contentsline {subsection}{\numberline {8.2.7}Maturity, limitations and known defects}{123}{subsection.8.2.7}%
+\contentsline {subsection}{\numberline {8.2.8}Developer notes}{124}{subsection.8.2.8}%
+\contentsline {section}{\numberline {8.3}S12 Figures, MOC construction diagrams and flow animations}{124}{section.8.3}%
+\contentsline {subsection}{\numberline {8.3.1}Role in the data flow and call sites}{124}{subsection.8.3.1}%
+\contentsline {subsection}{\numberline {8.3.2}Inputs and outputs}{125}{subsection.8.3.2}%
+\contentsline {subsection}{\numberline {8.3.3}Modules}{125}{subsection.8.3.3}%
+\contentsline {subsection}{\numberline {8.3.4}What the header comments establish}{126}{subsection.8.3.4}%
+\contentsline {subsection}{\numberline {8.3.5}Governing documents}{126}{subsection.8.3.5}%
+\contentsline {subsection}{\numberline {8.3.6}Verification}{127}{subsection.8.3.6}%
+\contentsline {subsection}{\numberline {8.3.7}Maturity, limitations and known defects}{127}{subsection.8.3.7}%
+\contentsline {subsection}{\numberline {8.3.8}Developer notes}{127}{subsection.8.3.8}%
+\contentsline {chapter}{\numberline {9}Engine MDO, Requirements, Re-evaluation and Run Records (S13--S14)}{128}{chapter.9}%
+\contentsline {section}{\numberline {9.1}S13: Differentiable whole-engine MDO, optimizer and requirement-driven design}{128}{section.9.1}%
+\contentsline {subsection}{\numberline {9.1.1}Role in the data flow and call sites}{128}{subsection.9.1.1}%
+\contentsline {subsection}{\numberline {9.1.2}Inputs and outputs}{129}{subsection.9.1.2}%
+\contentsline {subsection}{\numberline {9.1.3}Modules}{129}{subsection.9.1.3}%
+\contentsline {subsection}{\numberline {9.1.4}What the header comments establish}{130}{subsection.9.1.4}%
+\contentsline {subsection}{\numberline {9.1.5}Governing documents}{135}{subsection.9.1.5}%
+\contentsline {subsection}{\numberline {9.1.6}Verification}{135}{subsection.9.1.6}%
+\contentsline {subsection}{\numberline {9.1.7}Maturity, limitations and known defects}{136}{subsection.9.1.7}%
+\contentsline {subsection}{\numberline {9.1.8}Developer notes}{137}{subsection.9.1.8}%
+\contentsline {section}{\numberline {9.2}S14: Authoritative re-evaluation, provenance, release gates and run records}{137}{section.9.2}%
+\contentsline {subsection}{\numberline {9.2.1}Role in the data flow and call sites}{137}{subsection.9.2.1}%
+\contentsline {subsection}{\numberline {9.2.2}Inputs and outputs, including artifacts}{137}{subsection.9.2.2}%
+\contentsline {subsection}{\numberline {9.2.3}Modules}{138}{subsection.9.2.3}%
+\contentsline {subsection}{\numberline {9.2.4}What the header comments establish}{138}{subsection.9.2.4}%
+\contentsline {subsection}{\numberline {9.2.5}Governing documents}{140}{subsection.9.2.5}%
+\contentsline {subsection}{\numberline {9.2.6}Verification}{140}{subsection.9.2.6}%
+\contentsline {subsection}{\numberline {9.2.7}Maturity, limitations and known defects}{141}{subsection.9.2.7}%
+\contentsline {subsection}{\numberline {9.2.8}Developer notes}{141}{subsection.9.2.8}%
+\contentsline {chapter}{\numberline {10}Cross-cutting groups I: differentiable core, spray handoff, legacy CLI, NASA reference, unreachable code}{143}{chapter.10}%
+\contentsline {section}{\numberline {10.1}X01 Differentiable JAX core}{143}{section.10.1}%
+\contentsline {subsection}{\numberline {10.1.1}Role in the data flow, call site, inputs and outputs}{144}{subsection.10.1.1}%
+\contentsline {subsection}{\numberline {10.1.2}Modules}{145}{subsection.10.1.2}%
+\contentsline {subsection}{\numberline {10.1.3}What the header comments establish}{145}{subsection.10.1.3}%
+\contentsline {subsection}{\numberline {10.1.4}Governing documents}{146}{subsection.10.1.4}%
+\contentsline {subsection}{\numberline {10.1.5}Verification}{147}{subsection.10.1.5}%
+\contentsline {subsection}{\numberline {10.1.6}Maturity, limitations and known defects}{147}{subsection.10.1.6}%
+\contentsline {subsection}{\numberline {10.1.7}Developer notes}{148}{subsection.10.1.7}%
+\contentsline {section}{\numberline {10.2}X02 Spray-parcel mid-tier and OpenFOAM handoff}{148}{section.10.2}%
+\contentsline {subsection}{\numberline {10.2.1}Role in the data flow, call site, inputs and outputs}{148}{subsection.10.2.1}%
+\contentsline {subsection}{\numberline {10.2.2}Modules}{148}{subsection.10.2.2}%
+\contentsline {subsection}{\numberline {10.2.3}What the header comments establish}{149}{subsection.10.2.3}%
+\contentsline {subsection}{\numberline {10.2.4}Governing documents}{150}{subsection.10.2.4}%
+\contentsline {subsection}{\numberline {10.2.5}Verification}{150}{subsection.10.2.5}%
+\contentsline {subsection}{\numberline {10.2.6}Maturity, limitations and known defects}{150}{subsection.10.2.6}%
+\contentsline {subsection}{\numberline {10.2.7}Developer notes}{151}{subsection.10.2.7}%
+\contentsline {section}{\numberline {10.3}X03 Legacy toolbox CLI}{151}{section.10.3}%
+\contentsline {subsection}{\numberline {10.3.1}Role in the data flow, call site, inputs and outputs}{151}{subsection.10.3.1}%
+\contentsline {subsection}{\numberline {10.3.2}Modules}{152}{subsection.10.3.2}%
+\contentsline {subsection}{\numberline {10.3.3}What the header comments establish}{152}{subsection.10.3.3}%
+\contentsline {subsection}{\numberline {10.3.4}Governing documents}{152}{subsection.10.3.4}%
+\contentsline {subsection}{\numberline {10.3.5}Verification}{153}{subsection.10.3.5}%
+\contentsline {subsection}{\numberline {10.3.6}Maturity, limitations and known defects}{153}{subsection.10.3.6}%
+\contentsline {subsection}{\numberline {10.3.7}Developer notes}{154}{subsection.10.3.7}%
+\contentsline {section}{\numberline {10.4}X04 NASA/JHU reference port}{154}{section.10.4}%
+\contentsline {subsection}{\numberline {10.4.1}Role in the data flow, call site, inputs and outputs}{154}{subsection.10.4.1}%
+\contentsline {subsection}{\numberline {10.4.2}Modules}{154}{subsection.10.4.2}%
+\contentsline {subsection}{\numberline {10.4.3}What the header comments establish}{155}{subsection.10.4.3}%
+\contentsline {subsection}{\numberline {10.4.4}Governing documents}{155}{subsection.10.4.4}%
+\contentsline {subsection}{\numberline {10.4.5}Verification}{155}{subsection.10.4.5}%
+\contentsline {subsection}{\numberline {10.4.6}Maturity, limitations and known defects}{156}{subsection.10.4.6}%
+\contentsline {subsection}{\numberline {10.4.7}Developer notes}{156}{subsection.10.4.7}%
+\contentsline {section}{\numberline {10.5}X08 Library code not reachable from the CLI}{156}{section.10.5}%
+\contentsline {subsection}{\numberline {10.5.1}Role, inputs and outputs}{156}{subsection.10.5.1}%
+\contentsline {subsection}{\numberline {10.5.2}What the header comments establish}{156}{subsection.10.5.2}%
+\contentsline {subsection}{\numberline {10.5.3}Evidence and recommendation per module}{157}{subsection.10.5.3}%
+\contentsline {subsection}{\numberline {10.5.4}Verification}{158}{subsection.10.5.4}%
+\contentsline {subsection}{\numberline {10.5.5}Maturity, limitations and known defects}{158}{subsection.10.5.5}%
+\contentsline {subsection}{\numberline {10.5.6}Developer notes}{158}{subsection.10.5.6}%
+\contentsline {chapter}{\numberline {11}Cross-cutting groups B: research scripts, scientific memory and test harness}{159}{chapter.11}%
+\contentsline {section}{\numberline {11.1}X05: Research and offline scripts}{159}{section.11.1}%
+\contentsline {subsection}{\numberline {11.1.1}Role in the data flow and call sites}{159}{subsection.11.1.1}%
+\contentsline {subsection}{\numberline {11.1.2}Inputs, outputs and modules}{160}{subsection.11.1.2}%
+\contentsline {subsection}{\numberline {11.1.3}What the header comments establish}{160}{subsection.11.1.3}%
+\contentsline {subsection}{\numberline {11.1.4}Governing documents}{162}{subsection.11.1.4}%
+\contentsline {subsection}{\numberline {11.1.5}Verification}{162}{subsection.11.1.5}%
+\contentsline {subsection}{\numberline {11.1.6}Maturity, limitations and known defects}{162}{subsection.11.1.6}%
+\contentsline {subsection}{\numberline {11.1.7}Developer notes}{163}{subsection.11.1.7}%
+\contentsline {section}{\numberline {11.2}X06: Knowledge system and source data}{163}{section.11.2}%
+\contentsline {subsection}{\numberline {11.2.1}Role in the data flow and entry points}{163}{subsection.11.2.1}%
+\contentsline {subsection}{\numberline {11.2.2}Inputs and outputs}{163}{subsection.11.2.2}%
+\contentsline {subsection}{\numberline {11.2.3}Modules}{164}{subsection.11.2.3}%
+\contentsline {subsection}{\numberline {11.2.4}What the header comments establish}{165}{subsection.11.2.4}%
+\contentsline {subsection}{\numberline {11.2.5}Governing documents}{166}{subsection.11.2.5}%
+\contentsline {subsection}{\numberline {11.2.6}Verification}{167}{subsection.11.2.6}%
+\contentsline {subsection}{\numberline {11.2.7}Maturity, limitations and known defects}{167}{subsection.11.2.7}%
+\contentsline {subsection}{\numberline {11.2.8}Developer notes}{168}{subsection.11.2.8}%
+\contentsline {section}{\numberline {11.3}X07: Test harness}{168}{section.11.3}%
+\contentsline {subsection}{\numberline {11.3.1}Role in the data flow and call sites}{168}{subsection.11.3.1}%
+\contentsline {subsection}{\numberline {11.3.2}Inputs and outputs}{168}{subsection.11.3.2}%
+\contentsline {subsection}{\numberline {11.3.3}Test counts by stage}{169}{subsection.11.3.3}%
+\contentsline {subsection}{\numberline {11.3.4}What the header comments establish, by test family}{170}{subsection.11.3.4}%
+\contentsline {subsection}{\numberline {11.3.5}Governing documents}{171}{subsection.11.3.5}%
+\contentsline {subsection}{\numberline {11.3.6}Verification of the harness itself}{171}{subsection.11.3.6}%
+\contentsline {subsection}{\numberline {11.3.7}Maturity, limitations and known defects}{172}{subsection.11.3.7}%
+\contentsline {subsection}{\numberline {11.3.8}Developer notes}{172}{subsection.11.3.8}%
+\contentsline {chapter}{\numberline {12}Where the app stands today: the builds}{173}{chapter.12}%
+\contentsline {section}{\numberline {12.1}The builds archive}{173}{section.12.1}%
+\contentsline {subsection}{\numberline {12.1.1}What was archived}{173}{subsection.12.1.1}%
+\contentsline {subsection}{\numberline {12.1.2}Timeline}{175}{subsection.12.1.2}%
+\contentsline {subsection}{\numberline {12.1.3}What stands out}{175}{subsection.12.1.3}%
+\contentsline {section}{\numberline {12.2}The current state in pictures}{177}{section.12.2}%
+\contentsline {subsection}{\numberline {12.2.1}Thrust chamber geometry}{177}{subsection.12.2.1}%
+\contentsline {subsection}{\numberline {12.2.2}Supersonic flow field and the Rao construction}{178}{subsection.12.2.2}%
+\contentsline {subsection}{\numberline {12.2.3}Regenerative cooling and liner structure}{182}{subsection.12.2.3}%
+\contentsline {subsection}{\numberline {12.2.4}Pintle injector}{185}{subsection.12.2.4}%
+\contentsline {subsection}{\numberline {12.2.5}Machined injector and pump CAD}{189}{subsection.12.2.5}%
+\contentsline {section}{\numberline {12.3}Build cards}{190}{section.12.3}%
+\contentsline {section}{\numberline {12.4}Today's fresh run}{191}{section.12.4}%
+\contentsline {subsection}{\numberline {12.4.1}What was run}{191}{subsection.12.4.1}%
+\contentsline {subsection}{\numberline {12.4.2}Attempt 1: the shipped sea-level benchmark fails}{192}{subsection.12.4.2}%
+\contentsline {subsection}{\numberline {12.4.3}Attempt 2: the rao-bvp flow-field example succeeds}{194}{subsection.12.4.3}%
+\contentsline {subsection}{\numberline {12.4.4}What this says about the working tree}{195}{subsection.12.4.4}%
+\contentsline {section}{\numberline {12.5}Known defects visible in the builds}{196}{section.12.5}%
+\contentsline {chapter}{\numberline {13}Verification of the Cleanup}{198}{chapter.13}%
+\contentsline {section}{\numberline {13.1}Test runs}{198}{section.13.1}%
+\contentsline {section}{\numberline {13.2}Where the 24 failures come from}{198}{section.13.2}%
+\contentsline {section}{\numberline {13.3}What the cleanup itself changed}{199}{section.13.3}%
+\contentsline {section}{\numberline {13.4}What was not verified}{199}{section.13.4}%
+\contentsline {chapter}{\numberline {14}Remaining Work and Program Goals}{200}{chapter.14}%
+\contentsline {section}{\numberline {14.1}Overall goals now}{201}{section.14.1}%
+\contentsline {section}{\numberline {14.2}What changed since the October review}{202}{section.14.2}%
+\contentsline {section}{\numberline {14.3}Open-work register}{202}{section.14.3}%
+\contentsline {subsection}{\numberline {14.3.1}PRG: program, release and governance}{203}{subsection.14.3.1}%
+\contentsline {subsection}{\numberline {14.3.2}S01--S02: entry, dispatch, inputs and contracts}{204}{subsection.14.3.2}%
+\contentsline {subsection}{\numberline {14.3.3}S03--S04: thermochemistry, performance and off-design}{205}{subsection.14.3.3}%
+\contentsline {subsection}{\numberline {14.3.4}S05--S06: nozzle geometry and the Rao/MOC contour}{206}{subsection.14.3.4}%
+\contentsline {subsection}{\numberline {14.3.5}S07: regenerative wall, cooling and wall structures}{207}{subsection.14.3.5}%
+\contentsline {subsection}{\numberline {14.3.6}S08--S10: injector, pumps, interface and mass}{208}{subsection.14.3.6}%
+\contentsline {subsection}{\numberline {14.3.7}S11--S12: CAD deliverables and figures}{210}{subsection.14.3.7}%
+\contentsline {subsection}{\numberline {14.3.8}S13--S14: MDO, requirements, re-evaluation and provenance}{210}{subsection.14.3.8}%
+\contentsline {subsection}{\numberline {14.3.9}X01--X08: cross-cutting groups}{212}{subsection.14.3.9}%
+\contentsline {subsection}{\numberline {14.3.10}Conflicts between sources}{213}{subsection.14.3.10}%
+\contentsline {section}{\numberline {14.4}Literature- and standards-blocked items}{214}{section.14.4}%
+\contentsline {section}{\numberline {14.5}Validation and qualification path}{215}{section.14.5}%
+\contentsline {subsection}{\numberline {14.5.1}Test-suite status}{216}{subsection.14.5.1}%
+\contentsline {section}{\numberline {14.6}Proposed roadmap: the next three milestones}{217}{section.14.6}%
+\contentsline {section}{\numberline {14.7}Decisions the owner still has to make}{218}{section.14.7}%
+\contentsline {chapter}{\numberline {15}Iterations on MOC Fixes: Literature, Decisions, and Evidence}{220}{chapter.15}%
+\contentsline {section}{\numberline {15.1}Baseline and evidence}{220}{section.15.1}%
+\contentsline {section}{\numberline {15.2}Implementation inventory and validation checks}{221}{section.15.2}%
+\contentsline {section}{\numberline {15.3}Literature inventory and graph coverage}{221}{section.15.3}%
+\contentsline {subsection}{\numberline {15.3.1}What the knowledge graph establishes}{223}{subsection.15.3.1}%
+\contentsline {subsection}{\numberline {15.3.2}Reconciled equations and preserved disagreements}{223}{subsection.15.3.2}%
+\contentsline {section}{\numberline {15.4}Traceability and prioritized backlog}{224}{section.15.4}%
+\contentsline {section}{\numberline {15.5}Iteration 01: Repair the identity of the test geometry}{227}{section.15.5}%
+\contentsline {subsection}{\numberline {15.5.1}Issue and intended change}{227}{subsection.15.5.1}%
+\contentsline {subsection}{\numberline {15.5.2}Change and validation}{228}{subsection.15.5.2}%
+\contentsline {section}{\numberline {15.6}Iteration 02: Explain the nonlinear and topology failures separately}{228}{section.15.6}%
+\contentsline {subsection}{\numberline {15.6.1}Measured baseline}{228}{subsection.15.6.1}%
+\contentsline {subsection}{\numberline {15.6.2}Literature requirement and proposed investigation}{229}{subsection.15.6.2}%
+\contentsline {section}{\numberline {15.7}Iteration 03: Restore downstream throat-radius propagation}{229}{section.15.7}%
+\contentsline {subsection}{\numberline {15.7.1}Confirmed defect and specification}{229}{subsection.15.7.1}%
+\contentsline {subsection}{\numberline {15.7.2}Change and validation}{229}{subsection.15.7.2}%
+\contentsline {section}{\numberline {15.8}Iteration 04: Impose shared D boundary data exactly}{230}{section.15.8}%
+\contentsline {subsection}{\numberline {15.8.1}Boundary parameterization}{230}{subsection.15.8.1}%
+\contentsline {subsection}{\numberline {15.8.2}Status}{230}{subsection.15.8.2}%
+\contentsline {section}{\numberline {15.9}Iteration 05: Report the actual failing gates}{230}{section.15.9}%
+\contentsline {section}{\numberline {15.10}Iteration 06: Restore unit-process convergence failure handling}{231}{section.15.10}%
+\contentsline {section}{\numberline {15.11}Iteration 07: Make benchmark assumptions explicit}{231}{section.15.11}%
+\contentsline {section}{\numberline {15.12}Iteration 08: Correct unsupported coefficient provenance claims}{232}{section.15.12}%
+\contentsline {section}{\numberline {15.13}Iteration 09: Require the same model in refinement comparisons}{232}{section.15.13}%
+\contentsline {section}{\numberline {15.14}Iteration 10: Remove provably inactive optimizer columns}{232}{section.15.14}%
+\contentsline {section}{\numberline {15.15}Iteration 11: Refuse unsupported reduced-coordinate sensitivities}{233}{section.15.15}%
+\contentsline {subsection}{\numberline {15.15.1}Validation of Iterations 09--11}{233}{subsection.15.15.1}%
+\contentsline {section}{\numberline {15.16}Iteration 12: Align the CLI and reports with the authoritative gates}{233}{section.15.16}%
+\contentsline {section}{\numberline {15.17}Iteration 13: A passing Nozzle-B configuration}{234}{section.15.17}%
+\contentsline {subsection}{\numberline {15.17.1}Reproducible numerical specification}{234}{subsection.15.17.1}%
+\contentsline {subsection}{\numberline {15.17.2}Measured outcome and its limits}{234}{subsection.15.17.2}%
+\contentsline {subsection}{\numberline {15.17.3}First refinement pair: retain the failed result}{234}{subsection.15.17.3}%
+\contentsline {section}{\numberline {15.18}Iteration 14: Diagnose the finer-grid branch change}{235}{section.15.18}%
+\contentsline {subsection}{\numberline {15.18.1}Broad regression checkpoint before the row-budget repair}{236}{subsection.15.18.1}%
+\contentsline {section}{\numberline {15.19}Iteration 15: Make kernel capacity explicit and reject partial seeds}{236}{section.15.19}%
+\contentsline {section}{\numberline {15.20}Iteration 16: Separate seed-search accuracy from final closure}{236}{section.15.20}%
+\contentsline {section}{\numberline {15.21}Iteration 17: Check the actual final live JAX kernel}{237}{section.15.21}%
+\contentsline {section}{\numberline {15.22}Iteration 18: Exact fixed-exit boundary parameterization}{237}{section.15.22}%
+\contentsline {subsection}{\numberline {15.22.1}Three solved levels: endpoint fixed, field comparison still fails}{238}{subsection.15.22.1}%
+\contentsline {subsection}{\numberline {15.22.2}Actual JAX integration: retain an underresolved result}{239}{subsection.15.22.2}%
+\contentsline {section}{\numberline {15.23}Iteration 19: Resolve the remaining field-angle gate}{239}{section.15.23}%
+\contentsline {subsection}{\numberline {15.23.1}Additional refinement and unchanged limits}{239}{subsection.15.23.1}%
+\contentsline {subsection}{\numberline {15.23.2}Completed result and independent review}{239}{subsection.15.23.2}%
+\contentsline {subsection}{\numberline {15.23.3}Post-freeze integration checkpoint}{241}{subsection.15.23.3}%
+\contentsline {section}{\numberline {15.24}Final audit and remaining evidence}{241}{section.15.24}%
+\contentsline {subsection}{\numberline {15.24.1}What is established, and what a green local gate means}{241}{subsection.15.24.1}%
+\contentsline {subsection}{\numberline {15.24.2}Research questions requiring additional primary evidence}{241}{subsection.15.24.2}%
+\contentsline {subsection}{\numberline {15.24.3}Implemented capabilities with incomplete validation}{242}{subsection.15.24.3}%
+\contentsline {subsection}{\numberline {15.24.4}Architecture and scope boundaries}{242}{subsection.15.24.4}%
+\contentsline {chapter}{\numberline {A}Documentation Inventory}{243}{appendix.A}%
+\contentsline {section}{\numberline {A.1}How to read the inventory}{243}{section.A.1}%
+\contentsline {section}{\numberline {A.2}Inventory by folder}{244}{section.A.2}%
+\contentsline {section}{\numberline {A.3}Files added on 5 November 2026}{249}{section.A.3}%
+\contentsline {section}{\numberline {A.4}Superseded and historical documents}{250}{section.A.4}%
+\contentsline {section}{\numberline {A.5}Filing notes and discrepancies}{252}{section.A.5}%
+\contentsline {section}{\numberline {A.6}Counts}{254}{section.A.6}%
+\contentsline {chapter}{\numberline {B}Cleanup Record of 5 November 2026}{255}{appendix.B}%
+\contentsline {section}{\numberline {B.1}Summary of actions}{255}{section.B.1}%
+\contentsline {section}{\numberline {B.2}Documentation regrouped by stage}{256}{section.B.2}%
+\contentsline {subsection}{\numberline {B.2.1}Starting point}{256}{subsection.B.2.1}%
+\contentsline {subsection}{\numberline {B.2.2}Placement rule}{256}{subsection.B.2.2}%
+\contentsline {subsection}{\numberline {B.2.3}How git sees the move}{259}{subsection.B.2.3}%
+\contentsline {section}{\numberline {B.3}Reference rewrites}{259}{section.B.3}%
+\contentsline {subsection}{\numberline {B.3.1}Mechanism}{259}{subsection.B.3.1}%
+\contentsline {subsection}{\numberline {B.3.2}Files rewritten outside docs}{259}{subsection.B.3.2}%
+\contentsline {subsection}{\numberline {B.3.3}Rewrites that carry behaviour}{260}{subsection.B.3.3}%
+\contentsline {subsection}{\numberline {B.3.4}References still pointing at old or missing paths}{261}{subsection.B.3.4}%
+\contentsline {section}{\numberline {B.4}requirements.txt returned to the root}{261}{section.B.4}%
+\contentsline {section}{\numberline {B.5}Build outputs archived}{261}{section.B.5}%
+\contentsline {subsection}{\numberline {B.5.1}What was moved}{261}{subsection.B.5.1}%
+\contentsline {subsection}{\numberline {B.5.2}Keeping the version counter}{262}{subsection.B.5.2}%
+\contentsline {subsection}{\numberline {B.5.3}Effect on the knowledge system}{262}{subsection.B.5.3}%
+\contentsline {section}{\numberline {B.6}Scratch and regenerable files}{262}{section.B.6}%
+\contentsline {section}{\numberline {B.7}What was deliberately not moved}{263}{section.B.7}%
+\contentsline {section}{\numberline {B.8}Test run after the cleanup}{264}{section.B.8}%
+\contentsline {section}{\numberline {B.9}Proposed future package layout (not performed)}{264}{section.B.9}%
+\contentsline {subsection}{\numberline {B.9.1}Risks}{265}{subsection.B.9.1}%
+\contentsline {section}{\numberline {B.10}Follow-up actions}{266}{section.B.10}%

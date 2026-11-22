@@ -1,0 +1,1529 @@
+{
+ "packet": "V-WHITE-p826-829",
+ "kind": "verification",
+ "document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+ "source_pdf": "propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf",
+ "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+ "pages": [
+  826,
+  829
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 826,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/p0826.png",
+   "sha256": "54a545cd3e2cd1be5ad6362dfce9cd5fa80e250726cb3296946ba228520a2baa",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 827,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/p0827.png",
+   "sha256": "684f564bb297744434840135ab1122c3e7271850bf3e3f487cb33fe40a7d27d9",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 828,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/p0828.png",
+   "sha256": "b75455b5b39cfdd6e94f5b6cded8bac5a0c1afaa1fa40062e5bf8cbc2537de1f",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 829,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/p0829.png",
+   "sha256": "d0195799dbd77b22c4f98a9eb1fbe7479231e482d406a5e35098211f43b1a93e",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_249c26a5c8619a7be8359916",
+  "ENR_55fe16b04e8f36d6954bf085",
+  "ENR_90345549297146439162a09e",
+  "ENR_bc5f860c657231530f31e644"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_358d78050c6a10f241c264f2",
+   "kind": "figure",
+   "pages": [
+    826
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 197.05770874023438,
+     "t": 380.1341552734375,
+     "r": 436.6300354003906,
+     "b": 340.8437805175781,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_249c26a5c8619a7be8359916",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p826-826-5f6ff7391b89cc1a7c7402e5787bb901089b54d1a8d685001edd7ab4a944fe47.json",
+   "raw_sha256": "c939a9aed553448faa94879d36fbd9c39e7dd95fb817f4cd23b21537e3ebd2c1",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_5772393f23c78fe203ffca2f",
+   "kind": "formula",
+   "pages": [
+    826
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/5",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 282.0,
+     "t": 482.6666666666667,
+     "r": 351.6666666666667,
+     "b": 458.3333333333333,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\frac { d D } { d x } = \\rho b U ^ { 2 } \\frac { d \\theta } { d x }",
+   "original_text": "dD_ dO a",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_249c26a5c8619a7be8359916",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p826-826-5f6ff7391b89cc1a7c7402e5787bb901089b54d1a8d685001edd7ab4a944fe47.json",
+   "raw_sha256": "c939a9aed553448faa94879d36fbd9c39e7dd95fb817f4cd23b21537e3ebd2c1",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_cec5fc83f44f3620802681a3",
+   "kind": "formula",
+   "pages": [
+    826
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/10",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 169.66666666666666,
+     "t": 260.66666666666663,
+     "r": 465.0,
+     "b": 233.0,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\mu ( x , y ) \\approx U \\left ( \\frac { 2 y } { \\delta } - \\frac { y ^ { 2 } } { \\delta ^ { 2 } } \\right ) \\quad 0 \\leq y \\leq \\delta ( x )",
+   "original_text": "ws») ~u(2 - ) 0<y <3) 7)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_249c26a5c8619a7be8359916",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p826-826-5f6ff7391b89cc1a7c7402e5787bb901089b54d1a8d685001edd7ab4a944fe47.json",
+   "raw_sha256": "c939a9aed553448faa94879d36fbd9c39e7dd95fb817f4cd23b21537e3ebd2c1",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_dae0b68bc03d6da31a1576c4",
+   "kind": "formula",
+   "pages": [
+    826
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/12",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 270.0,
+     "t": 150.0,
+     "r": 470.3333333333333,
+     "b": 103.66666666666663,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\left | \\begin{matrix} \\delta & \\delta ^ { 2 } \\end{matrix} \\right \\rangle ^ { 1 5 }",
+   "original_text": "5 _ 2nU y=0 a (7.7)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_249c26a5c8619a7be8359916",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p826-826-5f6ff7391b89cc1a7c7402e5787bb901089b54d1a8d685001edd7ab4a944fe47.json",
+   "raw_sha256": "c939a9aed553448faa94879d36fbd9c39e7dd95fb817f4cd23b21537e3ebd2c1",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_de78bbf67447092fd408a40c",
+   "kind": "formula",
+   "pages": [
+    826
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/3",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 119.33333333333333,
+     "t": 592.0,
+     "r": 514.3333333333333,
+     "b": 536.6666666666667,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "D ( x ) = b \\int _ { 0 } ^ { x } \\tau _ { w } ( x ) \\, d x \\\\ \\intertext { o r } \\frac { d D } { \\frac { w } { 2 } } = b \\tau _ { w }",
+   "original_text": "or D(x) = o| TAX) dx 0 (74)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_249c26a5c8619a7be8359916",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p826-826-5f6ff7391b89cc1a7c7402e5787bb901089b54d1a8d685001edd7ab4a944fe47.json",
+   "raw_sha256": "c939a9aed553448faa94879d36fbd9c39e7dd95fb817f4cd23b21537e3ebd2c1",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_ea2c174c7aa8bbc809948280",
+   "kind": "formula",
+   "pages": [
+    826
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/1",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 168.0,
+     "t": 686.6666666666666,
+     "r": 290.33333333333337,
+     "b": 656.3333333333334,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "D ( x ) = \\rho b U ^ { 2 } \\theta \\quad \\theta = \\int _ { 0 } ^ { \\theta }",
+   "original_text": "D(x) = pbU?@ = | 0",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_249c26a5c8619a7be8359916",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p826-826-5f6ff7391b89cc1a7c7402e5787bb901089b54d1a8d685001edd7ab4a944fe47.json",
+   "raw_sha256": "c939a9aed553448faa94879d36fbd9c39e7dd95fb817f4cd23b21537e3ebd2c1",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_0b74398e5a6b20b127df8f28",
+   "kind": "formula",
+   "pages": [
+    827
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/5",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 182.0,
+     "t": 401.6666666666667,
+     "r": 452.0,
+     "b": 384.6666666666667,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "c _ { f } = \\frac { r } { \\rho U ^ { 2 } } \\approx \\left ( \\frac { 1 / 2 } { R e _ { x } } \\right ) \\quad = \\frac { } { R e _ { x } ^ { 1 / 2 } }",
+   "original_text": "Cr Sa eS SS SE (7.10) 3 am Rel",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_55fe16b04e8f36d6954bf085",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p827-827-fd27b7aee3049e6cc5214acbb1e1a30d2b8a879bf8365a1bde8d11bbafce7093.json",
+   "raw_sha256": "138ca40642e19d403a5b13abaa8bea6cbbf4fcea073c821c3d9c4d4e36e6c35b",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_405b229af4d40ad8c4293c4d",
+   "kind": "formula",
+   "pages": [
+    827
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/2",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 119.33333333333333,
+     "t": 586.0,
+     "r": 514.3333333333333,
+     "b": 558.0,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\text {or} \\quad \\frac { \\delta } { x } \\approx 5 . 5 \\left ( \\frac { \\nu } { U x } \\right ) ^ { 1 / 2 } = \\frac { 5 . 5 } { R e _ { x } ^ { 1 / 2 } }",
+   "original_text": "2 or 2 ~5s(2) => (7.9)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_55fe16b04e8f36d6954bf085",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p827-827-fd27b7aee3049e6cc5214acbb1e1a30d2b8a879bf8365a1bde8d11bbafce7093.json",
+   "raw_sha256": "138ca40642e19d403a5b13abaa8bea6cbbf4fcea073c821c3d9c4d4e36e6c35b",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_7b417cbd42491b354246d26e",
+   "kind": "formula",
+   "pages": [
+    827
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/0",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 199.0,
+     "t": 705.0,
+     "r": 435.66666666666663,
+     "b": 683.3333333333334,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\delta \\, d \\delta \\approx 1 5 \\frac { \\nu } { U } \\, d x",
+   "original_text": "3 d3 ~ IS rd (7.8)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_55fe16b04e8f36d6954bf085",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p827-827-fd27b7aee3049e6cc5214acbb1e1a30d2b8a879bf8365a1bde8d11bbafce7093.json",
+   "raw_sha256": "138ca40642e19d403a5b13abaa8bea6cbbf4fcea073c821c3d9c4d4e36e6c35b",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_b0b03929bf5e2d67dcebe5b1",
+   "kind": "figure",
+   "pages": [
+    828
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [
+    "Fig. 7.4 Displacement effect of a boundary layer."
+   ],
+   "bbox": [
+    {
+     "l": 167.77590942382812,
+     "t": 719.9414215087891,
+     "r": 465.30389404296875,
+     "b": 596.1176605224609,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/0\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_bc5f860c657231530f31e644",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p828-828-29938ad7e150f4d1d3845a1684ecc57627c22719aafef31aa07bf1e60ff35aa9.json",
+   "raw_sha256": "d743c76ef351dcfc8a8ce05386396546a5ee01d0e5c9a1aa1fa2c7f0f0b8028e",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_23d7de3918b1d186018ad407",
+   "kind": "formula",
+   "pages": [
+    828
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/7",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 171.33333333333334,
+     "t": 467.3333333333333,
+     "r": 462.3333333333333,
+     "b": 435.0,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\int _ { 0 } ^ { h } \\rho U b \\, d y = \\int _ { 0 } ^ { \\delta } \\rho u b \\, d y \\quad \\delta = h + \\delta ^ { * }",
+   "original_text": "h 4 | pUb dy = | pub dy 6=h+ &* (7.11) 0 0",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_bc5f860c657231530f31e644",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p828-828-29938ad7e150f4d1d3845a1684ecc57627c22719aafef31aa07bf1e60ff35aa9.json",
+   "raw_sha256": "d743c76ef351dcfc8a8ce05386396546a5ee01d0e5c9a1aa1fa2c7f0f0b8028e",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_44bb6aba988e0e9dee9efe8f",
+   "kind": "formula",
+   "pages": [
+    828
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/9",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 184.66666666666669,
+     "t": 353.6666666666667,
+     "r": 514.3333333333333,
+     "b": 285.0,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "U h = \\int _ { 0 } ^ { \\delta } ( U + u - U ) \\, d y = U ( h + \\delta ^ { * } ) + \\int _ { 0 } ^ { \\delta } ( u - U ) \\, d y \\\\ \\delta ^ { * } = \\int _ { 0 } ^ { \\delta } \\left ( 1 - \\frac { u } { U } \\right ) d y",
+   "original_text": "5 Fy Uh = | (U + u— U) dy = Uh + 5*) + { (u — U)dy 0 0 é s* = | (1 _ Yay (7.12) 0 U",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_bc5f860c657231530f31e644",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p828-828-29938ad7e150f4d1d3845a1684ecc57627c22719aafef31aa07bf1e60ff35aa9.json",
+   "raw_sha256": "d743c76ef351dcfc8a8ce05386396546a5ee01d0e5c9a1aa1fa2c7f0f0b8028e",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_b6cb953a52490a0442025d7c",
+   "kind": "formula",
+   "pages": [
+    828
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/12",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 188.33333333333331,
+     "t": 172.0,
+     "r": 446.3333333333333,
+     "b": 152.0,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\delta ^ { * } \\approx \\frac { 1 } { 3 } \\, \\delta \\quad \\frac { \\delta ^ { * } } { r } \\approx \\frac { 1 . 8 3 } { R e ^ { 1 / 2 } }",
+   "original_text": "I 6* =-—58 ———— (7.13)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_bc5f860c657231530f31e644",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p828-828-29938ad7e150f4d1d3845a1684ecc57627c22719aafef31aa07bf1e60ff35aa9.json",
+   "raw_sha256": "d743c76ef351dcfc8a8ce05386396546a5ee01d0e5c9a1aa1fa2c7f0f0b8028e",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_0cdfe5fd0ea99df9e3f5a9e4",
+   "kind": "formula",
+   "pages": [
+    829
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/9",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 124.33333333333333,
+     "t": 215.33333333333337,
+     "r": 510.0,
+     "b": 171.33333333333337,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\frac { \\delta } { x } = \\frac { 5 . 0 } { \\sqrt { 6 2 0 0 } } = 0 . 0 6 3 4 \\\\ \\text {or, at } x = 1 \\, \\text {ft} , \\quad \\delta = 0 . 0 6 3 4 \\, \\text {ft} \\approx 0 . 7 6 \\, \\text {in} \\quad \\text {Ans. (a)}",
+   "original_text": "a5: . o _ 0.0634 ~ 6200 or, at x = 1 ft, 5 = 0.0634 ft = 0.76 in Ans. (a)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_90345549297146439162a09e",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p829-829-cad965c98f5d9959491c8e78e1725eb5e0c34901024680cd07b0f8dc6695c1c3.json",
+   "raw_sha256": "00e8b44d394fbd91d903fef758e06a849b102d5d7891015ba25b8a7d40508164",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_70ac1bbb313dc423976b593c",
+   "kind": "formula",
+   "pages": [
+    829
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/7",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 242.0,
+     "t": 334.0,
+     "r": 392.66666666666663,
+     "b": 317.6666666666667,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "R e _ { l } = \\frac { U L } { } = \\frac { ( 1 \\hat { \\iota } / s ) ( 1 \\hat { \\iota } ) } { 1 \\cos \\Gamma \\, \\sigma \\hat { \\imath } ^ { 2 } ( \\hat { \\imath } ) } = 6 2 0 0",
+   "original_text": "Re, = = CC = 6200",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_90345549297146439162a09e",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p829-829-cad965c98f5d9959491c8e78e1725eb5e0c34901024680cd07b0f8dc6695c1c3.json",
+   "raw_sha256": "00e8b44d394fbd91d903fef758e06a849b102d5d7891015ba25b8a7d40508164",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [
+  {
+   "id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_17E5EFE3",
+   "store": "equations",
+   "type": "Equation",
+   "page": 826,
+   "is_target": false,
+   "active": false,
+   "source_state": "SUPERSEDED_EXTRACTION",
+   "verification": null,
+   "label": "Eq. (7.5) Kármán momentum integral relation for flat-plate flow",
+   "equation_number": "7.5",
+   "form": "NOT RENDERED IN MARKDOWN. Kármán momentum integral relation relating wall shear to the streamwise growth of momentum thickness for U = constant.",
+   "statement": null,
+   "quote": "_momentum integral relation_ for flat-plate boundary layer flow:",
+   "confidence": "low",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "θ",
+     "meaning": "momentum thickness",
+     "units": "length",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "τ_w",
+     "meaning": "wall shear stress",
+     "units": "",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "U",
+     "meaning": "external velocity (constant)",
+     "units": "",
+     "role": "parameter",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_FLOW_SPEED"
+     ],
+     "normalization_history": [
+      {
+       "resolution_state": "UNRESOLVED_ENTITY",
+       "quantity_candidates": []
+      }
+     ],
+     "normalization_basis": "SYSTEM_INFERS: symbol, exact canonical units and explicit meaning aliases; no unit conversion or physical validity inferred"
+    }
+   ],
+   "assumptions": [
+    "U = constant"
+   ],
+   "validity": [
+    "valid for either laminar or turbulent flat-plate flow"
+   ],
+   "extraction_note": "Equation not rendered; validity statement survives in prose.",
+   "same_page_formula_candidates": [
+    "CAND_5772393f23c78fe203ffca2f",
+    "CAND_cec5fc83f44f3620802681a3",
+    "CAND_dae0b68bc03d6da31a1576c4",
+    "CAND_de78bbf67447092fd408a40c",
+    "CAND_ea2c174c7aa8bbc809948280"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 826
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": [
+      "DAMAGE_OR_REPETITION_MARKER"
+     ]
+    },
+    {
+     "check": "variable_symbol_absent_from_form",
+     "symbols": [
+      "θ",
+      "τ_w"
+     ]
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "θ",
+      "τ_w"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_2AECD826",
+   "store": "equations",
+   "type": "Equation",
+   "page": 828,
+   "is_target": false,
+   "active": false,
+   "source_state": "SUPERSEDED_EXTRACTION",
+   "verification": null,
+   "label": "Eq. (7.12) displacement thickness in terms of velocity profile",
+   "equation_number": "7.12",
+   "form": "NOT RENDERED IN MARKDOWN. Source: cancel ρ and b from Eq. (7.11), evaluate the left integral, add and subtract U in the right integrand; result shows δ*/δ depends only on the dimensionless profile shape u/U.",
+   "statement": null,
+   "quote": "Thus the ratio of _δ_ <sup>*</sup> / _δ_ varies only with the dimensionless velocity profile",
+   "confidence": "low",
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "δ*",
+     "meaning": "displacement thickness",
+     "units": "length",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "δ",
+     "meaning": "boundary layer thickness (99 percent of U)",
+     "units": "length",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": [],
+     "normalization_history": [
+      {
+       "resolution_state": "RESOLVED",
+       "quantity_candidates": [
+        "QTY_TW"
+       ]
+      }
+     ],
+     "normalization_basis": "SYSTEM_INFERS: symbol and exact canonical units; no source meaning or unit conversion inferred"
+    },
+    {
+     "symbol": "u/U",
+     "meaning": "dimensionless velocity profile",
+     "units": "",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [
+    "incompressible flat-plate boundary layer with U = constant"
+   ],
+   "validity": [],
+   "extraction_note": "Integral form not rendered; described from surrounding prose only.",
+   "same_page_formula_candidates": [
+    "CAND_23d7de3918b1d186018ad407",
+    "CAND_44bb6aba988e0e9dee9efe8f",
+    "CAND_b6cb953a52490a0442025d7c"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 828
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": [
+      "DAMAGE_OR_REPETITION_MARKER"
+     ]
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "δ*",
+      "δ",
+      "u/U"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_850EBB3B",
+   "store": "equations",
+   "type": "Equation",
+   "page": 828,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "White Eq. (7.11) displacement mass-conservation balance",
+   "equation_number": "7.11",
+   "form": "integral_0^h rho*U*b dy = integral_0^delta rho*u*b dy; delta = h + delta_star",
+   "statement": null,
+   "quote": "must deflect outward a distance _δ_ <sup>*</sup> ( _x_ ) to satisfy conservation of mass between the",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "rho",
+     "meaning": "density",
+     "units": "kg/m^3",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_RHO"
+     ]
+    },
+    {
+     "symbol": "U",
+     "meaning": "uniform outer-stream velocity",
+     "units": "m/s",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_FLOW_SPEED"
+     ],
+     "normalization_history": [
+      {
+       "resolution_state": "UNRESOLVED_ENTITY",
+       "quantity_candidates": []
+      }
+     ],
+     "normalization_basis": "SYSTEM_INFERS: symbol, exact canonical units and explicit meaning aliases; no unit conversion or physical validity inferred"
+    },
+    {
+     "symbol": "b",
+     "meaning": "plate width",
+     "units": "m",
+     "role": "source_variable",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "y",
+     "meaning": "distance normal to the plate",
+     "units": "m",
+     "role": "source_variable",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "h",
+     "meaning": "inlet outer-streamline height",
+     "units": "m",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_STREAMLINE_HEIGHT"
+     ]
+    },
+    {
+     "symbol": "delta",
+     "meaning": "boundary-layer thickness",
+     "units": "m",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_BL_THICKNESS"
+     ]
+    },
+    {
+     "symbol": "u",
+     "meaning": "local mean streamwise velocity",
+     "units": "m/s",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_FLOW_SPEED"
+     ],
+     "normalization_history": [
+      {
+       "resolution_state": "UNRESOLVED_ENTITY",
+       "quantity_candidates": []
+      }
+     ],
+     "normalization_basis": "SYSTEM_INFERS: symbol, exact canonical units and explicit meaning aliases; no unit conversion or physical validity inferred"
+    },
+    {
+     "symbol": "delta_star",
+     "meaning": "displacement thickness",
+     "units": "m",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_BL_DISPLACEMENT"
+     ]
+    }
+   ],
+   "assumptions": [
+    "Uniform outer-stream velocity in the source flat-plate analysis"
+   ],
+   "validity": [
+    "Source flat-plate mass-balance construction with common density and constant plate width; no variable-density generalization asserted."
+   ],
+   "extraction_note": "Docling region output matches original displayed equation after visual comparison. SI units are consistent dimensional interpretations. This is source transcription, not numerical or physical validation.",
+   "same_page_formula_candidates": [
+    "CAND_23d7de3918b1d186018ad407",
+    "CAND_44bb6aba988e0e9dee9efe8f",
+    "CAND_b6cb953a52490a0442025d7c"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 828
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "b",
+      "y"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_890DD85F",
+   "store": "equations",
+   "type": "Equation",
+   "page": 828,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "White Eq. (7.12) displacement-thickness definition",
+   "equation_number": "7.12",
+   "form": "delta_star = integral_0^delta (1-u/U) dy",
+   "statement": null,
+   "quote": "Thus the ratio of _δ_ <sup>*</sup> / _δ_ varies only with the dimensionless velocity profile",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "delta_star",
+     "meaning": "displacement thickness",
+     "units": "m",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_BL_DISPLACEMENT"
+     ]
+    },
+    {
+     "symbol": "delta",
+     "meaning": "boundary-layer thickness",
+     "units": "m",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_BL_THICKNESS"
+     ]
+    },
+    {
+     "symbol": "u",
+     "meaning": "local mean streamwise velocity",
+     "units": "m/s",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_FLOW_SPEED"
+     ],
+     "normalization_history": [
+      {
+       "resolution_state": "UNRESOLVED_ENTITY",
+       "quantity_candidates": []
+      }
+     ],
+     "normalization_basis": "SYSTEM_INFERS: symbol, exact canonical units and explicit meaning aliases; no unit conversion or physical validity inferred"
+    },
+    {
+     "symbol": "U",
+     "meaning": "uniform outer-stream velocity",
+     "units": "m/s",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_FLOW_SPEED"
+     ],
+     "normalization_history": [
+      {
+       "resolution_state": "UNRESOLVED_ENTITY",
+       "quantity_candidates": []
+      }
+     ],
+     "normalization_basis": "SYSTEM_INFERS: symbol, exact canonical units and explicit meaning aliases; no unit conversion or physical validity inferred"
+    },
+    {
+     "symbol": "y",
+     "meaning": "distance normal to the plate",
+     "units": "m",
+     "role": "source_variable",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [
+    "Uniform outer-stream velocity in the source flat-plate analysis",
+    "The source derivation treats density rho and plate width b as common constant factors that can be cancelled from the inlet and outlet mass integrals."
+   ],
+   "validity": [
+    "Source flat-plate mass-balance construction with common density and constant plate width; no variable-density generalization asserted."
+   ],
+   "extraction_note": "Docling region output matches original displayed equation after visual comparison. SI units are consistent dimensional interpretations. This is source transcription, not numerical or physical validation.",
+   "same_page_formula_candidates": [
+    "CAND_23d7de3918b1d186018ad407",
+    "CAND_44bb6aba988e0e9dee9efe8f",
+    "CAND_b6cb953a52490a0442025d7c"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 828
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "y"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_95B47AD1",
+   "store": "equations",
+   "type": "Equation",
+   "page": 826,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "White Eq. (7.5) flat-plate momentum integral",
+   "equation_number": "7.5",
+   "form": "tau_w = rho*U^2*dtheta/dx",
+   "statement": null,
+   "quote": "_momentum integral relation_ for flat-plate boundary layer flow:",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "tau_w",
+     "meaning": "wall shear stress",
+     "units": "Pa",
+     "role": "source_variable",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "rho",
+     "meaning": "density",
+     "units": "kg/m^3",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_RHO"
+     ]
+    },
+    {
+     "symbol": "U",
+     "meaning": "uniform outer-stream velocity",
+     "units": "m/s",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_FLOW_SPEED"
+     ],
+     "normalization_history": [
+      {
+       "resolution_state": "UNRESOLVED_ENTITY",
+       "quantity_candidates": []
+      }
+     ],
+     "normalization_basis": "SYSTEM_INFERS: symbol, exact canonical units and explicit meaning aliases; no unit conversion or physical validity inferred"
+    },
+    {
+     "symbol": "theta",
+     "meaning": "momentum thickness",
+     "units": "m",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_BL_MOMENTUM"
+     ]
+    },
+    {
+     "symbol": "x",
+     "meaning": "distance from the plate leading edge",
+     "units": "m",
+     "role": "source_variable",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [
+    "Uniform outer-stream velocity in the source flat-plate analysis"
+   ],
+   "validity": [
+    "Flat-plate boundary layer; Eq7.5 is stated to hold for laminar or turbulent flow"
+   ],
+   "extraction_note": "Docling region output matches original displayed equation after visual comparison. SI units are consistent dimensional interpretations. This is source transcription, not numerical or physical validation.",
+   "same_page_formula_candidates": [
+    "CAND_5772393f23c78fe203ffca2f",
+    "CAND_cec5fc83f44f3620802681a3",
+    "CAND_dae0b68bc03d6da31a1576c4",
+    "CAND_de78bbf67447092fd408a40c",
+    "CAND_ea2c174c7aa8bbc809948280"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 826
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "tau_w",
+      "x"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_F95E31B5",
+   "store": "equations",
+   "type": "Equation",
+   "page": 828,
+   "is_target": false,
+   "active": false,
+   "source_state": "SUPERSEDED_EXTRACTION",
+   "verification": null,
+   "label": "Eq. (7.11) displacement of outer streamlines (conservation of mass)",
+   "equation_number": "7.11",
+   "form": "NOT RENDERED IN MARKDOWN. Mass-conservation balance between inlet and outlet of Fig. 7.4 defining the outward streamline deflection δ*(x).",
+   "statement": null,
+   "quote": "must deflect outward a distance _δ_ <sup>*</sup> ( _x_ ) to satisfy conservation of mass between the",
+   "confidence": "low",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "δ*(x)",
+     "meaning": "outward deflection of outer streamlines = displacement thickness",
+     "units": "length",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "ρ",
+     "meaning": "fluid density",
+     "units": "",
+     "role": "parameter",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_RHO"
+     ]
+    },
+    {
+     "symbol": "b",
+     "meaning": "plate width into the paper",
+     "units": "length",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "Equation not rendered; only the prose definition survives.",
+   "same_page_formula_candidates": [
+    "CAND_23d7de3918b1d186018ad407",
+    "CAND_44bb6aba988e0e9dee9efe8f",
+    "CAND_b6cb953a52490a0442025d7c"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 828
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": [
+      "DAMAGE_OR_REPETITION_MARKER"
+     ]
+    },
+    {
+     "check": "variable_symbol_absent_from_form",
+     "symbols": [
+      "ρ"
+     ]
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "δ*(x)",
+      "b"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_19F3D13C",
+   "store": "claims",
+   "type": "Claim",
+   "page": 827,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "For Re_x less than 2500, boundary layer theory fails because the thick layer has a significant effect on the outer inviscid flow.",
+   "quote": "2500 we can estimate that boundary layer theory fails because the thick layer has",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 827
+    }
+   ]
+  },
+  {
+   "id": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_1A93E486",
+   "store": "claims",
+   "type": "Claim",
+   "page": 827,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Above Re_x ≈ 3 × 10^6 the turbulent Reynolds number may be arbitrarily large; a practical limit at present is 5 × 10^10 for oil supertankers.",
+   "quote": "upward the turbulent Reynolds number may be arbitrarily large, and a practical",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 827
+    }
+   ]
+  },
+  {
+   "id": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_36C08E96",
+   "store": "claims",
+   "type": "Claim",
+   "page": 827,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "A boundary layer can be judged thin if the ratio δ/x is less than about 0.1, which occurs at Re_x = 2500.",
+   "quote": "A boundary layer can be judged as “thin” if, say, the ratio _δ_ / _x_ is less than",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 827
+    }
+   ]
+  },
+  {
+   "id": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_6CF41B94",
+   "store": "claims",
+   "type": "Claim",
+   "page": 828,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The quantity δ* is called the displacement thickness of the boundary layer; outer streamlines must deflect outward by δ*(x) to conserve mass between inlet and outlet.",
+   "quote": "The quantity _δ_ <sup>*</sup> is called the _displacement thickness_ of the boundary layer. To",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 828
+    }
+   ]
+  },
+  {
+   "id": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_AFA53D41",
+   "store": "claims",
+   "type": "Claim",
+   "page": 829,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Because δ* is much smaller than x for large Re_x, the velocity normal to the wall is much smaller than the velocity parallel to the wall; this is a key assumption of boundary layer theory.",
+   "quote": "_δ_ <sup>*</sup>, we conclude that the velocity normal to the wall is much smaller than the",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 829
+    }
+   ]
+  },
+  {
+   "id": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_BA24252F",
+   "store": "claims",
+   "type": "Claim",
+   "page": 828,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The Kármán parabolic-profile estimates of displacement thickness are only 6 percent away from the exact laminar flat-plate solutions.",
+   "quote": "These estimates are only 6 percent away from the exact solutions for laminar",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 828
+    }
+   ]
+  },
+  {
+   "id": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_BD3E34CD",
+   "store": "claims",
+   "type": "Claim",
+   "page": 828,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The ratio of displacement thickness to boundary layer thickness varies only with the dimensionless velocity profile shape u/U.",
+   "quote": "Thus the ratio of _δ_ <sup>*</sup> / _δ_ varies only with the dimensionless velocity profile",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 828
+    }
+   ]
+  },
+  {
+   "id": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_E864D84D",
+   "store": "claims",
+   "type": "Claim",
+   "page": 826,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The momentum integral relation for flat-plate boundary layer flow is valid for either laminar or turbulent flat-plate flow.",
+   "quote": "It is valid for either laminar or turbulent flat-plate flow.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 826
+    }
+   ]
+  },
+  {
+   "id": "ASM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_C205E16E",
+   "store": "entities",
+   "type": "Assumption",
+   "page": 829,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "Velocity normal to the wall is much smaller than velocity parallel to the wall (key boundary layer assumption).",
+   "equation_number": null,
+   "form": null,
+   "statement": "Velocity normal to the wall is much smaller than velocity parallel to the wall (key boundary layer assumption).",
+   "quote": "_δ_ <sup>*</sup>, we conclude that the velocity normal to the wall is much smaller than the",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 829
+    }
+   ]
+  },
+  {
+   "id": "CONST_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_2FF1C760",
+   "store": "entities",
+   "type": "EmpiricalConstant",
+   "page": 827,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "Thin-boundary-layer Reynolds number threshold = 2500 dimensionless",
+   "equation_number": null,
+   "form": null,
+   "statement": null,
+   "quote": "A boundary layer can be judged as “thin” if, say, the ratio _δ_ / _x_ is less than",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 827
+    }
+   ]
+  },
+  {
+   "id": "CONST_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_EB9D3CDB",
+   "store": "entities",
+   "type": "EmpiricalConstant",
+   "page": 827,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "Practical upper limit of turbulent flat-plate Re_x = 5 × 10^10 dimensionless",
+   "equation_number": null,
+   "form": null,
+   "statement": null,
+   "quote": "upward the turbulent Reynolds number may be arbitrarily large, and a practical",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 827
+    }
+   ]
+  },
+  {
+   "id": "VAL_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_26CED797",
+   "store": "validity",
+   "type": "ValidityEnvelope",
+   "page": 826,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Kármán momentum integral relation is valid for either laminar or turbulent flat-plate flow.",
+   "quote": "It is valid for either laminar or turbulent flat-plate flow.",
+   "confidence": null,
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 826
+    }
+   ]
+  },
+  {
+   "id": "VAL_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_7D89A39E",
+   "store": "validity",
+   "type": "ValidityEnvelope",
+   "page": 827,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Boundary layer is thin (δ/x < 0.1) for Re_x >= 2500; boundary layer theory fails below Re_x = 2500.",
+   "quote": "2500 we can estimate that boundary layer theory fails because the thick layer has",
+   "confidence": null,
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 827
+    }
+   ]
+  }
+ ],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01103",
+   "page_start": 825,
+   "page_end": 826,
+   "section": "**Kármán’s Analysis of the Flat Plate**",
+   "text": "Equation (7.2) was derived in 1921 by Kármán [7], who wrote it in the\n\nconvenient form of the _momentum thickness_ _θ_ :\n\nMomentum thickness is thus a measure of total plate drag. Kármán then\nnoted that the drag also equals the integrated wall shear stress along the plate:\n\nMeanwhile, the derivative of Eq. (7.3), with _U_ = constant, is\n\nBy comparing this with Eq. (7.4) Kármán arrived at what is now called the\n_momentum integral relation_ for flat-plate boundary layer flow:\n\nIt is valid for either laminar or turbulent flat-plate flow.\n\nTo get a numerical result for laminar flow, Kármán assumed that the\nvelocity profiles had an approximately parabolic shape\n\nwhich makes it possible to estimate both momentum thickness and wall\nshear:\n\nBy substituting (7.7) into (7.5) and rearranging we obtain"
+  },
+  {
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01104",
+   "page_start": 827,
+   "page_end": 827,
+   "section": "**Kármán’s Analysis of the Flat Plate**",
+   "text": "where _ν_ = _μ_ / _ρ_ . We can integrate from 0 to _x_, assuming that _δ_ = 0 at _x_ = 0, the\nleading edge:\n\nThis is the desired thickness estimate. It is all approximate, of course, part\nof Kármán’s _momentum integral theory_ [7], but it is startlingly accurate, being\nonly 10 percent higher than the known accepted solution for laminar flat-plate\nflow, which we gave as Eq. (7.1a).\n\nBy combining Eqs. (7.9) and (7.7) we also obtain a shear stress estimate\nalong the plate:\n\nAgain this estimate, in spite of the crudeness of the profile assumption [Eq.\n(7.6)] is only 10 percent higher than the known exact laminar-plate-flow solution\n\n, treated in Sec. 7.4. The dimensionless quantity _cf_, called the _skin_\n_friction coefficient,_ is analogous to the friction factor _f_ in ducts.\n\nA boundary layer can be judged as “thin” if, say, the ratio _δ_ / _x_ is less than\nabout 0.1. This occurs at or at Re _x_ = 2500. For Re _x_ less than\n2500 we can estimate that boundary layer theory fails because the thick layer has\na significant effect on the outer inviscid flow. The upper limit on Re _x_ for laminar\nflow is about 3 × 10 <sup>6</sup>, where measurements on a smooth flat plate [8] show that\nthe flow undergoes transition to a turbulent boundary layer. From 3 × 10 <sup>6</sup>\n\nupward the turbulent Reynolds number may be arbitrarily large, and a practical\nlimit at present is 5 × 10 <sup>10</sup> for oil supertankers."
+  },
+  {
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01105",
+   "page_start": 828,
+   "page_end": 828,
+   "section": "**Displacement Thickness**",
+   "text": "**Fig. 7.4 Displacement effect of a boundary layer.**\n\nAnother interesting effect of a boundary layer is its small but finite\ndisplacement of the outer streamlines. As shown in Fig. 7.4, outer streamlines\nmust deflect outward a distance _δ_ <sup>*</sup> ( _x_ ) to satisfy conservation of mass between the\ninlet and outlet:\n\nThe quantity _δ_ <sup>*</sup> is called the _displacement thickness_ of the boundary layer. To\nrelate it to _u_ ( _y_ ), cancel _ρ_ and _b_ from Eq. (7.11), evaluate the left integral, and\nslyly add and subtract _U_ from the right integrand:\n\nThus the ratio of _δ_ <sup>*</sup> / _δ_ varies only with the dimensionless velocity profile\nshape _u_ / _U_ .\n\nIntroducing our profile approximation (7.6) into (7.12), we obtain by\nintegration this approximate result:\n\nThese estimates are only 6 percent away from the exact solutions for laminar\nflat-plate flow given in Sec. 7.4: Since _δ_ <sup>*</sup> is much\nsmaller than _x_ for large Re _x_ and the outer streamline slope _V_ / _U_ is proportional to"
+  },
+  {
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01106",
+   "page_start": 829,
+   "page_end": 829,
+   "section": "**Displacement Thickness**",
+   "text": "_δ_ <sup>*</sup>, we conclude that the velocity normal to the wall is much smaller than the\nvelocity parallel to the wall. This is a key assumption in boundary layer theory\n(Sec. 7.3).\n\nWe also conclude from the success of these simple parabolic estimates that\nKármán’s momentum integral theory is effective and useful. Many details of this\ntheory are given in Refs. 1 to 3.\n\nAre low-speed, small-scale air and water boundary layers really thin?\nConsider flow at _U_ = 1 ft/s past a flat plate 1 ft long. Compute the boundary\nlayer thickness at the trailing edge for ( _a_ ) air and ( _b_ ) water at 68°F."
+  },
+  {
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01107",
+   "page_start": 829,
+   "page_end": 829,
+   "section": "**Solution** **Part (a)**",
+   "text": "From Table A.2, _ν_ air ≈ 1.61 E-4 ft <sup>2</sup> /s. The trailing-edge Reynolds number\nthus is\n\nSince this is less than 10 <sup>6</sup>, the flow is presumed laminar, and since it is\ngreater than 2500, the boundary layer is reasonably thin. From Eq. (7.1a), the\npredicted laminar thickness is"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "figure": 2,
+   "formula": 13
+  },
+  "flagged_candidates": 0,
+  "target_objects": 8,
+  "objects_with_anchor_problems": 0
+ }
+}

@@ -1,0 +1,713 @@
+\chapter{Injector, Spray Coupling, Feed System and Electric Pumps}\label{ch:s08-s09}
+
+\lead{Stages S08 and S09 of the traditional pipeline}
+
+\stagetag{S08} sizes (or evaluates) a pintle injector from the cycle mass-flow
+split, screens its hydraulics, spray, manifold, face/tip heating and stability,
+and closes a per-propellant feed-pressure budget; optionally it closes a fixed
+point between the spray vaporization screen and the cycle mass flow.
+\stagetag{S09} consumes that budget and sizes an electric pump feed: centrifugal
+impeller, inducer, diffuser/volute, motor, inverter and battery, each with
+screening gates. Both run inside \code{raosim.run_nozzle.main} after the cooling
+analysis (\stagetag{S07}) and before the bolted-interface and CAD stages
+(\stagetag{S10}, \stagetag{S11}). They share one gate record,
+\code{raosim.injector.InjectorGate} (status \texttt{pass}, \texttt{warn},
+\texttt{fail} or \texttt{info}), and one hand-off object, the
+\code{FeedSystemLedger}.
+
+Abbreviations: TMR, total momentum ratio (radial over axial stream momentum);
+$C_d$, discharge coefficient; SMD, Sauter mean diameter ($d_{32}$); NPSH, net
+positive suction head (carried here as a pressure); $N_s$, $N_{ss}$,
+non-dimensional specific and suction specific speed; BOM, bill of materials;
+VOF, volume of fluid; MDO, multidisciplinary design optimization; DN, bearing
+bore in millimetres times shaft speed in rpm.
+
+\caution{Nothing in these two stages is physically validated. Every spray,
+atomization, stability, thermal and pump-efficiency number is a screening
+estimate. The injector always emits a \texttt{validation\_status} gate at
+\texttt{warn} stating that cold-flow and hot-fire validation are required and
+not performed (\code{raosim/injector.py:4349-4353}); pump CAD reports
+\code{cold_flow_release_ready = False} and \code{hardware_qualified = False};
+\code{summary["hardware_qualified"]} is always \code{False}.}
+
+\begin{figure}[!t]
+\centering
+\begin{tikzpicture}[
+  font=\scriptsize\sffamily,
+  box/.style={draw=teal, fill=pale, rounded corners=2pt, align=left, text width=7.4cm, inner sep=3pt},
+  inp/.style={draw=rulegray, fill=white, rounded corners=2pt, align=left, text width=7.4cm, inner sep=3pt},
+  art/.style={draw=warn, fill=warnpale, rounded corners=2pt, align=left, text width=7.4cm, inner sep=3pt},
+  arr/.style={-{Stealth[length=2mm]}, draw=ink, thick},
+  node distance=2.6mm]
+\node[inp] (in1) {\textbf{From S04/S05/S07:} $\dot m_f,\ \dot m_o,\ P_c$; gas $\gamma, T_c, R$; chamber $R_c$ and injector-to-throat length; cooling spec and result (jacket outlet $T$, $P$, $\Delta p$).};
+\node[inp, below=of in1] (in2) {\textbf{CLI flags} $\rightarrow$ InjectorSpec (run\_nozzle.py:5701--5849), incl.\ FeedSystemSpec (:852) and MovablePintleSpec.};
+\node[box, below=of in2] (e1) {{\ttfamily evaluate\_pintle\_injector} (injector.py:3457): regen fuel-flow closure gate; jacket-outlet $T,P$ become the fuel feed state only when closure passes.};
+\node[box, below=of e1] (e2) {{\ttfamily size\_pintle\_injector} (:2820): optional target-TMR bisection; feed state and phase; axial annulus + radial stream (slots, holes, or Son gap via movable\_pintle.py); spray, manifold, face/tip thermal and stability screens; {\ttfamily injector\_gates} (:3676).};
+\node[box, below=of e2] (e3) {{\ttfamily feed\_system\_ledger} (:3302) + {\ttfamily feed\_system\_gates} (:3421) $\rightarrow$ FeedSystemLedger.};
+\node[art, below=of e3] (a1) {\textbf{S08 artifacts:} pintle.json; summary keys injector and spray\_cstar\_coupling; a rejected spec writes summary.json and exits 2.};
+\node[draw=warn, dashed, rounded corners=2pt, align=left, text width=7.4cm, inner sep=3pt, right=6mm of e2] (sp) {\textbf{Opt-in} {\ttfamily -{}-spray-cstar-coupling}: {\ttfamily solve\_spray\_cstar\_fixed\_point} (spray\_coupling.py:210) re-runs the injector (and cooling with {\ttfamily -{}-regen}) at each $\eta_{c^*}$ iterate; performance is then recomputed (run\_nozzle.py:5989--5998).};
+\node[inp, below=of sp] (p0) {PumpSizingSpec ({\ttfamily \_pump\_spec\_from\_args} :881); eight drive/battery values from electric\_technology.py, resolved at parse time (:3792).};
+\node[box, below=of p0] (p1) {{\ttfamily size\_electric\_pumps} (pumps.py:3747), per line: RPM; coupled shaft/eye/impeller/inducer/meanline solve; diffuser/volute; synthetic curve; architecture; reference geometry; system curve.};
+\node[box, below=of p1] (p2) {Shared DC bus; motor/inverter and battery sizing; thermal/stress ledger; {\ttfamily \_feasibility} (:3141); BOM, mass roll-up.};
+\node[art, below=of p2] (a2) {\textbf{S09 artifacts:} pump.json, pump\_bom.json, pump\_reference\_geometry.json; summary key electric\_pump; S11 pump CAD; gate fail $\rightarrow$ exit 2 unless {\ttfamily -{}-allow-infeasible-pump}.};
+\draw[arr] (in1) -- (in2);
+\draw[arr] (in2) -- (e1);
+\draw[arr] (e1) -- (e2);
+\draw[arr] (e2) -- (e3);
+\draw[arr] (e3) -- (a1);
+\draw[arr] (p0) -- (p1);
+\draw[arr] (p1) -- (p2);
+\draw[arr] (p2) -- (a2);
+\draw[arr, dashed, draw=warn, {Stealth[length=2mm]}-{Stealth[length=2mm]}] (sp.west) -- (e2.east);
+\draw[arr] (e3.east) -- ++(3mm,0) |- (p1.west);
+\end{tikzpicture}
+\caption{Internal flow of S08 (left) and S09 (right). The ledger arrow is taken only with -{}-electric-pump. Line numbers refer to the 2026-11-05 tree.}
+\label{fig:s08-s09-flow}
+\end{figure}
+
+%=====================================================================
+\section{S08 -- Pintle injector sizing and the optional spray/c-star fixed point}\label{sec:s08}
+
+\subsection{Role in the data flow and call site}
+
+The injector block is \code{if args.injector == "pintle":} at
+\code{raosim/run_nozzle.py:5623}. It sits after cooling on purpose: the comment at
+\code{:5618-5622} states that the fuel feed state ($T$, $P$, hence $\rho$, $\mu$,
+$\sigma$) must come from the regenerative jacket outlet when the fuel is the
+coolant. The block refuses to run without real propellant identities (return 2),
+checks that every movable-pintle validity range is a min/max pair, and builds one
+\code{InjectorSpec} (\code{:5701-5849}). Two closures do the work:
+\code{evaluate_cli_cooling} (\code{:5871}) returns the S07 result unchanged without
+\code{--regen} and otherwise re-runs Bartz heat flux and
+\code{physics.regenerative_cooling_analysis} at a trial mass flow, and
+\code{evaluate_cli_injector} (\code{:5903}) splits a total mass flow by O/F and
+calls \code{injector.evaluate_pintle_injector}.
+
+On the default path the CLI calls \code{evaluate_cli_injector(perf.m_dot, prop)}
+once (\code{:6182}) and records the spray coupling as disabled (``vaporization
+screen is report-only by default''). With \code{--spray-cstar-coupling} it calls
+\code{spray_coupling.solve_spray_cstar_fixed_point} (\code{:5989}) with the
+evaluator \code{spray_evaluator} (\code{:5959}), which rebuilds a trial propellant
+with the iterate's $\eta_{c^*}$, re-solves cooling with the coolant flow set to the
+new fuel flow, and re-evaluates the injector. After convergence it recomputes
+\code{compute_engine_performance} (\code{:5998}), updates the mass flows on
+\code{args}, and regenerates \code{cooling_profile.png}, \code{channel_march.png},
+\code{cross_section.png} and \code{structural_life.png} from the final iterate
+(\code{:6017-6156}).
+
+\code{InjectorUnsupportedState}, \code{InjectorSpecError}, \code{RuntimeError} and
+\code{ValueError} are caught (\code{:6188-6193}): \code{summary["injector"]}
+records \code{feasible: false} with the message, \code{summary.json} is written,
+and the run returns 2. After S09, failing injector gates block the chamber export
+(return 2) unless \code{--allow-infeasible-injector} (\code{:6361-6365}).
+\code{--throttle-map} is evaluated later in the S10/S11 block
+(\code{injector.throttle_map}, called at \code{:6442}). Outside the CLI the same
+boundary is called by \code{raosim/design.py:759} (\code{design_nozzle_v2}, used by
+legacy \code{main.py} and the MDO re-evaluation), which also wires the spray
+fixed point (\code{design.py:827}).
+
+\needspace{8\baselineskip}
+\subsection{Inputs and outputs}
+
+{\small
+\begin{longtable}{@{}P{3.6cm}P{12.6cm}@{}}
+\toprule
+\textbf{Input} & \textbf{Source and default} \\
+\midrule
+\endhead
+Cycle state & S04 \code{perf.m_dot} split by O/F; \code{args.pc}; \code{prop.gamma}, \code{prop.Tc}, \code{prop.R_gas} (S03). \\
+Chamber & \code{chamber["Rc"]}; \code{chamber["injector_to_throat_length"]} (S05), the ``available chamber length'' of the spray screen. \\
+Cooling state & \code{CoolingSpec} (method, coolant, coolant flow) and the S07 result (jacket outlet $T$, $P$, $\Delta p$). \\
+Pressure split & \code{--fuel-injector-dp-fraction}, \code{--oxidizer-injector-dp-fraction}, default 0.2 each (\code{run_nozzle.py:363}, resolved at \code{:680}); legacy \code{--injector-pressure-drop} is rejected (\code{:661}). \\
+Architecture & \code{--injector-architecture} (\code{fixed_discrete} default, \code{son_continuous_movable}); \code{--injector-sizing} (\code{auto} default, \code{fixed}, \code{movable}); \code{--pintle-radial-exit} CLI default \code{holes} (API default \code{slots}); \code{--pintle-radial-stream} (fuel); \code{--pintle-slot-count} (24). \\
+Coefficients & discharge coefficients 0.7 per stream; \code{--pintle-target-momentum-ratio}; \code{--injector-min-feature} (0.3 mm). \\
+Feed ledger & \code{--feed-architecture}; per role supply pressure, flow capacity, line, manifold and control allowances (absolute and fraction of $P_c$), tank pressure, NPSH required; ledger pump efficiency 0.7 unless overridden (\code{:852}). \\
+Movable pintle & about fifty \code{--movable-*} flags (54 distinct in \code{run_nozzle.py}): Son geometry, stops, $C_d$ map with source, hash, fingerprint and validity ranges, metrology, leakage, static loads, sheet-thickness evidence. \\
+Spray coupling & \code{--spray-cstar-coupling} with mandatory \code{--spray-eta-mixing}, \code{--spray-eta-combustion}; relaxation 0.5, tolerance $10^{-4}$, 25 iterations; \code{--spray-evaporation-constant} $10^{-6}$\,m$^2$/s. Cross-checks at \code{:3912-3936}, \code{:4148-4157}. \\
+\bottomrule
+\end{longtable}}
+
+\textbf{Outputs.} \code{InjectorDesignResult.to_dict()} goes to
+\code{summary["injector"]} and, regardless of feasibility, to \code{pintle.json}
+(\code{:6200-6206}): both streams (area, velocity, $D_h$, Re, We, Oh, injection
+branch), TMR, spray half-angle and wall intercept, blockage and web, momentum
+targeting, model provenance, atomization, manifold, face/tip thermal, stability,
+the feed ledger with its \code{fuel_flow_split}, the Son actuation ledger, feed
+states and gates. With coupling, \code{summary["spray_cstar_coupling"]} holds the
+iteration history, closure error and a \code{scope} of
+\code{injector_and_cycle_mass_flow_no_regen} or
+\code{spray_cycle_regen_wall_feed_and_pump_duty} (\code{design.py:546-548}), and
+\code{summary["performance"]}/\code{["thrust_closure"]} take the converged
+$\eta_{c^*}$ and mass flow. The \code{pintle/} package, \code{injector_*.png}
+figures and the throttle map belong to S10--S12 consumers of this result.
+
+\subsection{Modules}
+
+{\small
+\begin{longtable}{@{}P{4.2cm}P{1.0cm}P{11.0cm}@{}}
+\toprule
+\textbf{File} & \textbf{Lines} & \textbf{Role} \\
+\midrule
+\endhead
+\code{raosim/injector.py} & 4355 & Spec/result dataclasses; feed properties (CoolProp or constant table); liquid and compressible orifice hydraulics; annulus/slot/hole/Son-gap geometry; atomization, manifold, face/tip thermal, stability screens; throttle maps; feed ledger; all injector and feed gates; \code{evaluate_pintle_injector}. \\
+\code{raosim/movable_pintle.py} & 686 & Son et al.\ (2017) continuous radial gap (Eq.~1), centre-gap transition and open stop, evidence-bound $C_d$ map, opening solve, geometry fingerprint, static actuator ledger. \\
+\code{raosim/spray_coupling.py} & 320 & Opt-in relaxed fixed point between vaporization and $\eta_{c^*}$/cycle mass flow; legacy-screen and typed Lagrangian sources. \\
+\bottomrule
+\end{longtable}}
+
+\subsection{What the header comments establish}
+
+\subsubsection*{\code{raosim/injector.py}: sizing principle and hydraulics}
+
+The header's rule is that the injector ``is sized from the operating point the
+nozzle + chamber solver already produces, never from an independent injector
+thrust input'', along
+$F,P_c,P_a,\varepsilon,\mathrm{O/F}\rightarrow C_F,A_t,\dot m\rightarrow\dot m_f,\dot m_o
+\rightarrow A_f,A_o,\Delta p_f,\Delta p_o\rightarrow$ geometry and spray, with the
+core relations attributed to Sutton and Biblarz (\emph{Rocket Propulsion
+Elements}) and NASA SP-8089 (\emph{Liquid Rocket Engine Injectors}):
+\begin{equation*}
+\dot m = C_d A\sqrt{2\rho\,\Delta p},\quad v=\frac{\dot m}{\rho A},\quad
+\mathrm{TMR}=\frac{\dot m_r v_r}{\dot m_a v_a},\quad
+\mathrm{Re}=\frac{\rho v D_h}{\mu},\quad
+\mathrm{We}=\frac{\rho v^2 D_h}{\sigma},\quad
+\mathrm{Oh}=\frac{\mu}{\sqrt{\rho\sigma D_h}} .
+\end{equation*}
+Geometry is an axial annulus $A_a=\tfrac{\pi}{4}(D_o^2-D_i^2)$ and radial slots
+$A_r=Nwh$; the code adds round holes ($d=\sqrt{4A_r/(N\pi)}$) and the Son gap.
+Auto slots use $w=\sqrt{A_r/(N\,AR)}$, $h=AR\,w$, $D_h=2wh/(w+h)$,
+web $\pi D_p/N-w$, blockage $Nw/(\pi D_p)$ and depth $(L/D)D_h$ with $L/D=2$
+(\code{:1692}). Without a pintle diameter, $D_p=0.30D_c$ (\code{:2882}); the
+model registry labels this a packaging heuristic (\code{assumption_only}) that
+``must not be presented as a NASA or textbook sizing law''.
+
+Gas and dense-gas streams use the compressible branch of \code{_stream_mass_flux}
+(\code{:1753}), citing White, \emph{Fluid Mechanics} 7th ed., Eqs.~9.32 and
+9.46--9.47, and warning that $P_0=P_c+\Delta p$ and the feed temperature are
+treated as stagnation values and that real-gas accuracy is not established. With
+$r=P_c/P_0$ the flow is choked for $r\le(2/(\gamma+1))^{\gamma/(\gamma-1)}$,
+$G=C_dP_0\sqrt{\gamma/(RT_0)}\,(2/(\gamma+1))^{(\gamma+1)/(2(\gamma-1))}$, and
+otherwise $G=C_dP_0\sqrt{\tfrac{2\gamma}{(\gamma-1)RT_0}(r^{2/\gamma}-r^{(\gamma+1)/\gamma})}$.
+The movable radial sheet requires liquid; two-phase states and unsupported exit
+geometries are rejected.
+
+\textbf{Feed properties} (\code{resolve_feed_state}, \code{:1483}): explicit
+overrides win; then CoolProp HEOS (Bell et al., \emph{Ind.\ Eng.\ Chem.\ Res.}\ 53,
+2014) for oxygen, methane, hydrogen, ethanol, water and nitrous oxide (default
+inlet 90, 112, 21, 298, 298, 270~K); then a constant-property table (Sutton and
+Biblarz, NASA SP-8087, CRC) for RP-1/Jet-A, MMH, N$_2$O$_4$, UDMH and a LOX
+fallback, ``screening-grade (no T-dependence modelled)''. \code{_classify_phase}
+(\code{:1648}) sends $T\ge0.98T_{crit}$ and $P\le P_v$ to the compressible branch
+and rejects $P<1.10P_v$ as a flashing state ``neither branch can size''.
+
+\subsubsection*{\code{raosim/injector.py}: momentum, spray and screening extras}
+
+The header's maturity statement: SP-8089 names momentum balance, annulus/slot
+geometry and deflector angle as the governing variables ``while warning that spray
+distributions generally require cold-flow testing — so every spray/atomization
+number below is a clearly-labeled screening surrogate, not a validated result''.
+\begin{itemize}
+\item \textbf{Spray direction.} $\theta=\operatorname{atan2}(M_r\cos\delta,\,M_a+M_r\sin\delta)$,
+$M=\dot m v$; wall intercept $x_w=x_{imp}+(R_c-r_0)/\tan\theta$ (\code{:3236-3258}).
+\item \textbf{Atomization} (\code{:1814}, \code{:1892}; model
+\code{hinze_reitzbracco_d2law_liquid_only_screen_v2}). $\rho_g=P_c/(RT_c)$;
+Hinze critical-Weber SMD (\emph{AIChE J.}\ 1, 1955),
+$d_{32}=\min(13\sigma/(\rho_gv^2),D_h)$; breakup length $L_b=15D_h$ (midpoint of
+the Reitz--Bracco range); $d^2$-law with $K=10^{-6}$\,m$^2$/s (``hydrocarbon
+class''), $t_{99}=d_{32}^2(1-0.01^{2/3})/K$, $L_{vap}=vt_{99}$; vaporized fraction
+$1-(d_{rem}^2/d_{32}^2)^{3/2}$ over residence $\max(0,L_c-L_b)/v$; poor regime
+below $\mathrm{We}_g=40$. Only liquid, subcritical sheet/slot/hole streams
+qualify; the screen is off for $P_c\ge P_{crit}$ and for the Son sheet. It returns
+only $\eta_{vap}$ (liquid-mass-weighted); $\eta_{mix}$, $\eta_{comb}$, $\eta_{c^*}$
+are \code{None}, and \code{predicted_cstar_efficiency} survives as a deprecated
+alias that ``must not be interpreted as characteristic-velocity efficiency''.
+\item \textbf{Manifold} (\code{:1948}): 1-D annular two-header square-law network
+(NASA SP-8087; Kang and Sun, JTHT 25, 2011), ``requires 3-D manifold validation'';
+its loss is reported as \code{manifold_screen_loss} and not charged to the budget.
+\item \textbf{Face/tip thermal} (\code{:2018}): recovery $0.8T_c$, recirculation
+velocity $0.2v$, Dittus--Boelter both sides, 1-D series circuit (``cf.\ the SP-125
+regen wall solve''); unresolved material falls back to $k=350$\,W/m\,K,
+$T_{lim}=800$\,K.
+\item \textbf{Stability} (\code{:2095}; NASA SP-8113/SP-194, Crocco--Cheng):
+chug on $\min\chi$, $\chi=\Delta p/P_c$ (good $\ge0.20$, prone $<0.10$);
+$f_{L1}=a/(2L)$, $f_{T1}=1.8412a/(\pi D)$, $f_{R1}=3.8317a/(\pi D)$; $n$--$\tau$
+band $0.1<\tau f_{L1}<0.5$ with $\tau$ the development time. A real assessment
+``needs the feed admittance, the combustion response function, and damping''.
+\item \textbf{Throttle map} (\code{:2565}): for \code{fixed_discrete} a
+``commanded-effective-area study \ldots\ no physical stroke is claimed'' (registry:
+\code{derived_schedule_not_hardware_model}); for the Son architecture the hardware
+is sized once, the opening is solved per point, and a separate upstream
+controller $\Delta p$ is solved for the fixed annulus. $P_c(f)=P_{c,full}f^{n}$,
+$n$ from \code{--throttle-pc-exponent} (default 1).
+\end{itemize}
+
+\subsubsection*{\code{raosim/injector.py}: feed ledger and regenerative hand-off}
+
+\code{FeedLineSpec} cites Huzel and Huang (NASA SP-125), Sutton and Biblarz, and
+SP-8052 for NPSH, and states that unknown pump or tank data yield an
+\texttt{info} requirement ``instead of judging a pump it was never told about''.
+\code{feed_system_ledger} (\code{:3302}) computes per stream
+\begin{gather*}
+P_{req}=P_c+\Delta p_{inj}+\Delta p_{man}+\Delta p_{regen}+\Delta p_{line}+\Delta p_{ctrl},\\
+\Delta p_{pump}=\max(0,P_{req}-P_{tank}),\qquad
+H=\frac{\Delta p_{pump}}{\rho g_0},\qquad
+\mathrm{NPSH}_a=P_{tank}-P_v ,
+\end{gather*}
+and an ``ideal'' pump power $Q\Delta p_{pump}/\eta_{pump}$; only the coolant stream
+carries the jacket loss. \code{evaluate_pintle_injector} adds the regen coupling:
+with the fuel as coolant, coolant plus explicit film flow must match the cycle fuel
+flow within 1\% (pass), below 5\% (warn), else fail (\code{:866-867}). Only on a
+pass are the jacket outlet $T$, $P$ handed to the fuel feed; a conflicting
+explicit fuel inlet state fails the gate. A film bypass is a common upstream pump
+then a split; ``Film-slot/orifice hardware and its branch-specific
+pressure/thermal state remain outside this screening model''.
+
+\subsubsection*{\code{raosim/injector.py}: gates}
+
+\code{result.feasible} is false if any gate fails (Table~\ref{tab:s08-gates}).
+Screening gates for spray development and face/tip heat are capped at
+\texttt{warn} so they ``never hard-fail export over a screening estimate''.
+
+{\small
+\begin{longtable}{@{}P{5.6cm}P{10.6cm}@{}}
+\caption{S08 gate rules as implemented in raosim/injector.py.}\label{tab:s08-gates}\\
+\toprule
+\textbf{Gate} & \textbf{Rule} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Gate} & \textbf{Rule} \\
+\midrule
+\endhead
+\code{mass_flow_mixture_ratio_closure} & flow error $<0.1\%$ pass, $<5\%$ warn, else fail, in every sizing mode. \\
+\code{upstream_pressure_<role>} & feed pressure $\ge P_c+\Delta p$ else fail. \\
+\code{cavitation_<role>} & $K=(P_{man}-P_v)/\Delta p$: $\ge1.5$ pass, $\ge1.0$ warn, else fail. \\
+\code{injection_state_<role>}, \code{atomization_applicability_<role>} & info on branch; applicability pass, info (gas), or warn. \\
+\code{orifice_domain_<geometry>} & $L/D<1$ warn (hydraulic flip). \\
+\code{min_slot_width}/\code{min_hole_diameter}, \code{min_web}, \code{min_annulus_gap}, blockage & 0.3 mm floors; blockage $<1$; else fail. \\
+\code{annulus_concentricity} & tolerance/gap $<0.10$ pass, $<0.25$ warn, else fail. \\
+\code{manifold_maldistribution_<role>} & spread $<10\%$ pass, $<25\%$ warn, else fail. \\
+\code{spray_wall_clearance} & $\theta\ge90^\circ$ fail; intercept $<5\%$ of $L_c$ or nearly axial warn. \\
+\code{combustion_development_length}, \code{face_tip_thermal_margin} & margin $\ge1$ / $\ge1.2$ pass, else warn. \\
+\code{target_momentum_ratio} & TMR within relative $10^{-6}$ of target, else fail. \\
+\code{feed_system_chug}, \code{chamber_acoustic_modes}, \code{ntau_coupling} & chug 0.20/0.10 pass/warn/fail; modes info; band warn. \\
+\code{regen_fuel_flow_closure}; \code{feed_pump_pressure|capacity}, \code{feed_npsh} & hand-off rules above; feed gates info without supply data, else pass/fail. \\
+\code{validation_status}; \code{throttle_mr_drift} & always warn; info. \\
+Son-only gates (eleven in the movable block, e.g.\ \code{movable_cd_calibration}, \code{movable_position_authority}, \code{movable_sheet_thickness_handoff}) & transition fraction $\le0.90$; $C_d$ passes only with a calibrated map, fluid match, Re/$\Delta p$/$T$/cavitation in range, 64-hex artifact hash and matching fingerprint; position uncertainty $<10\%$ pass, $\ge25\%$ fail; leakage $\le1\%$ pass, $\ge5\%$ fail; actuator and stem margins $\ge1$ with hash-bound evidence; tip angle $\le40^\circ$. \\
+\bottomrule
+\end{longtable}}
+
+\subsubsection*{\code{raosim/movable_pintle.py}}
+
+The header cites Son et al., ``Design Procedure of a Movable Pintle Injector for
+Liquid Rocket Engines'', JPP 33(4), 2017, DOI 10.2514/1.B36301, and keeps the
+module ``intentionally separate'' from fixed slots and holes. Son Eq.~1 is
+evaluated in the stable expanded form
+\begin{equation*}
+A_{tip}=\pi\left[2r_fL\cos\theta-L^2\sin\theta\cos^2\theta\right],\qquad
+r_f=\tfrac12D_{post}-t_{post},\qquad
+A_{cg}=\tfrac{\pi}{4}(D_{cg}^2-D_{pr}^2),
+\end{equation*}
+with limit $2\pi r_fL$ at $\theta\to0$. At $A_{tip}=A_{cg}$ ``pintle travel no
+longer controls the minimum flow area'' (the paper reports an abrupt transition),
+so the open stop defaults to $A_{tip}/A_{cg}=0.95$; an open stop at or beyond the transition
+raises \code{ValueError} (an \code{InjectorSpecError} is a \code{ValueError} subclass; the CLI catches both). ``No universal discharge-coefficient-versus-stroke
+or actuator-force law is invented'': a $C_d(L/L_{max})$ map is accepted only with a
+source, 64-character SHA-256 and a fingerprint of schema
+\code{raosim.son2017_movable_geometry.v1}; otherwise the constant $C_d$ is
+labelled \code{constant_uncalibrated}. The static ledger is
+$F_{req}=SF(F_p+F_m+F_{pre}+F_{fr}+F_{in})$, $F_p=\Delta p\,A_{unbal}$ (never
+inferred), default $SF=1.5$. ``Dynamic response, seal life, thermal growth, and
+qualification are outside this preliminary model''; \code{to_dict} hard-codes
+\code{hardware_qualified: False}.
+
+\subsubsection*{\code{raosim/spray_coupling.py}}
+
+The default path ``remains independent of the screening atomization correlation'';
+only with user-supplied mixing and chemical-completion efficiencies does the
+module close $\eta_{c^*}\rightarrow\dot m\rightarrow$ geometry $\rightarrow\eta_{vap}\rightarrow\eta_{c^*}$,
+and it ``does not infer mixing or combustion efficiency and it refuses to use an
+inapplicable gas/transcritical droplet result''. The iteration (\code{:210}) is
+\begin{equation*}
+\dot m_k=\frac{P_cA_t}{c^*_{id}\eta_k},\qquad
+\eta_{raw}=\eta_{vap}(\dot m_k)\,\eta_{mix}\,\eta_{comb},\qquad
+\eta_{k+1}=\mathrm{clip}\!\left(\eta_k+\omega(\eta_{raw}-\eta_k),\,\eta_{min},\,1\right),
+\end{equation*}
+with $\omega=0.5$, tolerance $10^{-4}$, 25 iterations and $\eta_{min}=0.40$
+($\eta_{raw}<\eta_{min}$ raises). The \code{legacy_screen} source rejects any
+inapplicable or out-of-regime stream instead of renormalizing; the
+\code{lagrangian} source requires a typed \code{SprayCycleHandoff} with
+\code{coupling_eligible} true. The evaluator runs once more at the reported state,
+and convergence also requires closure within $\max(\mathrm{tol},2\mathrm{tol}/\omega)$.
+
+\subsection{Governing documents}
+
+{\small
+\begin{longtable}{@{}P{6.0cm}P{2.0cm}P{8.2cm}@{}}
+\toprule
+\textbf{Path} & \textbf{Type} & \textbf{Content; agreement with code} \\
+\midrule
+\endhead
+\code{docs/subsystems/S08-injector-and-spray-coupling/injector_pintle_provenance.md} & basis & Equation/source table, ``not validated'' list. Partly stale: ``fixed, liquid/liquid, automatically-sized''; a ``Predicted c* efficiency'' row (code reports only $\eta_{vap}$); throttle map called a movable-sleeve schedule. \\
+\code{docs/subsystems/S08-injector-and-spray-coupling/PINTLE_DESIGN_EVALUATION.md} & basis & Verified equations, line audit, CLI map; recommendations 1 and 5 done; tip-thermal coupling, spray-angle saturation, gas/supercritical hardening open. \\
+\code{docs/subsystems/S08-injector-and-spray-coupling/MOVABLE_PINTLE_MODEL.md} & basis & Son contract, evidence gates, throttle semantics, CLI example, fail-closed CAD. Agrees. \\
+\code{docs/subsystems/S08-injector-and-spray-coupling/SPRAY_CSTAR_COUPLING.md} & basis & Fixed point, direct-fuel regen re-solve, scope. Agrees. \\
+\code{docs/subsystems/S08-injector-and-spray-coupling/pintle_injector_model_gap_analysis.md} & basis & Pre-MVP gap list; feed ledger, movable branch and $\eta$ split since closed. \\
+\code{docs/subsystems/S08-injector-and-spray-coupling/LAGRANGIAN_SPRAY_MODEL.md}, \code{OPENFOAM_SPRAY_EXPORT.md} & basis & X02 parcel tier and VOF case export; not a CLI cycle source. \\
+\code{docs/literature/pintle_injector_literature_inventory.md} & inventory & 61 PDFs (54 unique); about 20 papers to acquire or verify. \\
+\bottomrule
+\end{longtable}}
+
+\needspace{10\baselineskip}
+\subsection{Verification}
+
+{\small
+\begin{longtable}{@{}P{4.0cm}P{1.5cm}P{10.7cm}@{}}
+\toprule
+\textbf{Test file} & \textbf{Tests} & \textbf{What it pins} \\
+\midrule
+\endhead
+\code{tests/test_injector.py} & 98 (102 cases) & Property resolution; area/TMR/annulus/slot identities; auto closure and fixed-geometry drift failure; spec errors; gas choke, flashing rejection; target-TMR bisection; regen closure and outlet hand-off; film split; Hinze/Reitz/$d^2$ recomputation; transcritical disabling; manifold, thermal, stability; fixed and Son throttle maps; feed-ledger arithmetic and gates; seven S09 pump tests. \\
+\code{tests/test_movable_pintle.py} & 9 (11) & Son Table~2 transition openings 0.418, 0.454, 0.568~mm at 0, 20, 40$^\circ$ within 0.0015~mm; Eq.~1 forms; $C_d$ map and fallback label; opening solve; ledger never infers pressure balance; fingerprint. \\
+\code{tests/test_spray_coupling.py} & 7 & Closure $\dot m=P_cA_t/(c^*\eta)$ on a synthetic evaluator; mandatory efficiencies; typed Lagrangian hand-off; no renormalization; regime and minimum-$\eta$ rejection. \\
+\code{tests/test_mdo_injector.py} & 6 & Parity of the MDO pintle block (Son area, arctan TMR angle). \\
+\code{tests/test_run_nozzle.py} & 7 of 54 & CLI: legacy $\Delta p$ rejected; spray flag scope and cycle-fuel coolant rule; fixed point updates mass flow; regen outer loop serializes final cooling and feed duty; split $\Delta p$ defaults. \\
+\code{tests/test_design_v2.py} & 12 of 47 & \code{design_nozzle_v2} pintle path, infeasible blocking/override, spray and regen loops, film split, interface and CAD consistency (not run here). \\
+\bottomrule
+\end{longtable}}
+
+For this guide the unit files \code{test_injector.py}, \code{test_movable_pintle.py},
+\code{test_spray_coupling.py}, \code{test_pumps.py},
+\code{test_electric_technology.py}, \code{test_mdo_injector.py} and
+\code{test_mdo_pump.py} were run with \code{.venv-jax} on 2026-11-05: 186 passed in
+30.6~s. The ten S08/S09 CLI tests in \code{tests/test_run_nozzle.py} (selected with
+\code{-k "spray or pump or electric or injector"}) passed in 284~s. These are
+software-verification tests: identities, contracts and literature reproduction
+points. None compares a sized injector with cold-flow or hot-fire data. The
+archived build \code{builds/_archive_2026-11-05/tests/13kn_sl_fast} (2026-07-08,
+13~kN LOX/RP-1, 30~bar) shows a typical scorecard: 24 pass, 3 warn, 0 fail,
+6 info, with warnings on development length (margin 0.33),
+\texttt{validation\_status} and a 2.5\% regen flow mismatch; that build predates
+the $\eta_{vap}$ vocabulary and still prints ``predicted $\eta_{c^*}$''.
+
+\subsection{Maturity, limitations and known defects}
+
+\begin{itemize}
+\item \textbf{Maturity labels} (\code{raosim/model_registry.py}): incompressible
+orifice \code{published_equation}; compressible orifice
+\code{published_equation_screening_use}; Hinze SMD and $d^2$ evaporation
+\code{screening_not_physically_validated}; $D_p=0.30D_c$ and $L_b=15D_h$
+\code{assumption_only}; Son branch validated for geometry and the literature
+transition only, not hydraulically, actuator-, sheet- or hardware-validated; spray fixed point
+\code{software_verified_not_hot_fire_calibrated}.
+\item \textbf{Defaults and envelope.} $C_d=0.7$ and $\Delta p/P_c=0.2$ for both
+streams; recirculation fractions fixed; flashing feeds rejected; the gas branch is
+a constant-$\gamma$ screen; no droplet estimate above the propellant critical
+pressure.
+\item \textbf{Spray coupling.} The CLI never sets the \code{source} field, so only
+the legacy screen is reachable. The default $K$ is uncalibrated and ``often causes
+the fixed point to reject the design'' (\code{SPRAY_CSTAR_COUPLING.md}). The Son
+sheet is inapplicable to the screen, so coupling and the movable architecture
+cannot be combined. With regen, the coolant must be the cycle fuel.
+\item \textbf{Movable pintle.} Every CAD request fails closed (report-only
+package); actuator dynamics, controller sizing and feed compliance are not
+modelled; the uncalibrated $C_d$ fallback fails its gate by construction.
+\item \textbf{Documentation drift (code wins).} The three stale statements in
+\code{injector_pintle_provenance.md}; \code{examples/cli/test_13kn_sealevel_regen_allstl.args}
+lines 147--148 say spray coupling is ``blocked with \code{--regen} at the CLI by design'',
+but \code{run_nozzle.py:4148-4157} allows it when the coolant is the cycle fuel;
+lines 145--146 say \code{export-openfoam-spray} ``consumes a finished run
+directory'', but \code{openfoam/case.py} \code{cli_main} takes an output path and a
+literature \code{--case-row}.
+\item \textbf{Deprecated alias serialized.} \code{pintle.json} still carries
+\code{predicted_cstar_efficiency} and \code{eta_cstar_surrogate_deprecated}
+beside \code{eta_vaporization}, which invites misreading as a $c^*$ efficiency.
+\item \textbf{Two pump-power numbers.} The ledger's \code{ideal_pump_power_w}
+uses $\eta_{pump}=0.7$ unless overridden (\code{run_nozzle.py:867-871}); S09 uses
+its meanline efficiency. In the archived 13~kN build the same \code{summary.json}
+reports 11.04/14.71~kW (ledger, fuel/oxidizer) and 9.91/13.20~kW (S09 shaft).
+\end{itemize}
+
+\subsection{Developer notes}
+
+{\small
+\begin{longtable}{@{}P{4.4cm}P{11.8cm}@{}}
+\toprule
+\textbf{Change} & \textbf{Where it goes} \\
+\midrule
+\endhead
+New feed fluid & \code{_COOLPROP_FLUIDS}, \code{_DEFAULT_INLET_T} or \code{_LITERATURE_FEED_PROPERTIES}/\code{_LITERATURE_ALIASES} (\code{injector.py:1408-1476}); add a test in \code{tests/test_injector.py}. \\
+New radial exit geometry & \code{PintleGeometrySpec}, \code{_validate_injector_spec}, the branch in \code{size_pintle_injector} (\code{:2921}), the injection-form list in \code{_stream_atomization}, \code{injector_gates}; CAD and figures must use the same exit style (\code{:149}). \\
+New or changed gate & \code{injector_gates} (\code{:3676}) or \code{feed_system_gates} (\code{:3421}); \texttt{fail} blocks export, so screening estimates should stay at \texttt{warn}. \\
+Spray, SMD or $c^*$ model & Not in the default path: add an applicable model behind \code{spray_atomization} or a typed \code{SprayCycleHandoff} source, with a \code{model_registry} entry and validation level. \\
+Movable-pintle physics & \code{raosim/movable_pintle.py}, the Son gate block (\code{injector.py:3853-4163}), \code{MOVABLE_PINTLE_MODEL.md}; version the fingerprint schema. \\
+New CLI flag & argparse (\code{run_nozzle.py:3035-3080}) and the \code{InjectorSpec} build (\code{:5701-5849}); feed flags also in \code{_feed_system_spec_from_args} and \code{_validate_pump_args}. \\
+\bottomrule
+\end{longtable}}
+
+%=====================================================================
+\section{S09 -- Feed-pressure ledger to electric pump, motor, inverter and battery}\label{sec:s09}
+
+\subsection{Role in the data flow and call site}
+
+S09 runs only with \code{--electric-pump}, inside the injector block right after
+\code{pintle.json}: \code{if args.electric_pump:} (\code{run_nozzle.py:6207}),
+then \code{pumps.size_electric_pumps(inj.feed_system, _pump_spec_from_args(args))}
+(\code{:6212}). \code{_validate_pump_args} (\code{:796}) requires
+\code{--injector pintle}, switches the pump on for \code{--pump-visualize}, and
+refuses \code{--pump-cad-format step|both} without CadQuery. A bare or
+\code{--complete-package} run sets the pintle injector and the electric pump and
+supplies tank pressures of $5\times10^5$~Pa (fuel) and $6\times10^5$~Pa (oxidizer)
+(\code{:607-658}). The technology set is resolved at parse time:
+\code{_apply_electric_technology} (\code{:522}, called at \code{:3792}) fills the
+eight drive/battery flags from \code{get_electric_technology} and records the set
+id, or \code{custom} when any of the eight was typed.
+
+The S11 pump CAD hand-off (\code{pump_cad.export_pump_package},
+\code{pump_cad_brep.export_pump_brep_package}) and the S12 pump GIF run inside the
+same block (\code{:6239-6351}). A failed pump gate writes \code{summary.json} and
+returns 2 unless \code{--allow-infeasible-pump} (\code{:6352-6357}). This check
+precedes the injector check, so pump artifacts are written even when the injector
+then blocks the run. The MDO re-evaluation calls \code{size_electric_pumps} from
+\code{raosim/mdo/postprocess.py:1123}, inside \code{try}/\code{except}.
+
+\subsection{Inputs and outputs}
+
+Inputs are the \code{FeedSystemLedger} (per line: mass and volumetric flow,
+density, viscosity, vapour pressure, required outlet pressure, rise, head, NPSH)
+and a \code{PumpSizingSpec}: drive efficiencies, power densities, voltage, RPM
+(\code{--pump-max-rpm} 120\,000) and optional power, current, torque and heat
+limits; battery densities, efficiency, margin, voltage, current limit, vehicle
+mass and mass-fraction limit; \code{--burn-time} (traditional default 10~s,
+\code{:500}; the MDO keeps \code{MissionSpec.burn_time} = 120~s); optional pump
+efficiencies (default solved); $\psi=0.55$, $\phi=0.08$, tip-speed limit 350~m/s
+and 2500~m per stage. A line without tank pressure has no rise; it gets an
+\texttt{info} gate and no geometry.
+
+\textbf{Outputs.} \code{ElectricPumpSizingResult.to_dict()} goes to
+\code{summary["electric_pump"]} and \code{pump.json}, its \code{hardware_bom} to
+\code{pump_bom.json}, and per-line \code{reference_geometry} to
+\code{pump_reference_geometry.json} (\code{:6217-6238}). Per line it holds the
+duty, drive, impeller, inducer, diffuser/volute, meanline, curve, architecture,
+system curve and thermal/stress ledger; globally the battery, gates, an
+\code{assumptions} block (technology id, bus voltage) and the BOM and mass roll-up.
+
+\subsection{Modules}
+
+{\small
+\begin{longtable}{@{}P{4.2cm}P{1.0cm}P{11.0cm}@{}}
+\toprule
+\textbf{File} & \textbf{Lines} & \textbf{Role} \\
+\midrule
+\endhead
+\code{raosim/pumps.py} & 3976 & Pump feed on the injector ledger: RPM, SP-8109 meanline impeller with coupled shaft/eye/blockage solve, SP-8052 inducer, diffuser/volute, synthetic curve, architecture, reference geometry, system curve, drive and battery, thermal/stress ledger, gates, BOM, mass roll-up. \\
+\code{raosim/electric_technology.py} & 496 & Registry of complete drive/battery technology sets shared by \code{pumps.SCREENING_DEFAULTS} and \code{mdo.schema.MissionSpec}, with page-located sources and published brackets. \\
+\bottomrule
+\end{longtable}}
+
+\needspace{8\baselineskip}
+\subsection{What the header comments establish}
+
+\subsubsection*{\code{raosim/pumps.py}}
+
+The injector module ``already owns the feed-pressure balance''; this module adds
+``first-pass electric drive, battery, centrifugal pump, inducer, diffuser/volute,
+and feasibility screens'', all ``preliminary sizing rules anchored to the standard
+rocket turbopump design variables \ldots\ not hardware qualification''.
+\code{LITERATURE_SOURCES} names NASA SP-125 (two-feed-role BOM only), SP-8109
+(meanline, $N_s$/$D_s$, diffuser/volute, tip speed, staging), SP-8052 (NPSH,
+$N_{ss}$, inducer), Lee et al.\ 2021 (mass closure only, ``not as universal pump
+RPM or pump efficiency defaults'') and Spiller, Stabile and Lentini 2013 (poor
+efficiency of very small off-the-shelf pumps). The implemented chain:
+\begin{itemize}
+\item \textbf{Duty.} $Q=\dot m/\rho$, $P_{hyd}=\Delta p\,Q$, $P_{sh}=P_{hyd}/\eta_p$,
+$P_{el}=P_{sh}/(\eta_m\eta_i)$, torque $P_{sh}/\omega$.
+\item \textbf{Speed} (\code{_select_rpm}, \code{:1121}): target
+$N_s=\omega\sqrt Q/(g_0H_{st})^{3/4}=0.45$ (clamped 0.10--1.20), bounded by
+$D_2$ of 8--180~mm, $b_2\ge0.3$~mm, $b_2/D_2\le0.12$ and the RPM limit.
+\item \textbf{Impeller} (\code{:1245}): $U_2=\sqrt{g_0H_{st}/\psi}$, $D_2=2U_2/\omega$,
+$D_s=D_2(g_0H_{st})^{1/4}/\sqrt Q$, outlet blade angle fixed at $25^\circ$, stages
+$\lceil H/2500\,\mathrm{m}\rceil$. Blade count from a digitized SP-8109 Fig.~16
+(``zero prewhirl, SHROUDED impellers'', diameter ratio 0.65, read-off about
+$\pm0.02$ in $\psi$), snapped to a multiple of the inducer count (SP-8052
+\S3.1.14); four blades reach the eye, the rest start as splitters. Blockage
+$B=Zt/(2\pi r\sin\beta)\le0.20$ inlet, $\le0.15$ exit; the root closure
+$t\ge\sqrt{6F_{blade}/(\sigma_y/\mathrm{FoS})}$ feeds back into thickness,
+diameter and RPM.
+\item \textbf{Eye/shaft} (\code{:3547}): $Q=\pi(R_1^2-R_h^2)(1-B_1)\phi_1\omega R_1$,
+with the hub enclosing the torsion-sized shaft, a 15~$\mu$m fit clearance and the
+root wall; non-convergence raises \code{RuntimeError}.
+\item \textbf{Meanline} (\code{:1406-1568}): Stodola-style slip
+$\mathrm{clip}(1-\pi\sin\beta_2/Z,0.55,0.92)$, $c_{u2}=\sigma U_2-c_{m2}/\tan\beta_2$,
+Euler head $U_2c_{u2}/g_0$, zero prewhirl and incidence. Losses are fixed fractions
+of stage head (friction by Reynolds band, loading, incidence, disk, 2.5\% leakage,
+recirculation by flow and $N_s$) with no per-coefficient citation;
+$\eta=\mathrm{clip}(H_{st}/(H_{st}+\sum h),0.20,0.78)$, a cap above which values
+``should come from a real pump curve''.
+\item \textbf{Inducer} (\code{:2489}; SP-8052 \S\S2.1.9--3.1.15):
+$N_{ss}=\omega\sqrt Q/(g_0\mathrm{NPSH})^{3/4}$; 3 blades, solidity 2.5, hub ratio
+0.35, incidence ratio 0.425 (``a mean value, 0.425, has gained preference''), tip
+angle $\arctan\phi_{tip}/(1-0.425)$, constant lead $r\tan\beta$, 0.005~in leading edge.
+\item \textbf{Diffuser/volute} (\code{:2576}): volute if $N_s<0.20$, else 8 vanes;
+throat $\max(1.15Q/c_{m2},0.35A_{exit})$; exit area $\max(1.8A_{th},Q/(0.35U_2))$
+on $A(\theta)=A_{exit}\theta/2\pi$ (\code{constant_mean_velocity_screen}).
+\item \textbf{Curve, drive, battery.} Synthetic curve at flow ratios 0.50--1.30
+(\code{pump.synthetic_map}, \code{assumption_only}); one shared DC bus chosen from
+24--800~V at a 250~A target; motor mass $P_{sh}/\delta_m$, inverter
+$P_{sh}/(\eta_m\delta_{inv})$ (Lee Eqs.~26--29); battery
+$m_b=\kappa_b\max(P_{el}t_b/(\eta_E\delta_E),P_{el}/\delta_P)$.
+\item \textbf{Thermal/stress} (\code{:2608}): 70\% of pump loss heat plus disk
+friction into the propellant (15~K limit); hoop $\rho U^2$; blade-root bending;
+torsion $16T/(\pi d^3)$; casing hoop; DN limit $10^6$; seal speed 35~m/s; rotor
+7800~kg/m$^3$, yield 600/300~MPa (rotor/casing), FoS 1.5.
+\end{itemize}
+The gates in \code{_feasibility} (\code{:3141}) screen bus voltage, missing tank
+pressure (\texttt{info}), auto efficiency $\ge0.74$ (warn), power, RPM, torque,
+current and heat limits, tip speed (warn at 0.85, fail at 1.0 of the limit), $N_s$
+(pass 0.10--1.20), $D_s$ (pass 1.5--12), stages, free areas, eye continuity, shaft
+fit, split-casing clamp and tool access, capacity, NPSH and $N_{ss}$ ($\le4$ pass),
+system-curve margin, stresses, DN, seal speed and battery current, mass fraction
+(warn above 20\%), power/energy balance and heat.
+
+\subsubsection*{\code{raosim/electric_technology.py}}
+
+Before this module the traditional sizing and the MDO ``carried two different,
+unsourced electric-drive sets — battery power density 3.0 vs 1.3 kW/kg, battery
+energy density 250 vs $\approx$180.6 Wh/kg, motor 2.5 vs 3.0 kW/kg, inverter 15 vs
+20 kW/kg'', and ``about 94\% of the MDO objective is that electric package''. One
+\code{ElectricTechnologySet} now feeds \code{pumps.SCREENING_DEFAULTS},
+\code{MissionSpec} (which refuses numbers that disagree with its declared set
+unless \code{custom}) and the MDO-to-traditional hand-off. Density conventions
+follow Lee et al.\ 2021 (DOI 10.1007/s42405-020-00325-z, PDF p.~7 Eqs.~26--29,
+p.~8 Eqs.~30--32, ``checked on the page''): motor on shaft output, inverter on its
+output, battery branches on inverter input, $\kappa_b$ on both.
+
+{\small
+\begin{longtable}{@{}P{5.0cm}P{2.4cm}P{2.4cm}P{6.0cm}@{}}
+\caption{Registered electric technology sets (raosim/electric\_technology.py:236-369).}\label{tab:s09-tech}\\
+\toprule
+\textbf{Quantity} & \textbf{Repo.\ screening v1} & \textbf{Lee 2021 set} & \textbf{Held published bracket} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Quantity} & \textbf{Repo.\ screening v1} & \textbf{Lee 2021 set} & \textbf{Held published bracket} \\
+\midrule
+\endhead
+Battery power density [W/kg] & 3000 & 650 & 650--6950 \\
+Battery energy density [Wh/kg] & 250 & 325 & 90--350 \\
+Structural margin $\kappa_b$ & 1.20 & 1.20 & 1.2 in every held set \\
+Discharge efficiency $\eta_E$ & 0.95 & 0.925 & 0.925 only (Lee Eq.~38 at 600~s) \\
+Motor power density [W/kg] & 2500 & 875 & 875--8200 \\
+Motor efficiency & 0.90 & 0.87 & 0.80--0.95 \\
+Inverter power density [W/kg] & 15\,000 & 60\,000 & 26\,640--60\,000 \\
+Inverter efficiency & 0.96 & 0.85 & 0.80--0.85 \\
+\bottomrule
+\end{longtable}}
+
+\code{repository_screening_v1} (default) is ``a repository screening assumption
+with no single source''; its notes record that the inverter density lies below and
+the inverter efficiency above every held value, and that the constant 0.95 stands
+in for $\eta_E=0.093\ln t_b+0.3301$, which reaches 0.95 only near 785~s. The Lee
+set reads every drive and battery value from Lee Table~2 (PDF p.~11), excludes the
+paper's pump efficiencies and 10\% pump margin, and states $\eta_E$ only at 600~s,
+so \code{MissionSpec} raises \code{ElectricTechnologyValidityWarning} at other burn
+times. \code{MissionSpec.pump_specific_mass} is ``deliberately NOT part of a
+technology set'' because no held source states it on the MDO's basis.
+
+\subsection{Governing documents}
+
+{\small
+\begin{longtable}{@{}P{6.0cm}P{2.0cm}P{8.2cm}@{}}
+\toprule
+\textbf{Path} & \textbf{Type} & \textbf{Content; agreement with code} \\
+\midrule
+\endhead
+\code{docs/subsystems/S09-feed-system-and-electric-pumps/electric_pump_model_basis.md} & basis & Ledger-to-battery equations, meanline V1, assumptions, blade/channel fidelity. Stale on one point: a pump assembly ``in STL, faceted STEP, or both''; the pseudo-STEP writer was removed (\code{pump_cad.py:620}). \\
+\code{docs/subsystems/S09-feed-system-and-electric-pumps/PUMP_PHYSICS_AND_PROCESS_BASIS_2026-09-05.md} & basis & SP-8109, Gradl and Reis process/meanline basis with [V]/[T]/[F] marks; discrepancy ledger D1--D12. \\
+\code{docs/subsystems/S09-feed-system-and-electric-pumps/PUMP_CAD_IMPLEMENTATION_PLAN.md} & plan (STATUS) & Phases 0--3 and the 2026-07-12 coupled closure and split casing landed; STEP default flip and NURBS deferred. \\
+\code{docs/subsystems/S09-feed-system-and-electric-pumps/PUMP_ADVANCED_GEOMETRY_ROADMAP_2026-07-11.md} & superseded & Geometry roadmap, overridden by the 2026-07-13 plan. \\
+\code{docs/program/PUMP_GEOMETRY_IMPLEMENTATION_PLAN_2026-07-13.md} & plan & Corrections C1--C8, backlog P0--P11; no STATUS head. \\
+\code{docs/audits/LREKIT_PUMP_AUDIT_2026-09-05.md} & audit (dated) & a coupled preliminary sizing and reference-CAD system; 500~N fatal error, 130~kN false-feasible bolt layout; sequence A--H; lines refer to HEAD \texttt{f763fe1}. \\
+\code{docs/literature/LITERATURE_REQUESTS_HARDWARE_LOOP.md} & literature & H1--H14 gaps; SP-8109 refs 82/83 Confidential; bearings and seals blocked. \\
+\bottomrule
+\end{longtable}}
+
+\subsection{Verification}
+
+{\small
+\begin{longtable}{@{}P{4.0cm}P{1.5cm}P{10.7cm}@{}}
+\toprule
+\textbf{Test file} & \textbf{Tests} & \textbf{What it pins} \\
+\midrule
+\endhead
+\code{tests/test_pumps.py} & 39 & STL gates; CAD dimensions from reference geometry; inducer identities; Hong et al.\ 2012 inducer (10.4$^\circ$, 3 blades, solidity 2.6); SP-8109 Fig.~16 anchors and snap; eye continuity and blockage; root closure; wear rings and balance holes; Lee 2021 closure (motor 451.2~g, battery 985.6~g, power-limited) with the paper's Table~2 inputs; $N_s$ envelope; split-casing bolts fit at 13~kN. \\
+\code{tests/test_injector.py} & 7 & Pump sizing from a ledger; auto RPM and efficiency; BOM and reference geometry; shared-bus mismatch; missing tank pressure; envelope and stress failures. \\
+\code{tests/test_electric_technology.py} & 12 & Default set equals former defaults; MDO uses the same set; \code{MissionSpec} refuses mismatches; Lee set page-located and closes Table~4; bracket positions; CLI technology reaches both pipelines; 600~s warning (on \code{MissionSpec}). \\
+\code{tests/test_mdo_pump.py} & 7 (9) & Differentiable pump chain parity, inverter output basis, efficiency smoothness, battery branches, $N_{ss}$ and tip-speed margins. \\
+\code{tests/test_pump_cad_brep.py} & 12 & B-rep re-import and meanline dimensions (CadQuery; S11; not run here). \\
+\code{tests/test_run_nozzle.py} & 3 of 54 & Complete-package defaults; shared bus and visualization; technology flag reaches the MDO. \\
+\bottomrule
+\end{longtable}}
+
+\subsection{Maturity, limitations and known defects}
+
+\begin{itemize}
+\item \textbf{Maturity labels.} \code{pump.meanline_coefficients},
+\code{pump.annular_eye_free_area} and \code{pump.electric_drive} are
+\code{software_verified_not_hardware_validated}; \code{pump.inducer_npsh}
+\code{software_verified_not_cavitation_validated}; \code{pump.split_casing_joint}
+\code{software_verified_not_joint_qualified}; \code{pump.auto_efficiency_flow_head}
+and \code{pump.synthetic_map} \code{assumption_only}; CAD is
+\code{reference_geometry_not_hardware_qualified}.
+\item \textbf{Fixed assumptions.} $\beta_2=25^\circ$, $\psi=0.55$, $\phi=0.08$, a
+scalar tip-speed limit, efficiency cap 0.78, uncited loss constants,
+constant-mean-velocity volute, rectangular diffuser vanes. In the archived 13~kN
+build both pumps hit the 0.78 cap (warn) and the battery was power-limited
+(0.38~kg energy branch vs 8.92~kg power branch before margin).
+\item \textbf{Uncaught pump exceptions.} \code{size_electric_pumps} can raise
+\code{ValueError}/\code{RuntimeError} (e.g.\ ``coupled shaft/hub envelope leaves no
+credible impeller-eye annulus'', \code{pumps.py:2071}; \code{:3650}, \code{:3742}).
+The call at \code{run_nozzle.py:6212} is outside the injector \code{try}, and
+neither \code{raosim/cli.py} nor \code{lrekit/cli.py} catches exceptions, so the run
+ends with a traceback and no \code{summary.json}. The pump audit reproduced this at
+500~N; it was not re-run here. The MDO path wraps the same call.
+\item \textbf{Bolt-layout fit not gated.} \code{bolt_layout_fits_clear_arc} is
+computed (\code{pumps.py:1927}) but \code{split_casing_bolt_clamp_screen} and the
+B-rep assembly gate read only the stress flag \code{bolt_screen_passed}
+(\code{:1959}, \code{:3369}; \code{pump_cad_brep.py:915}). If the bolt-size ladder
+runs out without a fit the design can still report feasible (the audit's 130~kN
+finding); tests assert the fit only at 13~kN.
+\item \textbf{Pump properties at the injector inlet.} The ledger takes $\rho$ and
+$P_v$ from \code{result.feed[role]}, which for a closed direct-regen fuel path is
+the jacket outlet state, although the pump is upstream of the jacket. RP-1 uses
+constant properties, so nothing changes; a CoolProp coolant such as methane would
+get pump flow and $\mathrm{NPSH}_a$ from heated properties. Code-reading
+observation; no test covers it.
+\item \textbf{Burn-time validity.} The 600~s warning fires only in
+\code{MissionSpec}; \code{--electric-technology lee2021_ijass_electric_pump} with
+the traditional 10~s burn applies the 600~s $\eta_E$ silently.
+\item \textbf{Open items from the documents.} D1 machinability ceiling
+($Z_2\lesssim28\sin\beta_2$), D2 process-dependent tip speed, D3
+constant-moment-of-momentum volute and D4 flow-angle-matched diffuser vanes have no implementation
+(grep of \code{pumps.py}, \code{pump_cad_brep.py}); D6 is partly covered by the root
+closure. Bearings, seals, shaft retention, rotordynamics, measured pump and motor
+maps, battery pulse data and cavitation tests are out of scope; propellant heating
+is not fed back into properties or NPSH.
+\end{itemize}
+
+\subsection{Developer notes}
+
+{\small
+\begin{longtable}{@{}P{4.4cm}P{11.8cm}@{}}
+\toprule
+\textbf{Change} & \textbf{Where it goes} \\
+\midrule
+\endhead
+New technology set & An \code{ElectricTechnologySet} with page-located \code{TechnologySource} rows in \code{ELECTRIC_TECHNOLOGY_SETS}; it becomes a CLI choice automatically; never edit \code{SCREENING_DEFAULTS} numbers directly. \\
+Hydraulic correlation & \code{_impeller_geometry}, \code{_velocity_triangle}, \code{_hydraulic_meanline}, \code{_inducer_geometry}; \code{pumps.py} stays the single source of truth (CAD only turns solved numbers into solids) and needs a registry entry. \\
+New pump gate & \code{_feasibility} (\code{:3141}); \texttt{fail} blocks export through \code{pump.feasible}. \\
+Pump geometry or CAD & \code{_reference_geometry} (\code{:2239}) for numbers; \code{pump_cad.py}, \code{pump_cad_brep.py} for solids (S11); backlog in the 2026-07-13 plan. \\
+Feed-budget term & \code{FeedLineSpec}, \code{feed_system_ledger} (\code{injector.py}), \code{_feed_system_spec_from_args}, \code{_validate_pump_args}; S09 must not re-solve the ledger. \\
+Differentiable twin & \code{raosim/mdo/pump.py} and \code{raosim/mdo/injector.py} (S13) stay in parity via \code{test_mdo_pump.py}, \code{test_mdo_injector.py}. \\
+\bottomrule
+\end{longtable}}

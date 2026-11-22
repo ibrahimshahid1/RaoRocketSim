@@ -1,0 +1,743 @@
+{
+ "packet": "V-SP8089-p032-034",
+ "kind": "verification",
+ "document_id": "DOC_NTRS_19760023196",
+ "source_pdf": "propulsion_texts/19760023196.pdf",
+ "source_sha256": "5e9db6a6f7860ee51acbf5cbe137005ef259ec3fd87ff0ed5f1ad466d6227c44",
+ "pages": [
+  32,
+  34
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 32,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19760023196/p0032.png",
+   "sha256": "77ad52b7c267caacf8858f6e58a94cce1c1fb531351e648d2fb62422b6f0d5a0",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 33,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19760023196/p0033.png",
+   "sha256": "e8c1a95b373a75614dc1d711220dcc6a7515d8e37567144393d3af2ee0c2e96c",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 34,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19760023196/p0034.png",
+   "sha256": "829c5d3eb9283b964631cb4743fea72f64ac0f1cf4f1bc3907fb5c98c2ded1dc",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_5fe100e44a8c1a53a0195a1c",
+  "ENR_7f2d995ee5d097190775e05e"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_cfa291bf9f6a2968bea55852",
+   "kind": "figure",
+   "pages": [
+    33
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [
+    "Figure 4. — Hlustration of pintle element showing inner slots and outer annulus."
+   ],
+   "bbox": [
+    {
+     "l": 164.34732055664062,
+     "t": 654.2302017211914,
+     "r": 426.7398986816406,
+     "b": 539.8893737792969,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/7\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "REJECTED",
+   "run_id": "ENR_7f2d995ee5d097190775e05e",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19760023196/5e9db6a6f786-p33-35-00108fd3b8.json",
+   "raw_sha256": "9ce37c0a8c5430f0e9ed0065290cd3ec3807627add627aa8f49ecfcd53779262",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_13f9305ce8f424a9f0bce71e",
+   "kind": "formula",
+   "pages": [
+    33
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/19",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 249.66666666666666,
+     "t": 414.0,
+     "r": 336.0,
+     "b": 401.0,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\rho _ { o } V _ { o } ^ { 2 } \\ S \\Omega",
+   "original_text": "PV? SE 7",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "REJECTED",
+   "run_id": "ENR_7f2d995ee5d097190775e05e",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19760023196/5e9db6a6f786-p33-35-00108fd3b8.json",
+   "raw_sha256": "9ce37c0a8c5430f0e9ed0065290cd3ec3807627add627aa8f49ecfcd53779262",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_86afde26a40d1105af754e14",
+   "kind": "figure",
+   "pages": [
+    34
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/1",
+   "caption_text": [
+    "Figure 5. — Two-dimensional flow field for a typical unlike-impinging element."
+   ],
+   "bbox": [
+    {
+     "l": 48.91771697998047,
+     "t": 445.2816467285156,
+     "r": 466.185546875,
+     "b": 334.0595397949219,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/25\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "REJECTED",
+   "run_id": "ENR_7f2d995ee5d097190775e05e",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19760023196/5e9db6a6f786-p33-35-00108fd3b8.json",
+   "raw_sha256": "9ce37c0a8c5430f0e9ed0065290cd3ec3807627add627aa8f49ecfcd53779262",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_0f68202fbe5f9e21fe90b661",
+   "kind": "formula",
+   "pages": [
+    35
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/53",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 214.0,
+     "t": 345.66666666666663,
+     "r": 510.0,
+     "b": 331.6666666666667,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\bar { \\mathbf D } _ { \\sigma } \\, = \\, ( 1 . 4 4 \\, u \\, \\mathbf O . 0 0 7 3 4 \\, \\theta ) \\, \\bar { \\mathbf D } _ { \\sigma , 0 }",
+   "original_text": "@) \"da (oreLoo0 FPL) = \"d",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "REJECTED",
+   "run_id": "ENR_7f2d995ee5d097190775e05e",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19760023196/5e9db6a6f786-p33-35-00108fd3b8.json",
+   "raw_sha256": "9ce37c0a8c5430f0e9ed0065290cd3ec3807627add627aa8f49ecfcd53779262",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_ead1b8e7e7ae727a725d476f",
+   "kind": "formula",
+   "pages": [
+    35
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/49",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 202.66666666666666,
+     "t": 657.6666666666666,
+     "r": 510.0,
+     "b": 617.6666666666666,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\cos \\left ( 9 0 ^ { \\circ } - \\theta \\right ) = 0 . 2 \\ \\frac { V _ { \\kappa } } { V _ { 1 } } \\ \\frac { d _ { \\kappa } } { d _ { 1 } } \\ \\left ( \\frac { \\rho _ { \\kappa } } { \\rho _ { 1 } } \\right ) ^ { \\kappa }",
+   "original_text": "cos (90° — 8) = 0.2 ¥ Yi . Pp & Ey ee Coe (6) V4, (3) ,",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "REJECTED",
+   "run_id": "ENR_7f2d995ee5d097190775e05e",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19760023196/5e9db6a6f786-p33-35-00108fd3b8.json",
+   "raw_sha256": "9ce37c0a8c5430f0e9ed0065290cd3ec3807627add627aa8f49ecfcd53779262",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [
+  {
+   "id": "EQ_NTRS_19760023196_65647A04",
+   "store": "equations",
+   "type": "Equation",
+   "page": 33,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "SP-8089 eq. (5) pintle slot optimum-mixing correlation",
+   "equation_number": "(5)",
+   "form": "rho_f * V_f^2 * (A*S + 2*ell*C) / (rho_o * V_o^2 * S*ell) = 1",
+   "statement": null,
+   "quote": "For liquid/liquid applications, the correlation for oxidizer injected through slots in the pintle is expressed as (adptd. from ref. 10)",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "rho_f",
+     "meaning": "fuel density",
+     "units": "",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "rho_o",
+     "meaning": "oxidizer density",
+     "units": "",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "V_f",
+     "meaning": "fuel injection velocity",
+     "units": "",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "V_o",
+     "meaning": "oxidizer injection velocity",
+     "units": "",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "A",
+     "meaning": "width of the fuel slot (annulus)",
+     "units": "in.",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "S",
+     "meaning": "width of oxidizer slot",
+     "units": "in.",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "ell",
+     "meaning": "length of oxidizer slot",
+     "units": "in.",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "C",
+     "meaning": "cross-influence term defined in source reference10",
+     "units": "in.",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [
+    "Liquid/liquid propellants; oxidizer injected through slots in the pintle (LEM-descent-type geometry, fig. 4)"
+   ],
+   "validity": [
+    "Stated to apply to liquid/liquid designs; the same expression is stated to apply also to gas/liquid designs per ref. 38"
+   ],
+   "extraction_note": "Docling2.139.0 standard pipeline and visually located formula-region enrichment were executed. Both misread scan subscripts/operators; formula manually corrected by visual inspection of original source PDF. Original damaged records and raw parser candidates retained. Quote anchors OCR prose only. Ratios require consistent units; no new numeric applicability range is asserted. No model link inherited because neither equation is the implemented momentum-resultant relation.",
+   "same_page_formula_candidates": [
+    "CAND_13f9305ce8f424a9f0bce71e"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 33
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "rho_f",
+      "rho_o",
+      "V_f",
+      "V_o",
+      "A",
+      "S",
+      "ell",
+      "C"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_NTRS_19760023196_BE05E0AF",
+   "store": "equations",
+   "type": "Equation",
+   "page": 33,
+   "is_target": false,
+   "active": false,
+   "source_state": "SUPERSEDED_EXTRACTION",
+   "verification": null,
+   "label": "SP-8089 eq. (5) pintle slot optimum-mixing correlation",
+   "equation_number": "(5)",
+   "form": "OCUpV? Sk >)5)   [OCR-garbled; source states it is a correlation among A, S, ℓ and C for oxidizer injected through slots in the pintle]",
+   "statement": null,
+   "quote": "For liquid/liquid applications, the correlation for oxidizer injected through slots in the pintle is expressed as (adptd. from ref. 10)",
+   "confidence": "low",
+   "model_ids": [
+    "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "A",
+     "meaning": "width of the fuel slot (annulus)",
+     "units": "in.",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": [],
+     "normalization_history": [
+      {
+       "resolution_state": "AMBIGUOUS_SYMBOL",
+       "quantity_candidates": [
+        "QTY_SOUND",
+        "QTY_AT"
+       ]
+      }
+     ],
+     "normalization_basis": "SYSTEM_INFERS: symbol and exact canonical units; no source meaning or unit conversion inferred"
+    },
+    {
+     "symbol": "S",
+     "meaning": "width of oxidizer slot",
+     "units": "in.",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "ℓ",
+     "meaning": "length of oxidizer slot",
+     "units": "in.",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "C",
+     "meaning": "cross-influence term (defined in ref. 10)",
+     "units": "in.",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": [],
+     "normalization_history": [
+      {
+       "resolution_state": "AMBIGUOUS_SYMBOL",
+       "quantity_candidates": [
+        "QTY_SOUND",
+        "QTY_CSTAR"
+       ]
+      }
+     ],
+     "normalization_basis": "SYSTEM_INFERS: symbol and exact canonical units; no source meaning or unit conversion inferred"
+    }
+   ],
+   "assumptions": [
+    "Liquid/liquid propellants; oxidizer injected through slots in the pintle (LEM-descent-type geometry, fig. 4)"
+   ],
+   "validity": [
+    "Stated to apply to liquid/liquid designs; the same expression is stated to apply also to gas/liquid designs per ref. 38"
+   ],
+   "extraction_note": "The equation body is unreadable in the OCR ('OCUpV? Sk >)5)'). Only the surrounding variable list survives: A = width of the fuel slot (annulus), in.; S = width of oxidizer slot, in.; ℓ = length of oxidizer slot, in.; C = cross-influence term (defined in ref. 10), in. Do not reconstruct the functional form from other literature.",
+   "same_page_formula_candidates": [
+    "CAND_13f9305ce8f424a9f0bce71e"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 33
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": [
+      "UNBALANCED_()",
+      "DAMAGE_OR_REPETITION_MARKER"
+     ]
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "A",
+      "S",
+      "ℓ",
+      "C"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_05B6CE67",
+   "store": "claims",
+   "type": "Claim",
+   "page": 33,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The pintle slot optimum-mixing expression developed for liquid/liquid has been found to apply also to gas/liquid designs.",
+   "quote": "It should be noted that the same expression has been found to apply also to gas/liquid designs (ref. 38).",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 33
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_0AA2DBA5",
+   "store": "claims",
+   "type": "Claim",
+   "page": 32,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "For the pintle element the equivalent of orifice diameter ratio is the ratio of the inner to the outer annulus or, for the LEM descent engine, the ratio of the outer annulus width A to the inner slot width S.",
+   "quote": "For the pintle element, the equivalent of diameter ratio is the ratio of the inner to the outer annulus or, in the case of the LEM descent engine, the ratio of the width of the outer annulus A to the width of the inner slot S (fig. 4).",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 32
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_32024E91",
+   "store": "claims",
+   "type": "Claim",
+   "page": 32,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Experiment has shown that a correlation very similar to that for unlike-impinging injectors also applies to the pintle: a momentum balance between the inner stream and the outer stream produces optimum mixing.",
+   "quote": "Experiment has shown thata correlation very similar to that for unlike injectors also applies to the pintle design; i.e., a momentum balance between the inner stream and the outer stream produces optimum mixing.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 32
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_915957AE",
+   "store": "claims",
+   "type": "Claim",
+   "page": 34,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The greater the impingement angle the more mass is distributed at angles greater than 90°, and experiment shows impingement angles greater than 90° result in high heat flux to the injector face.",
+   "quote": "the greater the impingement angle, the greater the mass distributed at angles greater than 90°. Experiment has shown that impingement angles > 90° result in high heat flux to the injector face.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 34
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_933F3804",
+   "store": "claims",
+   "type": "Claim",
+   "page": 34,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The quantity of mass flowing backward from an unlike-impingement point is proportional to the cosine of the impingement half-angle.",
+   "quote": "It is easily shown that the quantity of mass flowing backward is proportional to the cosine of the impingement half-angle.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 34
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_C399DDFE",
+   "store": "claims",
+   "type": "Claim",
+   "page": 32,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The most definitive works on the pintle injector are references 10 and 39.",
+   "quote": "The most definitive works on the pintle injector are those of references 10 and 39.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 32
+    }
+   ]
+  },
+  {
+   "id": "ASM_NTRS_19760023196_D9122687",
+   "store": "entities",
+   "type": "Assumption",
+   "page": 32,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "The pintle optimum-mixing criterion assumes a correlation very similar to that for unlike-impinging injectors applies, i.e. that inner/outer stream momentum bal",
+   "equation_number": null,
+   "form": null,
+   "statement": "The pintle optimum-mixing criterion assumes a correlation very similar to that for unlike-impinging injectors applies, i.e. that inner/outer stream momentum balance governs mixing.",
+   "quote": "Experiment has shown thata correlation very similar to that for unlike injectors also applies to the pintle design; i.e., a momentum balance between the inner stream and the outer stream produces optimum mixing.",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 32
+    }
+   ]
+  },
+  {
+   "id": "VAL_NTRS_19760023196_9C9ABA02",
+   "store": "validity",
+   "type": "ValidityEnvelope",
+   "page": 33,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The pintle slot correlation (eq. 5) is stated for liquid/liquid oxidizer injection through slots in the pintle, and is also found to apply to gas/liquid designs per ref. 38.",
+   "quote": "It should be noted that the same expression has been found to apply also to gas/liquid designs (ref. 38).",
+   "confidence": null,
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 33
+    }
+   ]
+  },
+  {
+   "id": "VAL_NTRS_19760023196_E5998A55",
+   "store": "validity",
+   "type": "ValidityEnvelope",
+   "page": 34,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The deflector-angle effect on wall impingement is stated for a given set of flow conditions; impingement angles greater than 90° produce high heat flux to the injector face.",
+   "quote": "Experiment has shown that impingement angles > 90° result in high heat flux to the injector face.",
+   "confidence": null,
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 34
+    }
+   ]
+  }
+ ],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00048",
+   "page_start": 32,
+   "page_end": 32,
+   "section": "subscript o,f = oxidizer and fuel, respectively",
+   "text": "Non impinging elements. — The ratio of orifice diameters has no effect on mixing or atomization for the showerhead element. However, the size of the element does affect both mixing and atomization. Mixing for showerhead jets increases for smaller jets, since for a fixed total flow area smaller jets result in increased total surface area. No correlations that show this effect quantitatively are available. Generally, the orifices are made as small as possible, consistent with fabrication limits. For free jet flow, where the surrounding medium affects the breakup process, jet size is directly proportional to drop size (ref. 9). Therefore, decreasing element size increases performance for vaporization-limited combustion."
+  },
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00049",
+   "page_start": 32,
+   "page_end": 32,
+   "section": "subscript o,f = oxidizer and fuel, respectively",
+   "text": "For the concentric-tube element, the equivalent of diameter ratio is the ratio of the width of the annulus gap to diameter of the center jet. Element size is equivalent to the center-jet diameter. Experiments have shown that mixing decreases when the ratio of annulus width to center-jet diameter increases. This effect is thought to be related to increased loss in flow energy available for mixing as a consequence of outward expansion of the flow from the annulus jet (i.e., for this type of design, increased thickness increases outer surface area). In addition, increased size also results in a decrease in mixing uniformity. Empirical correlations of the element geometry quantitatively with variations in mixing and atomization are presented in references 5 and 14. An analytical model has been developed specifically for O,/H, propellants (ref. 48). This model defines the liquid-jet stripping, atomization, and combustion processes for a concentric-tube injector element. Some success has been achieved in applying the reference-48 model to actual engine data of reference 49. The results from the reference-48 analysis have also been input to stability models (ref. 50), and stability trends have been predicted successfully. A considerable quantity of experience, however, has been gained from engine development programs relating variations in orifice element design to changes in heat flux to the wall or in overall engine performance. In reference 14, for example, it was shown that the relative velocity or differential velocity between the gas in the annulus and the liquid in the center jet is of critical importance in attaining performance and stability; in addition, empirical correlations among differential velocity, performance, flow per element, chamber pressure, and other minor variables were developed. As another example, high-performance designs resulting in low AP have been found insufficient for distributing the liquid oxidizer in the feed manifold and sometimes insufficient to meet system stability requirements. To overcome the problems resulting from low AP, a small orifice for flow control is placed at the forward end of the center liquid tube (i.e., at the manifold outlet into the tube), with a large outlet area at the exit end of the tube to inject the liquid at low velocity."
+  },
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00050",
+   "page_start": 32,
+   "page_end": 32,
+   "section": "subscript o,f = oxidizer and fuel, respectively",
+   "text": "Hybrid elements. — For the pintle element, the equivalent of diameter ratio is the ratio of the inner to the outer annulus or, in the case of the LEM descent engine, the ratio of the width of the outer annulus A to the width of the inner slot S (fig. 4). The most definitive works on the pintle injector are those of references 10 and 39. Experiment has shown thata correlation very similar to that for unlike injectors also applies to the pintle design; i.e., a momentum balance between the inner stream and the outer stream produces optimum mixing."
+  },
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00051",
+   "page_start": 33,
+   "page_end": 33,
+   "section": "subscript o,f = oxidizer and fuel, respectively",
+   "text": "| 7 aunutus<br>/#,Zi :! 4 FUEL INJECTION<br>CZ<br>ZL % Z ZY tft,<br>| bmA<br>—sle— J<br>UBOOILINNY<br>OXIDIZER ay<br>PRJECTION<br>ORIFICES<br>\n\nFigure 4. — illustration of pintle element showing inner slots and outer annulus.\n\nFor liquid/liquid applications, the correlation for oxidizer injected through slots in the pintle is expressed as (adptd. from ref. 10)\n\nOCUpV? Sk >)5)<br>\n\nwhere\n\n- A = width of the fuel slot (annulus), in.\n\nS = width of<sup>oxidizerslot,in.</sup>\n\n- £ = leneth of oxidizer slot, in.\n\n- C = cross-influence term (defined in ref. 10), in.\n\nIt should be noted that the same expression has been found to apply also to gas/liquid designs (ref. 38).\n\nIn the splash-plate injector, the jets impinge on a plate, and hence there is little if any dependence of the mixing uniformity on orifice diameter ratio. Orifice size, however, docs affect both atomization and mixing. In reference 11, it is shown that the overall performance increased as the orifice size was increased until the oxidizer jet diameter was 0.08 in.: then, with further increases in the size, performance decreased. The specific roles of atomization and mixing were not determined. These results suggest that there is a"
+  },
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00052",
+   "page_start": 34,
+   "page_end": 34,
+   "section": "subscript o,f = oxidizer and fuel, respectively",
+   "text": "tradeoff between these two parameters when the element size is increased. Studies of the effect of jet size on atomization for jets impinging on a plate (refs. 51 and 52) suggest that as the jet size increases, drop size also increases."
+  },
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00053",
+   "page_start": 34,
+   "page_end": 34,
+   "section": "2.1.1.1.3 Impingement Angle",
+   "text": "The angle of impingement between impinging jets affects propellant backsplash, resultant mixing uniformity, and atomization characteristics. Propellant backsplash on the injector face can result in injector-face burnout. The relative importance of impingement angle depends on the element type.\n\nUnlike-impinging elements. — For unlike-impinging elements, the greater the impingement angle, the greater the quantity of mixed propellant flowing back toward the injector face. The phenomenon of mixed propellant backflow is illustrated in figure 5.\n\nFUELa FUELaN<br>_S<br>BACKFLOW BACKFLOW<br>PROPELLANT y,OXIDIZER PROPELLANT 4OxiDIZER<br>{a) Fan view (b) Edge view<br>\n\nFigure 5. — Two-dimensional flow field for a typical unlike-impinging element.\n\nIt is easily shown that the quantity of mass flowing backward is proportional to the cosine of the impingement half-angle. In addition, the angular distribution of mixed spray leaving the point of impingement is also dependent on impingement angle: the greater the impingement angle, the greater the mass distributed at angles greater than 90°. Experiment has shown that impingement angles > 90° result in high heat flux to the injector face.\n\nMixing uniformity is also affected by impingement angle. For liquid/liquid propellants, this effect has only been quantitatively defined for unlike-impingement doublet elements (ref. 3). The results show that over the range of impingement angle from 80° to 40°, mixing increases as the impingement angle decreases. Impingement angle also affects the mixing uniformity for gas/liquid propellants. For gas/liquids, the impingement angle @ producing optimum mixing may be related to the flow conditions by the expression"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "figure": 2,
+   "formula": 3
+  },
+  "flagged_candidates": 0,
+  "target_objects": 6,
+  "objects_with_anchor_problems": 0
+ }
+}

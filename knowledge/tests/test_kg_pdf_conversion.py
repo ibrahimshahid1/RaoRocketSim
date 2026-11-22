@@ -4,6 +4,7 @@ import hashlib
 import json
 from pathlib import Path
 import sys
+import weakref
 from types import ModuleType
 
 import pytest
@@ -171,3 +172,33 @@ def test_native_pdf_needs_no_ocr_or_confidence_warning(fake_pdf):
     assert result.method == "pymupdf4llm-classic"
     assert "[!WARNING]" not in output.read_text()
     assert doc.closed
+
+
+def test_ocr_keeps_the_source_page_alive_until_text_is_read(fake_pdf):
+    """PyMuPDF returns transient page wrappers and weakly owned text pages."""
+    pages = [native_page(1), FakePage("", ocr_text="Recovered image-only appendix text.")]
+    doc, pdf, output = fake_pdf(pages)
+
+    class TransientPage(FakePage):
+        def get_textpage_ocr(self, **kwargs):
+            return weakref.ref(self)
+
+        def get_text(self, kind, *, textpage=None):
+            if textpage is not None:
+                if textpage() is not self:
+                    raise ReferenceError("weakly-referenced source page no longer exists")
+                return self.ocr_text
+            return self.native_text
+
+    class TransientDocument(FakeDocument):
+        def __getitem__(self, index):
+            original = self.pages[index]
+            return TransientPage(original.native_text, ocr_text=original.ocr_text)
+
+    doc.__class__ = TransientDocument
+    result = pdf_to_markdown.convert_pdf(pdf, output)
+
+    assert result.ocr_pages == 1
+    assert result.failed_pages == 0
+    assert "Recovered image-only appendix text." in output.read_text()
+    assert result.low_confidence is True

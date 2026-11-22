@@ -1,0 +1,486 @@
+{
+ "packet": "V-WHITE-p1120-1122",
+ "kind": "verification",
+ "document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+ "source_pdf": "propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf",
+ "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+ "pages": [
+  1120,
+  1122
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 1120,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/p1120.png",
+   "sha256": "535784d4e1a9139f0072130c570ed749b88abaf29b17bf4b9566b16e8efec4b3",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 1121,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/p1121.png",
+   "sha256": "33d45245b8528676aa1b1bcf096691b34874d2b2be51cf09967dd3b0f84b64ff",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 1122,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/p1122.png",
+   "sha256": "a8aa8b8d1900b56791eaa096f963708218dba6b5cd1aeb42fc2a2e11c26ed4f7",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_17f0c33f11d39a5b6b8cdcfe",
+  "ENR_dd7e82128f34bff74fb35b83",
+  "ENR_fb5dd156eb3fdb94c7c3a7ee"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_66670491c7da7d89bce9ea50",
+   "kind": "formula",
+   "pages": [
+    1120
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/8",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 181.66666666666666,
+     "t": 112.0,
+     "r": 451.6666666666667,
+     "b": 87.0,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\frac { p ^ { * } } { p _ { 0 } } = 0 . 5 2 8 3 \\quad \\text {or} \\quad p ^ { * } = ( 0 . 5 2 8 3 ) ( 1 2 0 \\, k P a ) = 6 3 . 4 \\, k P a",
+   "original_text": "* = = 0.5283 or _—_ p* = (0.5283)(120 kPa) = 63.4 kPa 0",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_17f0c33f11d39a5b6b8cdcfe",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p1120-1120-21f702bfea2047925e4fb419d86e118a50cae46bafcc34490bfb0fd313b3bb80.json",
+   "raw_sha256": "d5fdf4d7a93db7fd1923c2adddb8cb902433cc5f9b1bca006ca4f1b896525110",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_30e1bd36366052d0d1c84d62",
+   "kind": "formula",
+   "pages": [
+    1121
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/5",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 189.5764923095703,
+     "t": 399.01702880859375,
+     "r": 444.4885559082031,
+     "b": 368.915771484375,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\frac { \\dot { m } \\sqrt { R T _ { 0 } } } { A p _ { 0 } } = \\sqrt { \\frac { 2 ( 1 . 4 ) } { 0 . 4 } ( 0 . 7 5 ) ^ { 2 / 1 . 4 } [ 1 - ( 0 . 7 5 ) ^ { 0 . 4 / 1 . 4 } ] } = 0 , 6 0 5 2",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_dd7e82128f34bff74fb35b83",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p1121-1121-b82d472155b14e23b2f1b6f296d4af13e1f79b26502076b0ac9af380ccba6bbc.json",
+   "raw_sha256": "7f96e44d277e7ffed4d6d82e45f6bd6ad8a64f857ed92c78e91baa9a3f4b0e65",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_60ec82f80ab910649a137f42",
+   "kind": "formula",
+   "pages": [
+    1121
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/3",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 292.0,
+     "t": 546.0,
+     "r": 478.3333333333333,
+     "b": 517.0,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\left ( \\frac { 1 2 0 } { 9 0 } \\right ) ^ { 2 / 7 } - 1 \\right ] = 0 . 4 2 8 3 \\ \\ M a _ { e } = 0 . 6 5 4",
+   "original_text": "120 90 way\" - 1 = 0.4283 Ma, = 0.654",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_dd7e82128f34bff74fb35b83",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p1121-1121-b82d472155b14e23b2f1b6f296d4af13e1f79b26502076b0ac9af380ccba6bbc.json",
+   "raw_sha256": "7f96e44d277e7ffed4d6d82e45f6bd6ad8a64f857ed92c78e91baa9a3f4b0e65",
+   "mechanical_flags": [
+    "UNBALANCED_[]"
+   ]
+  },
+  {
+   "id": "CAND_67a3e2b0a4af154f14642a16",
+   "kind": "formula",
+   "pages": [
+    1121
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/6",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 118.66666666666667,
+     "t": 388.3333333333333,
+     "r": 514.3333333333333,
+     "b": 293.3333333333333,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\frac { \\frac { m \\, V ( 1 _ { 0 } ) } { \\ A p _ { 0 } } = \\sqrt { \\frac { 2 ( 1 . 4 ) } { 0 . 4 } ( 0 . 7 5 ) ^ { 2 / 1 - [ 1 - ( 0 . 7 5 ) ^ { 0 . 4 / 1 . 4 } ] } = 0 . 6 0 5 2 } } \\\\ h e n c \\\\ \\frac { \\dot { m } = 0 . 6 0 5 2 \\frac { ( 0 . 0 0 6 ) ( 1 2 0 , 0 0 0 ) } { \\sqrt { 2 8 7 ( 4 0 ) } } = 0 . 1 2 9 \\, k g / s } { A _ { 2 } } = 0 . 1 2 9 \\, k g / s \\\\ \\intertext { f o r } p _ { c } = p _ { b } = 9 0 \\, k P a \\quad \\text {Ans. (a)}",
+   "original_text": "aay — (0,75)°\"\"4] = 0,6052 (0,0006)(120,000) _ hence m = 0.6052 Vigiaooy 0.129 kg/s Ans. (a) for Pp. = p;, = 90 kPa Ans. (a)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_dd7e82128f34bff74fb35b83",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p1121-1121-b82d472155b14e23b2f1b6f296d4af13e1f79b26502076b0ac9af380ccba6bbc.json",
+   "raw_sha256": "7f96e44d277e7ffed4d6d82e45f6bd6ad8a64f857ed92c78e91baa9a3f4b0e65",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_d192b3656da23f388b607d8d",
+   "kind": "formula",
+   "pages": [
+    1121
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/9",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 194.33333333333334,
+     "t": 154.0,
+     "r": 440.0,
+     "b": 144.0,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "p _ { e } = p ^ { * } = 6 3 . 4 \\, k P a \\quad \\text {And} \\,",
+   "original_text": "Pp. = p* = 63.4 kPa Ans. (b)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_dd7e82128f34bff74fb35b83",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p1121-1121-b82d472155b14e23b2f1b6f296d4af13e1f79b26502076b0ac9af380ccba6bbc.json",
+   "raw_sha256": "7f96e44d277e7ffed4d6d82e45f6bd6ad8a64f857ed92c78e91baa9a3f4b0e65",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_d79091d7cb9ec2223fc6d92e",
+   "kind": "figure",
+   "pages": [
+    1122
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 140.73976135253906,
+     "t": 720.7381210327148,
+     "r": 492.2015380859375,
+     "b": 692.1651840209961,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_fb5dd156eb3fdb94c7c3a7ee",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p1122-1122-8106eecebe0cca520418364b81bd9db902fbb31195a530e3bb81c5565b721c36.json",
+   "raw_sha256": "0c187553b0d8078c2a2861de2ed618aa450b54a7918a6ea550821c517e13198d",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [
+  {
+   "id": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_17AD6907",
+   "store": "claims",
+   "type": "Claim",
+   "page": 1122,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "For a converging nozzle with throat area 6 cm2 and stagnation air at 120 kPa and 400 K, the critical pressure is 63.4 kPa; at pb = 90 kPa the flow is subsonic with Ma_e = 0.654 and 0.128 kg/s, while any back pressure below 63.4 kPa gives the same choked mass flow of 0.145 kg/s (a 50 percent rise in exit Mach number raises mass flow only 12 percent).",
+   "quote": "has increased the mass flow only 12 percent, from 0.128 to 0.145 kg/s.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 1122
+    }
+   ]
+  },
+  {
+   "id": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_5A3B4921",
+   "store": "claims",
+   "type": "Claim",
+   "page": 1121,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The critical (sonic) throat pressure is computed from Eq. (9.32); if the back pressure is less than this amount, the nozzle flow is choked.",
+   "quote": "If the back pressure is less than this amount, the nozzle flow is choked.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 1121
+    }
+   ]
+  },
+  {
+   "id": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_5CA72450",
+   "store": "claims",
+   "type": "Claim",
+   "page": 1120,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Example 9.5: a converging nozzle has a throat area of 6 cm2 and stagnation air conditions of 120 kPa and 400 K; exit pressure and mass flow are computed for back pressures of 90 kPa and 45 kPa with k = 1.4.",
+   "quote": "A converging nozzle has a throat area of 6 cm <sup>2</sup> and stagnation air conditions",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 1120
+    }
+   ]
+  },
+  {
+   "id": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_821E7FCD",
+   "store": "claims",
+   "type": "Claim",
+   "page": 1120,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "For a moderate drop in back pressure the throat pressure exceeds the critical value p*; the flow is subsonic throughout, pe = pb, and the mass flow is predicted by subsonic isentropic theory and is less than the critical value.",
+   "quote": "pressure _pb_ . The mass flow is predicted by subsonic isentropic theory and is less",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 1120
+    }
+   ]
+  },
+  {
+   "id": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_F5F5E320",
+   "store": "claims",
+   "type": "Claim",
+   "page": 1120,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "If pb is lowered below p* the nozzle cannot respond further because it is choked at its maximum throat mass flow; the throat remains sonic with pe = p* and the exit jet expands supersonically to pb without sending signals upstream.",
+   "quote": "cannot respond further because it is choked at its maximum throat mass flow.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 1120
+    }
+   ]
+  },
+  {
+   "id": "ASM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_A426565E",
+   "store": "entities",
+   "type": "Assumption",
+   "page": 1120,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "Converging-nozzle flow is steady or nearly so only if the stagnation plenum is large or supplemented by a compressor and the discharge chamber is large or pumpe",
+   "equation_number": null,
+   "form": null,
+   "statement": "Converging-nozzle flow is steady or nearly so only if the stagnation plenum is large or supplemented by a compressor and the discharge chamber is large or pumped; otherwise blowdown is treated quasi-steadily with isentropic steady-flow theory.",
+   "quote": "converging nozzle flow will be steady or nearly so. Otherwise the nozzle will be",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 1120
+    }
+   ]
+  },
+  {
+   "id": "CONST_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_885DFC77",
+   "store": "entities",
+   "type": "EmpiricalConstant",
+   "page": 1122,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "Critical throat pressure for p0 = 120 kPa, k = 1.4 (Example 9.5) = 63.4 kPa",
+   "equation_number": null,
+   "form": null,
+   "statement": null,
+   "quote": "Any back pressure less than 63.4 kPa would cause this same choked mass",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 1122
+    }
+   ]
+  }
+ ],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01516",
+   "page_start": 1120,
+   "page_end": 1120,
+   "section": "**Converging Nozzle**",
+   "text": "pressure _pb_ . The mass flow is predicted by subsonic isentropic theory and is less\nthan the critical value, as shown in Fig. 9.11 _c_ .\nFor condition _c_, the back pressure exactly equals the critical pressure _p_ <sup>*</sup> of\nthe throat. The throat becomes sonic, the jet exit flow is sonic, _pe_ = _pb_, and the\nmass flow equals its maximum value from Eqs. (9.46). The flow upstream of the\nthroat is subsonic everywhere and predicted by isentropic theory based on the\nlocal area ratio _A_ ( _x_ )/ _A_ <sup>*</sup> and Table B.1.\n\nFinally, if _pb_ is lowered further to conditions _d_ or _e_ below _p_ <sup>*</sup>, the nozzle\ncannot respond further because it is choked at its maximum throat mass flow.\nThe throat remains sonic with _pe_ = _p_ <sup>*</sup>, and the nozzle pressure distribution is the\nsame as in state _c_, as sketched in Fig. 9.11 _b_ . The exit jet expands supersonically\nso that the jet pressure can be reduced from _p_ <sup>*</sup> down to _pb_ . The jet structure is\ncomplex and multidimensional and is not shown here. Being supersonic, the jet\ncannot send any signal upstream to influence the choked flow conditions in the\nnozzle.\n\nIf the stagnation plenum chamber is large or supplemented by a compressor,\nand if the discharge chamber is larger or supplemented by a vacuum pump, the\nconverging nozzle flow will be steady or nearly so. Otherwise the nozzle will be\nblowing down, with _p_ 0 decreasing and _pb_ increasing, and the flow states will be\nchanging from, say, state _e_ backward to state _a_ . Blowdown calculations are\nusually made by a quasi-steady analysis based on isentropic steady flow theory\nfor the instantaneous pressures _p_ 0( _t_ ) and _pb_ ( _t_ )."
+  },
+  {
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01517",
+   "page_start": 1120,
+   "page_end": 1120,
+   "section": "**Converging Nozzle**",
+   "text": "A converging nozzle has a throat area of 6 cm <sup>2</sup> and stagnation air conditions\nof 120 kPa and 400 K. Compute the exit pressure and mass flow if the back\npressure is ( _a_ ) 90 kPa and ( _b_ ) 45 kPa. Assume _k_ = 1.4.\n\nFrom Eq. (9.32) for _k_ = 1.4 the critical (sonic) throat pressure is"
+  },
+  {
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01518",
+   "page_start": 1121,
+   "page_end": 1121,
+   "section": "**Converging Nozzle**",
+   "text": "If the back pressure is less than this amount, the nozzle flow is choked."
+  },
+  {
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01519",
+   "page_start": 1121,
+   "page_end": 1121,
+   "section": "**Part (a)**",
+   "text": "For _pb_ = 90 kPa > _p_ <sup>*</sup>, the flow is subsonic, not choked. The exit pressure is\n_pe_ = _pb_ . The throat Mach number is found from the isentropic relation (9.35) or\nTable B.1:\n\nTo find the mass flow, we could proceed with a serial attack on Ma _e_, _Te_, _ae_,\n_Ve_, and _ρe_, hence to compute _ρeAeVe_ . However, since the local pressure is\nknown, this part is ideally suited for the dimensionless mass flow function in Eq.\n(9.47). With _pe_ / _p_ 0 = 90/120 = 0.75, compute"
+  },
+  {
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01520",
+   "page_start": 1121,
+   "page_end": 1122,
+   "section": "**Part (b)**",
+   "text": "For _pb_ = 45 kPa < _p_ <sup>*</sup>, the flow is choked, similar to condition _d_ in Fig. 9.11 _b_ .\nThe exit pressure is sonic:\n\nThe (choked) mass flow is a maximum from Eq. (9.46b):\n\nAny back pressure less than 63.4 kPa would cause this same choked mass\nflow. Note that the 50 percent increase in exit Mach number, from 0.654 to 1.0,\nhas increased the mass flow only 12 percent, from 0.128 to 0.145 kg/s."
+  },
+  {
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01521",
+   "page_start": 1122,
+   "page_end": 1122,
+   "section": "**Converging-Diverging Nozzle**",
+   "text": "Now consider the converging–diverging nozzle sketched in Fig. 9.12 _a_ . If the\nback pressure _pb_ is low enough, there will be supersonic flow in the diverging\nportion and a variety of shock wave conditions may occur, which are sketched in\nFig. 9.12 _b_ . Let the back pressure be gradually decreased."
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "formula": 5,
+   "figure": 1
+  },
+  "flagged_candidates": 1,
+  "target_objects": 5,
+  "objects_with_anchor_problems": 0
+ }
+}

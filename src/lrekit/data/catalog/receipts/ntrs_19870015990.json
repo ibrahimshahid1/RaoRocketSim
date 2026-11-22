@@ -1,0 +1,69 @@
+{
+  "source_id": "ntrs_19870015990",
+  "acquired_at_utc": "2026-11-04T00:33:09.592257+00:00",
+  "evidence_kind": "published_experimental_report",
+  "status": "ACQUIRED",
+  "files": [
+    {
+      "path": "raw/ntrs_19870015990/ntrs_metadata.json",
+      "bytes": 4676,
+      "sha256": "6864b62193ff0a2d6eea5c25d33e77312569a30b22cf6ebbb89d6b4f2049420b",
+      "origin": "publisher_metadata",
+      "requested_url": "https://ntrs.nasa.gov/api/citations/19870015990",
+      "resolved_url": "https://ntrs.nasa.gov/api/citations/19870015990",
+      "headers": {
+        "Content-Type": "application/json; charset=utf-8",
+        "ETag": "W/\"1244-3GzTT2ngosHM0Sn1snCxDcLt7UU\"",
+        "Last-Modified": null
+      }
+    },
+    {
+      "path": "raw/ntrs_19870015990/source.pdf",
+      "bytes": 4294242,
+      "sha256": "dfaef22c8ca4e57bae0d5b26ad553699ccf7a2d71011dd87954d2bcee18a914f",
+      "origin": "publisher_report_pdf",
+      "requested_url": "https://ntrs.nasa.gov/api/citations/19870015990/downloads/19870015990.pdf",
+      "resolved_url": "https://ntrs.nasa.gov/api/citations/19870015990/downloads/19870015990.pdf",
+      "headers": {
+        "Content-Type": "application/pdf",
+        "ETag": "\"3f8dbb05207680497db2baaf57aea54b\"",
+        "Last-Modified": "Thu, 06 Aug 2020 19:59:56 GMT"
+      }
+    },
+    {
+      "path": "derived/ntrs_19870015990/source.txt",
+      "bytes": 109014,
+      "sha256": "44a92b5dddb993b5d727cd2c92dd4c4ee6c2881b37cf9e9b083f3b730cbec3e3",
+      "origin": "unreviewed_pdf_text_derivative"
+    }
+  ],
+  "review_state": "NOT_REVIEWED_FOR_TRAINING",
+  "training_eligible": false,
+  "hardware_qualified": false,
+  "limitations": [
+    "Published experimental and TDK outputs must remain separate. Not independent of TP-2726; reconcile shared campaign and hardware before splitting."
+  ],
+  "publisher_title": "Comparison of theoretical and experimental thrust performance of a 1030:1 area ratio rocket nozzle at a chamber pressure of 2413 kN/m2 (350 psia)",
+  "publisher_copyright": {
+    "thirdPartyPermissionsProduced": false,
+    "disclosedToPublic": false,
+    "containsIndication": false,
+    "publisherPermissionOrRightsToDistribute": false,
+    "belongsToUsGov": false,
+    "determinationType": "GOV_PUBLIC_USE_PERMITTED",
+    "thirdPartyContentCondition": "NOT_SET",
+    "belongsToContractor": false,
+    "disclosedInvention": false,
+    "submissionId": 19870015990,
+    "containsThirdPartyMaterial": false,
+    "belongsToPublisher": false,
+    "id": "398e92d00a5e48ac9c36d4837132e6f5",
+    "belongsToAuthors": false
+  },
+  "publisher_distribution": "PUBLIC",
+  "pdf_info": "Creator:         Acrobat Capture 3.0\nProducer:        Adobe PDF Library 4.0\nCreationDate:    Tue Feb  3 19:54:08 2004 EST\nModDate:         Tue Feb 10 17:43:33 2004 EST\nCustom Metadata: yes\nMetadata Stream: yes\nTagged:          no\nUserProperties:  no\nSuspects:        no\nForm:            none\nJavaScript:      no\nPages:           24\nEncrypted:       no\nPage size:       588.959 x 786.72 pts\nPage rot:        0\nFile size:       4294242 bytes\nOptimized:       yes\nPDF version:     1.5\n",
+  "text_extraction": {
+    "status": "DERIVATIVE_TEXT_UNREVIEWED",
+    "warning_excerpt": ""
+  }
+}

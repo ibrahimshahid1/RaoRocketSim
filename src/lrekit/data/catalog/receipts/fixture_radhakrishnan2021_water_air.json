@@ -1,0 +1,21 @@
+{
+  "source_id": "fixture_radhakrishnan2021_water_air",
+  "acquired_at_utc": "2026-11-04T00:34:48.904424+00:00",
+  "evidence_kind": "mixed_experimental_numeric_fixture",
+  "status": "ACQUIRED",
+  "files": [
+    {
+      "path": "raw/fixture_radhakrishnan2021_water_air/raosim/benchmark_data/cases/radhakrishnan2021_water_air_validation.json",
+      "bytes": 6938,
+      "sha256": "0683cdacd1dcd32c925df2b67bb1eb4de3b1e4e0d3559ab0d63e71a9d6c41fa8",
+      "origin": "existing_repository_fixture",
+      "original_path": "raosim/benchmark_data/cases/radhakrishnan2021_water_air_validation.json"
+    }
+  ],
+  "review_state": "EXISTING_FIXTURE_IMPORTED_NOT_REVALIDATED",
+  "training_eligible": false,
+  "hardware_qualified": false,
+  "limitations": [
+    "One case; related to 2018, not an additional independent experimental campaign."
+  ]
+}

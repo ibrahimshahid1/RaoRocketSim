@@ -14,6 +14,18 @@ The graph never outranks the PDF it points to.
 
 ## 0. Startup protocol (mandatory for scientifically consequential work)
 
+Current implementation code lives under `src/lrekit/`; `src/raosim/` contains
+compatibility entry points only. `docs/architecture/relocations_2026-11-21.json`
+is the explicit route from historical paths to current files. The KG preserves
+scientific/model/object IDs and source-review history, translates current
+implementation/test locators, and retains their prior spelling in
+`repository_locator_history`. A translated path does not reconfirm a scientific
+comparison: inspect the separate AST locator and scientific-comparison states.
+`kg.sh rebuild` refreshes these paths and the bounded call graph. Historical
+source-review assertions are not rewritten to look current. `kg.sh basis`
+accepts historical paths through the same map; new references should use the
+canonical `src/lrekit/...` files.
+
 ```bash
 knowledge/kg.sh status                       # 1. corpus synchronized? stores populated?
 knowledge/kg.sh context --task "<your task>" # 2. retrieve_for_task(): the context package
@@ -301,6 +313,21 @@ refresh before relying on current artifact existence. Exported stores may refere
 ignored local build files which will be unavailable on another checkout.
 
 ## 13. Docling derivatives and audit states
+
+Full-document Docling imports can be produced with
+`.venv-docling/bin/python knowledge/tools/docling_import.py propulsion_texts/PAPER.pdf`,
+then registered with `.venv-jax/bin/python knowledge/tools/docling_register.py`
+and indexed with `knowledge/kg.sh rebuild`. These canonical Markdown files have
+original-PDF page markers, referenced figure crops, and a facsimile link for every
+page. Checkpointed JSON, page Markdown, conversion options and images live under
+`propulsion_texts/propulsion_texts_for_agents/docling_import/<source-sha-prefix>/`.
+The graph connects unreviewed Figure nodes (with `image_uri`) to parser runs and
+their source Document. Bulk layout/OCR/table parsing disables formula-model
+enrichment: neither processing coverage nor a Figure node establishes scientific
+support or equation correctness. Use the original-page facsimiles when layout
+misses a diagram or damages notation. Bibliographic inventory JSON can be supplied
+to registration with `--bibliography-json`; conversion warnings can be retained
+with `--conversion-log`.
 
 `tools/docling_enrich.py` runs local formula/table processing on one bounded source
 window. Raw JSON, model versions/revisions, source hashes, original page numbers

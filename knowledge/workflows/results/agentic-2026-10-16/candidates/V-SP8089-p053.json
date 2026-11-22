@@ -1,0 +1,88 @@
+{
+ "packet": "V-SP8089-p053",
+ "kind": "verification",
+ "document_id": "DOC_NTRS_19760023196",
+ "source_pdf": "propulsion_texts/19760023196.pdf",
+ "source_sha256": "5e9db6a6f7860ee51acbf5cbe137005ef259ec3fd87ff0ed5f1ad466d6227c44",
+ "pages": [
+  53,
+  53
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 53,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19760023196/p0053.png",
+   "sha256": "7bee00a4a0015d0ccf014eb3cf6b556308c359105b67e230d7650e1de06cd2d6",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_d36c4a3406fccd69a2d624c7"
+ ],
+ "candidates": [],
+ "stored_objects": [
+  {
+   "id": "CLM_NTRS_19760023196_9955FB36",
+   "store": "claims",
+   "type": "Claim",
+   "page": 53,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Standard drills selected within ±0.0002 in. have been used for small orifices with tight pressure-drop control, and +0.003/-0.002 in. for the ~0.250 in. F-1 orifices with looser control.",
+   "quote": "Standard drills have been used successfully by selecting only those within a tight tolerance, such as + 0.0002 in. for small orifices with tight AP control or + 0.003/-0.002 in. for the F-1 orifices",
+   "confidence": "medium",
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 53
+    }
+   ]
+  }
+ ],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00086",
+   "page_start": 53,
+   "page_end": 53,
+   "section": "2.1.2.3 ORIFICE OUTLET",
+   "text": "drilling from the orifice inlet side. Drilling from the orifice exit side usually docs not result in deleterious burrs on the orifice exit. except for very soft materials such as copper.\n\nConcentric-tube concentricity generally is maintained by mechanical centering devices or ribs.\n\n| 2.1.24 ORIFICE TOLERANCES | Injector orifice tolerances are required in order to avaid problems such as (1) | misimpingement or maldistribution, with subsequent performance loss, (2) stream misdirection and overheating. (3) failure to achieve the design operating level. and (4) combustion instability. Orifice tolerances usually are specified along with the physical orifice dimensions (bore diameter, inlet radius, ete.), although a flowrate vs pressure<drop tolerance sometimes is used in addition to the dimensional tolerance. Some injectors have no AP tolerance requirements, others have an overall AP tolerance requirement, and some require individual orifice AP measurements. Small injectors with few elements sometimes have high rejection rates unless extreme care is taken with each orifice. Large injectors with many orifices need not and cannot be kept within a tight tolerance and, therefore, it has been necessary to allow a wider tolerance on some of the orifices (10 percent of the orifices, for example, for the LEM ascent injector). The overall AP tolerance is still maintained with the relaxed tolerances. On the J-2 injector, tighter control is maintained on those elements next to the wall that can result in wall streaking than on the remainder of the elements."
+  },
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00087",
+   "page_start": 53,
+   "page_end": 53,
+   "section": "2.1.2.3 ORIFICE OUTLET",
+   "text": "Standard drills have a diameter tolerance too wide for many injector AP requirements. Standard drills have been used successfully by selecting only those within a tight tolerance, such as + 0.0002 in. for small orifices with tight AP control or + 0.003/-0.002 in. for the F-1 orifices (= 0.250 in. diam.) with looser AP control. Standard drills are adequate even without drill selection for very high AP allowances.\n\nEven with properly controlled individual orifice characteristics, local element atomization and mixture-ratio distribution have been drastically disturbed by failure of opposed-element streams to intersect properly (ref. 54). The absolute location of the impingement point of two or more streams usually is precisely located on the blueprint, but in general a slight variation of this spatial point has little or no effect on combustion-oriented characteristics. A slight misalignment of the individual orifice centerline, however, can result in wall streaks or lower performance and may also affect combustion stability, particularly for near-wall elements. Experimental results with orifice diameters of 0.073 in. and 0.052 in. resulted ina c* loss (IRFNA-UDMH propellants) of slightly more than 2 percent when the stream centerlines of the opposed-doublet clement were deliberately mismatched by 0.010 in., all in one direction (ref. 44). Also, centerline misimpingement can change secondary mixing"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {},
+  "flagged_candidates": 0,
+  "target_objects": 1,
+  "objects_with_anchor_problems": 0
+ }
+}

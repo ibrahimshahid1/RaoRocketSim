@@ -1,0 +1,95 @@
+{
+ "packet": "V-SP8089-p102",
+ "kind": "verification",
+ "document_id": "DOC_NTRS_19760023196",
+ "source_pdf": "propulsion_texts/19760023196.pdf",
+ "source_sha256": "5e9db6a6f7860ee51acbf5cbe137005ef259ec3fd87ff0ed5f1ad466d6227c44",
+ "pages": [
+  102,
+  102
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 102,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19760023196/p0102.png",
+   "sha256": "2785e1d663d9565f27bdc28bf64ee59101aa3a5e97dac898c924d676b8408342",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_72137ba1b82b7240243f972c"
+ ],
+ "candidates": [],
+ "stored_objects": [
+  {
+   "id": "CLM_NTRS_19760023196_F9F81BAC",
+   "store": "claims",
+   "type": "Claim",
+   "page": 102,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The natural frequency of the injector structure should be established to fall outside the potential frequency ranges of the combustion process, to prevent unacceptable resonance with combustion.",
+   "quote": "The natural frequency of the injector design should be established to fall outside the potential frequency ranges of the combustion process.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 102
+    }
+   ]
+  }
+ ],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00187",
+   "page_start": 101,
+   "page_end": 102,
+   "section": "__— eee > 3.2.1.5 POSTS",
+   "text": "Center posts of concentric-tube injector elements shall remain concentric within acceptable limits and shall resist cracking.\n\nCentering devices should be used to maintain concentricity throughout fabrication processing and test operations. In many designs, however, the centering devices are not adequate because of a tolerance buildup that may be impractical to correct. Thus, other centering techniques are recommended; viz., machining and processing to minimize eccentricity and mechanical straightening. Welding or brazing processes that result in a mismatch between the injector face or outer tube diameter and the center post should be minimized. If the welding or brazing does produce mismatch, match drill as necessary to produce acceptable concentricity, particularly in those elements near the chamber wall or baffles.\n\nWhen mechanical straightening is required, use a ductile post material such as 347 CRES and use long posts. If a less ductile material such as Inconel 718 is used, decrease the stress concentrations in the center posts developed by bending; for example, use a large fillet radius at the base as shown in the design in figure 28. Also, anneal posts that are made of brittle material."
+  },
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00188",
+   "page_start": 102,
+   "page_end": 102,
+   "section": "__— eee > 3.2.1.6 FACE AND BODY RIGIDITY",
+   "text": "The injector face and body rigidity shall be adequate to prevent an unacceptable resonance with the combustion process.\n\nThe natural frequency of the injector design should be established to fall outside the potential frequency ranges of the combustion process. The injector frequency can be adjusted through the use of stiffening ribs (an inner row of tie rods or posts between dome-type manifold and the injector (large injector)), by using a contoured (concave) injector face, or by the less desirable method of changing the overall thickness."
+  },
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00189",
+   "page_start": 102,
+   "page_end": 102,
+   "section": "__— eee > 3.2.1.7 STRUCTURAL SUPPORTS AND FLOW DEVICES",
+   "text": "Structural supports and flow devices shall not detach or loosen.\n\nSupports and flow devices should be made integral with the injector whenever possible. Parts that are not integral should be designed to avoid stress concentrations in the weld or braze joints used for attachment. Shapes sensitive to failure from vibration or flutter as well as designs that are prone to failure from surges should be avoided.\n\n."
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {},
+  "flagged_candidates": 0,
+  "target_objects": 1,
+  "objects_with_anchor_problems": 0
+ }
+}

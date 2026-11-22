@@ -1,6 +1,6 @@
 {
  "meta": {
-  "generated_at": "2026-10-17T17:57:59.004053+00:00"
+  "generated_at": "2026-11-21T23:24:26.789951+00:00"
  },
  "records": [
   {
@@ -111,6 +111,12 @@
    "n_chunks": 0,
    "source_pdf": "propulsion_texts/10.1007_978-3-030-14788-4.pdf",
    "remediation": "Restore the original PDF: the tracked payload has zero pages; enrichment cannot recover absent pages."
+  },
+  {
+   "doc_id": "DOC_DOI_10_1007_978_3_319_68427_7",
+   "state": "LOW_EXTRACTION_CONFIDENCE",
+   "n_chunks": 435,
+   "unchanged": true
   },
   {
    "doc_id": "DOC_DOI_10_1007_S00170_015_7201_4",
@@ -400,6 +406,18 @@
    "unchanged": true
   },
   {
+   "doc_id": "DOC_DOI_10_1017_S0022112000002366",
+   "state": "LOW_EXTRACTION_CONFIDENCE",
+   "n_chunks": 45,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1017_S0022112058000434",
+   "state": "LOW_EXTRACTION_CONFIDENCE",
+   "n_chunks": 16,
+   "unchanged": true
+  },
+  {
    "doc_id": "DOC_DOI_10_1038_S41598_024_64027_2",
    "state": "INGESTED",
    "n_chunks": 35,
@@ -477,6 +495,12 @@
    "canonical": "DOC_DOI_10_1088_1757_899X_1301_1_012030"
   },
   {
+   "doc_id": "DOC_DOI_10_1093_QJMAM_15_4_487",
+   "state": "LOW_EXTRACTION_CONFIDENCE",
+   "n_chunks": 38,
+   "unchanged": true
+  },
+  {
    "doc_id": "DOC_DOI_10_1115_1_2814127",
    "state": "INGESTED",
    "n_chunks": 19,
@@ -486,6 +510,12 @@
    "doc_id": "DOC_DOI_10_1115_1_2817294",
    "state": "INGESTED",
    "n_chunks": 14,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1115_1_2960953",
+   "state": "LOW_EXTRACTION_CONFIDENCE",
+   "n_chunks": 12,
    "unchanged": true
   },
   {
@@ -558,6 +588,12 @@
    "doc_id": "DOC_DOI_10_1115_94_GT_426",
    "state": "INGESTED",
    "n_chunks": 20,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1137_09078078X",
+   "state": "LOW_EXTRACTION_CONFIDENCE",
+   "n_chunks": 28,
    "unchanged": true
   },
   {
@@ -716,9 +752,21 @@
    "unchanged": true
   },
   {
+   "doc_id": "DOC_DOI_10_2514_3_5355",
+   "state": "LOW_EXTRACTION_CONFIDENCE",
+   "n_chunks": 13,
+   "unchanged": true
+  },
+  {
    "doc_id": "DOC_DOI_10_2514_3_60066",
    "state": "INGESTED",
    "n_chunks": 30,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_3_61399",
+   "state": "LOW_EXTRACTION_CONFIDENCE",
+   "n_chunks": 26,
    "unchanged": true
   },
   {
@@ -761,6 +809,12 @@
    "doc_id": "DOC_DOI_10_2514_6_1997_2913",
    "state": "INGESTED",
    "n_chunks": 43,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_6_1999_3285",
+   "state": "LOW_EXTRACTION_CONFIDENCE",
+   "n_chunks": 28,
    "unchanged": true
   },
   {
@@ -1064,6 +1118,12 @@
    "unchanged": true
   },
   {
+   "doc_id": "DOC_NTRS_19650010083",
+   "state": "INGESTED",
+   "n_chunks": 98,
+   "unchanged": true
+  },
+  {
    "doc_id": "DOC_NTRS_19670010557",
    "state": "INGESTED",
    "n_chunks": 74,
@@ -1088,9 +1148,21 @@
    "unchanged": true
   },
   {
+   "doc_id": "DOC_NTRS_19690063911",
+   "state": "INGESTED",
+   "n_chunks": 14,
+   "unchanged": true
+  },
+  {
    "doc_id": "DOC_NTRS_19700005097",
    "state": "LOW_EXTRACTION_CONFIDENCE",
    "n_chunks": 31,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_19710011726",
+   "state": "LOW_EXTRACTION_CONFIDENCE",
+   "n_chunks": 89,
    "unchanged": true
   },
   {
@@ -1232,6 +1304,12 @@
    "unchanged": true
   },
   {
+   "doc_id": "DOC_NTRS_19780012674",
+   "state": "LOW_EXTRACTION_CONFIDENCE",
+   "n_chunks": 78,
+   "unchanged": true
+  },
+  {
    "doc_id": "DOC_NTRS_19780013268",
    "state": "INGESTED",
    "n_chunks": 223,
@@ -1259,6 +1337,18 @@
    "doc_id": "DOC_NTRS_19870007469",
    "state": "INGESTED",
    "n_chunks": 28,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_19870015990",
+   "state": "INGESTED",
+   "n_chunks": 50,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_19870015991",
+   "state": "INGESTED",
+   "n_chunks": 68,
    "unchanged": true
   },
   {
@@ -1292,6 +1382,18 @@
    "unchanged": true
   },
   {
+   "doc_id": "DOC_NTRS_19950024435",
+   "state": "INGESTED",
+   "n_chunks": 24,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_19960042495",
+   "state": "LOW_EXTRACTION_CONFIDENCE",
+   "n_chunks": 49,
+   "unchanged": true
+  },
+  {
    "doc_id": "DOC_NTRS_19960044559",
    "state": "INGESTED",
    "n_chunks": 278,
@@ -1307,6 +1409,12 @@
    "doc_id": "DOC_NTRS_19970004933",
    "state": "INGESTED",
    "n_chunks": 31,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_19990025912",
+   "state": "INGESTED",
+   "n_chunks": 53,
    "unchanged": true
   },
   {
@@ -1409,6 +1517,12 @@
    "doc_id": "DOC_NTRS_20180003628",
    "state": "INGESTED",
    "n_chunks": 18,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_20190030431",
+   "state": "INGESTED",
+   "n_chunks": 28,
    "unchanged": true
   },
   {

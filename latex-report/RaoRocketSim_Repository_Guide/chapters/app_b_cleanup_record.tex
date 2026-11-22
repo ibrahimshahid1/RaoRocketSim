@@ -1,0 +1,261 @@
+\chapter{Cleanup Record of 5 November 2026}\label{app:cleanup}
+
+\lead{What this appendix records}
+On 5 November 2026 the repository was reorganized without changing any engineering behaviour. Documentation was regrouped by pipeline stage, references to moved files were rewritten, all earlier build output was archived intact, scratch material was moved out of the tree, and regenerable files were deleted. This appendix states what moved, where it went, what was rewritten to keep paths valid, what was deliberately left in place and why, and what still has to happen. It ends with a package-layout proposal that was \emph{not} carried out.
+
+\lead{Evidence used}
+Counts come from the working tree and from \code{git}~\code{--no-optional-locks}~\code{status}~\code{--short}, both read when this appendix was written. Build figures come from \code{builds/_archive_2026-11-05/BUILDS_ARCHIVE_INDEX.md}. Two working files of the cleanup session were also used; neither is part of the repository. The first is the old-to-new path map produced by the reorganization script. The second is a tar backup of every file the script touched, taken before the move. Before-and-after comparisons below diff that backup against the current files. No \code{git} write command was run, and \code{knowledge/kg.sh}~\code{rebuild} was not run.
+
+% ------------------------------------------------------------------------------
+\section{Summary of actions}\label{sec:cl-summary}
+
+{\small
+\begin{longtable}{P{2.5cm}P{4.4cm}P{4.5cm}P{3.9cm}}
+\toprule
+Area & Before & After & Reason \\
+\midrule
+\endhead
+\code{docs/} & 73 files: 69 directly in \code{docs/} and 4 in \code{docs/audit_work/} & 74 files in eight folders: 72 moved, plus 2 generated code maps & Navigate by pipeline stage (Section~\ref{sec:cl-docs}) \\
+Loose root files & \code{AGENTS.md}, \code{TEST_PROMPT.md}, \code{Rocket_nozzle_sim_phase2.py} and \code{deep-research-report.md} at the root in \code{HEAD} & \code{docs/agents/} (first two) and \code{docs/archive/} (last two) & Keep the root to code, packaging and entry documents \\
+\code{requirements.txt} & \code{docs/requirements.txt} (tracked) & \code{requirements.txt} at the root (untracked until committed) & Section~\ref{sec:cl-req} \\
+References & Old flat paths in 32 files outside \code{docs/} and in 34 of the moved documents & Rewritten to the new paths; one harvester glob made recursive & Keep links, code constants and tests valid (Section~\ref{sec:cl-refs}) \\
+\code{builds/} & 522 entries plus \code{scripts/builds/} (1 entry): 1,931 files, 1.6~GB & \code{builds/_archive_2026-11-05/} with index and catalog; version-counter marker; \code{builds/README.md} & Separate history from new runs and keep version numbering (Section~\ref{sec:cl-builds}) \\
+\code{tmp/} & Top-level scratch directory (gitignored) & \code{archive/tmp_literature_scratch_2026-11-05/}; \code{/archive/} added to \code{.gitignore} & Section~\ref{sec:cl-scratch} \\
+Regenerable files & 21 tracked LaTeX auxiliary files; caches and Finder metadata & Deleted & Section~\ref{sec:cl-scratch} \\
+\bottomrule
+\end{longtable}}
+
+% ------------------------------------------------------------------------------
+\section{Documentation regrouped by stage}\label{sec:cl-docs}
+
+\subsection{Starting point}
+Immediately before the move, \code{docs/} held 73 files: 69 at the top level and 4 under \code{docs/audit_work/}. In \code{HEAD}, 68 of these are tracked: 64 top-level files and the 4 in \code{audit_work/}. The other five top-level files were untracked. One was the new plan \code{COMPONENT_DATA_AND_MULTIFIDELITY_PLAN_2026-11-03.md}. The other four are the loose files that \code{HEAD} records at the repository root (previous table); they were already in \code{docs/} when the reorganization script ran, and were filed with the rest. The session's first \code{git} snapshot, taken before the script ran, already lists them as deleted from the root; who moved them, and when, is not recorded. These figures are recomputed from the backup and from \code{git}.
+
+\subsection{Placement rule}
+Each document went to the folder of its primary pipeline stage, as assigned in a per-document triage (Appendix~\ref{ch:docs-inventory} lists each document's type and status). The reorganization script overrode the triage for eight files:
+\begin{itemize}
+  \item \code{JAX_DIFFERENTIABLE_PLAN.md} went to \code{docs/program/}; the script comment calls it the ``canonical STATUS-head project record''.
+  \item \code{requirements.txt} went to the repository root (Section~\ref{sec:cl-req}).
+  \item \code{PUMP_ADVANCED_GEOMETRY_ROADMAP_2026-07-11.md} went to the S09 folder.
+  \item Five files went to \code{docs/archive/} (reasons in the table below).
+\end{itemize}
+Every file kept its name; only its folder changed. A reader looking for an old path \code{docs/<NAME>} therefore finds the file by name in one of the folders below.
+
+{\small
+\begin{longtable}{P{3.3cm}P{4.6cm}P{0.8cm}P{6.7cm}}
+\toprule
+Folder & Meaning & Files & Contents \\
+\midrule
+\endhead
+\code{docs/architecture/} & Cross-stage contracts and maps: model registry, release gates, output contract, MDO architecture, packaging & 7 & \code{MODEL_REGISTRY.md}, \code{PHYSICAL_RELEASE_GATES.md}, \code{MDO_REMEDIATION_AND_OUTPUT_CONTRACT.md}, \code{IMPLICIT_RAO_JAX_MDO_ARCHITECTURE.md}, \code{pypi_release.md}; generated during the cleanup: \code{CODE_MAP.md}, \code{CODE_HEADER_COMMENTS.md} \\
+\code{docs/subsystems/Sxx-<slug>/} & Physics and design basis of one pipeline stage & 23 & Eight stage folders (next table) \\
+\code{docs/program/} & Plans, roadmaps and backlogs spanning several stages; the STATUS-head project record & 12 & \code{COMPLETION_PLAN.md}, \code{COMPONENT_DATA_AND_MULTIFIDELITY_PLAN_2026-11-03.md}, \code{GENERALIZATION_PLAN_THRUST_PROPELLANT_FEED.md}, \code{INTEGRATION_PROGRAM_2026-08-22.md}, \code{JAX_DIFFERENTIABLE_PLAN.md}, \code{LREKIT_DELIVERY_BACKLOG_2026-09-05.md}, \code{LREKIT_HARDWARE_PROGRAM_2026-09-05.md}, \code{LREKIT_READINESS_AND_DELIVERY_PLAN_2026-09-05.md}, \code{PHYSICS_FIDELITY_ROADMAP.md}, \code{PLAN_VALVES_LINES_BRACKETS_GIMBAL.md}, \code{PUMP_GEOMETRY_IMPLEMENTATION_PLAN_2026-07-13.md}, \code{ROADMAP_REQUIREMENTS_TO_PARTS.md} \\
+\code{docs/audits/} & Dated audits, remediation records and host-evidence notes, including the former \code{audit_work/} & 16 & \code{CEA_H1_HOST_EVIDENCE_2026-08-22.md}, \code{CONTRACT_INTEGRITY_REMEDIATION_2026-09-05.md}, \code{DIFFERENTIABLE_MDO_PLAN_EVALUATION_2026-07-22.md}, \code{FEATURE_DATAFLOW_AUDIT_2026-07-11.md}, \code{INPUT_EXECUTION_INTEGRITY_2026-09-09.md}, \code{legacy_code_audit.md}, \code{LITERATURE_AUDIT_2026-07-24.md}, \code{MDO_ISSUES_AND_WORKFLOW_BLOCKERS_2026-10-16.md}, \code{PHYSICAL_INTEGRITY_REMEDIATION_2026-07-11.md}, \code{PROJECT_AUDIT_2026-08-25.md}, \code{RAO_B3_B5_HOST_EVIDENCE_2026-08-24.md}, \code{REPO_PHYSICS_AUDIT_2026-07-02.md}; from \code{audit_work/}: \code{INPUT_EXECUTION_SMOKE_2026-09-09.json}, \code{LREKIT_LITERATURE_AUDIT_2026-09-05.md}, \code{LREKIT_PUMP_AUDIT_2026-09-05.md}, \code{LREKIT_WORKFLOW_AUDIT_2026-09-04.md} \\
+\code{docs/literature/} & Literature requests, inventories and provenance notes & 7 & \code{LITERATURE_REQUESTS.md}, \code{LITERATURE_REQUESTS_GENERALIZATION.md}, \code{LITERATURE_REQUESTS_HARDWARE_LOOP.md}, \code{chamber_design_literature.md}, \code{pintle_injector_literature_inventory.md}, \code{REMEDIATION_LITERATURE_TRACEABILITY.md}, \code{thermofluid_literature_provenance.md} \\
+\code{docs/data/} & Data files kept as reference & 2 & \code{nasa_jhu_file_list.txt}, \code{rao_nozzle.csv} \\
+\code{docs/agents/} & Instructions and prompts addressed to coding agents & 2 & \code{AGENTS.md} (formerly at the root), \code{TEST_PROMPT.md} \\
+\code{docs/archive/} & Historical, empty or superseded items that nothing cites as authority & 5 & See the archive table below \\
+\midrule
+Total & & 74 & 72 moved files and 2 generated files \\
+\bottomrule
+\end{longtable}}
+
+{\small
+\begin{longtable}{P{6.3cm}P{0.8cm}P{8.3cm}}
+\toprule
+Stage folder under \code{docs/subsystems/} & Files & Documents \\
+\midrule
+\endhead
+\code{S04-performance-and-off-design} & 1 & \code{FROZEN_VARIABLE_CP_EXPANSION.md} \\
+\code{S05-nozzle-and-chamber-geometry} & 1 & \code{shoulder_radius_design_basis.md} \\
+\code{S06-rao-moc-bvp-contour} & 5 & \code{MOC_MARCH_TOPOLOGY_REMEDIATION_2026-09-21.md}, \code{nasa_tt_prime_provenance.md}, \code{rao_stationarity_transversality.md}, \code{REWRITE_PLAN.md}, \code{rice_jhu_moc_topology_map.md} \\
+\code{S07-regen-cooling-and-wall-structures} & 1 & \code{regen_wall_model.md} \\
+\code{S08-injector-and-spray-coupling} & 7 & \code{injector_pintle_provenance.md}, \code{LAGRANGIAN_SPRAY_MODEL.md}, \code{MOVABLE_PINTLE_MODEL.md}, \code{OPENFOAM_SPRAY_EXPORT.md}, \code{PINTLE_DESIGN_EVALUATION.md}, \code{pintle_injector_model_gap_analysis.md}, \code{SPRAY_CSTAR_COUPLING.md} \\
+\code{S09-feed-system-and-electric-pumps} & 4 & \code{electric_pump_model_basis.md}, \code{PUMP_ADVANCED_GEOMETRY_ROADMAP_2026-07-11.md}, \code{PUMP_CAD_IMPLEMENTATION_PLAN.md}, \code{PUMP_PHYSICS_AND_PROCESS_BASIS_2026-09-05.md} \\
+\code{S10-interface-and-mass-ledger} & 2 & \code{HARDWARE_MASS_LEDGER.md}, \code{injector_interface_model.md} \\
+\code{S13-engine-mdo-and-requirements} & 2 & \code{DIFFERENTIABLE_ENGINE_MDO_PLAN.md}, \code{MDO_GUIDE.md} \\
+\bottomrule
+\end{longtable}}
+
+Stages S01, S02, S03, S11, S12 and S14 have no subsystem folder, because no document had one of them as its primary stage. Their design basis lives in \code{docs/architecture/} (for example \code{PHYSICAL_RELEASE_GATES.md} and \code{MDO_REMEDIATION_AND_OUTPUT_CONTRACT.md} for S14), in the audits, and in module docstrings.
+
+{\small
+\begin{longtable}{P{4.6cm}P{10.8cm}}
+\toprule
+Archived item (\code{docs/archive/}) & Why it was archived \\
+\midrule
+\endhead
+\code{PROJECT_AUDIT_2026-08-25.html} & HTML twin of \code{docs/audits/PROJECT_AUDIT_2026-08-25.md}. Only generated knowledge indexes name the \code{.html}; the live citations in \code{LREKIT_HARDWARE_PROGRAM_2026-09-05.md} name the \code{.md}. \\
+\code{Rocket_nozzle_sim_phase2.py} & Early monolithic prototype. No code, test, \code{pyproject.toml} entry, registry source or knowledge code imports or cites it. \\
+\code{NEXT_SESSION_PROMPT.md} & June-era hand-off prompt. Row 22 of \code{knowledge/reports/pdf_issue_disposition_2026-10-15.md} already says it must be treated as historical. \\
+\code{rao_nozzle_profile.csv} & Example output. The name survives only as an output-file default in \code{main.py} (lines 745 and 1157); nothing reads this file. \\
+\code{deep-research-report.md} & Empty file (0 bytes), tracked in \code{HEAD} at the root. \\
+\bottomrule
+\end{longtable}}
+
+\subsection{How git sees the move}
+\code{git}~\code{status} currently lists the 68 old tracked paths under \code{docs/} as deleted (status \texttt{D}) and the eight new folders as untracked (status \texttt{??}). The four root files and the 21 LaTeX auxiliary files also appear as deleted, giving 93 deletions in all. Git records the moves as renames only when the deletions and the new files are staged together in one commit. Until then the history of each document appears to stop at its old path.
+
+% ------------------------------------------------------------------------------
+\section{Reference rewrites}\label{sec:cl-refs}
+
+\subsection{Mechanism}
+The reorganization script rewrote references in two passes. First, it recomputed every relative Markdown link inside a moved \code{.md} file for the file's new location. Second, it replaced every literal \code{docs/<name>} path string with the new path. The second pass covered all \code{.py}, \code{.md}, \code{.sh}, \code{.txt}, \code{.toml}, \code{.tex}, \code{.html}, \code{.args}, \code{.yml}/\code{.yaml}, \code{.ini} and \code{.cfg} files. It skipped \code{.git/}, the virtual environments, \code{builds/}, \code{propulsion_texts/}, \code{tmp/}, \code{archive/}, the vendored NASA tree and the derived knowledge folders (\code{vector_index/}, \code{workflows/}, \code{graph/}, \code{.work/}). It did not touch the knowledge JSON stores (Section~\ref{sec:cl-notmoved}).
+
+\subsection{Files rewritten outside docs}
+Thirty-four files outside \code{docs/} were changed. Thirty-two of them are rewrites by the script; the other two are hand edits to \code{knowledge/kg/harvest_repo.py} and \code{.gitignore}. Thirty-two of the 34 are tracked and now show as modified. The other two, \code{raosim/data/README.md} and \code{latex-report/Component_Data_and_Research_Plan/plan.tex}, are untracked. Every other modified entry in \code{git}~\code{status} was already modified before the cleanup began.
+
+{\small
+\begin{longtable}{P{3.6cm}P{0.9cm}P{10.9cm}}
+\toprule
+Area & Files & What changed \\
+\midrule
+\endhead
+\code{README.md} & 1 & Twelve links to moved documents rewritten; trailing slashes dropped from the \code{propulsion_texts} and NASA-tree links; §Repository layout (lines 1314--1353) rewritten for the new tree, now naming \code{main.py} as the legacy CLI rather than the primary one. \\
+\code{raosim/} & 18 & Docstrings and comments in \code{chamber_geometry.py}, \code{jax/reference.py}, \code{jax/thermal.py}, \code{mdo/__init__.py}, \code{mdo/bounds.py}, \code{mdo/engine.py}, \code{mdo/envelope.py}, \code{moc.py}, \code{moc_bounded.py}, \code{separation.py} and \code{data/README.md}. Run-time strings in \code{mdo/build.py} and \code{mdo/metrics.py} (limitation text), \code{requirements.py} (a docstring and one message string), \code{pump_cad.py} (an error message) and \code{run_nozzle.py} (the \code{--shoulder-sizing} help text). Constants in \code{model_registry.py} and \code{rao_variational.py} (next subsection). \\
+\code{scripts/} & 3 & \code{NASA_TT_PRIME_PROVENANCE_DOC} in \code{compare_nasa_reference.py}; docstrings in \code{sample_cea_surface.py} and \code{seed_diagnostic.py}. \\
+\code{tests/} & 3 & Docstrings or comments in \code{test_jax_thermal_design_opt.py}, \code{test_moc_bounded_net.py} and \code{test_pumps.py}. \\
+\code{examples/cli/} & 2 & Provenance comments in \code{test_13kn_movable_pintle.args} and \code{test_13kn_sealevel_regen_allstl.args}. \\
+\code{knowledge/kg/} & 2 & Six \code{requested_by} strings in \code{standards.py}. In \code{harvest_repo.py} (line 291), \code{glob} became \code{rglob}, so \code{LITERATURE_REQUESTS*.md} files under \code{docs/literature/} are still harvested as literature-request capability records. The document harvester (\code{_docs_harvest}, line 72) already used \code{rglob}. \\
+\code{knowledge/reports/} & 3 & \code{NEXT_KNOWLEDGE_SESSION.md}, \code{OPUS_A_AUDIT_BRIEF_2026-10-16.md}, \code{pdf_issue_disposition_2026-10-15.md} (eight absolute links). \\
+\code{latex-report/} & 1 & \code{Component_Data_and_Research_Plan/plan.tex}: path of the plan it develops. \\
+\code{.gitignore} & 1 & Added \code{/archive/} (the only change; \code{/tmp/} was already ignored). \\
+\bottomrule
+\end{longtable}}
+
+Inside \code{docs/}, 34 of the 73 moved files carry rewritten links or path strings: 116 changed lines when diffed against the pre-move backup. Separately, the three \code{tmp/} references in \code{docs/literature/pintle_injector_literature_inventory.md} (lines 12--13) were redirected to \code{archive/tmp_literature_scratch_2026-11-05/}.
+
+\subsection{Rewrites that carry behaviour}
+Most rewrites change comments only. Four groups change what the code reports or checks:
+\begin{itemize}
+  \item \code{raosim/model_registry.py}: \code{local_source} of the thermofluid entry (line 662) and the shoulder-radius policy source (line 349). \code{audit_model_registry} (same file) lists every entry whose \code{local_source} does not exist under \code{missing_local_sources} and sets \code{passed} to false. The flag runner puts that audit into every \code{summary.json} (\code{raosim/run_nozzle.py:4967-4974}), so an unrewritten path would have turned every run's registry audit into a failure.
+  \item \code{raosim/rao_variational.py:347}: \code{NASA_REFERENCE_PROVENANCE_DOC} is written into contour metadata as \code{fixture_generator_provenance_doc} (line 433).
+  \item \code{scripts/compare_nasa_reference.py}: \code{NASA_TT_PRIME_PROVENANCE_DOC}, written into the NASA comparison artifacts.
+  \item \code{knowledge/kg/standards.py} and \code{knowledge/kg/harvest_repo.py}: inputs to the next knowledge rebuild.
+\end{itemize}
+
+\subsection{References still pointing at old or missing paths}
+The second pass matched paths only when written on a single line. The following references were found during the writing of this appendix and remain:
+\begin{itemize}
+  \item \code{tests/test_transonic_kernel.py:195-196} (docstring) and \code{raosim/mdo/convergence.py:6-7} (module docstring) wrap an old flat path across two lines (\code{docs/MOC_MARCH_TOPOLOGY_REMEDIATION_} / \code{2026-09-21.md}, \code{docs/DIFFERENTIABLE_ENGINE_MDO_PLAN} / \code{.md}). Both are comments with no run-time effect.
+  \item \code{knowledge/AGENTS.md} (§1 store table and §9) and the docstring of \code{knowledge/kg/harvest_repo.py} (lines 3 and 13) still describe the harvested set as \code{docs/*.md} and \code{docs/LITERATURE_REQUESTS*.md}, although both harvesters now search recursively.
+  \item \code{README.md} cites \code{docs/architecture/DATAFLOW.md} (a link), \code{docs/README.md} and \code{docs/program/REMAINING_WORK_AND_GOALS.md}; \code{docs/architecture/CODE_MAP.md} and \code{CODE_HEADER_COMMENTS.md} also link to \code{DATAFLOW.md}. None of these three files existed when this appendix was written.
+  \item A check of the 96 relative links in \code{docs/**/*.md}, \code{README.md} and \code{knowledge/README.md} found 90 that resolve. The six that do not are the three \code{DATAFLOW.md} links above (from \code{README.md}, \code{CODE_MAP.md} and \code{CODE_HEADER_COMMENTS.md}) and three further links inside \code{CODE_HEADER_COMMENTS.md}, to \code{AGENTS.md}, \code{reports/IMPLEMENTATION_AUDIT_2026-09-20.md} and \code{reports/latest_report.md}. That file reproduces header text from \code{knowledge/} verbatim, so those relative links resolve against \code{docs/architecture/} instead of \code{knowledge/}.
+\end{itemize}
+Moving the root \code{AGENTS.md} to \code{docs/agents/AGENTS.md} has one further consequence. Coding agents that look for an \code{AGENTS.md} file at the repository root no longer find the project guidance there, which now begins one level down. \code{knowledge/AGENTS.md} is unaffected.
+
+% ------------------------------------------------------------------------------
+\section{requirements.txt returned to the root}\label{sec:cl-req}
+\code{HEAD} tracks the runtime requirements file only as \code{docs/requirements.txt}. \code{requirements-dev.txt} sits at the root and includes \code{-r}~\code{requirements.txt}, which pip resolves relative to the including file, so at \code{HEAD} that include pointed at a file that was not there. The cleanup moved the file to the root. Its content is unchanged: core pins plus the exact JAX stack (jax and jaxlib 0.6.2, optimistix 0.0.11, equinox 0.13.8), which \code{pyproject.toml} declares identically. The root copy is untracked until it is committed.
+
+% ------------------------------------------------------------------------------
+\section{Build outputs archived}\label{sec:cl-builds}
+
+\subsection{What was moved}
+Every build that existed on 5 November 2026 was moved intact, without re-running or pruning anything, into \code{builds/_archive_2026-11-05/}. \code{builds/} is gitignored, so none of this appears in \code{git}~\code{status}. According to the archive index, the moved set is:
+\begin{itemize}
+  \item 523 top-level entries: 522 from \code{builds/} plus the stray \code{scripts/builds/lox_rp1_13kn_ss316_sizewall}, now under \code{scripts_builds/};
+  \item 1,931 files, 1.6~GB (1,704,308,042 bytes apparent), of which STL meshes account for 1.2~GB;
+  \item by kind: 454 versioned runs \code{v001}--\code{v454} (no gaps, 2026-03-02 to 2026-10-16), 47 named builds, 20 loose files, one \code{samples/} folder and one \code{tests/} folder holding six sub-builds.
+\end{itemize}
+The cleanup added \code{BUILDS_ARCHIVE_INDEX.md} and its machine-readable twin \code{catalog.json}, both generated by a read-only walk, so the archive now holds 525 entries and 1,933 files. The index groups the builds into families, lists the output epochs of the versioned series, and records anomalies: four empty folders, byte-identical duplicates, and off-nominal recorded values. It also states that no build records its command line, and that every build which states a qualification flag states \code{hardware_qualified:}~\code{false}. Chapter~\ref{ch:builds} discusses the build state recorded in the archive.
+
+\subsection{Keeping the version counter}
+\code{raosim.build_log._next_version} (\code{raosim/build_log.py:25-36}) scans only the top level of \code{builds/} for folders whose names start with \texttt{v}, exactly three digits and an underscore, and returns the highest number plus one. Once the 454 versioned folders moved one level down, the legacy toolbox would have restarted at \code{v001}. The cleanup therefore left an empty marker folder, \code{builds/v454_archived_20261105/}, whose \code{README.md} explains its purpose and says it is safe to delete if renumbering is acceptable. The marker works: \code{builds/} now holds \code{v455_20261105_070346} to \code{v463_20261105_071800}, nine legacy batch runs (\code{metadata.txt} plus \code{cli_bezier.csv} or \code{cli_rao.csv}) written between 07:03 and 07:18 on 5 November, after the move. \code{builds/README.md} explains the folder layout to new users. Because the pattern requires exactly three digits, from \code{v1000} onwards the scan would no longer see new folders and the number would stop advancing.
+
+\subsection{Effect on the knowledge system}
+\code{knowledge/artifacts.json} holds 581 references to \code{builds/...} paths recorded before the move. The artifact harvester walks \code{builds/} recursively (\code{knowledge/kg/harvest_artifacts.py:70-82}), so the next rebuild will find the archived producer reports under their new paths. According to \code{knowledge/README.md}, changed or missing evidence ``retains inactive history and loses active graph links'', so the old records will be retired rather than deleted.
+
+% ------------------------------------------------------------------------------
+\section{Scratch and regenerable files}\label{sec:cl-scratch}
+
+\begin{itemize}
+  \item \textbf{\code{tmp/}.} Moved to \code{archive/tmp_literature_scratch_2026-11-05/}: 233 files, 62~MB. The contents are NTRS and Crossref pintle-literature search results, PDF page renders and inventory helpers, and two stray STL files (\code{flange.stl}, \code{plain.stl}). \code{archive/README.md} describes it. \code{/archive/} was added to \code{.gitignore}, so the folder is local only and a fresh checkout does not contain it.
+  \item \textbf{LaTeX auxiliary files.} 21 tracked files deleted from \code{latex-report/}: \code{.aux}, \code{.log}, \code{.out} and \code{.toc} of \code{report}, \code{raosim_reference} and \code{Gimbal_TVC_Actuator_Sizing}; the same plus \code{.fls} and \code{.fdb_latexmk} of \code{Differentiable_Engine_MDO_Plan}; and \code{tmp1.tmp} to \code{tmp3.tmp}. The \code{.tex} sources and compiled PDFs were kept.
+  \item \textbf{Caches and metadata.} \code{__pycache__/}, \code{.pytest_cache/} and \code{.DS_Store} were removed; all three are gitignored. They regenerate: when this appendix was written, 12 \code{__pycache__} folders (outside the virtual environments) and a root \code{.DS_Store} had reappeared from later runs.
+  \item \textbf{Emptied folders.} \code{docs/audit_work/}, \code{scripts/builds/} and \code{tmp/} no longer exist. A search for empty directories, excluding \code{.git/}, the virtual environments, \code{builds/} and \code{propulsion_texts/}, finds none. The four empty build folders the index lists (\code{nozzle_run_beta}, \code{nozzle_run_beta3}, \code{nozzle_run_beta4}, \code{nozzle_run_gpt_5.5}) were moved intact with the rest of the archive.
+\end{itemize}
+
+% ------------------------------------------------------------------------------
+\section{What was deliberately not moved}\label{sec:cl-notmoved}
+
+The cleanup touched documentation, outputs and scratch only. The following items stay where they are because code, tests, packaging or the knowledge graph depend on their paths.
+
+{\small
+\begin{longtable}{P{3.3cm}P{12.1cm}}
+\toprule
+Item & Why it stays (evidence) \\
+\midrule
+\endhead
+\code{raosim/} modules & 129 of the 131 test modules import \code{raosim} (778 import lines). The knowledge stores identify code by path: \code{knowledge/software_links.json} holds 2,437 \code{raosim/...py} references, \code{knowledge/graph/graph.json} 1,791, \code{knowledge/models.json} 304 and \code{knowledge/requirements.json} 72. \code{pyproject.toml} names \code{raosim.cli} as the console-script target and declares package data relative to \code{raosim/}. The \code{lrekit} alias resolves names by searching \code{raosim/} itself, so any module or subpackage kept at the top of \code{raosim/} keeps its \code{lrekit.<name>} spelling (for example \code{lrekit.jax.api}, README line 1196). Section~\ref{sec:cl-proposal} lists the remaining blockers. \\
+\code{Three-Dimensional-Nozzle-Design-Code-master/} & The directory name occurs 9 times in 7 test modules: \code{test_legacy_io}, \code{test_moc_bounded_net}, \code{test_nasa_kernel}, \code{test_nasa_kernel_march_parity}, \code{test_nasa_port}, \code{test_plotting}, \code{test_transonic_kernel}. \code{tests/test_moc.py} imports \code{NASA_DIR} from \code{test_moc_bounded_net}. It also occurs in \code{raosim/nasa_moc.py}, \code{raosim/rao_variational.py}, \code{scripts/compare_nasa_reference.py} and \code{scripts/nasa_wall_probe.py}. The parity suites built on it are the oracle tests that must not change (Chapter~\ref{ch:orientation}, Section~\ref{sec:orient-conventions}). \\
+\code{debug_outputs/} & Default output locations: \code{scripts/rao_existence_scan.py:124} (\code{debug_outputs/rao_existence_scan}) and \code{scripts/compare_jax_scan_stationarity.py:49} (\code{debug_outputs/rao_stationarity_compare.json}). It holds 43 tracked evidence files, cited by documents such as \code{docs/subsystems/S06-rao-moc-bvp-contour/nasa_tt_prime_provenance.md} (line 138) and \code{docs/audits/legacy_code_audit.md} (line 60). \\
+\code{scripts/} & Five test modules depend on it. \code{test_cea_surface_validation.py:23} and \code{test_compare_nasa_reference.py:5} import from \code{scripts.*}. \code{test_run_nozzle.py} imports \code{scripts.run_nozzle} and runs \code{scripts/run_nozzle.py} as a subprocess. \code{test_rao_existence_scan.py} and \code{test_rao_convergence_domain.py} run \code{scripts/rao_existence_scan.py}. \\
+\code{main.py} & Packaged as the module \code{main} (\code{py-modules}~\code{=}~\code{["main"]}); \code{RaoRocketSimLegacy} imports it by that name. \\
+\code{knowledge/} JSON stores & Not hand-edited. Repository-document records are keyed by path: \code{node_id("RDOC",}~\code{rel)} in \code{knowledge/kg/harvest_repo.py:74,80}. \code{knowledge/repo_documents.json} still lists the documents under their old flat paths (63 flat \code{docs/*.md} paths). \code{knowledge/kg.sh}~\code{rebuild} re-keys them to the new folders; it was not run for this guide. The modified state of the knowledge JSON stores in \code{git}~\code{status} predates the cleanup. \\
+\code{propulsion_texts/} & Local corpus at the path the knowledge manifest, the model registry \code{local_source} entries and the documentation cite. Gitignored, with 21 PDFs tracked from before the ignore rule. \\
+\bottomrule
+\end{longtable}}
+
+% ------------------------------------------------------------------------------
+\section{Test run after the cleanup}\label{sec:cl-verify}
+
+A non-slow pytest run finished at 07:49 after 46 minutes, so it started after the files had moved (the new folders are dated 07:00 to 07:02). Its log is a working file of the cleanup session, not a repository file. It reports ``24 failed, 2832 passed, 1 skipped, 27 deselected, 8 warnings in 2761.04s''. No failure in the log is a missing file or a moved path. The failures are assertion and \code{ValueError} results in the nozzle-geometry, chart-benchmark, design, MDO and regen-CAD tests. Several carry the message ``Rao/TOP angle lookup is outside the held SP-125 chart domain''. That message is raised at \code{raosim/nozzle_geometry.py:68}, a line added by an uncommitted change that was already present before the cleanup (\code{raosim/nozzle_geometry.py}: 53 insertions, 85 deletions; the untracked \code{raosim/rao_top_chart.py} also predates it). The cleanup did not edit \code{raosim/nozzle_geometry.py}. Chapter~13 discusses the verification state.
+
+% ------------------------------------------------------------------------------
+\section{Proposed future package layout (not performed)}\label{sec:cl-proposal}
+
+\caution{This section is a \textbf{proposal}. None of it was carried out. \code{raosim/} still has the flat layout shown in Chapter~\ref{ch:orientation}.}
+
+The documentation now follows the pipeline stages; the code does not. One possible way to align them is a stage subpackage per pipeline stage, using the module-to-stage assignment of \code{docs/architecture/CODE_MAP.md}. Subpackage names are chosen so that none collides with an existing module in the same directory. A package called \code{injector}, for example, cannot sit next to \code{raosim/injector.py}.
+
+{\small
+\begin{longtable}{P{2.6cm}P{1.1cm}P{6.8cm}P{4.9cm}}
+\toprule
+Proposed subpackage & Stage & Current modules (under \code{raosim/}) & Path-sensitive details \\
+\midrule
+\endhead
+\code{raosim/entry/} & S01 & \code{cli.py}, \code{run_nozzle.py} (\code{__init__.py} and \code{__main__.py} stay) & Console-script targets in \code{pyproject.toml}; \code{run_nozzle.py:73} computes \code{REPO_ROOT} as \code{parents[1]} \\
+\code{raosim/contracts/} & S02 & \code{input_validation.py}, \code{units.py}, \code{manufacturing_limits.py} & \code{mdo/job.py}, \code{mdo/capabilities.py} and \code{mdo/metrics.py} stay in \code{mdo/} \\
+\code{raosim/thermochem/} & S03 & \code{propellants.py}, \code{cea.py}, \code{frozen_flow.py} & \code{raosim/mdo/propellants.py} is a separate module \\
+\code{raosim/performance/} & S04 & \code{engine.py}, \code{gas_dynamics.py}, \code{separation.py}, \code{wall_pressure.py}, \code{atmosphere.py} & Widely imported low-level modules \\
+\code{raosim/geometry/} & S05 & \code{nozzle_geometry.py}, \code{rao_top_chart.py}, \code{throat_geometry.py}, \code{chamber_geometry.py}, \code{validation.py} & Two of these carry uncommitted work \\
+\code{raosim/contour/} & S06 & \code{rao_variational.py}, \code{rao_residuals.py}, \code{moc.py}, \code{moc_bounded.py}, \code{moc_topology.py}, \code{nasa_moc.py}, \code{transonic_kernel.py}, \code{wall_model.py}, \code{rao_optimizer.py}, \code{rao_existence_scan.py} & \code{rao_variational.py:363} uses \code{parent.parent}; covered by the oracle suites \\
+\code{raosim/thermal/} & S07 & \code{thermal_design.py}, \code{physics.py}, \code{thermofluids.py}, \code{regen_profile.py}, \code{coolants.py}, \code{materials.py} & \code{raosim/jax/thermal.py} is a separate module \\
+\code{raosim/injection/} & S08 & \code{injector.py}, \code{movable_pintle.py}, \code{spray_coupling.py} & -- \\
+\code{raosim/feed/} & S09 & \code{pumps.py}, \code{electric_technology.py} & -- \\
+\code{raosim/interfaces/} & S10 & \code{interface.py}, \code{mass_ledger.py}, \code{regen_volumes.py} & -- \\
+\code{raosim/cad/} & S11 & \code{export.py}, \code{regen_geometry.py}, \code{regen_cad.py}, \code{injector_export.py}, \code{injector_cad.py}, \code{injector_coaxial_cad.py}, \code{pump_cad.py}, \code{pump_cad_brep.py}, \code{engine_cad.py} & Tests patch private CAD functions, e.g. \code{_export_step_with_cadquery} \\
+\code{raosim/figures/} & S12 & \code{plotting.py}, \code{flow_viz.py}, \code{moc_diagrams.py}, \code{injector_plots.py} & -- \\
+\code{raosim/mdo/} (kept) & S13 & the 24 S13 modules already in \code{mdo/}, plus \code{requirements.py} & -- \\
+\code{raosim/records/} & S14 & \code{design.py}, \code{model_registry.py}, \code{release_readiness.py} (the seven S14 modules in \code{mdo/} stay) & \code{design.py:937} uses \code{parents[1]}; registry paths are relative to the repository root \\
+\code{raosim/legacy/} & X03 & \code{build_log.py}, \code{trade_study.py}, \code{altitude_performance.py}, \code{nozzle_comparison.py}, \code{conical.py}, \code{benchmarks.py} & \code{build_log.py:21} and \code{benchmarks.py:36-39} locate \code{builds/} through \code{parent.parent} \\
+\code{raosim/reference/} & X04 & \code{legacy_io.py} & -- \\
+unchanged & X01, X02, X06 & \code{jax/}, \code{spray/}, \code{openfoam/}, \code{data/}, \code{benchmark_data/} & Package-data globs in \code{pyproject.toml}; \code{spray/benchmarks.py:22} uses \code{parents[2]} \\
+undecided & X08 & \code{flange_cad.py}, \code{thermal_correlations.py}, \code{trajectory.py} & Wire into the pipeline or retire before moving \\
+\bottomrule
+\end{longtable}}
+
+\subsection{Risks}
+\begin{enumerate}
+  \item \textbf{Import surface.} 129 of the 131 test modules import \code{raosim}, through 778 import lines. Re-export shims at the old paths would keep the imports working but not the tests' patching. 85 \code{monkeypatch.setattr} calls in 23 test files replace attributes on module objects, and a patch applied to a shim module does not reach the implementation module. In addition, 35 test modules import underscore-private names (59 distinct module-and-name pairs), which \code{from}~\code{...}~\code{import}~\code{*} shims do not re-export. A shim that installs the new module object under the old name in \code{sys.modules} avoids both problems but must be done consistently.
+  \item \textbf{Repository-root arithmetic.} Seven \code{parents[...]} or \code{parent.parent} expressions in \code{raosim/} locate the repository root or \code{builds/} relative to the file (\code{design.py:937}, \code{rao_variational.py:363}, \code{benchmarks.py:36} and \code{:39}, \code{run_nozzle.py:73}, \code{build_log.py:21}, \code{spray/benchmarks.py:22}). One level deeper, \code{build_log.py} would create \code{builds/} inside \code{raosim/}, and \code{run_nozzle.py} would pass a wrong root to \code{audit_model_registry}. Every \code{local_source} would then be reported missing.
+  \item \textbf{The \code{lrekit} alias.} \code{lrekit.<x>} resolves only names found directly under \code{raosim/} (\code{lrekit/__init__.py:16}). Imports such as \code{lrekit.engine} would break for external users once \code{engine.py} moved into a stage subpackage, unless the alias is extended.
+  \item \textbf{Knowledge graph.} About 4,600 path references across four stores, including file:line software locators, would go stale. A rebuild re-keys them, but per \code{knowledge/AGENTS.md} §13--14 the implementation-freshness and source-review states must then be renewed rather than inherited.
+  \item \textbf{Documentation and this guide.} The hand-written documents and \code{README.md} contain about 290 mentions of \code{raosim/...py} paths, many with line numbers; the generated indexes (\code{CODE_MAP.md}, \code{CODE_HEADER_COMMENTS.md}, \code{DATAFLOW.md}) add several hundred more. Every chapter of this guide cites module paths.
+  \item \textbf{Uncommitted work.} \code{git}~\code{status} shows uncommitted edits to \code{raosim/nozzle_geometry.py} and untracked modules (\code{raosim/rao_top_chart.py}, \code{raosim/thermal_correlations.py}, \code{raosim/data/}). Moving files before that work is committed risks conflicts or loss.
+  \item \textbf{Scope.} A move does not split \code{raosim.run_nozzle.main}, which spans roughly 4,160 lines (2817--6977). Splitting that function is separate work, and the larger maintainability gain.
+\end{enumerate}
+
+\decision{If the proposal is pursued, a low-risk order follows from the risks above. (1) Commit the current work, including the cleanup itself. (2) Replace the seven file-relative root computations with one shared repository-root helper. (3) Move one stage at a time with \code{git}~\code{mv}, leaving \code{sys.modules} aliases at the old paths, and run the full test suite, including \code{tests/test_characteristic_pairing.py} and the oracle suites, after each stage. (4) Run \code{knowledge/kg.sh}~\code{rebuild} and renew code-locator reviews. (5) Update the documentation and \code{CODE_MAP.md}.}
+
+% ------------------------------------------------------------------------------
+\section{Follow-up actions}\label{sec:cl-followup}
+\begin{enumerate}
+  \item Stage the deletions and the new \code{docs/} folders, \code{requirements.txt} and the rewritten files together, so that git records the moves as renames.
+  \item Run \code{knowledge/kg.sh}~\code{rebuild} to re-key the repository-document and build-artifact records, then \code{knowledge/kg.sh}~\code{--json}~\code{validate}.
+  \item Fix the two line-wrapped references (in the test docstring at \code{tests/test_transonic_kernel.py:195} and the module docstring at \code{raosim/mdo/convergence.py:6}). Update the descriptions of the harvested document set in \code{knowledge/AGENTS.md} and in the docstring of \code{knowledge/kg/harvest_repo.py}.
+  \item Create the three documents the README cites (\code{docs/architecture/DATAFLOW.md}, \code{docs/README.md}, \code{docs/program/REMAINING_WORK_AND_GOALS.md}), or remove the citations.
+  \item Decide whether a root-level \code{AGENTS.md} pointer to \code{docs/agents/AGENTS.md} is wanted for agent tooling.
+  \item Replace the \code{.venv/bin/python} commands in \code{docs/agents/AGENTS.md} and \code{knowledge/README.md} with an environment that exists (Chapter~\ref{ch:orientation}, Section~\ref{sec:orient-env}).
+\end{enumerate}

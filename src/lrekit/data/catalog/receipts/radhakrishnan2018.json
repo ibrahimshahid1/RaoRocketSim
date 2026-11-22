@@ -1,0 +1,32 @@
+{
+  "source_id": "radhakrishnan2018",
+  "acquired_at_utc": "2026-11-04T00:34:47.625536+00:00",
+  "evidence_kind": "mixed_experiment_simulation_or_method_report",
+  "status": "ACQUIRED",
+  "files": [
+    {
+      "path": "raw/radhakrishnan2018/source.pdf",
+      "bytes": 1130792,
+      "sha256": "512f152720e604770e28e5e684700d9d22e7450a065e066f58fe305b0273e266",
+      "origin": "existing_local_literature_copy",
+      "original_path": "propulsion_texts/pintle_injector/radhakrishnan2018 (1).pdf"
+    },
+    {
+      "path": "derived/radhakrishnan2018/source.txt",
+      "bytes": 44248,
+      "sha256": "924d6b098c007f9ccb1bba92c42d7508fde51042531c753e5bd8b6bb755c906a",
+      "origin": "unreviewed_pdf_text_derivative"
+    }
+  ],
+  "review_state": "NOT_REVIEWED_FOR_TRAINING",
+  "training_eligible": false,
+  "hardware_qualified": false,
+  "limitations": [
+    "Mixed experimental targets and author VOF/derived quantities. Preserve per-column origins; not a reacting validation case."
+  ],
+  "pdf_info": "Title:           AAS2805(4)-22652.dvi\nCreator:         dvips(k) 5.998 Copyright 2018 Radical Eye Software\nProducer:        MiKTeX GPL Ghostscript 9.22\nCreationDate:    Fri Jul 27 16:23:43 2018 EDT\nModDate:         Mon Jul 30 09:53:18 2018 EDT\nCustom Metadata: no\nMetadata Stream: yes\nTagged:          no\nUserProperties:  no\nSuspects:        no\nForm:            none\nJavaScript:      no\nPages:           16\nEncrypted:       no\nPage size:       612 x 792 pts (letter)\nPage rot:        0\nFile size:       1130792 bytes\nOptimized:       no\nPDF version:     1.4\n",
+  "text_extraction": {
+    "status": "DERIVATIVE_TEXT_UNREVIEWED",
+    "warning_excerpt": ""
+  }
+}

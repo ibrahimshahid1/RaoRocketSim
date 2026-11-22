@@ -1,0 +1,32 @@
+{
+  "source_id": "betti2014",
+  "acquired_at_utc": "2026-11-04T00:34:48.530190+00:00",
+  "evidence_kind": "simulation_method_report",
+  "status": "ACQUIRED",
+  "files": [
+    {
+      "path": "raw/betti2014/source.pdf",
+      "bytes": 978767,
+      "sha256": "c8ff4b1477b8d07ffe922513af718b303e43ed4e8d6fb9a7f544f8fa3367cf7b",
+      "origin": "existing_local_literature_copy",
+      "original_path": "propulsion_texts/betti2014.pdf"
+    },
+    {
+      "path": "derived/betti2014/source.txt",
+      "bytes": 163382,
+      "sha256": "16ba90e01901e233b6d91aefe8413ab82c914b3fc4c9058e7ee346dad4d3e7c9",
+      "origin": "unreviewed_pdf_text_derivative"
+    }
+  ],
+  "review_state": "NOT_REVIEWED_FOR_TRAINING",
+  "training_eligible": false,
+  "hardware_qualified": false,
+  "limitations": [
+    "Computational comparison is not independent experimental truth. No solver outputs downloaded with this paper."
+  ],
+  "pdf_info": "Title:           Coupled Heat Transfer Analysis in Regeneratively Cooled Thrust Chambers\nSubject:         Journal of Propulsion and Power 2014.30:360-367\nAuthor:          Barbara Betti, Marco Pizzarelli, and Francesco Nasuti\nCreator:         Arbortext Advanced Print Publisher 9.1.405/W Unicode\nProducer:        Acrobat Distiller 6.0.1 (Windows); modified using iText 4.2.0 by 1T3XT\nCreationDate:    Sat Mar  1 09:02:35 2014 EST\nModDate:         Tue Feb 10 01:42:20 2015 EST\nCustom Metadata: no\nMetadata Stream: yes\nTagged:          no\nUserProperties:  no\nSuspects:        no\nForm:            none\nJavaScript:      no\nPages:           8\nEncrypted:       no\nPage size:       584.957 x 782.986 pts\nPage rot:        0\nFile size:       978767 bytes\nOptimized:       no\nPDF version:     1.4\n",
+  "text_extraction": {
+    "status": "DERIVATIVE_TEXT_UNREVIEWED",
+    "warning_excerpt": ""
+  }
+}

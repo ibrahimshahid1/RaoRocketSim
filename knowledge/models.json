@@ -1,7 +1,7 @@
 {
  "meta": {
-  "generated_at": "2026-10-17T17:58:00.071232+00:00",
-  "source": "raosim/model_registry.py",
+  "generated_at": "2026-11-21T23:24:27.474739+00:00",
+  "source": "src/lrekit/verification/registry.py",
   "n": 61
  },
  "records": [
@@ -30,9 +30,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "source_support_state": "PARTIALLY_SUPPORTED",
    "source_support_notes": "Hagemann et al. 1998 (Advanced Rocket Nozzles) is a qualitative review with no numbered equations. It does NOT state a quasi-one-dimensional attached-flow thrust-coefficient or nozzle momentum-balance relation anywhere; the 'Cf' half of the registry relation is absent. The paper only asserts that nonadapted exhaust flow induces a significant negative thrust contribution and that off-design over/underexpansion losses rise up to 15% (Table 1, Fig. 3). What the document DOES support is the 'explicit separation applicability' half and the equation_ref 'overexpanded nozzle flow and separation regimes': it defines over-/underexpanded off-design regimes, defines the critical pressure ratio p_cr = p_sep/p_p across the separation point, states that p_cr depends strongly on Mach number (slightly on Re) and also on wall temperature, gas composition and wall roughness, catalogs empirical separation-onset criteria (Summerfield, Schmucker, Keldysh empirical p_cr/p_p/p_w,e/p_amb relationships, Aerojet tabulated upper/lower separation ratios for conical vs bell nozzles, European p_sep/p_amb = f(local wall Mach number) criterion), and states that nozzle area ratios are chosen to avoid separation at nominal chamber pressure and that side-load prediction in the separated regime is uncertain/ongoing research. The registry validity_text ('attached flow only; separated-flow thrust must be withheld or separately modeled') is consistent with the paper's statements but is not phrased as a rule by the paper. The Cf momentum balance must be sourced elsewhere (the paper cites NASA SP-8120 as its Ref. 2).",
    "source_support_equation_labels": [
@@ -82,9 +82,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "source_support_state": "NOT_FOUND_IN_SOURCE",
    "source_support_notes": "CAD_04.md is a 173-slide lecture deck on B-Splines and NURBS (basis functions, divided differences, Cox-de Boor recursion, knot insertion/removal, rational curves and surfaces). The registry attributes to it 'OpenCascade valid-solid/re-import/bounding-box/volume checks' under a 'CAD exchange/solid-modeling background' equation_ref. Grep for opencascade, occ, solid, topolog, b-rep/brep, boundary, STEP, IGES, exchange, bounding, volume, valid, manifold, shell, edge, vertex, euler, kernel, export returned zero relevant hits ('import' matches only unrelated text; 'closed' refers to closed curves; 'tolerance' appears once in a control-point replacement step). The document contains no solid-modeling, topology-validity, data-exchange, re-import, bounding-box or volume-check content, so it cannot support the model. The only tangentially related geometric statement is the convex-hull containment property of B-spline curves (page 40), which is a curve property, not a kernel verification policy.",
    "source_support_equation_labels": [],
@@ -131,9 +131,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "source_support_state": "SUPPORTED",
    "source_support_notes": "The registry relation Vc = Lstar*At is exactly the rearranged form of SP-125 eq. (4-4), L* = Vc/At (PDF p.95, book p.86), and the book applies it verbatim as design practice ('With At and minimum required L* established, the required combustion chamber volume Vc can be calculated by equation (4-4)') and numerically (Vc = 487 x 45 = 21915 cu in, PDF p.104). The registry validity text ('empirical propellant/injector design input; not predicted combustion closure') matches the source, which states the minimum required L* 'can only be evaluated by actual firings of experimental thrust chambers' and tabulates typical values (Table 4-1). Caveats: (a) the Markdown conversion drops the equation images for (4-3) and (4-4), so the relation is anchored via the verbal definition and the sample calculation; the equation forms were confirmed from a render of the PDF page. (b) The source also gives the physical basis L* = Wtc V ts / At (stay-time form) which the registry does not carry. (c) The registry's second cited source (Sutton & Biblarz) is not this document and was not checked.",
    "source_support_equation_labels": [
@@ -169,7 +169,7 @@
    "subsystem": "chamber",
    "quantity": "shoulder fillet",
    "relation": "Rs = 0.8*Rs,max",
-   "cited_source_text": "repository geometry policy; docs/shoulder_radius_design_basis.md",
+   "cited_source_text": "repository geometry policy; docs/subsystems/S05-nozzle-and-chamber-geometry/shoulder_radius_design_basis.md",
    "local_source": "propulsion_texts/19710019929.pdf",
    "source_document_id": "DOC_NTRS_19710019929",
    "source_kind": "corpus_pdf",
@@ -187,9 +187,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "source_support_state": "PARTIALLY_SUPPORTED",
    "source_support_notes": "SP-125 (Huzel & Huang) contains NO chamber-shoulder fillet radius, no symbol Rs or Rs,max, and no 0.8 factor anywhere in the thrust-chamber geometry text (grep of 'shoulder' hits only fatigue/seal contexts; 'fillet' only in the structural stress-concentration discussion). What the document DOES state, and what the registry's equation_ref ('SP-125 qualitative contraction factors') can legitimately point to, is qualitative: (a) any smooth, well-rounded convergent section has very low energy losses because subsonic velocities are low (PDF p. 98); (b) abrupt changes or discontinuities in the wall contour should be avoided (p. 98); (c) the contraction area ratio is optimized against seven listed factors - combustion performance/injector, gas-flow pressure drop, wall cooling, stability, weight, envelope, manufacturability (p. 97); (d) chamber total-pressure loss is a function of gamma and the contraction ratio via Rayleigh flow (pp. 14-15). The only NUMERIC radius guidance is for the THROAT arc (R = 0.5-1.5 Rt) plus a convergent half-angle range of 20-45 deg (p. 98); this is the throat-side upstream arc, not the cylinder-to-cone shoulder. The worked layouts (pp. 104-107) run a straight convergent cone from the cylindrical chamber to the throat arc with no shoulder fillet, and compute the convergent volume as a frustum cone. The only '0.8' in the neighbourhood is the 80-percent-bell nozzle length fraction (p. 107), unrelated to the shoulder. Figure 4-9 ('Elements of basic cylindrical combustion chamber') is not OCR-recoverable in the markdown, so a figure-labelled shoulder radius cannot be ruled out from the rendering, but no text refers to one. Net: the qualitative motivation is supported; the relation Rs = 0.8*Rs,max and the fill-fraction concept are repository policy, as the registry itself concedes, and should not be cited to SP-125.",
    "source_support_equation_labels": [
@@ -244,9 +244,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "source_support_state": "PARTIALLY_SUPPORTED",
    "source_support_notes": "Original White PDF pp840-842 recovers Eq7.42 delta/x approx0.16 Re_x^(-1/7) and Eq7.46 delta_star approxdelta/8, implying0.02 x Re_x^(-1/7). This is a smooth flat-plate derivation using a one-seventh-power profile and constant outer velocity. The implementation instead uses0.046*s/Re_s^(1/5)*sqrt(max(T/T_wall,0.2)), with local nozzle properties, distance since throat, radius floor and blockage clipping. The coefficient, exponent, temperature factor, floors/clips and nozzle application are repository screening assumptions, not established by these source equations. No justified substitution of the flat-plate formula into the nozzle is made. CITES links explicitly connect the compared source equations without asserting IMPLEMENTS; numerical validity of the nozzle extension and physical calibration remain unavailable.",
    "source_support_equation_labels": [],
@@ -307,9 +307,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
    "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
    "execution_reach": {
@@ -353,9 +353,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "source_support_state": "PARTIALLY_SUPPORTED",
    "source_support_notes": "Original White PDFpp1092,1101 supplies ideal-gas sonic pressure ratio and choked/local mass-flow functions, matching the perfect-gas functions in injector._stream_mass_flux before its supplied Cd multiplier. White does not establish that empirical injector Cd, real/supercritical-fluid accuracy, or the approximation treating feed temperature and P_back+dp as stagnation states. White6.117(p750) instead describes a meter-dependent expansion-factor model and is preserved as a distinct compared relation. CITES comparison edges document this support/scope separation without asserting that the complete injector implementation is identical to any one source formula.",
    "source_support_equation_labels": [],
@@ -418,9 +418,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "source_support_state": "PARTIALLY_SUPPORTED",
    "source_support_notes": "The registry attributes the d-squared law d^2(t) = d0^2 - K t to this document via 'evaporation-model context and Eq. 16'. The document's Eq. 16 is a Spalding-type mass-transfer rate, m˙_d = k_c A_d ρ ln(1 + B_m), not a diameter-squared-versus-time law; no d^2 law, no evaporation constant K, and no droplet-lifetime expression appears anywhere (grepped 'd^2', 'squared', 'lifetime', 'vaporiz', 'Priem', 'Heidmann' - none found). Priem/Heidmann are not cited; the evaporation model references are Miller-Harstad-Bellan 1998 [59] and Sazhin 2006 [60]. What IS supported: the subcritical isolated-droplet (Lagrangian DPM) context, the constant-mixture-density assumption near the droplet surface, and the qualitative statement that evaporation rate depends on droplet-gas temperature difference, vapour concentration and relative velocity (through k_c). The d^2 law could be derived from Eq. 16 under quasi-steady constant-property assumptions, but the document does not perform or state that derivation.",
    "source_support_equation_labels": [
@@ -469,9 +469,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
    "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
    "execution_reach": {
@@ -515,9 +515,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "source_support_state": "PARTIALLY_SUPPORTED",
    "source_support_notes": "NASA SP-8089 (Liquid Rocket Engine Injectors, 1976) never writes the orifice mass-flux relation G = Cd*sqrt(2*rho*dP) or any algebraic orifice-flow equation; a genuine search for discharge coefficient, sqrt/square root, velocity head, Bernoulli, orifice equation, injection velocity, mass flux and the numbered equations (1)-(6) found only mixing/drop-size correlations. The glossary defines Cd as 'discharge coefficient, dimensionless' and the text states orifice flowrate theory is 'not well developed' for injector conditions (p.45). What the document DOES supply is the 'pressure-drop sizing practice' the registry cites: minimum dP_inj/Pc of 5-20% (5% concentric-tube, 10-15% unlike-impinging, 15-25% like-impinging) to avoid chug; injection dP and orifice length as large as practical; upstream manifold losses <25% of orifice dP; and extensive qualitative Cd behaviour (inlet radius/chamfer/burr effects, L/d, cross velocity, full vs separated flow/hydraulic flip, cold-flow vs hot-fire Cd differences) that supports the registry's 'calibrated Cd required' validity note. The equation form itself must be attributed to the other cited source (Sutton & Biblarz), not SP-8089.",
    "source_support_equation_labels": [],
@@ -564,9 +564,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "source_support_state": "PARTIALLY_SUPPORTED",
    "source_support_notes": "The registry relation theta = atan2(M_radial*cos(delta), M_axial + M_radial*sin(delta)) does not appear anywhere in SP-8089. Grepped 'momentum', 'resultant', 'vector', 'direction', 'axial', 'radial', 'deflect', 'tan', 'cos', 'sin', 'spray angle' across all 130 pages. What the document does state (and which the registry's 'NASA SP-8089 design variables' attribution can lean on): (1) the pintle deflector angle is the equivalent of impingement angle for the pintle injector and controls oxidizer impingement on the wall and propellant back flow (p.36); (2) for slot-injection pintles the impingement angle is the angle between the slot axis and the deflector, with the LEM descent engine at about 90 deg and a 90 deg recommendation in Sec. 3.1.1.1.3 (pp.36, 89); (3) a momentum balance between the inner and outer streams produces optimum mixing for the pintle, by analogy with unlike-impinging correlations (p.32); (4) for unlike doublets/quadlet (a) the resultant spray direction depends on the relative jet momenta, whereas symmetric triplet/quadlet (b) give an axial resultant (pp.22-23, 39); (5) cold-flow experiments are recommended to determine spray distributions for pintle designs not covered by refs. 10/38 (p.87), which matches the registry validity text. The only trigonometric momentum/geometry statement is qualitative: backward mass flow is proportional to the cosine of the impingement half-angle (p.34). No momentum-vector construction, no atan2/arctan, and no M_axial/M_radial symbols exist in the source; the equation form is the registry's own first-order construction, not SP-8089's.",
    "source_support_equation_labels": [
@@ -616,9 +616,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "source_support_state": "PARTIALLY_SUPPORTED",
    "source_support_notes": "NASA SP-8089 (this document) contains no n-tau equation, no interaction-index or sensitive-time-lag values, and no sensitive-frequency formula. Its combustion-stability content (sec. 2.1.1.3, pp. 42-45; design criteria sec. 3.1.1.3, pp. 91-92) is qualitative design guidance: it classifies instability into chug (50-250 Hz), buzz (100-900 Hz), acoustic (>500 Hz) and hybrid (>500 Hz); gives a minimum delta-P_inj/P_ch of 5-20 percent (element-type dependent) to prevent chug; recommends estimating the oscillatory response of injector, feed system and combustion process and avoiding coincidence of fluid-system resonances with high combustion-process response; and defers all analytical modeling to references 57 (Harrje & Reardon, NASA SP-194), 62 (Priem), 63 (Smith et al., 'The Sensitive Time Lag Theory...', AFRPL-TR-67-314) and 64, stating that the models of refs. 63 and 64 'have been most widely used'. So the document supports the registry's framing (a frequency-band screen against combustion response, classical time-lag theory as the accepted tool) and its validity caveat (it is guidance, not a transfer-function or stability-margin prediction), but the n-tau relation itself must be sourced from ref. 63 or SP-194, not from this monograph.",
    "source_support_equation_labels": [],
@@ -665,9 +665,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
    "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
    "execution_reach": {
@@ -711,9 +711,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
    "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
    "execution_reach": {
@@ -1125,9 +1125,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
    "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
    "execution_reach": {
@@ -1135,29 +1135,29 @@
     "routes": [
      {
       "scope": "traditional_analysis",
-      "root": "raosim.design.design_nozzle_v2",
+      "root": "lrekit.application.design.design_nozzle_v2",
       "root_locator": {
-       "file": "raosim/design.py",
-       "line": 565,
-       "source_sha256": "1673f1e564fef469c5c328f9c4a09db394b728e59c5ca5b5e7b38fca14ac5e5c"
+       "file": "src/lrekit/application/design.py",
+       "line": 567,
+       "source_sha256": "9fad0f416db89602da39051cd37380a9230168efc125e91257c5fe60841e8b57"
       },
       "call_sites": [
        {
-        "caller": "raosim.design.design_nozzle_v2",
-        "callee": "raosim.spray_coupling.solve_spray_cstar_fixed_point",
-        "file": "raosim/design.py",
-        "line": 827,
-        "source_sha256": "1673f1e564fef469c5c328f9c4a09db394b728e59c5ca5b5e7b38fca14ac5e5c"
+        "caller": "lrekit.application.design.design_nozzle_v2",
+        "callee": "lrekit.components.injector.coupling.solve_spray_cstar_fixed_point",
+        "file": "src/lrekit/application/design.py",
+        "line": 829,
+        "source_sha256": "9fad0f416db89602da39051cd37380a9230168efc125e91257c5fe60841e8b57"
        }
       ],
       "state": "STATIC_POSSIBLE_CALL_PATH"
      }
     ],
     "mapped_symbols": [
-     "raosim.spray_coupling.solve_spray_cstar_fixed_point"
+     "lrekit.components.injector.coupling.solve_spray_cstar_fixed_point"
     ],
     "located_symbols": [
-     "raosim.spray_coupling.solve_spray_cstar_fixed_point"
+     "lrekit.components.injector.coupling.solve_spray_cstar_fixed_point"
     ],
     "optimizer_reach_state": "NO_STATIC_PATH_FOUND",
     "runtime_trace_state": "NOT_RUN",
@@ -1195,9 +1195,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
    "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
    "execution_reach": {
@@ -1241,9 +1241,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
    "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
    "execution_reach": {
@@ -1287,9 +1287,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
    "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
    "execution_reach": {
@@ -1334,9 +1334,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
    "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
    "execution_reach": {
@@ -1381,9 +1381,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
    "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
    "execution_reach": {
@@ -1859,9 +1859,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "source_support_state_extracted": "SUPPORTED",
    "source_support_state": "SUPPORTED",
    "source_support_notes": "The original source states stationarity (Eqs. 7-13), exit transversality (14), characteristic compatibility (15), mass-flow matching (19), and length closure (3-4). PDF pages 2-6 were visually inspected, with the Rao text in the full six-page Markdown also read. This confirms the registry citation for the method, not numerical solver correctness, hardware qualification, or an unstated numerical validity range.",
@@ -1920,9 +1920,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
    "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
    "execution_reach": {
@@ -1984,9 +1984,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
    "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
    "execution_reach": {
@@ -2030,9 +2030,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
    "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
    "execution_reach": {
@@ -2087,9 +2087,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
    "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
    "execution_reach": {
@@ -2133,9 +2133,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
    "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
    "execution_reach": {
@@ -2179,9 +2179,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "source_support_state": "PARTIALLY_SUPPORTED",
    "source_support_notes": "The source equations are supported exactly: Lee Eqs. (20) and (26)-(32), PDF pp.6-8, as implemented in raosim/mdo/pump.py, raosim/mdo/engine.py and raosim/pumps.py (motor density on shaft output; inverter density on output = shaft/eta_m; battery power and energy branches with kappa_b; eta_E = eta_discharge). Support stays PARTIAL, as the 2026-10-14 review recorded: per-stream drives, the default technology set and its efficiencies and densities (repository_screening_v1 lies outside held evidence; P2 gap G4), bus selection and the electrical/thermal screens are repository extensions. The NLP objective uses a log-sum-exp upper envelope of Eq. (32); installed mass uses the exact MAX.",
    "source_support_equation_labels": [
@@ -2788,9 +2788,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
    "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
    "execution_reach": {
@@ -3235,9 +3235,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
    "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
    "execution_reach": {
@@ -3786,9 +3786,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
    "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
    "execution_reach": {
@@ -3832,9 +3832,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
    "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
    "execution_reach": {
@@ -3879,9 +3879,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
    "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
    "execution_reach": {
@@ -3925,9 +3925,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
    "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
    "execution_reach": {
@@ -3971,9 +3971,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
    "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
    "execution_reach": {
@@ -4018,9 +4018,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
    "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
    "execution_reach": {
@@ -4064,9 +4064,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
    "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
    "execution_reach": {
@@ -4110,9 +4110,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
    "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
    "execution_reach": {
@@ -4120,9 +4120,9 @@
     "routes": [
      {
       "scope": "explicit_analysis_api",
-      "root": "raosim.spray.solver.march_parcels",
+      "root": "lrekit.components.injector.spray.solver.march_parcels",
       "root_locator": {
-       "file": "raosim/spray/solver.py",
+       "file": "src/lrekit/components/injector/spray/solver.py",
        "line": 407,
        "source_sha256": "e188c787866d96978a5d4ae0e5f507ddbc3d469569e7c40fa9020a8b47be17d5"
       },
@@ -4131,10 +4131,10 @@
      }
     ],
     "mapped_symbols": [
-     "raosim.spray.solver.march_parcels"
+     "lrekit.components.injector.spray.solver.march_parcels"
     ],
     "located_symbols": [
-     "raosim.spray.solver.march_parcels"
+     "lrekit.components.injector.spray.solver.march_parcels"
     ],
     "optimizer_reach_state": "NO_STATIC_PATH_FOUND",
     "runtime_trace_state": "NOT_RUN",
@@ -4172,9 +4172,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
    "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
    "execution_reach": {
@@ -4218,9 +4218,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
    "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
    "execution_reach": {
@@ -4264,9 +4264,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
    "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
    "execution_reach": {
@@ -4310,9 +4310,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
    "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
    "execution_reach": {
@@ -4320,24 +4320,24 @@
     "routes": [
      {
       "scope": "explicit_analysis_api",
-      "root": "raosim.spray.solver.march_parcels",
+      "root": "lrekit.components.injector.spray.solver.march_parcels",
       "root_locator": {
-       "file": "raosim/spray/solver.py",
+       "file": "src/lrekit/components/injector/spray/solver.py",
        "line": 407,
        "source_sha256": "e188c787866d96978a5d4ae0e5f507ddbc3d469569e7c40fa9020a8b47be17d5"
       },
       "call_sites": [
        {
-        "caller": "raosim.spray.solver.march_parcels",
-        "callee": "raosim.spray.breakup.advance_breakup",
-        "file": "raosim/spray/solver.py",
+        "caller": "lrekit.components.injector.spray.solver.march_parcels",
+        "callee": "lrekit.components.injector.spray.breakup.advance_breakup",
+        "file": "src/lrekit/components/injector/spray/solver.py",
         "line": 594,
         "source_sha256": "e188c787866d96978a5d4ae0e5f507ddbc3d469569e7c40fa9020a8b47be17d5"
        },
        {
-        "caller": "raosim.spray.breakup.advance_breakup",
-        "callee": "raosim.spray.breakup.rayleigh_taylor_metrics",
-        "file": "raosim/spray/breakup.py",
+        "caller": "lrekit.components.injector.spray.breakup.advance_breakup",
+        "callee": "lrekit.components.injector.spray.breakup.rayleigh_taylor_metrics",
+        "file": "src/lrekit/components/injector/spray/breakup.py",
         "line": 615,
         "source_sha256": "1bd300e71249e74c0d42ea390e182b56c64aa15b81e29834ce124217cc7bcb6f"
        }
@@ -4346,10 +4346,10 @@
      }
     ],
     "mapped_symbols": [
-     "raosim.spray.breakup.rayleigh_taylor_metrics"
+     "lrekit.components.injector.spray.breakup.rayleigh_taylor_metrics"
     ],
     "located_symbols": [
-     "raosim.spray.breakup.rayleigh_taylor_metrics"
+     "lrekit.components.injector.spray.breakup.rayleigh_taylor_metrics"
     ],
     "optimizer_reach_state": "NO_STATIC_PATH_FOUND",
     "runtime_trace_state": "NOT_RUN",
@@ -4387,9 +4387,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
    "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
    "execution_reach": {
@@ -4397,17 +4397,17 @@
     "routes": [
      {
       "scope": "explicit_analysis_api",
-      "root": "raosim.spray.solver.march_parcels",
+      "root": "lrekit.components.injector.spray.solver.march_parcels",
       "root_locator": {
-       "file": "raosim/spray/solver.py",
+       "file": "src/lrekit/components/injector/spray/solver.py",
        "line": 407,
        "source_sha256": "e188c787866d96978a5d4ae0e5f507ddbc3d469569e7c40fa9020a8b47be17d5"
       },
       "call_sites": [
        {
-        "caller": "raosim.spray.solver.march_parcels",
-        "callee": "raosim.spray.drag.drag_acceleration",
-        "file": "raosim/spray/solver.py",
+        "caller": "lrekit.components.injector.spray.solver.march_parcels",
+        "callee": "lrekit.components.injector.spray.drag.drag_acceleration",
+        "file": "src/lrekit/components/injector/spray/solver.py",
         "line": 527,
         "source_sha256": "e188c787866d96978a5d4ae0e5f507ddbc3d469569e7c40fa9020a8b47be17d5"
        }
@@ -4416,10 +4416,10 @@
      }
     ],
     "mapped_symbols": [
-     "raosim.spray.drag.drag_acceleration"
+     "lrekit.components.injector.spray.drag.drag_acceleration"
     ],
     "located_symbols": [
-     "raosim.spray.drag.drag_acceleration"
+     "lrekit.components.injector.spray.drag.drag_acceleration"
     ],
     "optimizer_reach_state": "NO_STATIC_PATH_FOUND",
     "runtime_trace_state": "NOT_RUN",
@@ -4458,19 +4458,19 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
    "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
    "execution_reach": {
     "state": "UNKNOWN",
     "routes": [],
     "mapped_symbols": [
-     "raosim.spray.dispersion.DiscreteRandomWalk.advance"
+     "lrekit.components.injector.spray.dispersion.DiscreteRandomWalk.advance"
     ],
     "located_symbols": [
-     "raosim.spray.dispersion.DiscreteRandomWalk.advance"
+     "lrekit.components.injector.spray.dispersion.DiscreteRandomWalk.advance"
     ],
     "optimizer_reach_state": "NO_STATIC_PATH_FOUND",
     "runtime_trace_state": "NOT_RUN",
@@ -4508,9 +4508,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
    "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
    "execution_reach": {
@@ -4518,24 +4518,24 @@
     "routes": [
      {
       "scope": "explicit_analysis_api",
-      "root": "raosim.spray.solver.march_parcels",
+      "root": "lrekit.components.injector.spray.solver.march_parcels",
       "root_locator": {
-       "file": "raosim/spray/solver.py",
+       "file": "src/lrekit/components/injector/spray/solver.py",
        "line": 407,
        "source_sha256": "e188c787866d96978a5d4ae0e5f507ddbc3d469569e7c40fa9020a8b47be17d5"
       },
       "call_sites": [
        {
-        "caller": "raosim.spray.solver.march_parcels",
-        "callee": "raosim.spray.evaporation.advance_evaporation",
-        "file": "raosim/spray/solver.py",
+        "caller": "lrekit.components.injector.spray.solver.march_parcels",
+        "callee": "lrekit.components.injector.spray.evaporation.advance_evaporation",
+        "file": "src/lrekit/components/injector/spray/solver.py",
         "line": 623,
         "source_sha256": "e188c787866d96978a5d4ae0e5f507ddbc3d469569e7c40fa9020a8b47be17d5"
        },
        {
-        "caller": "raosim.spray.evaporation.advance_evaporation",
-        "callee": "raosim.spray.evaporation.evaporation_rate_2021",
-        "file": "raosim/spray/evaporation.py",
+        "caller": "lrekit.components.injector.spray.evaporation.advance_evaporation",
+        "callee": "lrekit.components.injector.spray.evaporation.evaporation_rate_2021",
+        "file": "src/lrekit/components/injector/spray/evaporation.py",
         "line": 285,
         "source_sha256": "cfeeb7cff6e82f56d2816d36dedc7eeff96fb58460ab97b06bee4fe9a80f778b"
        }
@@ -4544,10 +4544,10 @@
      }
     ],
     "mapped_symbols": [
-     "raosim.spray.evaporation.evaporation_rate_2021"
+     "lrekit.components.injector.spray.evaporation.evaporation_rate_2021"
     ],
     "located_symbols": [
-     "raosim.spray.evaporation.evaporation_rate_2021"
+     "lrekit.components.injector.spray.evaporation.evaporation_rate_2021"
     ],
     "optimizer_reach_state": "NO_STATIC_PATH_FOUND",
     "runtime_trace_state": "NOT_RUN",
@@ -4585,9 +4585,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
    "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
    "execution_reach": {
@@ -4595,9 +4595,9 @@
     "routes": [
      {
       "scope": "explicit_analysis_api",
-      "root": "raosim.spray.handoff.build_cycle_handoff",
+      "root": "lrekit.components.injector.spray.handoff.build_cycle_handoff",
       "root_locator": {
-       "file": "raosim/spray/handoff.py",
+       "file": "src/lrekit/components/injector/spray/handoff.py",
        "line": 260,
        "source_sha256": "f13ad98a657b69b9fcd1ac9148f7c5a6abe42f0d0adc2f1b793ca6207951fce2"
       },
@@ -4606,10 +4606,10 @@
      }
     ],
     "mapped_symbols": [
-     "raosim.spray.handoff.build_cycle_handoff"
+     "lrekit.components.injector.spray.handoff.build_cycle_handoff"
     ],
     "located_symbols": [
-     "raosim.spray.handoff.build_cycle_handoff"
+     "lrekit.components.injector.spray.handoff.build_cycle_handoff"
     ],
     "optimizer_reach_state": "NO_STATIC_PATH_FOUND",
     "runtime_trace_state": "NOT_RUN",
@@ -4647,9 +4647,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
    "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
    "execution_reach": {
@@ -4694,9 +4694,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
    "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
    "execution_reach": {
@@ -4741,9 +4741,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
    "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
    "execution_reach": {
@@ -4787,19 +4787,19 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
    "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
    "execution_reach": {
     "state": "UNKNOWN",
     "routes": [],
     "mapped_symbols": [
-     "raosim.spray.statistics.summarize_spray"
+     "lrekit.components.injector.spray.statistics.summarize_spray"
     ],
     "located_symbols": [
-     "raosim.spray.statistics.summarize_spray"
+     "lrekit.components.injector.spray.statistics.summarize_spray"
     ],
     "optimizer_reach_state": "NO_STATIC_PATH_FOUND",
     "runtime_trace_state": "NOT_RUN",
@@ -4837,9 +4837,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
    "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
    "execution_reach": {
@@ -4883,9 +4883,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
    "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
    "execution_reach": {
@@ -4929,9 +4929,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
    "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
    "execution_reach": {
@@ -4939,50 +4939,50 @@
     "routes": [
      {
       "scope": "optimizer",
-      "root": "raosim.mdo.nlp._make_callables.solve",
+      "root": "lrekit.optimization.nlp._make_callables.solve",
       "root_locator": {
-       "file": "raosim/mdo/nlp.py",
+       "file": "src/lrekit/optimization/nlp.py",
        "line": 766,
-       "source_sha256": "3681953f527e3b38b7bc62b4087f299a80d5a549f0410eff128f5abf6e4e7705"
+       "source_sha256": "a7c267c766fa39f161638a07b8d356430adfcb6bba58c014cc87e13e8888f0b2"
       },
       "call_sites": [
        {
-        "caller": "raosim.mdo.nlp._make_callables.solve",
-        "callee": "raosim.mdo.engine.solve_engine",
-        "file": "raosim/mdo/nlp.py",
+        "caller": "lrekit.optimization.nlp._make_callables.solve",
+        "callee": "lrekit.optimization.engine.solve_engine",
+        "file": "src/lrekit/optimization/nlp.py",
         "line": 767,
-        "source_sha256": "3681953f527e3b38b7bc62b4087f299a80d5a549f0410eff128f5abf6e4e7705"
+        "source_sha256": "a7c267c766fa39f161638a07b8d356430adfcb6bba58c014cc87e13e8888f0b2"
        },
        {
-        "caller": "raosim.mdo.engine.solve_engine",
-        "callee": "raosim.mdo.cooling.solve_cooling",
-        "file": "raosim/mdo/engine.py",
+        "caller": "lrekit.optimization.engine.solve_engine",
+        "callee": "lrekit.optimization.cooling.solve_cooling",
+        "file": "src/lrekit/optimization/engine.py",
         "line": 345,
-        "source_sha256": "2cb0668f7a8baad32805efabc70decd072b2fbd1d42fab9c7340dd2c66817e6f"
+        "source_sha256": "be2d8b2405a0f7889042abd097128f8d0a0c7eb51abf1847b9f48c828f0ddc57"
        },
        {
-        "caller": "raosim.mdo.cooling.solve_cooling",
-        "callee": "raosim.mdo.cooling.cooling_march",
-        "file": "raosim/mdo/cooling.py",
+        "caller": "lrekit.optimization.cooling.solve_cooling",
+        "callee": "lrekit.optimization.cooling.cooling_march",
+        "file": "src/lrekit/optimization/cooling.py",
         "line": 527,
-        "source_sha256": "c2895834d6d091aa7c22500ffbf7179514d337d32e9b1a0c77e6f32f55de30a2"
+        "source_sha256": "46c32faa76b1f137cf7dcaf285dbf0ba23ea2d5622136791bb4218845ca97ba2"
        },
        {
-        "caller": "raosim.mdo.cooling.cooling_march",
-        "callee": "raosim.jax.thermal.bartz_hg",
-        "file": "raosim/mdo/cooling.py",
+        "caller": "lrekit.optimization.cooling.cooling_march",
+        "callee": "lrekit.numerics.jax.thermal.bartz_hg",
+        "file": "src/lrekit/optimization/cooling.py",
         "line": 339,
-        "source_sha256": "c2895834d6d091aa7c22500ffbf7179514d337d32e9b1a0c77e6f32f55de30a2"
+        "source_sha256": "46c32faa76b1f137cf7dcaf285dbf0ba23ea2d5622136791bb4218845ca97ba2"
        }
       ],
       "state": "STATIC_POSSIBLE_CALL_PATH"
      }
     ],
     "mapped_symbols": [
-     "raosim.jax.thermal.bartz_hg"
+     "lrekit.numerics.jax.thermal.bartz_hg"
     ],
     "located_symbols": [
-     "raosim.jax.thermal.bartz_hg"
+     "lrekit.numerics.jax.thermal.bartz_hg"
     ],
     "optimizer_reach_state": "STATIC_PATH_FOUND",
     "runtime_trace_state": "NOT_RUN",
@@ -5875,8 +5875,8 @@
    "quantity": "critical heat flux margin",
    "relation": "conservative Zuber-class boiling reference with optional property backend",
    "cited_source_text": "classical pool-boiling CHF used as a conservative reference",
-   "local_source": "docs/thermofluid_literature_provenance.md",
-   "source_document_id": "RDOC_DOCS_THERMOFLUID_LITERATURE_PROVENANCE_MD",
+   "local_source": "docs/literature/thermofluid_literature_provenance.md",
+   "source_document_id": "RDOC_DOCS_LITERATURE_THERMOFLUID_LITERATURE_PROVENANCE_MD",
    "source_kind": "repository_document",
    "equation_ref": "repository provenance note and declared forced-flow limitation",
    "validity_text": "not a validated forced-flow cryogenic channel CHF correlation",
@@ -5892,9 +5892,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
    "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
    "execution_reach": {
@@ -5938,9 +5938,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
    "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
    "execution_reach": {
@@ -5984,9 +5984,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
    "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
    "execution_reach": {
@@ -6030,9 +6030,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
    "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
    "execution_reach": {
@@ -6076,9 +6076,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
    "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
    "execution_reach": {
@@ -6122,9 +6122,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
    "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
    "execution_reach": {
@@ -6132,50 +6132,50 @@
     "routes": [
      {
       "scope": "optimizer",
-      "root": "raosim.mdo.nlp._make_callables.solve",
+      "root": "lrekit.optimization.nlp._make_callables.solve",
       "root_locator": {
-       "file": "raosim/mdo/nlp.py",
+       "file": "src/lrekit/optimization/nlp.py",
        "line": 766,
-       "source_sha256": "3681953f527e3b38b7bc62b4087f299a80d5a549f0410eff128f5abf6e4e7705"
+       "source_sha256": "a7c267c766fa39f161638a07b8d356430adfcb6bba58c014cc87e13e8888f0b2"
       },
       "call_sites": [
        {
-        "caller": "raosim.mdo.nlp._make_callables.solve",
-        "callee": "raosim.mdo.engine.solve_engine",
-        "file": "raosim/mdo/nlp.py",
+        "caller": "lrekit.optimization.nlp._make_callables.solve",
+        "callee": "lrekit.optimization.engine.solve_engine",
+        "file": "src/lrekit/optimization/nlp.py",
         "line": 767,
-        "source_sha256": "3681953f527e3b38b7bc62b4087f299a80d5a549f0410eff128f5abf6e4e7705"
+        "source_sha256": "a7c267c766fa39f161638a07b8d356430adfcb6bba58c014cc87e13e8888f0b2"
        },
        {
-        "caller": "raosim.mdo.engine.solve_engine",
-        "callee": "raosim.mdo.cooling.solve_cooling",
-        "file": "raosim/mdo/engine.py",
+        "caller": "lrekit.optimization.engine.solve_engine",
+        "callee": "lrekit.optimization.cooling.solve_cooling",
+        "file": "src/lrekit/optimization/engine.py",
         "line": 345,
-        "source_sha256": "2cb0668f7a8baad32805efabc70decd072b2fbd1d42fab9c7340dd2c66817e6f"
+        "source_sha256": "be2d8b2405a0f7889042abd097128f8d0a0c7eb51abf1847b9f48c828f0ddc57"
        },
        {
-        "caller": "raosim.mdo.cooling.solve_cooling",
-        "callee": "raosim.mdo.cooling.cooling_march",
-        "file": "raosim/mdo/cooling.py",
+        "caller": "lrekit.optimization.cooling.solve_cooling",
+        "callee": "lrekit.optimization.cooling.cooling_march",
+        "file": "src/lrekit/optimization/cooling.py",
         "line": 527,
-        "source_sha256": "c2895834d6d091aa7c22500ffbf7179514d337d32e9b1a0c77e6f32f55de30a2"
+        "source_sha256": "46c32faa76b1f137cf7dcaf285dbf0ba23ea2d5622136791bb4218845ca97ba2"
        },
        {
-        "caller": "raosim.mdo.cooling.cooling_march",
-        "callee": "raosim.jax.thermal.sieder_tate_hc",
-        "file": "raosim/mdo/cooling.py",
+        "caller": "lrekit.optimization.cooling.cooling_march",
+        "callee": "lrekit.numerics.jax.thermal.sieder_tate_hc",
+        "file": "src/lrekit/optimization/cooling.py",
         "line": 374,
-        "source_sha256": "c2895834d6d091aa7c22500ffbf7179514d337d32e9b1a0c77e6f32f55de30a2"
+        "source_sha256": "46c32faa76b1f137cf7dcaf285dbf0ba23ea2d5622136791bb4218845ca97ba2"
        }
       ],
       "state": "STATIC_POSSIBLE_CALL_PATH"
      }
     ],
     "mapped_symbols": [
-     "raosim.jax.thermal.sieder_tate_hc"
+     "lrekit.numerics.jax.thermal.sieder_tate_hc"
     ],
     "located_symbols": [
-     "raosim.jax.thermal.sieder_tate_hc"
+     "lrekit.numerics.jax.thermal.sieder_tate_hc"
     ],
     "optimizer_reach_state": "STATIC_PATH_FOUND",
     "runtime_trace_state": "NOT_RUN",
@@ -6425,9 +6425,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
    "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
    "execution_reach": {
@@ -6471,9 +6471,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
    "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
    "execution_reach": {
@@ -6517,9 +6517,9 @@
    "hardware_qualified": false,
    "experimentally_validated": false,
    "provenance_kind": "PROJECT_DERIVES",
-   "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
+   "provenance_note": "src/lrekit/verification/registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-10-17T17:58:00.071232+00:00",
+   "harvested_at": "2026-11-21T23:24:27.474739+00:00",
    "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
    "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
    "execution_reach": {

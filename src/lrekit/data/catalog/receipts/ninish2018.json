@@ -1,0 +1,32 @@
+{
+  "source_id": "ninish2018",
+  "acquired_at_utc": "2026-11-04T00:34:47.506168+00:00",
+  "evidence_kind": "published_experimental_report",
+  "status": "ACQUIRED",
+  "files": [
+    {
+      "path": "raw/ninish2018/source.pdf",
+      "bytes": 2698427,
+      "sha256": "e4fa1d121e4b28905197004361249b67f02025b80ac106cabc1096ce7befcba3",
+      "origin": "existing_local_literature_copy",
+      "original_path": "propulsion_texts/pintle_injector/ninish2018.pdf"
+    },
+    {
+      "path": "derived/ninish2018/source.txt",
+      "bytes": 75034,
+      "sha256": "694e623fcac472a5776fed7faffa81889a43ae7794cb6149b852ed7e85010eee",
+      "origin": "unreviewed_pdf_text_derivative"
+    }
+  ],
+  "review_state": "NOT_REVIEWED_FOR_TRAINING",
+  "training_eligible": false,
+  "hardware_qualified": false,
+  "limitations": [
+    "Nonreacting liquid-liquid regime; preserve angle convention and observation plane."
+  ],
+  "pdf_info": "Title:           SPRAY CHARACTERISTICS OF LIQUID-LIQUID PINTLE INJECTOR\nSubject:         Experimental Thermal and Fluid Science, Accepted manuscript. doi:10.1016/j.expthermflusci.2018.03.033\nAuthor:          S. Ninish\nCreator:         Elsevier\nCreationDate:    Thu Mar 29 01:44:01 2018 EDT\nModDate:         Thu Mar 29 01:45:01 2018 EDT\nCustom Metadata: yes\nMetadata Stream: yes\nTagged:          no\nUserProperties:  no\nSuspects:        no\nForm:            none\nJavaScript:      no\nPages:           40\nEncrypted:       no\nPage size:       595.276 x 793.701 pts\nPage rot:        0\nFile size:       2698427 bytes\nOptimized:       yes\nPDF version:     1.7\n",
+  "text_extraction": {
+    "status": "DERIVATIVE_TEXT_UNREVIEWED",
+    "warning_excerpt": ""
+  }
+}

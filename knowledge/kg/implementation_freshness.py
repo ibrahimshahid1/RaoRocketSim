@@ -73,7 +73,7 @@ def _read(path: Path) -> dict:
 
 
 def _symbol(record: dict, relative: Path) -> tuple[str | None, str]:
-    module = ".".join(relative.with_suffix("").parts)
+    module = ".".join(relative.with_suffix("").parts).removeprefix("src.")
     if module.endswith(".__init__"):
         module = module[:-len(".__init__")]
     qualname = record.get("qualname") or ""

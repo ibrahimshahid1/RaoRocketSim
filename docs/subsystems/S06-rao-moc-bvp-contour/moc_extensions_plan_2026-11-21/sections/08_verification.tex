@@ -1,0 +1,63 @@
+\section[Verification (MOC-14, MOC-15)]{Verification and the accuracy envelope (MOC-14, MOC-15)}
+\label{sec:verification}
+\textbf{Exact oracle.} Inviscid radial flow from a source in a straight cone is an
+exact Euler solution: $\theta=\arctan[r/(x-x_s)]$, and $M$ depends only on the
+distance $R$ to the source. Sivells describes radial source flow and gives the sonic
+area $2\pi r_1^2(1-\cos\eta)$ \cite[PDF pp.~8, 16, printed pp.~5, 13, Eq.~17]{sivells1978}.
+With $A/A^*=(R/r_1)^2$ (our derivation), $M$ is the supersonic root of the area--Mach
+relation \cite[PDF p.~220, printed p.~204, Eq.~5.20]{anderson}.
+
+GCI follows \cite[PDF pp.~5--7, printed pp.~3--5, Eqs.~1--7]{celik2008}. It is applied
+to integrated functionals, because Richardson extrapolation fails at discontinuities
+\cite{nparcspatial2021}.
+
+\textbf{E05: FAIL as pre-registered.} The maximum errors are non-monotone in two of
+four cases, and a third case converges at order 0.76. The cause is the exit-lip special
+row, whose last interior point lies at 0.18--0.54 of the normal near-axis spacing
+(MOC-27).
+Post hoc, excluding that row, the interior max-norm order is 1.59--1.76 and the axis
+order is within 0.02 of it. In E05b, exit-plane mass and thrust converge at order about
+2.0 in the $15^\circ$ cones and are barely affected by the lip row. The $25^\circ$ cases
+are invalid as an oracle, because their exit plane lies partly upstream of the start
+line's axis foot.
+
+\textbf{MOC-14, narrowed.} No active defect was found on the two tested paths. On the forward-net axis process
+(\code{nasa_moc._calc_axial_mesh_point}, which evaluates the source at the off-axis
+parent), E05 never met the pre-registered trigger of an axis order more than 0.5 below
+interior. \code{solve_axis_point} was unit-probed in E06, at order about 2 in $M$ and 3
+in $x$. The BVP residual source term \code{rao_residuals._source_axisym} (with its
+$r\le10^{-12}\Rightarrow S=0$ guard) and its JAX mirrors were not exercised. MOC-14
+stays open for that path until X0 adds a midpoint-limit oracle test.
+
+\textbf{Other evidence.} E07b matches the BVP (Section~\ref{sec:g4}), and the NASA
+M3.5Perf parity \cite{rice2003} remains. E14 is INFEASIBLE. Farley and Campbell's
+contours are the 8/10 streamlines of Clippinger's sharp-throat nozzles, with a wall
+radius of about 0.8 throat diameters \cite[PDF p.~4]{farley1960}, and include
+boundary-layer corrections \cite[Fig.~2, PDF p.~19]{farley1960}. No coordinates are
+tabulated. Back's taps \cite[PDF pp.~9, 13]{back} and the field of Cuffel et al.\
+\cite[PDF pp.~1--2]{cuffel1969} are viscous measurements and support only benchmark
+agreement.
+
+\begingroup\footnotesize
+\par\addvspace{\LTpre}{\centering\begin{tabular}{@{}P{0.30\linewidth}P{0.50\linewidth}P{0.13\linewidth}@{}}
+\toprule\textbf{Approach} & \textbf{Assessment} & \textbf{Verdict}\\\midrule
+Exact oracles (source flow, uniform, planar simple wave) & Exact for the same model; cheap; gives observed order & \textbf{X0}\\
+NASA M3.5Perf code-to-code & Same method family & keep\\
+Published data (Back, Cuffel, Farley--Campbell) & Real viscous flow; digitisation; Farley lacks coordinates & B0\\
+External Euler CFD & Independent full field & CFD1 (D1)\\
+In-repo Euler FV & Not independent of the team & reject\\
+Explicit axis limit $S\to(\partial\theta/\partial r)\sin\mu$ & Only if an untested path shows degraded order & conditional\\
+\bottomrule
+\end{tabular}\par}\addvspace{\LTpost}
+\endgroup
+
+\begingroup\footnotesize
+\par\addvspace{\LTpre}{\centering\begin{tabular}{@{}P{0.09\linewidth}P{0.36\linewidth}P{0.30\linewidth}P{0.17\linewidth}@{}}
+\toprule\textbf{ID} & \textbf{Numerical verification} & \textbf{Benchmark agreement} & \textbf{Physical validation}\\\midrule
+X0 & Oracles; order $\ge1.5$ on all nodes including the lip row; midpoint-limit test for \code{_source_axisym}; functional GCI & n/a & n/a\\
+B0 & Double digitisation within reading resolution & assets: Back, Cuffel, Ruf--McDaniels, TP-1207, Boldman, TP-2725 & n/a\\
+Q0 & Reproduces the t19 metrics (done) & n/a & n/a\\
+A0 & Oracle orders and GCI across the domain & CFD1 and B0 comparisons & only with matched data\\
+\bottomrule
+\end{tabular}\par}\addvspace{\LTpost}
+\endgroup

@@ -1,0 +1,1436 @@
+{
+ "packet": "V-SP8089-p043-045",
+ "kind": "verification",
+ "document_id": "DOC_NTRS_19760023196",
+ "source_pdf": "propulsion_texts/19760023196.pdf",
+ "source_sha256": "5e9db6a6f7860ee51acbf5cbe137005ef259ec3fd87ff0ed5f1ad466d6227c44",
+ "pages": [
+  43,
+  45
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 43,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19760023196/p0043.png",
+   "sha256": "589dc80023b1e9537ba09705e89a2413ceb3ecfebdfafcf767b778cece728d44",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 44,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19760023196/p0044.png",
+   "sha256": "afafa5d3a0c59e432dbdefed328e38ec7d6b83a785ee2227529b8cc4614a2fad",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 45,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19760023196/p0045.png",
+   "sha256": "a49d7c6ca668a5f2eb6d34228b8d2777e32c82eecde7bbea1b6ac55ed88ee3e6",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_20c17cd2c644301f5e1f367d",
+  "ENR_b658bc2709092340ce99f7ac",
+  "ENR_ca4ad30e63f9c518ca5b1dfa"
+ ],
+ "candidates": [],
+ "stored_objects": [
+  {
+   "id": "EQ_NTRS_19760023196_2A22408D",
+   "store": "equations",
+   "type": "Equation",
+   "page": 44,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "chug_injection_pressure_drop_ratio_minimum",
+   "equation_number": "",
+   "form": "minimum values of AP inj /Pcn = 5 to 20 percent (element-type dependent; concentric-tube ~5 percent, unlike-impinging 10 to 15 percent, like-impinging 15 to 25 percent)",
+   "statement": null,
+   "quote": "The required pressure drop for the fuel and oxidizer injection elements to prevent chug instability has been found to vary with the element type, minimum values ofAP inj /Pcn Of 5 to 20 percent generally being found.",
+   "confidence": "medium",
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "AP inj",
+     "meaning": "injector (injection element) pressure drop, OCR rendering of delta-P_inj",
+     "units": "pressure",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "Pcn / Pch",
+     "meaning": "chamber pressure, OCR renders it inconsistently as Pcn and Pch",
+     "units": "pressure",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [
+    "Derived from feed-system analytical models and engine experience, not from a chamber transfer function"
+   ],
+   "validity": [
+    "Applies to chug (feed-system-coupled) instability prevention only; value depends on element type"
+   ],
+   "extraction_note": "OCR garbles the symbols: 'AP inj /Pcn' and 'AP inj /Pch' stand for delta-P_inj/P_ch; the '*' in the element-specific sentence is an unreadable relational symbol (likely approx or >=). No n-tau or sensitive-frequency equation appears anywhere in this document.",
+   "same_page_formula_candidates": [],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 44
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "variable_symbol_absent_from_form",
+     "symbols": [
+      "Pcn / Pch"
+     ]
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "AP inj",
+      "Pcn / Pch"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_0D55DC76",
+   "store": "claims",
+   "type": "Claim",
+   "page": 43,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Combustion instability results from an oscillatory coupling of the combustion process and fluid dynamics, and this coupling is determined in large measure by the injector.",
+   "quote": "Combustion instability results from an oscillatory coupling of the combustion process and fluid dynamics: this coupling is determined in large measure by the injector.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 43
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_18C561AB",
+   "store": "claims",
+   "type": "Claim",
+   "page": 44,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Pressure-drop limits of about 5 percent of chamber pressure have been obtained with concentric-tube elements; 10 to 15 percent is typical for unlike-impinging elements; like-impinging elements require approximately 15 to 25 percent.",
+   "quote": "With concentric-tube elements, pressure-drop limits of AP inj /Pcn * 5 percent have been obtained. With unlike-impinging elements, AP inj /Pch * 10 to 15 percent is typical.",
+   "confidence": "medium",
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 44
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_1BE5EFD5",
+   "store": "claims",
+   "type": "Claim",
+   "page": 44,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Concentric-tube elements have achieved pressure-drop limits of about 5 percent of chamber pressure; unlike-impinging elements typically require 10 to 15 percent.",
+   "quote": "With concentric-tube elements, pressure-drop limits of AP inj /Pcn * 5 percent have been obtained. With unlike-impinging elements, AP inj /Pch * 10 to 15 percent is typical.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 44
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_2A7B9EAA",
+   "store": "claims",
+   "type": "Claim",
+   "page": 45,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The document states that theory for predicting individual orifice flowrate and stream characteristics is not well developed under the operating conditions and constraints of most rocket engine injectors.",
+   "quote": "The theory for predicting individual orifice stream characteristics such as flowrate. sircam direction. or stream “bushiness” is not well developed for orifices under the operating conditions",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 45
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_2BB0CEDA",
+   "store": "claims",
+   "type": "Claim",
+   "page": 45,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Many changes that improve performance also degrade stability; the analytical models of references 63 (Sensitive Time Lag Theory, Smith et al.) and 64 have been most widely used.",
+   "quote": "Unfortunately, many changes that tend to improve performance also degrade stability. The analytical models of references 63 and 64 have been most widely used.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 45
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_36A3DBE4",
+   "store": "claims",
+   "type": "Claim",
+   "page": 44,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Like-impinging elements have been found to require injector pressure drops of approximately 15 to 25 percent of chamber pressure; requirements were minimized by tailoring orifice lengths and manifold volumes.",
+   "quote": "Like-impinging elements have been found to require approximately 15 to 25 percent. The pressure-drop requirements have been minimized by tailoring the orifice lengths and manifold volumes.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 44
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_5BC5501D",
+   "store": "claims",
+   "type": "Claim",
+   "page": 44,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Like-impinging elements require approximately 15 to 25 percent pressure drop ratio; pressure-drop requirements have been minimized by tailoring orifice lengths and manifold volumes.",
+   "quote": "Like-impinging elements have been found to require approximately 15 to 25 percent. The pressure-drop requirements have been minimized by tailoring the orifice lengths and manifold volumes.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 44
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_8216D2D3",
+   "store": "claims",
+   "type": "Claim",
+   "page": 43,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Because instabilities are detrimental and often result in catastrophic failure, usually no form of instability can be permitted; the injector designer must consider features of the injector that affect stability.",
+   "quote": "Because instabilities are detrimental to the operation of a rocket engine and often result in catastrophic failure, usually no form of instablity can be permitted.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 43
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_8C39EA38",
+   "store": "claims",
+   "type": "Claim",
+   "page": 44,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The analytical models allow estimation of the response of various portions of the system to oscillations in chamber pressure and may be used to indicate injector design changes that prevent feed-system coupling (refs. 59-61).",
+   "quote": "Principally these analyses allow estimation of the response of various portions of the system to oscillations in chamber pressure. Such models may be used to indicate changes in an injector design that will prevent feed-system coupling.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 44
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_A4C9A5E2",
+   "store": "claims",
+   "type": "Claim",
+   "page": 44,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Models and experience indicate the injector passages should be designed with as large a pressure drop (delta-P) and orifice length as practical.",
+   "quote": "These models, and experience as well, indicate that the injector passages should be designed with as large a pressure drop (AP) and orifice length as practical.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 44
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_A701FF4C",
+   "store": "claims",
+   "type": "Claim",
+   "page": 45,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Analytical models such as Priem's (ref. 62) demonstrate the dependence of acoustic stability on injector-defined parameters: droplet sizes, local relative velocities between droplets and gases, and burning rate.",
+   "quote": "Analytical models such as Pricm’s (ref. 62) demonstrate the dependence of stability on such injector-defined parameters as droplet sizes. local relative yelocities between the droplets and gases, and burning rate.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 45
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_A8C00787",
+   "store": "claims",
+   "type": "Claim",
+   "page": 43,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Buzz instability occurs typically at 100 to 900 Hz; feed-system coupling is pronounced and the wave character of feed-system oscillations matters.",
+   "quote": "Buzz instability, which occurs with frequencies typically in the range of 100 to 900 Hz. Again, the coupling of the feed system with the combustion chamber is pronounced.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 43
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_BCDF0815",
+   "store": "claims",
+   "type": "Claim",
+   "page": 44,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Some feed-system-coupled instability problems have been attributed to two-phase flow from excessive heat transfer and were eliminated by increasing manifold pressure.",
+   "quote": "Some feed-system-coupled instability problems have been attributed to two-phase flow asa result of excessive heat transfer. This phenomenon has been eliminated by increasing the manifold pressure.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 44
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_C1703A3F",
+   "store": "claims",
+   "type": "Claim",
+   "page": 45,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Stability models may be used in conjunction with steady-state combustion models to assess the influence of injector design parameters on stability.",
+   "quote": "Such models may be used in conjunction with steady-state combustion models to assess the influence of injector design parameters on stability.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 45
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_C1C217E0",
+   "store": "claims",
+   "type": "Claim",
+   "page": 44,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Feed-system-coupled instabilities are often analyzed and remedied on the basis of analytical models for the system, particularly the lower-frequency instabilities which are more tractable to analysis.",
+   "quote": "These modes of instability often are analyzed, and remedial measures devised, on the basis of analytical models for the system. This is particularly true for the lower-frequency instabilities, which are more tractable to analysis.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 44
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_DE06F1CF",
+   "store": "claims",
+   "type": "Claim",
+   "page": 43,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Acoustic instability occurs at frequencies above 500 Hz, is dominated by wave behavior in the main chamber with spatial variations, and coupling with the feed system is negligible.",
+   "quote": "Acoustic instability, which occurs with frequencies > 500 Hy. With this form of instability, the oscillation is dominated by the wave behavior in the main chamber (with spatial variations), and coupling with the feed system is negligible.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 43
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_E4CEA728",
+   "store": "claims",
+   "type": "Claim",
+   "page": 43,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Hybrid instability also occurs above 500 Hz and is strongly coupled between feed system and combustion chamber, with wave character significant in both.",
+   "quote": "Hybrid instability, which also occurs with frequencies typically > 500 Hz. This oscillation is strongly coupled between the feed system and the combustion chamber.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 43
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_EEFB077D",
+   "store": "claims",
+   "type": "Claim",
+   "page": 44,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The pressure drop required across fuel and oxidizer injection elements to prevent chug instability varies with element type; minimum ΔP_inj/P_c of 5 to 20 percent is generally found.",
+   "quote": "The required pressure drop for the fuel and oxidizer injection elements to prevent chug instability has been found to vary with the element type, minimum values ofAP inj /Pcn Of 5 to 20 percent generally being found.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 44
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_F5F34ADF",
+   "store": "claims",
+   "type": "Claim",
+   "page": 45,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Concentrating propellant mass in chamber regions where the acoustic mode cannot couple efficiently with combustion has been proved effective in promoting stability.",
+   "quote": "Essentially, the propellant mass is concentrated in regions of the chamber where the acoustic mode cannot couple efficiently with the combustion. This approach has been proved to be effective in promoting stability",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 45
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_F639CD9A",
+   "store": "claims",
+   "type": "Claim",
+   "page": 43,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Chug and buzz instabilities usually are controlled through adjustments to the feed system, the injection passages, or element characteristics; hybrid instabilities are controlled in the same manner.",
+   "quote": "Chug and buzz instabilities usually are controlled through adjustments to the feed system. the injection passages. or element characteristics. Hybrid instabilities are controlled in the same manner.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 43
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_FD1FBD1D",
+   "store": "claims",
+   "type": "Claim",
+   "page": 44,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Feed-system-coupled instability problems are accentuated in engines that must be throttled.",
+   "quote": "Feed-system-coupled instability problems are accentuated in engines that must be throttled.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 44
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_FD60E73E",
+   "store": "claims",
+   "type": "Claim",
+   "page": 43,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Chug instability occurs typically at 50 to 250 Hz and results from strong coupling of the feed system and the combustion chamber.",
+   "quote": "Chue instability, which occurs with frequencies typically in the range of 50 to 250 Hz. This form of instability results from a strong coupling of the feed system and the combustion chamber.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 43
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_FFE4389B",
+   "store": "claims",
+   "type": "Claim",
+   "page": 43,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Acoustic instabilities generally are eliminated with chamber suppression devices (ref. 58); additionally the injector element size or mass/mixture-ratio distribution can be adjusted to promote stability.",
+   "quote": "Acoustic instabilities generally are eliminated through the use of suppression devices in the combustion chamber; the design and application of these devices is described in reference",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 43
+    }
+   ]
+  },
+  {
+   "id": "ASM_NTRS_19760023196_49FBA19E",
+   "store": "entities",
+   "type": "Assumption",
+   "page": 43,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "For acoustic instability, coupling with the feed system is assumed negligible and the oscillation is dominated by chamber wave behavior with spatial variation.",
+   "equation_number": null,
+   "form": null,
+   "statement": "For acoustic instability, coupling with the feed system is assumed negligible and the oscillation is dominated by chamber wave behavior with spatial variation.",
+   "quote": "the oscillation is dominated by the wave behavior in the main chamber (with spatial variations), and coupling with the feed system is negligible.",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 43
+    }
+   ]
+  },
+  {
+   "id": "ASM_NTRS_19760023196_7B83077D",
+   "store": "entities",
+   "type": "Assumption",
+   "page": 43,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "For buzz instability, wave character in the feed system is important but the chamber oscillation may still be regarded as spatially uniform.",
+   "equation_number": null,
+   "form": null,
+   "statement": "For buzz instability, wave character in the feed system is important but the chamber oscillation may still be regarded as spatially uniform.",
+   "quote": "the wave character of the oscillations in the feed system is important in this case, but the combustion chamber oscillation may still be regarded as spatially uniform.",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 43
+    }
+   ]
+  },
+  {
+   "id": "ASM_NTRS_19760023196_BDDC77AA",
+   "store": "entities",
+   "type": "Assumption",
+   "page": 43,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "For chug instability, oscillations in the feed system elements and the combustion chamber may be treated as spatially uniform (lumped) but time varying.",
+   "equation_number": null,
+   "form": null,
+   "statement": "For chug instability, oscillations in the feed system elements and the combustion chamber may be treated as spatially uniform (lumped) but time varying.",
+   "quote": "The oscillation in the elements of the feed system and the combustion chamber may be considered spatially uniform but time varying.",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 43
+    }
+   ]
+  },
+  {
+   "id": "CONST_NTRS_19760023196_033616D4",
+   "store": "entities",
+   "type": "EmpiricalConstant",
+   "page": 43,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "hybrid instability frequency threshold = > 500 Hz",
+   "equation_number": null,
+   "form": null,
+   "statement": null,
+   "quote": "Hybrid instability, which also occurs with frequencies typically > 500 Hz.",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 43
+    }
+   ]
+  },
+  {
+   "id": "CONST_NTRS_19760023196_20C78860",
+   "store": "entities",
+   "type": "EmpiricalConstant",
+   "page": 44,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "ΔP_inj/P_c, unlike-impinging elements = 10 to 15 percent",
+   "equation_number": null,
+   "form": null,
+   "statement": null,
+   "quote": "With unlike-impinging elements, AP inj /Pch * 10 to 15 percent is typical.",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 44
+    }
+   ]
+  },
+  {
+   "id": "CONST_NTRS_19760023196_643963F1",
+   "store": "entities",
+   "type": "EmpiricalConstant",
+   "page": 44,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "delta-P_inj/P_ch required, like-impinging elements = 15 to 25 percent",
+   "equation_number": null,
+   "form": null,
+   "statement": null,
+   "quote": "Like-impinging elements have been found to require approximately 15 to 25 percent.",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 44
+    }
+   ]
+  },
+  {
+   "id": "CONST_NTRS_19760023196_65C6CE93",
+   "store": "entities",
+   "type": "EmpiricalConstant",
+   "page": 44,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "minimum delta-P_inj/P_ch to prevent chug (general) = 5 to 20 percent",
+   "equation_number": null,
+   "form": null,
+   "statement": null,
+   "quote": "minimum values ofAP inj /Pcn Of 5 to 20 percent generally being found.",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 44
+    }
+   ]
+  },
+  {
+   "id": "CONST_NTRS_19760023196_72C3359F",
+   "store": "entities",
+   "type": "EmpiricalConstant",
+   "page": 44,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "delta-P_inj/P_ch typical, unlike-impinging elements = 10 to 15 percent",
+   "equation_number": null,
+   "form": null,
+   "statement": null,
+   "quote": "With unlike-impinging elements, AP inj /Pch * 10 to 15 percent is typical.",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 44
+    }
+   ]
+  },
+  {
+   "id": "CONST_NTRS_19760023196_7D1C1B80",
+   "store": "entities",
+   "type": "EmpiricalConstant",
+   "page": 44,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "ΔP_inj/P_c, like-impinging elements = 15 to 25 percent",
+   "equation_number": null,
+   "form": null,
+   "statement": null,
+   "quote": "Like-impinging elements have been found to require approximately 15 to 25 percent.",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 44
+    }
+   ]
+  },
+  {
+   "id": "CONST_NTRS_19760023196_96930E7F",
+   "store": "entities",
+   "type": "EmpiricalConstant",
+   "page": 44,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "minimum ΔP_inj/P_c to prevent chug (general range) = 5 to 20 percent",
+   "equation_number": null,
+   "form": null,
+   "statement": null,
+   "quote": "minimum values ofAP inj /Pcn Of 5 to 20 percent generally being found.",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 44
+    }
+   ]
+  },
+  {
+   "id": "CONST_NTRS_19760023196_97519FB7",
+   "store": "entities",
+   "type": "EmpiricalConstant",
+   "page": 44,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "ΔP_inj/P_c limit, concentric-tube elements = ~5 percent",
+   "equation_number": null,
+   "form": null,
+   "statement": null,
+   "quote": "With concentric-tube elements, pressure-drop limits of AP inj /Pcn * 5 percent have been obtained.",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 44
+    }
+   ]
+  },
+  {
+   "id": "CONST_NTRS_19760023196_9ABA22BC",
+   "store": "entities",
+   "type": "EmpiricalConstant",
+   "page": 43,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "buzz instability frequency range = 100 to 900 Hz",
+   "equation_number": null,
+   "form": null,
+   "statement": null,
+   "quote": "Buzz instability, which occurs with frequencies typically in the range of 100 to 900 Hz.",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 43
+    }
+   ]
+  },
+  {
+   "id": "CONST_NTRS_19760023196_D1A4F158",
+   "store": "entities",
+   "type": "EmpiricalConstant",
+   "page": 43,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "acoustic instability frequency threshold = > 500 Hz",
+   "equation_number": null,
+   "form": null,
+   "statement": null,
+   "quote": "Acoustic instability, which occurs with frequencies > 500 Hy.",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 43
+    }
+   ]
+  },
+  {
+   "id": "CONST_NTRS_19760023196_DFAC96E0",
+   "store": "entities",
+   "type": "EmpiricalConstant",
+   "page": 44,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "delta-P_inj/P_ch limit, concentric-tube elements = 5 percent",
+   "equation_number": null,
+   "form": null,
+   "statement": null,
+   "quote": "With concentric-tube elements, pressure-drop limits of AP inj /Pcn * 5 percent have been obtained.",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 44
+    }
+   ]
+  },
+  {
+   "id": "CONST_NTRS_19760023196_E3892D4A",
+   "store": "entities",
+   "type": "EmpiricalConstant",
+   "page": 43,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "chug instability frequency range = 50 to 250 Hz",
+   "equation_number": null,
+   "form": null,
+   "statement": null,
+   "quote": "Chue instability, which occurs with frequencies typically in the range of 50 to 250 Hz.",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 43
+    }
+   ]
+  },
+  {
+   "id": "VAL_NTRS_19760023196_0176D925",
+   "store": "validity",
+   "type": "ValidityEnvelope",
+   "page": 43,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The document does not itself treat the nature of combustion instability or prevention methods in detail; it defers to references 56 (Weiss AFRPL-TR-66-150) and 57 (Harrje & Reardon NASA SP-194).",
+   "quote": "The nature of combustion instability and methods for preventing it are discussed in detail in references 56 and $7.",
+   "confidence": null,
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 43
+    }
+   ]
+  },
+  {
+   "id": "VAL_NTRS_19760023196_11A68118",
+   "store": "validity",
+   "type": "ValidityEnvelope",
+   "page": 44,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Analytical feed-system models are most applicable to the lower-frequency instabilities, which are more tractable to analysis.",
+   "quote": "This is particularly true for the lower-frequency instabilities, which are more tractable to analysis.",
+   "confidence": null,
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 44
+    }
+   ]
+  },
+  {
+   "id": "VAL_NTRS_19760023196_42BB1A55",
+   "store": "validity",
+   "type": "ValidityEnvelope",
+   "page": 45,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Injector configuration is usually determined by considerations other than acoustic stability; required stability is obtained with stabilization devices rather than injector tuning.",
+   "quote": "Although stability (acoustic) can be improved by adjustments to the injector configuration, this configuration usually is determined on the basis of other considerations, and stabilization devices are used to obtain the required stability",
+   "confidence": null,
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 45
+    }
+   ]
+  }
+ ],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00068",
+   "page_start": 42,
+   "page_end": 43,
+   "section": "2.1.1.3 COMBUSTION STABILITY CONSIDERATIONS",
+   "text": "Combustion instability, or oscillatory combustion, has been an important consideration in the development of nearly all production rocket engines. Instability was a significant\n\n| problem. for example. in the RS-1401 PBPS engine with a thrust of 300 Ibf and in the F-] : engine with a thrust of 1.8 x 10° Ibf. Other engines in which stability was an important factor in design include Atlas, Thor, H-1, J-2, J-28. Apollo SPS, LEM Ascent. Lance (booster and sustainer). Titan Gemini, and Titan HI Transtage. The nature of combustion instability and methods for preventing it are discussed in detail in references 56 and $7.\n\nCombustion instability results from an oscillatory coupling of the combustion process and fluid dynamics: this coupling is determined in large measure by the injector. Because instabilities are detrimental to the operation of a rocket engine and often result in catastrophic failure, usually no form of instablity can be permitted. Thus, the injector designer must consider the features of the injector design that affect stability. The methods for controlling or climinating combustion instability vary with the type of instability present or expected. Several types of instability can occur, the particular kind depending on the relutive importance of various ascillatory processes. Four basic types are as follows:\n\n   - (i) Chue instability, which occurs with frequencies typically in the range of 50 to 250 Hz. This form of instability results from a strong coupling of the feed system and the combustion chamber. The oscillation in the elements of the feed system and the combustion chamber may be considered spatially uniform but time varying."
+  },
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00069",
+   "page_start": 43,
+   "page_end": 43,
+   "section": "2.1.1.3 COMBUSTION STABILITY CONSIDERATIONS",
+   "text": "   - (2) Buzz instability, which occurs with frequencies typically in the range of 100 to 900 Hz. Again, the coupling of the feed system with the combustion chamber is pronounced. However, the wave character of the oscillations in the feed system is important in this case, but the combustion chamber oscillation may still be regarded as spatially uniform.\n\n   - (3) Acoustic instability, which occurs with frequencies > 500 Hy. With this form of instability, the oscillation is dominated by the wave behavior in the main chamber (with spatial variations), and coupling with the feed system is negligible.\n\n- (4) Hybrid instability, which also occurs with frequencies typically > 500 Hz. This oscillation is strongly coupled between the feed system and the combustion chamber. In addition, the wave character of the oscillation is significant in both the feed system and the main chamber.\n\n- Chug and buzz instabilities usually are controlled through adjustments to the feed system. the injection passages. or element characteristics. Hybrid instabilities are controlled in the same manner.\n\nAcoustic instabilities generally are eliminated through the use of suppression devices in the combustion chamber; the design and application of these devices is described in reference"
+  },
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00070",
+   "page_start": 44,
+   "page_end": 44,
+   "section": "2.1.1.3 COMBUSTION STABILITY CONSIDERATIONS",
+   "text": "58. In addition, the characteristics of the injector itself can be adjusted to promote stability; e.g., the size of the injection element may be changed or the mass and mixture-ratio distribution may be modified.\n\nFeed-system-coupled instabilities. — These modes of instability often are analyzed, and remedial measures devised, on the basis of analytical models for the system. This is particularly true for the lower-frequency instabilities, which are more tractable to analysis. Principally these analyses allow estimation of the response of various portions of the system to oscillations in chamber pressure. Such models may be used to indicate changes in an injector design that will prevent feed-system coupling. Analytical models and techniques are described in references 59 through 61.\n\nThese models, and experience as well, indicate that the injector passages should be designed with as large a pressure drop (AP) and orifice length as practical. The required pressure drop for the fuel and oxidizer injection elements to prevent chug instability has been found to vary with the element type, minimum values ofAP inj /Pcn Of 5 to 20 percent generally being found.\n\nWith concentric-tube elements, pressure-drop limits of AP inj /Pcn * 5 percent have been obtained. With unlike-impinging elements, AP inj /Pch * 10 to 15 percent is typical. Like-impinging elements have been found to require approximately 15 to 25 percent. The pressure-drop requirements have been minimized by tailoring the orifice lengths and manifold volumes."
+  },
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00071",
+   "page_start": 44,
+   "page_end": 44,
+   "section": "2.1.1.3 COMBUSTION STABILITY CONSIDERATIONS",
+   "text": "In the case of higher frequency feed-system-coupled modes, analytical models have been used to guide installation of orifices, dams, and resonators in injectors to prevent such modes. For example, in the booster engine for the Extended Range Lance, dams placed in the injector ring grooves successfully eliminated a hybrid-type instability. In the J-2S engine, inserts placed in the oxidizer posts of the concentric-tube injection elements successfully ; eliminated a hybrid-type instability. Both of these solutions for instability were developed through the use of detailed and extensive analytical modeling and experimental studies.\n\nFeed-system-coupled instability problems are accentuated in engines that must be throttled.\n\nSome feed-system-coupled instability problems have been attributed to two-phase flow asa result of excessive heat transfer. This phenomenon has been eliminated by increasing the manifold pressure.\n\nAcoustic instabilities. -The design of an injector often is affected by the use of stabilization devices to prevent acoustic instability, because these devices frequently are mounted on the injector or form an integral part of it. For example, the injection pattern may be dictated in part by a baffle arrangement mounted on the injector face; also,"
+  },
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00072",
+   "page_start": 45,
+   "page_end": 45,
+   "section": "2.1.1.3 COMBUSTION STABILITY CONSIDERATIONS",
+   "text": "injection elements at the downstream end of the baffle may be required to avoid a significant loss in performance. Special mixture-ratio bias or film cooling may be required. Injector design also may be affected by a requirement to install a stability rating device (¢.2.. a bomb) on the injector face.\n\nThe injector has a direct influence on acoustic instability because of its influence on the combustion flow field. Analytical models such as Pricm’s (ref. 62) demonstrate the dependence of stability on such injector-defined parameters as droplet sizes. local relative yelocities between the droplets and gases, and burning rate. Such models may be used in conjunction with steady-state combustion models to assess the influence of injector design parameters on stability. Unfortunately, many changes that tend to improve performance also degrade stability. The analytical models of references 63 and 64 have been most widely used.\n\nStability also is affected by the injector-defined propellant) mass-flux distribution, Essentially, the propellant mass is concentrated in regions of the chamber where the acoustic mode cannot couple efficiently with the combustion. This approach has been proved to be effective in promoting stability (refs. 68 through 68). Although stability (acoustic) can be improved by adjustments to the injector configuration, this configuration usually is determined on the basis of other considerations, and stabilization devices are used to obtain the required stability (ref. 58). 2.1.2 Individual Orifice Geometry Establishing the individual orifice geometry is one of the major steps in constructing the total injector flow system. This step follows in logical order after the total element pattern has been formulated."
+  },
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00073",
+   "page_start": 45,
+   "page_end": 45,
+   "section": "2.1.1.3 COMBUSTION STABILITY CONSIDERATIONS",
+   "text": "The theory for predicting individual orifice stream characteristics such as flowrate. sircam direction. or stream “bushiness” is not well developed for orifices under the operating conditions and physical constraints of most rocket engine injectors. The orifice variables that must be accounted for in any general theory include physical characteristics (e.g. orifice bore diameter, bore length-todiameter ratio L/d, roughness, inlet geometry, and exit contour) and fluid or hydraulic characteristics (e.g., propellant properties, orifice pressure drop, back pressure, back pressurant, and propellant cross velocity (stream flow direction, velocity, and orifice inlet angle)). The most important flow-controlling aspects of the orifice geometry and the ones with which most problems occur are the orifice inlet geometry, the bore. the exit contour, and the related tolerances necessary for reproducibility.\n\nUncontrolled or nonreproducible orifice-stream hydraulic characteristics associated with cither orifice design or orifice fabrication techniques have been responsible for many"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {},
+  "flagged_candidates": 0,
+  "target_objects": 24,
+  "objects_with_anchor_problems": 0
+ }
+}

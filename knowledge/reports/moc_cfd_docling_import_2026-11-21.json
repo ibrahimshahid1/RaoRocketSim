@@ -1,0 +1,2714 @@
+{
+ "documents": 9,
+ "pages": 322,
+ "figures": 196,
+ "document_reports": [
+  {
+   "document_id": "DOC_DOI_10_1017_S0022112000002366",
+   "source_pdf": "propulsion_texts/giles2001.pdf",
+   "source_sha256": "7f16e97e4a513e2440917b2457e51a10fec8665a300f750dab2500e708331d12",
+   "page_count": 19,
+   "generated_markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/giles2001.md",
+   "markdown_sha256": "36df874bac2c675d37ec0af1493f773034aee6dd5b6b8ee9dfa6b766ec034154",
+   "figure_crops": 4,
+   "tables": 0,
+   "page_markers_verified": true,
+   "all_local_markdown_links_verified": true,
+   "conversion_issues": [
+    "Bulk Docling parser output is unreviewed; formula model enrichment disabled. All original pages linked as facsimiles."
+   ],
+   "parser_artifacts": "propulsion_texts/propulsion_texts_for_agents/docling_import/7f16e97e4a513e24",
+   "local_asset_links": 23,
+   "asset_readback": [
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/7f16e97e4a513e24/images/page-0001.png",
+     "sha256": "7f54834834b7a6fcbf8b520f90ccf6a278298fd9567e90bed32c7c3d516d1cd6"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/7f16e97e4a513e24/images/page-0002.png",
+     "sha256": "a20d4c44acfd041a8fe0974aaa74804c8b1ea18b06ab909ef42770868a7e4fb4"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/7f16e97e4a513e24/images/page-0003.png",
+     "sha256": "df5680f19a640a1aa2b86936ec147bf987065e14a4a696b2166bb10ba5ff9b06"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/7f16e97e4a513e24/images/page-0004.png",
+     "sha256": "ba0adafd8e9e7614bf081ba080e4ca04d46e7ddc5fb96fb9292af04301599fa5"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/7f16e97e4a513e24/images/page-0005.png",
+     "sha256": "6fd3a6727de7559dc54b4e5b821c63a90507f1c92a8dc70f2375c5816194db0b"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/7f16e97e4a513e24/images/page-0006.png",
+     "sha256": "9b17e10cdc682aef63a3bc142897766a4b3e95809ddf75377e18a1dfcc494a5f"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/7f16e97e4a513e24/images/page-0007.png",
+     "sha256": "fc14e25aee4bfbac3b98db2c01f4d842458e2c207245ba7f3542420edab63400"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/7f16e97e4a513e24/images/page-0008.png",
+     "sha256": "504ab1aba74496cc39f7fa3c33759fc182d370d853a28ed27505337a7069cc35"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/7f16e97e4a513e24/images/page-0009.png",
+     "sha256": "1dc2e53cb7ad3203da15b62bcc8b3d02dd720dd4f84c8d2872c48bb05b9fd328"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/7f16e97e4a513e24/images/page-0010.png",
+     "sha256": "c1e73c3e9b4e5e6bc21208f43422322c20174510c717bd5e69ee434319c1dc3d"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/7f16e97e4a513e24/images/page-0011.png",
+     "sha256": "b406a0dc9f9494245b6bf2c603b1da17745e597e4bdb3711e155e9d502a6a313"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/7f16e97e4a513e24/images/page-0012.png",
+     "sha256": "c67e17b08c33aa27e94720b7b9bab445a400b1099aa7fd37934514c2f4a37959"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/7f16e97e4a513e24/images/page-0013.png",
+     "sha256": "582a30bf02115b93c5e1010d787964037dc432e72b30e30e81e69ffe6a4d3ac6"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/7f16e97e4a513e24/images/page-0014.png",
+     "sha256": "b7eace7f08ba9a4a3084df231847811e927547f68a2908a5ad95b84608089e4a"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/7f16e97e4a513e24/images/image_000000_ed579a52d1869bf61b905ea86450a5476870d126b9082819c2137f8655a5f905.png",
+     "sha256": "5950a016503934bae23480c64dfc5875cf5c4449f236f19cfc6febcc3051f97e"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/7f16e97e4a513e24/images/page-0015.png",
+     "sha256": "a3a2187b89f0fea9cff56d8ea1c505bd57407fbc02554346c99bb204fd5e1dec"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/7f16e97e4a513e24/images/image_000000_2c2301f36c7c9f2f4856855c876cdada3462793e7a7f7cb363c99e71319a5a3c.png",
+     "sha256": "9d58c004f3069f819590d52831cc18dd5d2cb0b64304a2e4d85bc6f66921fc3f"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/7f16e97e4a513e24/images/page-0016.png",
+     "sha256": "ef770fd64471ccea05fb12d5cb647cac6d239a35eff7e5bcbaf9e4aeac1da449"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/7f16e97e4a513e24/images/image_000000_de8f58eaf2587e148210b2271811a5101a74157ab46671a27a64991470c3d56d.png",
+     "sha256": "3ffa8109df07cd20e9101d1328a2c4862a26224a52f9f6d29e4271a8771d9ec4"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/7f16e97e4a513e24/images/page-0017.png",
+     "sha256": "1145160e2963e633905c4fe9c782ced29917aa7f4e76bdf0541eb3e078adb0da"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/7f16e97e4a513e24/images/image_000000_d702e021d09369deaf7ec009f67d09f4e8e3e1c2d7071332794c50a20f85710b.png",
+     "sha256": "2c5ab56b441e1a8acafa48f9efe9893d52cf4033a3f4e9e2194a5987828e05e4"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/7f16e97e4a513e24/images/page-0018.png",
+     "sha256": "d42c66b6fe7e9ef65a9d328edf7b767dd94ac2bbdbf931c19027719bdfd7e645"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/7f16e97e4a513e24/images/page-0019.png",
+     "sha256": "482817b216f75f4d02bfb16339a22ea39c5a3190179b4d76079df06104307c54"
+    }
+   ],
+   "graph_figures_verified": 4,
+   "chunks": 45,
+   "retrieval_probe": {
+    "query": "Analytic adjoint solutions for the quasi-one-dimensional Euler equations",
+    "found": true,
+    "pages": [
+     1,
+     2,
+     3,
+     6,
+     15,
+     16,
+     19
+    ]
+   }
+  },
+  {
+   "document_id": "DOC_DOI_10_1017_S0022112058000434",
+   "source_pdf": "propulsion_texts/broer1958.pdf",
+   "source_sha256": "05c7aa566aba78fce3baf010cb4d526a8b529ac8a9fa782d4277b2837beda245",
+   "page_count": 7,
+   "generated_markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/broer1958.md",
+   "markdown_sha256": "04e12546bf4336808477302adb959b1bfe81b4c220b011f097f35015546c8be8",
+   "figure_crops": 0,
+   "tables": 0,
+   "page_markers_verified": true,
+   "all_local_markdown_links_verified": true,
+   "conversion_issues": [
+    "Bulk Docling parser output is unreviewed; formula model enrichment disabled. All original pages linked as facsimiles.",
+    "Tesseract orientation detection warned on sparse OCR crops; Docling returned success on all requested pages. Equations and OCR still require page comparison. See docling_import/conversion.log."
+   ],
+   "parser_artifacts": "propulsion_texts/propulsion_texts_for_agents/docling_import/05c7aa566aba78fc",
+   "local_asset_links": 7,
+   "asset_readback": [
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/05c7aa566aba78fc/images/page-0001.png",
+     "sha256": "e01d919c2cd19131ea9d8e667d1c8d59ad447583f63a875f2b25e261d834bed8"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/05c7aa566aba78fc/images/page-0002.png",
+     "sha256": "f7353f1859ac871cbc8511bc56a2ab68c219f2b3f38a13b6efb204ed314d1feb"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/05c7aa566aba78fc/images/page-0003.png",
+     "sha256": "843198ffa8dd8b4b4783fdb78bebed328f7dddb32bd090bb1dd91726894bb8f1"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/05c7aa566aba78fc/images/page-0004.png",
+     "sha256": "6e84408be787755857f8312eac857cab896ba891deaec2062e83003f20122186"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/05c7aa566aba78fc/images/page-0005.png",
+     "sha256": "29224e5195de282b28698015501bd7b53af1d9e10ba9b576de037cc509f20a0a"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/05c7aa566aba78fc/images/page-0006.png",
+     "sha256": "52afca928bb06bb9f366c1f2edef0469edbffa2be4a02d2935fe8fe3f8c2adfa"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/05c7aa566aba78fc/images/page-0007.png",
+     "sha256": "dca79d7424fa11c54b2a13846ac1e2da8068077c0de6ca2b2d1154072c62d797"
+    }
+   ],
+   "graph_figures_verified": 0,
+   "chunks": 16,
+   "retrieval_probe": {
+    "query": "Characteristics of the equations of motion of a reacting gas",
+    "found": true,
+    "pages": [
+     1,
+     2,
+     5,
+     6
+    ]
+   }
+  },
+  {
+   "document_id": "DOC_DOI_10_1115_1_2960953",
+   "source_pdf": "propulsion_texts/procedure-for-estimation-and-reporting-of-uncertainty-due-to-dis-2008.pdf",
+   "source_sha256": "023580bbe990d03ffc827d3be3b26bc89f238b5c30844a00495c137d372616fa",
+   "page_count": 4,
+   "generated_markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/procedure-for-estimation-and-reporting-of-uncertainty-due-to-dis-2008.md",
+   "markdown_sha256": "4a5f6e9796e94e0ceef3e380b21b601cc151f57f2b0e7d4e7b587021cc8b5885",
+   "figure_crops": 2,
+   "tables": 1,
+   "page_markers_verified": true,
+   "all_local_markdown_links_verified": true,
+   "conversion_issues": [
+    "Bulk Docling parser output is unreviewed; formula model enrichment disabled. All original pages linked as facsimiles."
+   ],
+   "parser_artifacts": "propulsion_texts/propulsion_texts_for_agents/docling_import/023580bbe990d03f",
+   "local_asset_links": 6,
+   "asset_readback": [
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/023580bbe990d03f/images/page-0001.png",
+     "sha256": "85175587b0535e2fab733ee1f5cb731572086f5e84639813235b687bdf49de11"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/023580bbe990d03f/images/page-0002.png",
+     "sha256": "bed24bbc16e744d6bbe1a095cbedbed64873381221c24f4e6b0fbb13ac1b8226"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/023580bbe990d03f/images/image_000000_0124afe18a832ec7c73020efc184cf9942d2e543469022ebace7593bf5b26558.png",
+     "sha256": "7036dc6222973e25851d453a8954e38ebfe38f415ce4569e0c6ec299901d1804"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/023580bbe990d03f/images/image_000001_876fa71582020a508a1a14bca7ea234fb637f130b26627d355e12e8f05bcdfb9.png",
+     "sha256": "365a409f92f8334de6d88be72c29efb659811ee3ecc76ce2d2dd72815675cddf"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/023580bbe990d03f/images/page-0003.png",
+     "sha256": "43359a887aaea118d627b9da04fb39ca62533518b427d44c2a96d3a5da69de00"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/023580bbe990d03f/images/page-0004.png",
+     "sha256": "1aae32306c3d81b3cd328200e9e8c5309409cb284f755d0012c1440cc286d250"
+    }
+   ],
+   "graph_figures_verified": 2,
+   "chunks": 12,
+   "retrieval_probe": {
+    "query": "Procedure for Estimation and Reporting of Uncertainty Due to Discretization in CFD Applications",
+    "found": true,
+    "pages": [
+     1,
+     2,
+     3,
+     4
+    ]
+   }
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_6_1999_3285",
+   "source_pdf": "propulsion_texts/lovely1999.pdf",
+   "source_sha256": "6fb10b57afb0e59a9a5cd0acb828d25292af289d6a7cda1e35fa256e570c70bf",
+   "page_count": 9,
+   "generated_markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/lovely1999.md",
+   "markdown_sha256": "3b456f933608e4bda28fb71285b86c8c401ae221b4871f0277767e67c3bcf0d7",
+   "figure_crops": 22,
+   "tables": 2,
+   "page_markers_verified": true,
+   "all_local_markdown_links_verified": true,
+   "conversion_issues": [
+    "Bulk Docling parser output is unreviewed; formula model enrichment disabled. All original pages linked as facsimiles.",
+    "Tesseract orientation detection warned on sparse OCR crops; Docling returned success on all requested pages. Equations and OCR still require page comparison. See docling_import/conversion.log."
+   ],
+   "parser_artifacts": "propulsion_texts/propulsion_texts_for_agents/docling_import/6fb10b57afb0e59a",
+   "local_asset_links": 31,
+   "asset_readback": [
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/6fb10b57afb0e59a/images/image_000000_89279bb1097e1cb393e544fcae6696ae5d9a73e84f4a74843db502c8f0e1d780.png",
+     "sha256": "902bd85caf0cbec49f4af166f301748798b13f0026cf4f5594de40c31bafcbc4"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/6fb10b57afb0e59a/images/page-0001.png",
+     "sha256": "c6d7baffaeb2fe5bd56806cd6e9ef65080c29285f66421d7c5a8d9bdb4b00309"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/6fb10b57afb0e59a/images/image_000000_26a720b6df5aefaa6d4ea0ee0f6228abcd705d2a507d6ade9cc455c54a3196b7.png",
+     "sha256": "9d071b155ac3f79f60470271253da7321138b25272f4d208ca5da865e1e5623d"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/6fb10b57afb0e59a/images/image_000001_d50082d4d078b28ed0b3f92634fbc7ec20d5ffb14b3e75a81bd0e744aaa43175.png",
+     "sha256": "db96cfc230ca5f6e86a59b9a67f97fe1b69d8fd8b62d3ed5adb07f2c7c4c38c9"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/6fb10b57afb0e59a/images/page-0002.png",
+     "sha256": "48ed3c3124db59ba77a4099dacc69676e466df492fe68351bfc8407f97e05f10"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/6fb10b57afb0e59a/images/image_000000_8f3f912f9c8eeac32c6ddb9ba42ec4e38445a9fe9f7d93b347b0f1f183c82b8e.png",
+     "sha256": "43f8dff647c3c9d147abcf1bc74be1281b3fc04dc730cdc7b604f4d35f303d25"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/6fb10b57afb0e59a/images/image_000001_30e55a6619368fd95732db0ff3010012714a339eadbcd9dc808b5ba8f822590f.png",
+     "sha256": "4ab16a7a57aad46c54d245bc0f0c12bb0679b76343124cea0f4f72b7426b25bc"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/6fb10b57afb0e59a/images/image_000002_ccc3ccc4ba07c15111dd4cef113c54ff959c458c43a4d8347ec16959ff62d435.png",
+     "sha256": "2fdb80c675391bd5165331d17cc0bfa39de2e852e47c2a003231dbcc181a39fb"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/6fb10b57afb0e59a/images/image_000003_39981887cb4847a725fc7cfe0966a065540b6590a1c81a9c7b6a00e5ad850611.png",
+     "sha256": "4685878c6e4a9709ba4b3d736fd6cb468b659476f24eab70b0eea09b8411910e"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/6fb10b57afb0e59a/images/image_000004_d98209818a56ec7d4713a9cc08d2d4c0baf4ee8d9403694415938ffd951f593f.png",
+     "sha256": "ea6e4c999a4b0084fbd3de28a16fb8149b98e24222c96c7fe1601f6022328a9b"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/6fb10b57afb0e59a/images/image_000005_89d1b4712aad904f2512ba9229b891eafbaef8e8b94cc91781fac1867f4c62ba.png",
+     "sha256": "5a19cf4c249dc93211c7238467a96759a7690bbd65f678776bdafdea51969b17"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/6fb10b57afb0e59a/images/image_000006_5cde1ee83ab0916a9bc303ca2ba1e7fa6ae28ae42bf8c97d09b30cdf9cfd1c1d.png",
+     "sha256": "26cd3b70b109a045bd402f723840ce72a198510382da66f2089f57a433652a69"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/6fb10b57afb0e59a/images/page-0003.png",
+     "sha256": "d646f025edd67ac1cbec5bcd122699c718cc1c2b188c2cad8a0475db6387e83e"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/6fb10b57afb0e59a/images/image_000000_d5fc433a85b45c394428c5cb36299ae9c3f27c44d3a48315729ad69fa97cae75.png",
+     "sha256": "f8119c9a64d017ef78b40e33faccb51cebe89b664c48d31468e55541aea48dcf"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/6fb10b57afb0e59a/images/page-0004.png",
+     "sha256": "7643849b3a2c1d765cc64595fe5eafdc6988c2a4862a4d96eae385d4e7570d7a"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/6fb10b57afb0e59a/images/image_000000_cea3a2510a43a5c33f86918a16d99701795e7efd036a445f1baef8d114030eb9.png",
+     "sha256": "7da180e6acb99c1f5bca63d28a28a96e4d6586116cab50e569bd5141342f6043"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/6fb10b57afb0e59a/images/image_000001_99dd90653e497271c305b6bfc7dfda18d2f64bc1a345f2c4189a394566554597.png",
+     "sha256": "7a9a2a5093fccb271d3aade12325e6f36ee716420e4a8a8c0c3915cca82aea31"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/6fb10b57afb0e59a/images/image_000002_89b4385c9f17e1ce0f95a2d4d5f09fc0178d7d47c01de0eb7dbb85e48d667bbf.png",
+     "sha256": "b8421d36402549adccadb13eaeb07d74eee340811a31587015356c961863b838"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/6fb10b57afb0e59a/images/image_000003_a1fd29207e7d2d1a39a6cc69fcac4d2d981eeb9f449c8d08955d2f99aa3e1301.png",
+     "sha256": "4a9e29ea55eaad21e795f03d3e831365131a678fcfb2ea645fea8d59a23848b3"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/6fb10b57afb0e59a/images/image_000004_a08b4740624a994af92e3639b0790e3a42b4e4ab669db159f7c31412bf212254.png",
+     "sha256": "3c966a38b0483e631bdb012133937d0f854446d17034b7190d49e318495cc13e"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/6fb10b57afb0e59a/images/page-0005.png",
+     "sha256": "cdefaf05078480024067c0ba9aa97d1b12e657786eca1936fc98d9827ec01f0b"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/6fb10b57afb0e59a/images/image_000000_1fe0005f46603b66fbaeb9c564cb1a7b8e94e7ee1ea7eaeee157751afda5e77f.png",
+     "sha256": "2c5c6de00ab2e25e13d0864eb5dbdf8e4135f4c39e85b55e31b85808d3ff8767"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/6fb10b57afb0e59a/images/page-0006.png",
+     "sha256": "7d3382babd86f688ef708dff05b7e959e3706bd60f9488d6102d8ec491f1864f"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/6fb10b57afb0e59a/images/image_000000_98b8b3599e231a586e3ddf49362d2a59e3e39c5155f8d5853d6dff5e5d69b4f0.png",
+     "sha256": "8ea8822923e0e39d13ce888af20e54aaf6e88ada55486f043c7ea669b766ee4c"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/6fb10b57afb0e59a/images/image_000001_6e016183b16a840c045720363deb46085f1f46ab73d9cd41d924e47a3a87fb8e.png",
+     "sha256": "eda01a8d32e7dbddfe12ae43c25092c14c1e873b41810ccbb0f3b687dc548b7a"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/6fb10b57afb0e59a/images/image_000002_1afdb76cc1f9865fd99fc6eb97fd08834effd2cc29484562dbe8468423cf0f65.png",
+     "sha256": "9e1548b82bff54ab16b06327771391b6850ed7a2fd93c4575793deae9211c3d6"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/6fb10b57afb0e59a/images/page-0007.png",
+     "sha256": "42fa0dec4d25c19f85495cfa1bb7915f587bff2b83eced21f01a3620ca74eb1b"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/6fb10b57afb0e59a/images/image_000000_53fce68aab809159716732b00b0c6de3de5b46050aea00ad814c69c4a2486763.png",
+     "sha256": "b70ac67f6a25bb16051a5ceb3841687a783df0d20e459a99171d2aa474372aa9"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/6fb10b57afb0e59a/images/page-0008.png",
+     "sha256": "d807b87285506549138830e4976c222dda342608e938f72bab74d878667a1107"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/6fb10b57afb0e59a/images/image_000000_308f5e6d626f216dfa8cacb44a7e0a0f20b2e1ca570d19770ddf8622ca3a939a.png",
+     "sha256": "183217a66c1eb77568928ac03d06a2aa389e0d866c9c798fc8da107822351654"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/6fb10b57afb0e59a/images/page-0009.png",
+     "sha256": "098abe4d2a506c29025fa289ed34317445e16d965722a9926e7f92fabfca3268"
+    }
+   ],
+   "graph_figures_verified": 22,
+   "chunks": 28,
+   "retrieval_probe": {
+    "query": "Shock Detection from Computational Fluid Dynamics Results",
+    "found": true,
+    "pages": [
+     1,
+     5,
+     8,
+     9
+    ]
+   }
+  },
+  {
+   "document_id": "DOC_DOI_10_1137_09078078X",
+   "source_pdf": "propulsion_texts/giles2010.pdf",
+   "source_sha256": "7cda4a2de71cd21cba92be7c01d8588544cba2951d54c188d4b48eb42ec29e1b",
+   "page_count": 17,
+   "generated_markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/giles2010.md",
+   "markdown_sha256": "23caf858b95f56eb82cf4d787be74a5532499a64cfb6bea3d1ac5a11bff24758",
+   "figure_crops": 7,
+   "tables": 0,
+   "page_markers_verified": true,
+   "all_local_markdown_links_verified": true,
+   "conversion_issues": [
+    "Bulk Docling parser output is unreviewed; formula model enrichment disabled. All original pages linked as facsimiles.",
+    "Tesseract orientation detection warned on sparse OCR crops; Docling returned success on all requested pages. Equations and OCR still require page comparison. See docling_import/conversion.log."
+   ],
+   "parser_artifacts": "propulsion_texts/propulsion_texts_for_agents/docling_import/7cda4a2de71cd21c",
+   "local_asset_links": 24,
+   "asset_readback": [
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/7cda4a2de71cd21c/images/page-0001.png",
+     "sha256": "7a75c4b011a2a12e0e0122cc0098619ffbcd058a908cf57f0909c692bfe0809e"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/7cda4a2de71cd21c/images/image_000000_3917fc19e53a4c904836198943275b1cb390d751e72dfd825d6065480b9a6e98.png",
+     "sha256": "0ad677c2c30ec0eb1e5e8e3997e05286404a17d85a52f8f3ba105d6055322af0"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/7cda4a2de71cd21c/images/page-0002.png",
+     "sha256": "e0d12509ab613d4ed94ebf122a6874e5eacbaab217e5964a9637adc0b1f3725b"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/7cda4a2de71cd21c/images/image_000000_ceedc1ca8a559ffd0b3183ea5743ddbb962221e75343c114ee41864ec1fca61a.png",
+     "sha256": "172369ca8319f948857b3c711d4ef4da65cf8888b60d10ccfba36f95c6ef7c7a"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/7cda4a2de71cd21c/images/page-0003.png",
+     "sha256": "e84bb940ea1845e121b64495d17a3de3390244383c2152957a674e604a30890d"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/7cda4a2de71cd21c/images/image_000000_bc07a62f05d2ad8094e4e4d37f1e7d2f08c04a5a3b3c916b923715974a701425.png",
+     "sha256": "5770afbc5e34e1de98bd2c809230ce6a9841d34d10ec607d2db23a278431edea"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/7cda4a2de71cd21c/images/image_000001_804d074261359a2e5ee4f6192f24d651d6716393d5883cf7b63f520f505c143c.png",
+     "sha256": "e7e0ef3979e46563cabdb8dbff9ab270ec745d1341a4e273793c6e01e69b3202"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/7cda4a2de71cd21c/images/page-0004.png",
+     "sha256": "4060e0bc1bbc44a27768d9a4a7cbad9a352a1851d22953fb6d9680ef3ec73c68"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/7cda4a2de71cd21c/images/image_000000_867ec0fe9d7085e53bb3d99a76447f895989c6a53f2e55530cd50dbb7f512194.png",
+     "sha256": "1e4bb4bf0028821359a5f6c556be9fe4fa6e4fa0cec6f33bfa84fdfd348a0070"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/7cda4a2de71cd21c/images/page-0005.png",
+     "sha256": "6adc584073b849333b0e6a4bd236a0d9e9750b54169c37915f67eb8bad165a9c"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/7cda4a2de71cd21c/images/page-0006.png",
+     "sha256": "87bd6f08cbe3cbb36143a9b0db18636c4a1f868ac583b72e0be13ecdcd7ece78"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/7cda4a2de71cd21c/images/page-0007.png",
+     "sha256": "7d1879a1fe69e170b21107d1993c2d3338d1f96a591ee3d43a229a8734d5cc2a"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/7cda4a2de71cd21c/images/page-0008.png",
+     "sha256": "218f1f1fa63e8a5844523261b32adb7bb39f72c19d72946663fba41c355976e0"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/7cda4a2de71cd21c/images/page-0009.png",
+     "sha256": "5a13454438ccbb177818455991e657ed5e879875dee52c5aedf1760eff667390"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/7cda4a2de71cd21c/images/page-0010.png",
+     "sha256": "3605aed5efd6697bbfe8ab1b5f025d30853f7b6d13ef74f87ef8aa81cca03645"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/7cda4a2de71cd21c/images/page-0011.png",
+     "sha256": "e1de3eb5ee43018af8d9558fad90407a447cb6c7fde708bfea47c38d0734314e"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/7cda4a2de71cd21c/images/page-0012.png",
+     "sha256": "f2376dade5404a66830f69655abe395306b962db1c877548bc29592cfa3bbb8b"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/7cda4a2de71cd21c/images/image_000000_0e15f3d0f605a3326dcce89c3c31b32408f62a852919b29256a2332b51259ba4.png",
+     "sha256": "5e4544042b65733c202733f7df0bc2670e59a59d0959145f03a59aca59860382"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/7cda4a2de71cd21c/images/page-0013.png",
+     "sha256": "633b386f54ca7ccf5a9f420899a39b9b3fc8f5d70c71ed9ac1de452654b21f4e"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/7cda4a2de71cd21c/images/page-0014.png",
+     "sha256": "f04d602397c2de8ee7945ca5e69363f9fd1922fcd56da4b59e8ddf39002df731"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/7cda4a2de71cd21c/images/image_000000_0295f7c152573f59d4acb3ecb422ee55b41e367c9efd73b50aace945c1642468.png",
+     "sha256": "6b7ed1ac7b658bd1a983ef7ea86f09e2f372ee3c8b679402bc4dd8f9f40fbfac"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/7cda4a2de71cd21c/images/page-0015.png",
+     "sha256": "d0b7ce40d8ffc013f5948dd2a6e960290e88d49fcf1419d8d6ba93d7bce36973"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/7cda4a2de71cd21c/images/page-0016.png",
+     "sha256": "7bd36c3b3680f5e92d643e2a98baad89be0d114f3e0389deec8ec54acf6c958a"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/7cda4a2de71cd21c/images/page-0017.png",
+     "sha256": "3b40efda3ecf84e716dbc58b07409b537e265d030baa5987ac519df47dd0e8ac"
+    }
+   ],
+   "graph_figures_verified": 7,
+   "chunks": 28,
+   "retrieval_probe": {
+    "query": "Convergence of Linearized and Adjoint Approximations for Discontinuous Solutions of Conservation Laws. Part 2: Adjoint Approximations and Extensions",
+    "found": true,
+    "pages": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     16,
+     17
+    ]
+   }
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_3_61399",
+   "source_pdf": "propulsion_texts/salas1976.pdf",
+   "source_sha256": "44b9e0752e287f6e598e3e5c750b022a52570ed10ee8478cd694e732325d2399",
+   "page_count": 6,
+   "generated_markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/salas1976.md",
+   "markdown_sha256": "a2979ce9e89052b211ae3d589a9d9285394d1cb8abc4ba685003105fbd8763e9",
+   "figure_crops": 10,
+   "tables": 0,
+   "page_markers_verified": true,
+   "all_local_markdown_links_verified": true,
+   "conversion_issues": [
+    "Bulk Docling parser output is unreviewed; formula model enrichment disabled. All original pages linked as facsimiles.",
+    "Tesseract orientation detection warned on sparse OCR crops; Docling returned success on all requested pages. Equations and OCR still require page comparison. See docling_import/conversion.log."
+   ],
+   "parser_artifacts": "propulsion_texts/propulsion_texts_for_agents/docling_import/44b9e0752e287f6e",
+   "local_asset_links": 16,
+   "asset_readback": [
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/44b9e0752e287f6e/images/page-0001.png",
+     "sha256": "68f46851f4d8015343e6b8727f088b95ed84fb9ceca59a7e1794594fbb84b982"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/44b9e0752e287f6e/images/image_000000_3a89a26191bceacb8e9593b3945ea2029e346e310d2e0b640aa5420165b9b0ee.png",
+     "sha256": "2a44323c1b1bd32ec57e74cf168d24881b30e62f209c6600e98e81a683af984c"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/44b9e0752e287f6e/images/image_000001_e6c1c3989a0580ec091e2b34da5bac50eb6beb81fabc87ecaaf7a57c02dd5494.png",
+     "sha256": "1971ce6477b463ac6007ef02f5487624b54fd551e4dce50ab7c83807ccc88cad"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/44b9e0752e287f6e/images/page-0002.png",
+     "sha256": "350594096adbbb87999fd607d1388d0b2f95dfeae11ed328124a938b2b0c4bc2"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/44b9e0752e287f6e/images/image_000000_9a89942d8947da026f28316ad66d1cc1b3997408bf83294d2c08af81074d988f.png",
+     "sha256": "95e1fe14f60bb44a99d453ec1d5b13d148d07c9c859906571ab09907e9c76c45"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/44b9e0752e287f6e/images/image_000001_cec55b0f5c13ef1dc6df5139015469b91f8fd92f47a472745586256aa221594c.png",
+     "sha256": "62bb920565119be2d313945206bbbcd6801048477be156d910ade94a1e96bc8c"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/44b9e0752e287f6e/images/image_000002_2baa50876769bcb9e21c2c5c88692ddd165a5ca74f7e64c7be9230fdfe1ffbd0.png",
+     "sha256": "90f0531523937c41234a131e5749dcb27b4b50abdbeb3c637f1111a43ba25d07"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/44b9e0752e287f6e/images/page-0003.png",
+     "sha256": "e644f6d6552aae62022511d3cc79d0033187e64be4270868b34b6053cd6463ab"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/44b9e0752e287f6e/images/image_000000_94837db522a2fa5f887d6ee288c219eb55fe1d7b2e26162f31378a6c2594964e.png",
+     "sha256": "863b43a58383e4cd02814bc74535d85fb3ea989d7a2acd84c4ac19f5c18d3786"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/44b9e0752e287f6e/images/page-0004.png",
+     "sha256": "94aa6db10eaf5a5f989c79a2c83db543c3ff7c4de031c518ffaa6750fedb4049"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/44b9e0752e287f6e/images/image_000000_5af3f46d1995a341570f4db8606f5ef2ab4ac8e010be348713178d2a838354e4.png",
+     "sha256": "09f06a05386f386cedc407870293e3a5a6b2eb47a5ab3d3a58329f45b79a61a3"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/44b9e0752e287f6e/images/image_000001_b3d8a9c891c6cbd83c0875fc56501377deca27fff95b33b0643f57fc616283e9.png",
+     "sha256": "5dbde2dce7309cc75ea3eb8cc77932b372abf9cc9e9b5623ace3fdf89bb04972"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/44b9e0752e287f6e/images/image_000002_04399178f58fdb84b69b1e087d72e95412e49c505818bc8c86d695743f294673.png",
+     "sha256": "7ebeb2a8234d9a5b1635451707ae63b7e24066ebd06ed904a954601652402005"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/44b9e0752e287f6e/images/image_000003_40ce97391dfe797ef2c8d7eb611732f72b67facba1fcb560e9d9a4f0847fb1d8.png",
+     "sha256": "f23a99f4ea897175ef1b378a2bf6a1d0f68a1ba9241afd8d1d6e97f089ff3527"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/44b9e0752e287f6e/images/page-0005.png",
+     "sha256": "813d0d74d2533883afd9ef3b3b0b0b0a6644030f18b3eb9cf6c3d5a89541278c"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/44b9e0752e287f6e/images/page-0006.png",
+     "sha256": "aa7498b27d413f4385c8bb5d181b2e6aa56f171e8b812147266bdfaa036beccf"
+    }
+   ],
+   "graph_figures_verified": 10,
+   "chunks": 26,
+   "retrieval_probe": {
+    "query": "Shock Fitting Method for Complicated Two-Dimensional Supersonic Flows",
+    "found": true,
+    "pages": [
+     1,
+     5,
+     6
+    ]
+   }
+  },
+  {
+   "document_id": "DOC_DOI_10_1093_QJMAM_15_4_487",
+   "source_pdf": "propulsion_texts/hall1962.pdf",
+   "source_sha256": "848c4398c6d48ee5c788361fbb4531b6a8ff34298e28007779b456b255f830ab",
+   "page_count": 22,
+   "generated_markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/hall1962.md",
+   "markdown_sha256": "cdf0acd16c2dad768775daa69647acf225cfa8daf2724562701419f46f4bd9c4",
+   "figure_crops": 1,
+   "tables": 5,
+   "page_markers_verified": true,
+   "all_local_markdown_links_verified": true,
+   "conversion_issues": [
+    "Bulk Docling parser output is unreviewed; formula model enrichment disabled. All original pages linked as facsimiles.",
+    "Tesseract orientation detection warned on sparse OCR crops; Docling returned success on all requested pages. Equations and OCR still require page comparison. See docling_import/conversion.log."
+   ],
+   "parser_artifacts": "propulsion_texts/propulsion_texts_for_agents/docling_import/848c4398c6d48ee5",
+   "local_asset_links": 23,
+   "asset_readback": [
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/848c4398c6d48ee5/images/page-0001.png",
+     "sha256": "36105283de834cbebfe04621722b76eb8091faba25fb94d0d0aa95537dc61278"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/848c4398c6d48ee5/images/page-0002.png",
+     "sha256": "e1d707378e1f1df74c503ffda6613f6a0dfafc710d2ad33687dfce9307f10dc3"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/848c4398c6d48ee5/images/page-0003.png",
+     "sha256": "f5bed272ddbed2f3165ce4b7e5c454b6b27c655b7e05feb931bc5f1a995cbe13"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/848c4398c6d48ee5/images/image_000000_2a25e8619f7643144d4bb842b9e84286239f1bb37e7d3a6be2b1637af57c0a05.png",
+     "sha256": "973845cdbb683e88c2e4e132da1c882c8f9dba96ef62bd6e08c532512c5b8d69"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/848c4398c6d48ee5/images/page-0004.png",
+     "sha256": "9d5808cd16ab644521084a713840ffd491776d91204846c22674cbe97e31e70f"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/848c4398c6d48ee5/images/page-0005.png",
+     "sha256": "4608b8d6607ee9b2a59ae462e3b870cc8b2b533c02a12615aea497f0c71ebf0d"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/848c4398c6d48ee5/images/page-0006.png",
+     "sha256": "861fd8f8e3d16bb4dd6220e051bf474be9b74b23d61e85b96cef3b438706da0f"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/848c4398c6d48ee5/images/page-0007.png",
+     "sha256": "69775849b1ebca8436d7ea230174eb9da64a66b06e2ef528a5c626d06814f5e0"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/848c4398c6d48ee5/images/page-0008.png",
+     "sha256": "47777938ec171e78072e708bbad0eae4a5a900651d1ad5dd0c80ef6a812302f6"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/848c4398c6d48ee5/images/page-0009.png",
+     "sha256": "81b995c2e0ab18deca0ecc67f57f11de51c71ec547eff79bb4a6433f3a2eeb98"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/848c4398c6d48ee5/images/page-0010.png",
+     "sha256": "184d6731164d82839877f307dea63173f8235c623973f4dde6a919e09b592695"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/848c4398c6d48ee5/images/page-0011.png",
+     "sha256": "ed4c093a8e95035691ef4d9a0abd245d79ea53eaaf769288720e4f1e1d71f5d8"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/848c4398c6d48ee5/images/page-0012.png",
+     "sha256": "422fcad06ba7d817918cc2cd8cf037195efddeb7db1d1ea7d21540883a78bc72"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/848c4398c6d48ee5/images/page-0013.png",
+     "sha256": "8684e7a075722d8f54cda57b971ab56180df02d41d0cead957743a9ecbb19c48"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/848c4398c6d48ee5/images/page-0014.png",
+     "sha256": "c3b96e036931ccd41eeb2bfb8a99e13c4205b59dd326dfc24f4b626e34362a7e"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/848c4398c6d48ee5/images/page-0015.png",
+     "sha256": "461efd00391bdc3b62c18333a2ebfff828e459301b41a341f136d586a437c234"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/848c4398c6d48ee5/images/page-0016.png",
+     "sha256": "51aa1d450916b0152c5f5885a511d6f46927690c2a40cfedb5616761aadaf433"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/848c4398c6d48ee5/images/page-0017.png",
+     "sha256": "5b24f45c719f2837f838878d6cf7c1c378b0b6e621256e92fe52f5966e6518d5"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/848c4398c6d48ee5/images/page-0018.png",
+     "sha256": "f265068064d2dc019e18a9759d1c0e8d240ee73af6d45565976755fcc2b57d25"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/848c4398c6d48ee5/images/page-0019.png",
+     "sha256": "5449640c643f7766b63cef043e943b40ea78757d658989fdf9bc34cc96da735e"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/848c4398c6d48ee5/images/page-0020.png",
+     "sha256": "da06444fcf8d433a6116b4c4b192cd79e917981b05295db5b30aa8558642a222"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/848c4398c6d48ee5/images/page-0021.png",
+     "sha256": "206a2051c0ccf21ec83b6858e68ef6c4f0c6d22a6fe5f064654d20225c3a20fc"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/848c4398c6d48ee5/images/page-0022.png",
+     "sha256": "e7faa0e16a06ad94dca0f35c2a5a6e9b02754a3f65b0ed44df0a8a0f6c2aab6f"
+    }
+   ],
+   "graph_figures_verified": 1,
+   "chunks": 38,
+   "retrieval_probe": {
+    "query": "Transonic Flow in Two-Dimensional and Axially-Symmetric Nozzles",
+    "found": true,
+    "pages": [
+     1,
+     3,
+     4,
+     6,
+     18,
+     21,
+     22
+    ]
+   }
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_3_5355",
+   "source_pdf": "propulsion_texts/kliegel1969.pdf",
+   "source_sha256": "1c4f875e3c112a166808dbc5f0149b0b3f62fd143acfb42c7274140ec09d68d9",
+   "page_count": 4,
+   "generated_markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/kliegel1969.md",
+   "markdown_sha256": "421b76265cd8fd9da22a2e1f426a7f79593f7d582e069ad8a7790a809537a275",
+   "figure_crops": 8,
+   "tables": 1,
+   "page_markers_verified": true,
+   "all_local_markdown_links_verified": true,
+   "conversion_issues": [
+    "Bulk Docling parser output is unreviewed; formula model enrichment disabled. All original pages linked as facsimiles.",
+    "Tesseract orientation detection warned on sparse OCR crops; Docling returned success on all requested pages. Equations and OCR still require page comparison. See docling_import/conversion.log.",
+    "Source PDF page 1 begins with the end of a preceding article before the Kliegel-Levine title; do not attribute the whole page to Kliegel-Levine."
+   ],
+   "parser_artifacts": "propulsion_texts/propulsion_texts_for_agents/docling_import/1c4f875e3c112a16",
+   "local_asset_links": 12,
+   "asset_readback": [
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/1c4f875e3c112a16/images/image_000000_fad037ca53edeadfeec7f8c918fb5728b4a89d86c0b222504afcb23cc90b793a.png",
+     "sha256": "16d382dfad49bd7696a804c6858f394a6b52d81973f319f52c04740f6729c8c6"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/1c4f875e3c112a16/images/image_000001_1d32c051455049a20e583a5494cb107ac288599a9af760725e9c3050de43c6cf.png",
+     "sha256": "6e4170d2bffe53bcdff04f0ac87ac5320a8b93ac73c1bb3430f64f0d88f4171e"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/1c4f875e3c112a16/images/image_000002_2be5f85beac105043b6e4efa3529183fc3803ce6c22b501dffea5efa78abf620.png",
+     "sha256": "f41c778a6efbe885f476c6141c729c82bbe19f836707a5b1ebff3c97525f7791"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/1c4f875e3c112a16/images/image_000003_b0a5682ab793ccd8265c59cac917dce72b386c24bf28eb8fd7f80502838b87b4.png",
+     "sha256": "dac77160f320922292f8b8028119a4755186caad9873f9876fa7dd04a7ccc26f"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/1c4f875e3c112a16/images/image_000004_c30eae5afecf920acb0920dd55004074e2c5455a68a12457f4741eb3bf92cc67.png",
+     "sha256": "f399ff934b2b83752aaaca293d351a608c8fd6a6835b6a7562abc94c2e7fd124"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/1c4f875e3c112a16/images/page-0001.png",
+     "sha256": "d4c9ce9691da475355c5c8125ab8ad086188ff34d67c17dc3b912194d2915469"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/1c4f875e3c112a16/images/image_000000_d883657333db77c697d07a6ef6d35beeae4c2f0294e0450e97b6699ec5ca0bd4.png",
+     "sha256": "8a3d759df5305cab05369c86e7521389983bf5ed422447558dd0a51b22dc4b55"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/1c4f875e3c112a16/images/page-0002.png",
+     "sha256": "8a98c8ef15e55d7e49dbbd4cae36326901647d1dbdde0cbf05cd0bbb58bb2665"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/1c4f875e3c112a16/images/image_000000_c5e945ca6b38382bfabfcc5f81cc6177a9e742e5b2d8afa289029c20abd27bd3.png",
+     "sha256": "4bd0b3abd19dbc4e167c775e9396b597737a0658dea75ca28dafca7e6c5ce9b9"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/1c4f875e3c112a16/images/image_000001_42ca4076a4c117134e551ac0eb4beb95b46c074665f83e15b2730fb471701411.png",
+     "sha256": "33bbdd46d93e2433ee47dfa812578caf108d9277980564f4ddad6a1ffc591762"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/1c4f875e3c112a16/images/page-0003.png",
+     "sha256": "8d5af3c93277904b275a87f546b3e6ceac3f3ec04b4a3275aede6b9be5c77a31"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/1c4f875e3c112a16/images/page-0004.png",
+     "sha256": "c7d12c599b6efc7a37a7b4d2182305e6bf2016a85eeb589fb6c8133ba8183908"
+    }
+   ],
+   "graph_figures_verified": 8,
+   "chunks": 13,
+   "retrieval_probe": {
+    "query": "Transonic Flow in Small Throat Radius of Curvature Nozzles",
+    "found": true,
+    "pages": [
+     1,
+     2,
+     3,
+     4
+    ]
+   }
+  },
+  {
+   "document_id": "DOC_DOI_10_1007_978_3_319_68427_7",
+   "source_pdf": "propulsion_texts/Shock Fitting _ Classical Techniques, Recent Developments, -- Marcello Onofri,Renato Paciorri (eds_) -- Shock Wave and High Pressure Phenomena, Shock -- isbn13 9783319684260 -- cac1acb5efe01602bc13ea2c7aca4465 -- Anna\u2019s Archive.pdf",
+   "source_sha256": "0705765da55172c9aab6a1868c690a396c0a2a34f637a13ba9148b3d6dacfa2d",
+   "page_count": 234,
+   "generated_markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/Shock Fitting _ Classical Techniques, Recent Developments, -- Marcello Onofri,Renato Paciorri (eds_) -- Shock Wave and High Pressure Phenomena, Shock -- isbn13 9783319684260 -- cac1acb5efe01602bc13ea2c7aca4465 -- Anna\u2019s Archive.md",
+   "markdown_sha256": "9fd0f267499b1b3c9ecb8a356cc1ee15cb9ea25914b46a9b9cc97dfd6192841d",
+   "figure_crops": 142,
+   "tables": 10,
+   "page_markers_verified": true,
+   "all_local_markdown_links_verified": true,
+   "conversion_issues": [
+    "Bulk Docling parser output is unreviewed; formula model enrichment disabled. All original pages linked as facsimiles.",
+    "Tesseract orientation detection warned on sparse OCR crops; Docling returned success on all requested pages. Equations and OCR still require page comparison. See docling_import/conversion.log."
+   ],
+   "parser_artifacts": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9",
+   "local_asset_links": 376,
+   "asset_readback": [
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_20e023f44d85e835e33f78ad62ac3f3f595ad72f6093749cb2f5cbdbb6bd823b.png",
+     "sha256": "3a88f50db6e7c6b92905af5f08a137f6852c1ce7e648430e8a4e0610e68f7491"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0001.png",
+     "sha256": "d72de06a8cf8789dc9dd0dfbdb4bc78ef3e370226ff027ce4cd53a8216be264e"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0002.png",
+     "sha256": "b9637f3fd5d513e59d89e5c76ed9fb701859721582ce5b7f0093db9bf448b6e7"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0003.png",
+     "sha256": "bd71e56c730ca048a374fd2631934d9eadb79ea9fc91d07cdeb3fb119d43df31"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_322301d63a845fd80d6ca27e91580f3d773da1c4cf53b44590ab4bc0d2736be8.png",
+     "sha256": "37ea315552e221c6fde7e42a8a10642704894007f12cb8774e868a3ac93a3987"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0004.png",
+     "sha256": "734a24c8674d736b60f70bbafc6d688608fb3217e23486dae2a0c4c4099c6aab"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0005.png",
+     "sha256": "42a9b4803e4889e39d8e02b2e5bcf7e3d2b3c2696923e0230927c515bf9d1ba0"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0006.png",
+     "sha256": "e5e42fcc2596bbda1bda98ae86485eeea63195853a6cf591fe87ab59b2a27ca4"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0007.png",
+     "sha256": "a39efcc9f20fa4012bcb0e29711fab06156e81caaafacc1bdcacf159c96b2dd7"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0008.png",
+     "sha256": "5f8ba8d1594bbd764a0651e10fed1602662a899ebbc5d50e6b0327cde5387521"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0009.png",
+     "sha256": "a4a370116f38bf41119b5cc5c909eb8f362d4e4e89b25b6649940377821ca695"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0010.png",
+     "sha256": "a2ae9ed443e81f512370b557bec6d2c4533c8fb4cd76b3931bb9b0f500cc063a"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_d5457fdb127a1471720f5e5c6ed8019273e5daa74f138ee8c39b8f3691097523.png",
+     "sha256": "1d75d36a578ab2519968533bb84813265c7722041856aee087477bb70742cac6"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0011.png",
+     "sha256": "f99485ceaf62d4c39b578f0256d48438c73742c8d6fa3a3895be26530b8eb32c"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0012.png",
+     "sha256": "701c28e9c24b81166c9d6a71280f0f36bf2ac3cdec3fa9e0e6b0516a26389a49"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0013.png",
+     "sha256": "582e69f4b301f5c0894c343b162c11360839c3c273122d57ed6c8fdcb85cadf6"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0014.png",
+     "sha256": "e44825349c2433a3b1c9063900ee46d50ee61f80791c014cd5d27fdef06a61c5"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0015.png",
+     "sha256": "58154204d43302cc5629ddec0dbe3aa5751259a372500159b7f15c04312f5f5a"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0016.png",
+     "sha256": "3108a0509bb9883875a80363415cf10d62babfe1ec4fdedf06da5f16874cf33c"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0017.png",
+     "sha256": "3052cf776a504efc34913aab7e42d9433fa9b92033ded81fc4a54c4c139afd2b"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0018.png",
+     "sha256": "ff033c70a4d9d9133e205b9f5a4f63713b1bd816b213c80ac4597f003782cb64"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0019.png",
+     "sha256": "f9ac63a73004972a3ced5fb00160cd27719a37d24621559eefb1c441f080d5bf"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0020.png",
+     "sha256": "80104db0fd72726934e7aa71ae0f0229bf460939f1720970430d9df31326dfb2"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0021.png",
+     "sha256": "0155655b4032f3d1167255898ad181d9eb509fb5fd10e51b7e58c90f53655acd"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0022.png",
+     "sha256": "864a8888f0bdebfbef1a776d37ea586cc762948134758de2c920d9ac8ec6448f"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_25b733d57ec849173ca06c54c3035b4965548e8d5f35483e0cf116fb641dbc1d.png",
+     "sha256": "93f7f68cd1bb67f9870d167e1c9ee996a4ff080c2e1317e1db0ac2074fd77923"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0023.png",
+     "sha256": "e92fdf35f14ec36fae4bc03f754bb8ee039b2af9e43b36befac805eb537d18c9"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0024.png",
+     "sha256": "b634d99014f116282cc7dcc9fdebe324c2e6bb3b99d7e6d2f56dea1d2db91e19"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0025.png",
+     "sha256": "20b88dd6a46eb61a7ff0805d2a6be741179fc9a30bdda44a35e5082c21682191"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_29d7bfdf95ab988418273ce6af3168a2d7ccf7ce79ef2b8d73d6dc8c1cab243a.png",
+     "sha256": "604386f4fef5af1ca41a87d098cf2365467a6875167094be41faf48606cc9ed6"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000001_69521f2aff9c41cdc2ef280f1273f2f5507b4e01e94fe0bd9a4af3a56e6c7fde.png",
+     "sha256": "0335b8264e9c87b89489aacfa75ec2e11840940c86c24c387b5a2aa0d0cf3ccb"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0026.png",
+     "sha256": "14ef5c6c55c9ef762c121527a482fb0e73a21feccb0d01ef3bd8d13c1f298569"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0027.png",
+     "sha256": "5be3a0272e0aba191659b348176c48b8210a7ff276249d5a9c67b72089cee7aa"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0028.png",
+     "sha256": "6efbcc27ca24784c12df2181835f8678a11b3c85c88fe88de2f6f9395a2dc09e"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_c3de4e672fe37e12135c2f7a8791154005d61d4243c08fea72d6804171c99791.png",
+     "sha256": "2c3fd634824340790383ba76800c4512768e86c9af70c183e1a0afde01af5888"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0029.png",
+     "sha256": "0815f1ff4b9127c3ecf59ac7e0bf47462a36f6e4cc7e03deacdea69b1e3288b6"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_95c8eb97b33e0ea9eb56009e860478b5ef4d55443f0ebc15b1781d55b7045dae.png",
+     "sha256": "13e7e938caa35bb2d19bfd9127e91f5718182e5d6e8872665042a19ebed8c83c"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0030.png",
+     "sha256": "69cb793cd60a553294e1b83f29d36ddd765454fac4c22b3ebb2b674c724a3a69"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0031.png",
+     "sha256": "861d4462450ad587a0b1cecb613ae4626341405a320fcdac2225e81d8bb71219"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_4e87745fd78023e6bf7c846a11edd9edf778a0407ef9716e05ae3349bd99053c.png",
+     "sha256": "ab46c26f41ff38c68b41bf44c9278600ce249d3ae14a58397658b65768cea3e7"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0032.png",
+     "sha256": "49f575537fb3e5f3b6b2f180a0bc9eade57613dcbffe40f8728a39526a9d1b8f"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0033.png",
+     "sha256": "2a39c1dff50a5785d836a61d8b74de803c37a3a5ddecce8b8d30535144f86e75"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_e341ae39bede4251b0aed58749688d1eecbefa9b91860ba131e4cb87811d1c7e.png",
+     "sha256": "c73d9bc64a687be3123b0c592a1145f96da884249f39e38aa367e683aa9ed23e"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0034.png",
+     "sha256": "7ad29c1591ee135a7627c10bc799a5fe466df06069e5464fd6abe67ff734fec9"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_c1f2aca169cb165b9159d463c3e3bb700fd572576b080152e24dc775f2fe7d66.png",
+     "sha256": "ba551170138e3063b921e917725e1f2a24b08eb13e2d1f3d6b6cacb8ca940fc1"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0035.png",
+     "sha256": "340ec6390b05a18f40dc5d34e7274bb3918cd8ff531fd8a68e91e08d7b9715ea"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_50869103e11c22b75e9842fa03bc4f3d644695c5bb1098118e28bdc346a3c972.png",
+     "sha256": "c60465c46bebe6fd882b4e93d69637488af25abbc3acf46327407ce22bfa5624"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0036.png",
+     "sha256": "6849f0883e667e95d463d3e306bbc8a17dde9a9a74d7b50ef0b6089ef070f1f3"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_de4950fbf8e927aa34001a7e38a7d6375b52db56b65a27550b13a824dbcb3ade.png",
+     "sha256": "9d5e83fd1cef6600839681b450359709e47bc8f4606bb399297ded997b3d7986"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0037.png",
+     "sha256": "81a6bc49694455383a89fbca089777e830ae3aab21d40d6752a6edf8c67f0609"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0038.png",
+     "sha256": "422efd3f417b0ecb70f855410d379587ce3bdbd52756f09286a21fb84488c693"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0039.png",
+     "sha256": "b819b7c1a3b48b0b4faa7567dd47a220d7194626fc4be2a80c98f60157a1d1c4"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_4bf2d3417160eb8af90963d7543f78e643f34db89fa6d31e95b8fb87cb140335.png",
+     "sha256": "f49874a9c88347a589ec941e725ac2d6f931bc8c18154c49af40c20447d6ef0f"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0040.png",
+     "sha256": "5cc8914fd67ff4c8bc07db69ef3b6d6769be58faf02cfd535a6abf603d4a4181"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0041.png",
+     "sha256": "b65083c39b121e6b52fd299603bebf9918e959e17df23a7474fbe023d300aa62"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0042.png",
+     "sha256": "d2a0abda1c9f6b3aced60fa9b72c384759a5b0c7cf389b9f750cb7f20fa109ba"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_5959d78d5832b3afdf7ff76a70f58ecfce2a531b8720b7b31b8006ec45403e99.png",
+     "sha256": "c8393a553c37f03787164a4c2a084a53688475cf5d915d06de5fc4c964001403"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0043.png",
+     "sha256": "55953d0afebf03c37f2cf7fa532712142b8e1de3057815748847a1af9b55b7e7"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_90a5110d1de5301e0cca8f7890e4a2f2bf26569be3c128b6945358387ad78f51.png",
+     "sha256": "74e3e2a72e92e4eef6f45b48b4ec0562403069572d7621d41c5794c80100bc16"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0044.png",
+     "sha256": "9b558936ee9f2a8979c28dfcc386ce3b5781039d9a496181e099cb32359c89b2"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_b84d62985fdedecd7e9a5168e9d2ecae147059c28a5d7946f7c47be5ee029dd1.png",
+     "sha256": "49838b8c3d2776804042153ceba6a679c2fda6c70a2073f210f34f1568f2d462"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0045.png",
+     "sha256": "9c4d187afcb790fcc6a58e957a3e18351e3f8e91e173f9b98cb4c7885e1919a7"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_8b917ac93849f873256cf833ee76d93b7ce58a134d1ec7e04830b76adc92b9db.png",
+     "sha256": "16f0c51477b352b3f0d8f06b8c276f7b1ec26ea770efeb94d9f64de75c1b5150"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0046.png",
+     "sha256": "6a085c4f74d1b2b43698e5b50be114112b206264283ca0937600c0b11510d7f3"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_a7daecf3aa4b8dd3a476222d71841825db2da3484a1190855c401c2a40640c16.png",
+     "sha256": "8b9c6d3c841bdcf78b144035ad7ba547710c03965e3145845fbe543faf29fb02"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0047.png",
+     "sha256": "97da2441c985f63bee5d8d65492f18717b78c78a69ff291971704764084b8b96"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0048.png",
+     "sha256": "8ab0d68f60c086a7296552778a2776c70b86ea274bc3d08efdc77c170bfacdf7"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0049.png",
+     "sha256": "5f29514e0d8623c52bbbd1b8dceb5158e50d55ec619628635eea882a107cbb0d"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0050.png",
+     "sha256": "0cf54a192e14b6c51c1821e0d26f90d4a90be974dc1787d5f3f7a2533f337070"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_1c8b283b06ce16eb3a11ca0abcb71913b366eae7fecd77d4df22571b61780204.png",
+     "sha256": "ae9aac2cd0d21d701853fd4b01e5b17fa4c89892e31aed25844d113aaee60e30"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0051.png",
+     "sha256": "c9571681875d7d9c3fc05421fd4ffe54d39f9c8dbdd999ac39d8fa6ac742cf7d"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0052.png",
+     "sha256": "ebcc7668f27a3714323d0f41ac715f72a4154698ce3f4440b5e4c9d3e87850c9"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_269da18977379e4b6087d3feec7415aca0fd17274cc8a416f02ff877587f0d8a.png",
+     "sha256": "b534e1b4f1edea5523f6ba3d65db3e7b0359a109ad49e757f73c73089b33dd77"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0053.png",
+     "sha256": "4f692700eb192d7ecd32afdf1f137d2688f7740d24e086df43c63623b9ee654d"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0054.png",
+     "sha256": "3812dbdd668ffff1ae6271452f7cf653d161c27f6028668ff4913ea71f23bd1c"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0055.png",
+     "sha256": "9169a9065a264d78a5e45a098b427f280498352e9bda99a2529cfd8a73470b44"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_134c6013a050d2c11aebeaa63cab05b94169053085b63b312e52398c0b109c91.png",
+     "sha256": "cb864c7720ee68ae7bfc5540d6d6bfcb6cb325d44fe378cf145ab059ca6cd324"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000001_6b178b805aa1168bd8e2f0af17553045bc7da54d6540f71c2037b2898ff3dde2.png",
+     "sha256": "7fed776209dd5cfeda94340923ebaf16c2f259c593f84e5361961bf9b25effd0"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0056.png",
+     "sha256": "a2b2232634ec1c614f7a8fdd94f2e2388f85bb8a3aea9ed69f617177af5eded9"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_da70e18be4aa6d0a32ac5cdc31c7e7f58914d2dc6dac8d11d2f95d9ac26322a8.png",
+     "sha256": "a86d7b1b61f5758c62fd1a17fa4c77b367d1654b371154ec075c21f720a2045e"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0057.png",
+     "sha256": "746513df974311a186f94fa77ad489f23c7d9195755620e4b42305d2351cf283"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_8a8c242fc342d4d94f63f73c8f70f0499d24f3a91ef83110cc3ef8ad1de57692.png",
+     "sha256": "6e39ba5f28b8d630873806fb84f24e1ceae673f351a0d829a8a71ec6536280e6"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0058.png",
+     "sha256": "c8d09f6821f0334cf51585f8f8a58df99460154cbc6c6a9f43440d7876b83950"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_24423cd071632e30e32bd0086a7b88ab88c5cb21cac92f45dcca942026f0b86e.png",
+     "sha256": "0df4490ef4f8d4aef79969952a25c063ce7ea92996cc51a0af7348bdf33fbf13"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0059.png",
+     "sha256": "d7b706ebd6bb4d2202474a13f1637533a9c60c0daf39f00a09277072b29369b0"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_be4edd893c30187953733b21894b862ec5847d080ffde1b39a8bed83c901d42b.png",
+     "sha256": "edade7a8d81afea757db5f5bf05fd78c0f0e962bade9a3028bcb8de2eab9cd32"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0060.png",
+     "sha256": "ab6a54f034077aaa17df7dced404b2cf6b3464279c47ab7ce98afa5a28742ee4"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_9eaf903aeee8ca0a40a01bb3dd64e044b6f2d5925934df9861b537c2e38d4ddc.png",
+     "sha256": "70ad6853e01b441754db720749306bca4805316d1c8b2f714d07884ef5d9d2d9"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0061.png",
+     "sha256": "6f107ff9d90a46159b1a989cc19f4e539d4a0b629b5d74f0d46198b4afa96f10"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_42145899cdc510d3813838da4e0928fcfd77236a53cd93817a12c4cc91107d77.png",
+     "sha256": "a3b368b34ab185807cadb3e86dce8506c719b2703bdc8232e7562c3b9a9d35b0"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0062.png",
+     "sha256": "a058fc1459635d6335abd6845fb45b7d87bf95d5367e2df0b8937972026d8adf"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_a50be1bce6d77353155c1e92413f1e923fdb2967a286b8df04eca128232eb818.png",
+     "sha256": "592db59f821e92ab5c6364827b00aeb8f3a5c2f1a19352f1a8de3a00795d7168"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0063.png",
+     "sha256": "a96c61c54d668d97ec24a62569f8cbe0aa4937d23deaf70630074cafe606a67a"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_a0214b6571ca232cb773150499a3d363f956e78ae51257d7f9f35a8dcf62cc27.png",
+     "sha256": "500b2cd442726ecc35144ccaa88d1c1489ee4ef0a2b5dd4214ad014661129a2e"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000001_8ba1fa1bc1c0086da8cfd7fbd7d55332c05972cd6fdc9c5ddd4c1c0afd4cec64.png",
+     "sha256": "9e26dac9254f1940e337e9b7dcc6e1e59a78865db176355e0ecdcf17e43d9a82"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0064.png",
+     "sha256": "4e280da1b7454e84ee8ec5ec74f6dd0a8d31ba30d2dd37f9840a23f24d68cbe2"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_03a06640124cc92991f94ac6180f80960388ef0e92d0c1bbc0f785106a444663.png",
+     "sha256": "67a8e21e6a0ccf2b103520d445170d39df9277def481d6e932aeee8567906266"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000001_a922c81f7cbbba5d77fe639e7f3a8cb75758d3bce994433ce6fb50cab95c5232.png",
+     "sha256": "40b52082d5b501c846336bc471d497b379a56940f9e542c93ac0f20ef3ab9803"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0065.png",
+     "sha256": "feb97fb3c9b5c6f6368bb5b322bca0219aff16925afe2ff3f397ef58409864fc"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_51ecb69e750903acc4b3c2c1a759ca11b5ae296405ded95ee8c5ff7eaf256541.png",
+     "sha256": "03a68181b58c2cc9d8f8d2e387a79bdf8166be8d2a2a23f3ec7c23a5571b37a1"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0066.png",
+     "sha256": "f4a4c0b3aac4bef46a51a314efd7f49f0b4a4e5883507d6e48682281bf6a326b"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0067.png",
+     "sha256": "31259b91c443b0278fe49d6e782c91e435eadb15eb214c178754eec733c76773"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_31e119d070e96abcc46df422c7735a0c6c44a880680bf69c8b6a0b6c9bd1cdbd.png",
+     "sha256": "c3cd98c8f7b192a4423c2fcfeda9270dd90b2b770048046ecbea927e23aa0d22"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0068.png",
+     "sha256": "3e0128ae9a738f4038a8bc6ce0641f51b0cf40e148555769a4139d70c22e7354"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0069.png",
+     "sha256": "c77cfbbc9fab101d6ce8c2fa366c2645bcc50645e706ff35129b535766c6758e"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0070.png",
+     "sha256": "1b37c4debee6458de06a207dac790181bfb1e9fd9d4e53ee2f740f1aab8c6d3f"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0071.png",
+     "sha256": "e188c8eefd4504262cbd9a4ce00b757c5e6e3167244ecce427666a5e3e93d7dc"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0072.png",
+     "sha256": "beddcdb99b4e6ee3d9cd7a05aea06c1de41be695e4a33241affec238f78afba4"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0073.png",
+     "sha256": "dc1dee2a413cda304ad4b712c411309a73e6b92981b727b7a8f91075a9bc0ee0"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0074.png",
+     "sha256": "fbdecb8c6f40d6fe587bec3dbc42bfb71d2016a59507e1ea95db694900b8ab15"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_1af8a8d5cfc2a10589795d7572fa077d0a386147499163be01230496d02686c9.png",
+     "sha256": "a0600949217aa95a1bf50872362ba368395b9d9262e311702fdfb0697d479adb"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0075.png",
+     "sha256": "6ff3daae88737595af50f6f47fc67e4494478572723bb6d4a4e15740e7742359"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_c97734b210a712ca548b5ba0c6835f4263a0344387ff6fb37db0ded345a3c40e.png",
+     "sha256": "22a6d7ed9e832f15c51e1048e0330c72168c3b69b1c59c65bc00df9f65b616ec"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0076.png",
+     "sha256": "22f1303010c136188fd08639a07cba6be90996c13559fc0ba99b5a4447990ec2"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0077.png",
+     "sha256": "2c36bdf29bc2c1c3449de41179fa8019745e34fe261f67303b9661f62e5b1e60"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0078.png",
+     "sha256": "62c1308b194bfdd24b07a282e7a5a22153c1fef3331632e4caef25b724603e6b"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0079.png",
+     "sha256": "c20c3f3bf1ad8bfc3433a27ac3cca32cb70324ac4c8f5a0679c20ee414dd722f"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0080.png",
+     "sha256": "6ac97ad50147f8dac93549e0d44f3156624b461cd8978d3cb1af710140408fb6"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0081.png",
+     "sha256": "edc40fcc6f47c1c30975c6f076d6892b19dff1cbe5cd66da79465592a12f5327"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_6b19a385f5d9c9c16aede5376cdcde26970e7ca4fb601107302b3b0a579df661.png",
+     "sha256": "444c3bfcd24d3feea45ac0ed2a9d7662358d413fbf0aafdd2bd57a7ec95407e9"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0082.png",
+     "sha256": "3f441005c2c07400650a4c60f6d16942b7811c8d5a41421a9629307943a1ed93"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_b2fc5a7f1d86af80356fba9633c7349a78feb667e35f9b3183507c8403b95efc.png",
+     "sha256": "38944e65e90e529d5895ac4f9fc63f5ff0ce4fd1de130d089da9791caa1b8b68"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000001_b494c3b606ed09c46f16a8afdf9e70d7555aeec402d0314ad3dd05b67d26b496.png",
+     "sha256": "fb57d1ed056da37b99ab731538fbf74fa97c7fe53525553e0e6f4078f347c4a8"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000002_c9a658169ac6ebdce42b1ba7b5e15af075f527c6e894e06be086ad3adf8b4c48.png",
+     "sha256": "5701c20866351f392f3db9039669e8fb95cd4ff20e7d407fe7e170bdc7f952fa"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0083.png",
+     "sha256": "16e30538710d0005bc4954e8def6cd5acaf2a0219b1e8d48c1dea02c7540058a"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_b5e846f1847d3bf3a4a0dc3e681df5f2f549d7c6dd471d3a9af1a35f1e083a4a.png",
+     "sha256": "9c2559761039cc1dffa61d927b6efa46ecfe06461362e161e198133d42f3e609"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0084.png",
+     "sha256": "233dbca3cb62bc567c2bf6a27f28fa951c8a1bfdb86ec925d4e719ef72f1dae0"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_3a78ddb59080bdb72922a5d3139a3f4792c17cfa53ee50edbf5e1f881f59e698.png",
+     "sha256": "3f48c72a8898534db9c4d8cddb29d16095a46d99e43b71449a67646fee8ee616"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000001_42ae4afe68995e64d09cc0649a9af822664402d3f5e2edf4a28d38bd25549973.png",
+     "sha256": "edea5a0694746920571918751dbc2d84e104cd3f9cfb3e20b2da34d58afe1535"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0085.png",
+     "sha256": "a71c0be0e0fe8f56e5cd7322fd1a07d8c4831c94384c0e41220588808bbbe24a"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_e2b823dcb575dcd50fa014945a6007d38c22a1f8041313c1c786d54b7a0a5be2.png",
+     "sha256": "f4e70817af6baedceccca865c3d1bce6fb7f03f066d18508cdd56776a98e29f3"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000001_a40325f77d42832fc30ead6e63e8c8d730852d8abde462b520d60bda85948729.png",
+     "sha256": "57935df20cba64d40496f0766b667bde3020ea42531ca233d74d2abe7caa1614"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0086.png",
+     "sha256": "88eb5fe281d09758ba0c2a16cbb4136fb275fb2ec809c41fcc4b59092395c766"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_1e5a336575e2a8cfcf5bf4cf2ba7bd7189c6570d2af3ecc30f2e1f3d1c4bb065.png",
+     "sha256": "fe190f7e02940df48586251ecb2afcf14e0ca1eace816dc4f696e0c4f74e5f10"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0087.png",
+     "sha256": "af488c5f103d73f950b3c9e7eaa7db4be497fa1333efa8f9f734093276c76e9c"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0088.png",
+     "sha256": "8bc0b9ac5d18db9ba41424afd6d8bf7525e8cb62690efa267765812dfef2d6c3"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_928accea3723666a786631ad7bd0cc2cf5fb937276aaa78ae559ce20440aaa84.png",
+     "sha256": "fe9a42856814b28c9610f7a080da5b2ca4a1d281c69d36239f9c76072d2a5170"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0089.png",
+     "sha256": "47fce2fd87bda0e679bfa77179a92459c3e0d74fe12b688258d3b7b258b0d999"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0090.png",
+     "sha256": "257d19e9b8535bb1edd769a5d8b467064a61742ee238da50a29859b7e54b87f2"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0091.png",
+     "sha256": "07a43b0a7c61ed67b96d4aeecad0c4f67ed515dd9dd599d6a3ddc154b6e71bd6"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_3579dd6155cfd6a8566e34eef63c7c5f14995696ea863530b4c7b55d72d7c222.png",
+     "sha256": "12534610c76c2c17fffdcc1d3c9d15457a6fbdd8e97936086d875e0437e1b954"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0092.png",
+     "sha256": "88eeb96b0a07a7b1d0d818b5f915868c60778ecfd7f5fbdf9bb0773c53174c19"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0093.png",
+     "sha256": "5fac7d82ea4b8adf13e32fae5b2258a19b3515705c519508c4ffbce0c41611c8"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0094.png",
+     "sha256": "df28695c623624bf1c880c3af0c36542edfc2783054a5f202a2b9fc020f04578"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0095.png",
+     "sha256": "e4189b777c7da33fddd8fbe64fbbeaa8fb669937d8ba62fd2b21c419232da1b7"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0096.png",
+     "sha256": "01885a50dcf95e54ffe5e8cdd8de08b7a9ff4e33e50a699a966e3bd7f7987099"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0097.png",
+     "sha256": "9588872c3124c9b53706acf728e58e50a6d5f7c330704e93c56283184c2e0213"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0098.png",
+     "sha256": "1f8ef20972d819551593295ce2cd9d819f80a218a89d7fb2220afb498c3d5ec5"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0099.png",
+     "sha256": "b46dc335ff17d92a416a15765b59e5e52c067f63f532c1597711d87c924312fe"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0100.png",
+     "sha256": "f63494bd8e5575ec9cd4abc8a896ad535550d35bccf53970274bd08170fbbb93"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0101.png",
+     "sha256": "f66a6c71dfecab99c5414935ec3853168dfbb9e7592068f6c9ef366fcc0b6752"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0102.png",
+     "sha256": "d86d02c350cb49e2a804b83fc77fc99556c626fd956b27f32b85ac609952c528"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_9406ea69423fdb77324975c4b970612a469d7316be98cb6ad510b4cd4ecbe3fc.png",
+     "sha256": "e8c42910841259f0eb2900399462f46fda9d7463d8809a06e6441bdd10bb1436"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0103.png",
+     "sha256": "3333d73b99ea926bb67344ce5a3f8ddd17827238a4b1d382a712b8e022805696"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_96189ff0fb7363782c78dcbc08957b7bc457e2ee31cb376e629d713d20f8c929.png",
+     "sha256": "c94d8d832f7e3e4fd4a0ae808f100bbbaaa022223e494ea0f53801e3e01fe085"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0104.png",
+     "sha256": "315590674100eb4cd3fafd0eb8d68e2091ba818f4668079631b0dbac1bf3c1d1"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_2d783ad568a6a0c288b78871ff5dd2bdc8ac2b196387d37e5917787fb4e13cdd.png",
+     "sha256": "561655b4d7ff5a7567117718b1d51e1c59188003670d81e75bd7e4bd4025add8"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0105.png",
+     "sha256": "5a76b45aaab8779d0cd9af9c1484038210eaa4f0223e89d1aad885defbb4f6e1"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0106.png",
+     "sha256": "c369a41fc1c9923530793ef3c22d9a68e4026a0f2e6b6675a62bffb1c5a8628d"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0107.png",
+     "sha256": "a63098b8b2bc9aa6ba132b75b09dec7007527e51924f9ed9e301da3c9c8ed4a6"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0108.png",
+     "sha256": "f3539432f4dd0024ad6f129cfce2a569791573d8b4232c2ffa32f386779ce1ff"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_dab0254f02f2c043e5a472e90c35b762dfefd52e9027bf8c1bf6b8645edd9366.png",
+     "sha256": "d7271268f1305f6e6aec75f21d8ff9598928fcb637ccff91237af362365ecbad"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0109.png",
+     "sha256": "560ed9d797c085a1d165e054352ddba237e7ee495f484bd3b142e2419406ca53"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0110.png",
+     "sha256": "256e43c37754d8550f82c23312d2bee0d4eda590270980e969656ba1c06bc01c"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0111.png",
+     "sha256": "4e7f95332463753ab7a25fdac848404a884fd28bfe5ef28a9f1aa91a6609d819"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_43ada421c5181af4b8287c0869dd8a7d40f6537c565ef609b8df2244cdd95474.png",
+     "sha256": "a9eacb63225eb0878ac89368944cf0383501095adfbd1111d3662604f6c42909"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0112.png",
+     "sha256": "fa264c505ff3ba8b04bdeb284c06827e89b5078680fb9061af07906a353e2f9e"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_eb3dde1d7709ec09527043eab6c36f6b7db6443e32572114f10e64a645896484.png",
+     "sha256": "e179e80f0285a9f6f4c217481e6bd9d6a823495950d3a6dc3bcc9eda2425c345"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0113.png",
+     "sha256": "6621eb6b78d3c82fe6f40a623470ccbacb000d304f1dad30e581110804293f43"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0114.png",
+     "sha256": "7dc7690679a81b2e78fdedaadcdfcd172edee970664d54b00816803fecc33d9a"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_b9588e9deaae4d7eb025bb6d075ad60a5ddb6d3db420200562068340ba042b26.png",
+     "sha256": "4ee43e1eb1ea3fb7b95f11fadfb5ed6aecacc5022e7730afb2ed9f21aa6ef2e5"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0115.png",
+     "sha256": "7309087dbab7a18651624f819a6c2445a5ce8fc8a45acab0984b9789fde3047c"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0116.png",
+     "sha256": "87dee647ff9a66d6a6147e67ec000cc7a779af7c6ce2a143df7ae01f8deb8ad9"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_9579d33db2377e0a830378b3bfbbb13bdd212cc5307f69be9446c96795cbb819.png",
+     "sha256": "6c6670a747ec14265f76ac5b45782509a9a290b4d56949cc72737852c127b30d"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0117.png",
+     "sha256": "3db0d7dfa5e958b02ecf3dee333953ecf0b6e6da3291627abfc8ff644966271b"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_bfe63d32154fbf3a14fdf54cebff85467c3337ac7799724aeacc7ea0b1ef443c.png",
+     "sha256": "0cdc965302277e97cadacef47b5433b4781f1189714b1651849cdf8315015cbe"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0118.png",
+     "sha256": "77c6ebd9d8422ee63a223466ed978e6f510e44410322c95d32530ed6e7336bad"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_cd788a133c67fc3f5298a31116c5a8a4091db72b86778021ca077015e1f75185.png",
+     "sha256": "6a04ce8081bfc7f2fca41cbff259c96051b064c3b43c5622577f388bd138b121"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0119.png",
+     "sha256": "018f31a31d0bfe214ad679087a6d96109dd2b17c9533b5ca57873ef5d62fafa2"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_9351613adcdd877bfbd05e36064d1f1764833e01453f66a6a82da9bb64126dae.png",
+     "sha256": "dcc47a501eb80dd7869d328b68b3fe91cc759d4f035461562cad0a8c13fa8755"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000001_75df0734476e7b6dd41ca66f03969f5ac6d82992aca72da0443a94a42fac536b.png",
+     "sha256": "a5be761eee541565ff1d45ca3fa551d0fd2bbe61c0de101d8433612e67d41d38"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0120.png",
+     "sha256": "58bcc8864455f4b65b95770f535a9d629f0ade6bca1a345532fbaedd0d9f5fe9"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_e47295f526de1d5cbda5ed56ae06f49db049059d09f7519d8f27edfe5ef1b6ee.png",
+     "sha256": "cead853b6b8a8ba8a2b8d85e19c04f374976568b44992fe64efb84b5e4304790"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0121.png",
+     "sha256": "3584271611d9963973f6bab0c2c682fb41a6a9106ef98c79b1bbd04d5a05040f"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_be6b4240a5a6ded510b3e5d47e77264ae4e6e8190c25fe4e64911fce91b1f278.png",
+     "sha256": "c70a17292b1c42eac397f5d6cd7d35a2d23fe7f44bf3adf250242618423fe2d8"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000001_135da1e7071814ceb0b4e092481c641a9db7f76c6748a16234d80f6d5e403dfc.png",
+     "sha256": "2365a2234bdba9c62b5e6033e5833c571cb9e003ed7f847b32911d89398f3eaa"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0122.png",
+     "sha256": "82253e042571b6dacea1d76beb665e6283bc1a087d8e380ffa4b6f444ac679c4"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0123.png",
+     "sha256": "d7096a70530d48f503be68b99aeb6ecfafb6fab6689dd6090c07a79d6e5cfc49"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0124.png",
+     "sha256": "aeebc02ffabfc1f52252df72e029aec0aa5dde73e276a73ab5ce57715193ff04"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0125.png",
+     "sha256": "867d960cc7447016401c7009a038ea91e50ccf1e2287a3fd406edda31b24f2b4"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0126.png",
+     "sha256": "c834684849d651c313ede6591b26fc21c83115713d3abf0be2d723d01b9315ae"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_d30b87dec1063f944c07e475aaea0a258690bf99bd4d3c118718ba668a1058f4.png",
+     "sha256": "389337ffe9ef4d79854aa72a3b23558f2b167061cf99a6b66fba846352eeb61c"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0127.png",
+     "sha256": "5a163374713485a1fe9c4040ffde9073b52aaa07716986a138e9f6557cef65e7"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0128.png",
+     "sha256": "f0e1ae18a71ec57ba2c09075da3ffbf706f64300f57a37af001fd3d7e3b62a55"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0129.png",
+     "sha256": "e4a12005705bebffcaa5f556742aa8e8f1766a76a5808e3fd3a5bf3824fcec49"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0130.png",
+     "sha256": "44a85dbe00c56878906474be0d39c9cb048d6848e63bbf507a45b918ebe9cc35"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_fc2ca5a1be77e696f9c5c664ec1df36caf0b8b4acb46cfc9c4026b0ec9fb23af.png",
+     "sha256": "e6e616be676a171ff29b03fdb60b4bf32e393f8a5b4722c6d4be1072e40ca0e1"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0131.png",
+     "sha256": "97c3c9a0cba573edf5ee260f360090961d461870dd836d557e001684ccb6e30a"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0132.png",
+     "sha256": "29af7d10c59fdab5fd5ba7c3cb3eb2809035993e8c0f50b69e363bfef62e5698"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_1dbb18bafdd80392ca76cc83c66fed66455690fd6cf945bddbffae5640811ab5.png",
+     "sha256": "16ea5020647def89062abd6cbed342a82940693cda7b9a056f5362fa6f3e078c"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0133.png",
+     "sha256": "d2a36b4a8c3501e8bfddedf3be9f6df76beae8c61d62bbc765b035c6ff8ebb92"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_e0fc2239e03d566a3ebc3eba16cd6adcce913ae16d656382556208511cbceb09.png",
+     "sha256": "b8cf53831f1d69ccd3191a48c495f51a3b6f7979ada3ab4063462aec993d1f2f"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0134.png",
+     "sha256": "75c40905e813ac40ef37f0f825c0f7a87acdafeb4eae4bce57a2b5669895525f"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_a21b1ffd597605c4b3ef6add1501d1f7099d577e8e1f9c6bc1cdd0727001b476.png",
+     "sha256": "fb52973c6c99635d961d1d71e188e84fa0c5ed67028c8dc70aac8cf25756adfa"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0135.png",
+     "sha256": "d54de4d1bae1c6ce2c3f57f069e22086b52c50aac3f77299c1a0aa79deb2850c"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0136.png",
+     "sha256": "68ffdffc92e45cce8c458fca0e3630dc4b26490d6f9be960161c7254f9543c27"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_0acefbceb9002faa74ff338ffaee98d40f6db261e5f0926e72a148779c80e8d9.png",
+     "sha256": "2b7b01ea5549a6d05320be5ccbfd47a686bd8ccd77b64809b20babd047afd0d5"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0137.png",
+     "sha256": "1db54ac0c54a46c0a8a054a98e4023a6d854997fe1dff8ade8c98bb50cdd9ee3"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0138.png",
+     "sha256": "451fb725d96c20a179407d846089e2a19ad135a54206617d28eb9b9f7c0a0016"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0139.png",
+     "sha256": "24bfa3ce0c9954bf515f2f0918f77f69d823ed503a7747d94baa5984af861d71"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_444362604b357af7c954b7f98b31030313e7b0445499f02b5d367b154c5991c4.png",
+     "sha256": "b213fdf407e7e54b656659157dbd5c0b47a093dd0bffda46ac9f7b714a3cfe03"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0140.png",
+     "sha256": "580925524b2feb1328c0267f8cfe971a97f2abf4851135106af630c835a971b3"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0141.png",
+     "sha256": "d29a746b7f2a5ae3bc9c2f748f2ad21bd614c4e1b45d100cfc1290c0bd02013c"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0142.png",
+     "sha256": "2aab252b0f5ab57ff75ff1b20d4a99d28d141d5eb6bd1e8fef81cf4a9345c403"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0143.png",
+     "sha256": "b9dc5e0bf1715c772d16e2de919848d6a8e6b0dd5d497d5f1490c3c88555f9cb"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0144.png",
+     "sha256": "08a9ea6d082c97a4fe10fc82e1e655ddb835481bd0e81163bf1a185bd54bc1b0"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0145.png",
+     "sha256": "06b6a3f61fcb41a34034c917472e3a5ab7bbff2848f512f29a4cbfa71d3e2a6d"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0146.png",
+     "sha256": "de40242addfaeb87fe3ec43d5cc2ac987e182bc382e276d7b0b71fc7cb13c53b"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0147.png",
+     "sha256": "4d3b6a17e53783e79c6e57cfad76b69705c4a07e3ffe3bbb855800a7e8343854"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_018e5f3c3602ba7ff7bf04ecb03d133443d4c5d7d50ce1bbd77c3dab7e491a62.png",
+     "sha256": "3b77a8d3f9c29488078ee80eb6655c87536f0bc2b071e514db66326353d4e4d2"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0148.png",
+     "sha256": "8240d42d568c81a0d5e285827b440394aa82526269bfa3d024ae8692f2960fb3"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_71989a1160fe104c05653dcb44504b600e1415f85f59a3f3da7ec3cff1cb7063.png",
+     "sha256": "8013452830597155991b4a209dc61b0fe3fbb35037dc81e780e2ea3c24ae2b16"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0149.png",
+     "sha256": "460d5f882bfa59fd9ff006114fc76c09886e0ffcd2147d8bf5fd6ec3fabfc01d"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_860f03c20be36133d6887ff8554de4842f3ad10e87696675548cd1150cd9c552.png",
+     "sha256": "7c6e9bad04e7fe716bb576c4d264b96015b2f40c979deb1a8354030a1fbc85e0"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0150.png",
+     "sha256": "5366c26b7f87a33e0736698657285d022e2c77ebbcc60a4df9fa7478171c395e"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0151.png",
+     "sha256": "743e1c8b7017012d6fe34527eed7cfa1af8beac5337667a6386410c8be2864fb"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_292537b120d022c04203150aa98a7b7ab12ab9f529b6911b7ce72c21118d53ff.png",
+     "sha256": "ea5ee3c03d77278590c4f80e3a76d057edf72c3eb1a87aa662b3ce6fd0f7aa20"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0152.png",
+     "sha256": "169f7f459684fc3f38ad1c0330d18f5b8efc25c09eb555dd1f0b5354b9a7727c"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0153.png",
+     "sha256": "39889312596dc0739f58ef848e3738f10725d79554a845f695a5d1622bc86357"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_f135e63eeb1efa626a421e7864aaa4c5401943c6be463e22ee93de68d6f7a867.png",
+     "sha256": "40bd373b84560b5fdd904783a4da4bc87a6f012b38f8ed53c8c77f48357f2dad"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0154.png",
+     "sha256": "dc375d34508c198d8254a0f1015c0afb12280f1953ab831d691d7a2ead63d135"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_e488dee8f9e19a7b7737fa80db047455e3355e82e9f7e250751efeec2fb290c2.png",
+     "sha256": "f6a7c981740170cf1355928cd54334f166c5f29774ce45591d4ae5563502769d"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0155.png",
+     "sha256": "a737b28ef9ab5478fd879601d9befba44b3fa8ac70cc45e08524a43e93a13117"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_88a8b6f2875c8e44fdf6d7f495d80f23e10a769e18abf390b01a225c429d4d80.png",
+     "sha256": "ac003a8fc469d1ba1bf7e32f9f83c542093bbfffd561a118aea5b4de3fbed599"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0156.png",
+     "sha256": "bb37fd0f85d20660983c1850f00a9d9e81d09a2c1ac43b173b4330e0ca7a9917"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_4116c500a64eb59960be570e209542eb015e919d066c71e31f0f31e832aa1225.png",
+     "sha256": "0fd091b6f30329f05ad4490689adb898b687b0eb9b0dbdb7bf13dafaf85e88ea"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000001_0a3ec6800f2e94350969c5771fedd534b4a999fd1b5653fa565540b2c4200e17.png",
+     "sha256": "b739e63062be86ef96a82610ba26ae07bdbcda18d8b8eba99d519c7524b312d9"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0157.png",
+     "sha256": "1308fd246ad7a00e4a675ae41b0d8e78f3815d6925818891f013810ba05bec6f"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_0aab63ade7f8dc953323074f93df0b168caf6ace1f9f7663362d115bbb426c11.png",
+     "sha256": "92f490e22f02fff5df9340dd8beea6bfd03bef37f152a791159805126ea6e69a"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0158.png",
+     "sha256": "72a2c84e02ee80bd1bbaf2946754c98afaaa348d90600bc8f243940db7ae5784"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_3c2ddbbea9ca84a4600d0878c5a153782acb51d63b07f623cf8d926aecb9a407.png",
+     "sha256": "71c92108a8409bab9f5d345b61827023493b989ae3a4b51a3e4b037c3180948c"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0159.png",
+     "sha256": "411551763f18f1c732184d572c1cb3c565579e31fdd4f4f259baed87c4271cb5"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0160.png",
+     "sha256": "5b77c75a1b05afe177b2c3f4f92d7f79fa90375a512217135a9bf0dec003631c"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0161.png",
+     "sha256": "984abe91038f5478dce8753fd5667ab3435f40e75a72b8b0e863ae515b1a5776"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0162.png",
+     "sha256": "3d5ad3e482aa82e807fa900fec011884308af28697944a07f4162ace9ea61292"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0163.png",
+     "sha256": "d6f402b68c278041987226ce6d7a385434e65039d380142cc183d0540ebe1ca8"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_1ff8b6987cab3905acdec33fb74711acb30d4325ac21063abdc5ffc5d278f627.png",
+     "sha256": "c725d4b662eb422339f7bad54546838ac26157f3eac9c8657eca6f50d854681a"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0164.png",
+     "sha256": "738c51bf1dfb41bc865d988799bdf060647a5b0c87139b3605973405aaa58a46"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0165.png",
+     "sha256": "0884ff69ae18f9ff2e0ec5632e3b3312270d88bbb17705230608906ea0c4ecad"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_6101d85b122a45ce0d703b795e0299d563cd7bfc01926329e694a4bb21560d1c.png",
+     "sha256": "45746a766595387d9e21e0deeaf6bddc54be468896d1e0b38e3fa7ecf335cdeb"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0166.png",
+     "sha256": "947d6a01c8f89f51230c062088da23fa2c3da14161f53b2b437074761c0b1bbd"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_930b708a91f585f08f6c4f8bc2d7070c8d98990a5c69981bfa47964dbb21eb20.png",
+     "sha256": "0a8b9e769f5b2f924336154ea56e3edeb976bd38baff2c9d9c27ec2bef679242"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0167.png",
+     "sha256": "459f5b1fdcf2e728360b46fdff0cec1d0f2f8ef33ef5637d56f7ba3c3df7e0b5"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_3eb8b6a07b9d5cd3a81bcf9ae240fbb3694552049f7269202cfaa2f0dba96572.png",
+     "sha256": "24af3fbd0b211e9f3fd9620b738852ce3507b3bbbe2b9cbe4179cb75192def9a"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0168.png",
+     "sha256": "436b7b82ca2b7a190f942aab4c9ad785339b12f5843370328b8f46791c317a57"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_e9af2d081ec01084d2d21ccb5262c06d9874170ac05a613696fa01bd2ae5b4f9.png",
+     "sha256": "388d53857076a6dbe5f94dc338ff1fca63871a2a8141ffeef3e1be2af5438108"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0169.png",
+     "sha256": "4194082fe263b3b18dd1fb584c1dafeebba8d2241919c6cbc9c6427eeb37079d"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_92ca99a1c4c0c175b4768aa8541096dce61bc06535873c08ceac019977d6dc95.png",
+     "sha256": "d419d55ecc13e0bf7ff7f1762df4be39fe03c7f63d806b18be708eebba4a17bc"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0170.png",
+     "sha256": "f164ece992838acebe6df4b676d6c995e2c79baa512e9c4d259a4c02b226f1f6"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_5d422b0a2332e127d5560874a127289438ddf0be1ba38f956cd2b8b2432ad6fa.png",
+     "sha256": "79703944c9e2fcbbc690cebbd46091348713e490e9b7b6f080cd4e871ab4963a"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0171.png",
+     "sha256": "30a853220f2ab09f404e879f09aac35c24162cc50c2f9c3ceca47a7e5968b4f1"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_a58c771166f922baab9577b254d67068857e8e983f33897dad21767748b1d948.png",
+     "sha256": "cc7005dd4ba9a85502a1084f6456f91ccf63028a86c819c6226c61a0d76f00b5"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0172.png",
+     "sha256": "54d520b5d5abcf4adbe375f1f072373dcd581a1c12cfd295ece1b30be4787586"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0173.png",
+     "sha256": "60821d386d641493408b31a1dfb864e8f9168031b1508d1d10a70a548cf2aa67"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_0b669430919a0465fe5c028dced8cf87659663d16e07a635985075561eda6340.png",
+     "sha256": "93505a50911cfe12fced129e851ecdba05a7daf378de9094e0959610151c5784"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0174.png",
+     "sha256": "817d7e9b52d3ad8bc5409cb2a633799c72c49855d711398cfa93dab6ec7abd1c"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_56e6ad55857c16f562b4efabf0b0b7550f43cf70b129f9eda5fe984606eef3b6.png",
+     "sha256": "a0e0cd4ae356ade87f1c2e9b120937c13b2f7fdc6c96b922af36875d3ac7a18f"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000001_1f7074ddde6e843b5ee6ac3049d1342aaf48e2ac6715a9e98fe676fd6255907a.png",
+     "sha256": "32c1e305e221525d7e7de31a95f74df617d9c67dd73154059f8b1255fb14628a"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0175.png",
+     "sha256": "23ac26bb61c08be03e7bc1606acf468b5d121328f50ebee69b69e9d4b596b9e9"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_2f599f65593b21bd481e31af366d04b23dee7a3b4e7fcea06ef9da3958c98d31.png",
+     "sha256": "50563c22ec583386b90dbcc5091e9a26c03d8c47824728722e9595f9251891c1"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0176.png",
+     "sha256": "8c6c612cfa1384483232200396e01c565aa4bb86c2e232d9ff94a5357429be0d"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_95670e05d4fc0714a757674eeb204f70adbd8bf1acd8e762d62ea04ff27f1a6e.png",
+     "sha256": "38e981124a12c99aedfb8f005cb52a79ba9aacd0101c6a08b4640fa1085e5684"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0177.png",
+     "sha256": "2cd5870a41cb26bd907c251d5e1e67187a21aad5e13c66d027510ae71fffdb05"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_bebcbdb9fc886b0b43dd782a84eceb6604193fb7758f62095dcffa30e6d6649c.png",
+     "sha256": "2d6d5ea2cb20f841ac11d8e118419d514cf3b637b08cbe849703d1ba256bc979"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0178.png",
+     "sha256": "f92990229f9da708c20c6c5fe96b0601a3814be7cf44ded54d15d4824c1c172a"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_8952db1c720fa17947c6b964b806d993e0462188b175525e42ae08b71ccd3e2f.png",
+     "sha256": "677e6574c7dfccce5f0cf467024079234248db1cb9fdaf48496357b6b7beda4b"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000001_9770c352253fe30c356d45e1744fa28e677fcd2d50524889b497d2b1e6e18064.png",
+     "sha256": "17f1d850782b0c137e5de921695356bd7b20cc0ec1c184c7efa2998a8daf26df"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0179.png",
+     "sha256": "421eaf9b9048b2c2e42c22f681f77e162ce1d24925841cb1cbc3ccf1c4fae3c4"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0180.png",
+     "sha256": "6c35b2a52e4b830ab7cf5905e34eedace7aa93f5b031bb186870c714ebfd01cb"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0181.png",
+     "sha256": "80ce61c3b7c5bf1bd5d1dc8aee04cce68fd3aa88a1d3dc65c721d731478c7faf"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0182.png",
+     "sha256": "c6dc610f77db4a32e17238fce1aefa5c54c679059f4980c8978f4fc7fc68d27f"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0183.png",
+     "sha256": "d35140774bf1b9c2ecd9dc97c81926efb1228a41150c7863b11bac509d63ba4f"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_f797b7edfdea4190368aad319cc61bbc6601e2e8c6b1ea6f84aacf20e59c44ea.png",
+     "sha256": "c0ad43f0419054b9e1c7fb35c108e28854c4ee73082c1c07e8e8d440a2707b5d"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0184.png",
+     "sha256": "a9251d33f153b8bae2e971d1f3cb3802e9946abb39c5feae78aca1a71e99d2b9"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_812476c0b4d71e2cfef28e55a7860b2903463b89e22d1ef17ed3af1be536720a.png",
+     "sha256": "ab5fb40fa539c38c9cfec899562ca848fe2a4c8f3775a964c03359084544a09f"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000001_85dd700351d3de2ad600cd8037a43f6ce6b86e8988fcfb064fbbae1a9d0696e8.png",
+     "sha256": "7a94f6989e3afdc42dc5cb48c81e5c2dd7456171117feced161307b8e08924e2"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0185.png",
+     "sha256": "c2789240f9b4cfb2a3879ddb17327bc5320c6044b18d068e3ba56a95b7508009"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0186.png",
+     "sha256": "b592d9b5247d27ff2011c858abc36998412cf7dbdffbf52422f15f930ad120bb"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_4badde8f831b44ba833daa3016784f0cdd4e3468479dd486b3df72c3d9857165.png",
+     "sha256": "00e8728f5606a4f9c1caf50efd0f57cf6dac3b8ea26c67312e1e3fdaa165f1c5"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0187.png",
+     "sha256": "8fbcfae9cf4518d7e92021c7b76cb88abacda347909f2dcb1164d3576da2a5bb"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_52639973f89d784cda53a3b8767a1cea460e91d8e4aa7b65c6fb471d441af9ee.png",
+     "sha256": "c2238d06b4b220b66755517cae149c54db9f4059deaf554dda13242031a70c27"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0188.png",
+     "sha256": "8de6da2d46a829887a10097e96eee9dc094926a675d57fa2e3e4ee80e20b762c"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_4f2dd2cce119bb5b047168bc7ea06c6c92af0076328eeb883afc42ae0c73c269.png",
+     "sha256": "e7d7371db61fabae5ae4d231cf756bb8590fca41ab4a842b9b29f4859d5c68de"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0189.png",
+     "sha256": "64e1c3c9f289f53c31bdb49771678bb6bd2e31c9898e617cfb61234d6797b652"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_c4fdb3034261e8f1cb79fc4dbdc77421b39d366b8c2547792ad8aa30ef5b142b.png",
+     "sha256": "6ad12c5195b0c41808f528bd342f8d138fd59d2dbcdc5b6a9d28635dd947992c"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0190.png",
+     "sha256": "89fbe5548b1d50ed22dff416884fea347a73e9bdbda66f44a8920f1f5c1803d5"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0191.png",
+     "sha256": "ad128a7da37aa2aaa23a9aa11278d57921e2d634706547d40d03ba944d5de7a6"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0192.png",
+     "sha256": "8e8c2fe6456b1618ad4e260a7258d43e5b82764a17f7ce579aaf4d45dd8582a7"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_027f564a970cf930d94a3458ca58b1176fb21a61fba06a679227c380494948f5.png",
+     "sha256": "ae90a553821b58bb07f57955121400ab66ae52d77552d2aa3c3a4f46e3246eb3"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0193.png",
+     "sha256": "97fb15f8dc494d122fb01385cb9802d338330ed633bb0decd9752f4439526789"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_d9b56e973cd37d57a98fb188a11a0c797b51979a3a60db85f5dc506756ec8494.png",
+     "sha256": "39a00ea62626165ecd01a3f7a8fbfe1f45baa906f5ff33f0810ebeb4419e17fc"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0194.png",
+     "sha256": "f0593109c886284678bc9ee44e40b8382d4d4fc134af360a44305bf46705a716"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_bcf8791110a1e1864f501031856c89e6fad495ae478e48e8455e9aaf0118c577.png",
+     "sha256": "c24c891eefc51efb51da7ab3f8e71a8c8faef3456f649dcc3fbebcac812b9f4f"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0195.png",
+     "sha256": "f1c0325246dbc64e2c34d733006b84bc15fb4c73cb5bf4bb361f88fc6e80adb2"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_c55a1a18717119fb3054acce7e21c6718a046a01594fd2271c2af4cb25788769.png",
+     "sha256": "25e7b43f19bb695bda1657b4b4d57127a8144accff4492285bc113acf50ae47d"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0196.png",
+     "sha256": "2ad8d84868439efb94e628ffe7a28778f034703770f930f023c329b74a8d6740"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_c7af0f3d4a237e1f30a2d818a5796f4cead1a9ba3b3061f5b463e12fd1421104.png",
+     "sha256": "6154e9add5263130ca82705855a1282ed1d173fc17f3ed182e89a58b8e7c543a"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0197.png",
+     "sha256": "2864eb0625280ab022d18a093906cd2d9d12da3e3ff764e38853d43c58cf4621"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_22b130d37142f7e0c70032264756a21df9b7882903dd2aa8177769980f12383e.png",
+     "sha256": "12e9e65aaabdb94e525e4f5eb93517905a8268a6f62c15dfc13b51cabb8c9abb"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0198.png",
+     "sha256": "c82438bbcdc0b457826f8082edc8d5d625ce90a3021180a5a36a81f08f3f81f3"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0199.png",
+     "sha256": "cd7059b103f2984dc1a1e6823d8e34c06c8867dd597be524e13218d7dee051e4"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0200.png",
+     "sha256": "33620ffecf3bdb77903c2a123d26b59f763bcbf6fc46b1b9b07523dcdda395c4"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0201.png",
+     "sha256": "530a9651aff384ca20a5dd4057bbf95b3bb75eb763e84b86691faa4f6aa20287"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0202.png",
+     "sha256": "51d9d954b732d16f2afded38f4734d0d08fc71b258ac032b4eed3d69ec79717d"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_72c061210a2fd0f3a2cafc705496eca8d9916bbfabbc05a687f210b865670acb.png",
+     "sha256": "c321ae186b3ef376c1940859c9cbaad3409cdce2b9e9e474bdd5514fdb36fedd"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0203.png",
+     "sha256": "878f8c47bb0294547d92bfaf7a7978744213b1a8aef6af544cc02c04c7075672"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0204.png",
+     "sha256": "414c4107e6bdde5c4e3fd0d16679956a1dfd6d8409312f599a0674c61d119df2"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0205.png",
+     "sha256": "ebb2d3f06125a5a311ed2dee7192eb4dabf42cbf2b125423f90b6761a5ed41d4"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_93cba889d73fe6b60564df05570a1b1161a4f03adae9163e93dc0a79d12ed8b2.png",
+     "sha256": "fec6da5e99028f9dc0dcf242aa7b724416d61924e246fb11a45aeb0885cbfa2e"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000001_72665b345d80c106fed923e8a70011aa3bbc477e708592a8b15e0fec4f235823.png",
+     "sha256": "26a6349a3b0eb637d856f015a749e49f846e5bbaf8411452853af887a37a0c09"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000002_61d7217f743be40fdd813505cf6fab846b78c3141bb2580f72348cc6d50b70c6.png",
+     "sha256": "a33551407c1e1860ea35b5ee05fee52432c5bf05de2187014ae69398db84a524"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0206.png",
+     "sha256": "41b5875308c7bfd43a7cd641bf22725330dc76c63ebc4edd524c2b945e181e06"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_8ef9635001b62c2016a21961d9bdc76005568017900931ebade36bf9f464608d.png",
+     "sha256": "d0421c0dc69d32fbddb2d8b5ab74c5b7e26e00197336c051a1f7ad2889e757f2"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000001_ed67430ae4b9ec9f8f7159c24afaa3094bcd12b30ee250de9df56dcd8a69e411.png",
+     "sha256": "8f45a5592a8f4f0e8fc43dee2961742df0be1603fab2a22ec8a6fcb08a3bf139"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0207.png",
+     "sha256": "735a68f4e3c44fa86e87cf4cdddae32f47cef2f160a68daf252fedfcd6276846"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0208.png",
+     "sha256": "1f4441abf2bd5f9f32fee0323ebe9a401512a1f87664f9fcc523101bebdd420c"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_651aebe5e2d29a90a545d0e7a35168a622a132ac39fb75e90b8ee5431c3a2bcf.png",
+     "sha256": "03eb6d5005e5155a1ddb9267dd4eb4c29f69f74e9f2cb19bed5377b464455e01"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0209.png",
+     "sha256": "d46a89c1aee2c0d364c51539a879e960ecec9338c7a394549a431b23ec8514f2"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_7ac5c0ce77f999c8ef63daa20edcad0c6afc942a6a3bea5f67a2cd390ed596f5.png",
+     "sha256": "442c27811e76ca10553477edfced6986ec03df4c0f94ff6dc5e8c1a6083c7462"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0210.png",
+     "sha256": "229662ca564b67af4fda85ad6e483b8ec71b6b03771d01bf4d3477fad6475aaf"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_f5ea90021bfa3e8d12cb72a17ca53564b4d4e8eebfd54f1d080b1ae3a2eb95e0.png",
+     "sha256": "b8857ac5ad399ddc72adf058b31eb08d3feea22a4ca7dee2f80a8c6417790656"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0211.png",
+     "sha256": "178a40807ea0bcbc143030c8817f013f5be950260737e367db5c87a5316ba6f2"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0212.png",
+     "sha256": "bb94a2c3d1c327e8cdc8e1ea3c7c18edb19a3d25495a5dd5c9a26d90f94603ba"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_ffb208750a64d38720cf39e425d165d462a5f2f97da1a96505986b7cdc9e584a.png",
+     "sha256": "25fb96d21e9d5c4cfc3a3b6568e62c210233ef58c087397896bfb4cfc24f4e30"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0213.png",
+     "sha256": "685ee20a49f258bddce35fe55cdf79b55549b1094daf78801c98dc20f808910b"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_abf41d2c8c19442c3ae6aef7220b9fd553d1a96e7784605d163acb5b8f23d371.png",
+     "sha256": "b32be7760dbaea784813bcdfccf4807359c7c0478fb78991fd0609802f0f48ea"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0214.png",
+     "sha256": "02c7384a0390c0912a9e5798b30cf4712d7f7bb518c39160bb49888c4ec65d5d"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_5947454a5c016aeb317ba938306b53beb7e70b1c29ebd494d157089baddcc486.png",
+     "sha256": "20e9b55166bc049b0ed3bb5f8a0d6319e72cf646f0318c28aae51cb254974a5f"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000001_10c45de0dc04a839a33d9b1005eae94abf598b9b67051d788084034c7203f983.png",
+     "sha256": "ad0fff28ae2758b63a77811213232f18841e666a126cffccb07706d409b10194"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000002_7b527a249ff8167b72b29efe7337eff6ef5f48fba4b85f38c69ecc3948024347.png",
+     "sha256": "e9aedbd33e105a583fd470ec4033465589b27c7354f2a08fc555b72ca029c7f8"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0215.png",
+     "sha256": "949e79146d0923b3d59992e40b2715b34ed2f310be777e2e1f3a527b27f7e2e6"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_2c5f6169eba27c6648e5cc6ceb7387e33733a58eb71dec66e345cda3ea87f96c.png",
+     "sha256": "d51596ae3fdd28b7e2ccf706b0909b2d4ce35bf955ab1f927d8f901e1542d1ff"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000001_9c1618f7c7812c3fbc2c21072b35a288f9c0e6dffd1fce66a8005e3b002c242e.png",
+     "sha256": "d669eee8b63d16c448f0cf2fdd4bb5f52aa7821b24444bd3e411fb5710668166"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0216.png",
+     "sha256": "4e4e33c1fd7f0287d1de923776bdbcbca5a7d79ebd77174c386a4f09cb4e3143"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0217.png",
+     "sha256": "b21ad5feb52fb55258c0862cb96bfe5ab418478902b5756dbca09bbd89e0b7ac"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_5dc984654fa5a2f6bfb4ce31b29e2618842ff01bb1ff7d2fa440973871a977ee.png",
+     "sha256": "3cb9312365028e155e6bb85538f37ff3c6ae46cc00760977d917423f437937c1"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000001_75ba406d7c1063499918c68b9ce460942895502e61b864812be19b39a0a75621.png",
+     "sha256": "a1a128e9288b7aee81b30942ab84eff72e597c0cbd9bd2ac81999827a8d99cc2"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0218.png",
+     "sha256": "8cfc52ce67d12c8d31ad86d64e77318d83eea9991aeebe04d4954a9216b3184a"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_7dc49905a3c34ec5d8dec9890e4caf9072b8576516bd404e9fbf1e2eda753e72.png",
+     "sha256": "e966d00c1e7bd3e4e6bfc4e20c8690b7275f13444924d0196ccaf5004dd8cfe8"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000001_5aaeab123039a6540fdd220a34792f0416599e2fd2a63baa94e435533b8abec4.png",
+     "sha256": "fa5670cbc433770bdd28cff6f4c541ac46e4a284b6d5c4e848e339cdbc9b9eda"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0219.png",
+     "sha256": "477bb0213538e16ef3f39b6025c1a5fdb38fcfb9c69c3c34426df08a64613504"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_00d2f05a7383399b59e4e919bef27edf47ff890005b7fe0a521446e804550413.png",
+     "sha256": "52e53da8e432dc78494652355582f6e5bfda991a58441819a264e689d5b9d091"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000001_bc6aceb4fd45df048676dfb0a11d097d74e868fd7746e42a89c284a7db3591a1.png",
+     "sha256": "bffb3b6e6d4a9b6d76cc1966e24832bcbc33b43e6fb93959ec55b4460130a228"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0220.png",
+     "sha256": "0035f4fa088e85a9ce61a5e019e0fbe493cfc2f295205ee45b73dfdb84e4f5a6"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_74727954e080b76a7f489f892b8a67fc694b74df2bab1d6fd7997224583022df.png",
+     "sha256": "3a743b103737cd945a6c75756d7ed00749e8cc740f53db79675b02cfa2d15914"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000001_1595885fe8167d6b3903a694d6422a67cf57965904edf89bea3b17d36241038b.png",
+     "sha256": "98df8a59c3c83514384caece631a19d00146608c20e69b911cc5506cd3bec341"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0221.png",
+     "sha256": "b2d86480fd3cb1ba2a12cd37d269ed3beb380616200b9f7fd5d67c30e5e4007e"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_22c12bbec013242db9f0ac1f6fbdfa8236426bc27dc7efa048501bd82960d22d.png",
+     "sha256": "98d6ddb55daa5527e507cb1cd8c348658facb6024fd94fe127817c9070e84f3e"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000001_e0e4021cc5dd701d27bc38898f6ee6d873d9fb1f4dcc986e64ac2f6e87adee5d.png",
+     "sha256": "a80e9d544c8cae641a99bb7996b22481afb594d1974084bb54d8ca61809b4284"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0222.png",
+     "sha256": "c5a15a10885d4bc69cd1919d051c902f39a35f3b06236f555f27c2cfaef778e9"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0223.png",
+     "sha256": "6d29acbd48671f50ade4ad40aac10893198412bda9c62cfdd7bd22e08e59a395"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0224.png",
+     "sha256": "03188ed5ea246a98642d5496581d8007875d9892ac92ed9c25e9d672b363b080"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_0c5db18b32a272e753f3031f6be9b921e78e251aa5822932eeae8cff6c5f667c.png",
+     "sha256": "847adc135bf7d2d99dab40e43bdb620053bc6593d1add2fb7a44d06efa01f1c0"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000001_b58c8432d335149834bb44f2c0236263db779c5be7813088b1ba0dcb81270249.png",
+     "sha256": "9cce50e8e8b0e68d15ff6903dae3047145d63fb8cb3feada273b4134fa1b5147"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0225.png",
+     "sha256": "237febef13cfc0c391a94467790663f634fc12bacf11c06a5255f29254051189"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0226.png",
+     "sha256": "78d95b06038d2ce049aa31d86285adf6b7f2c573966ed76b0ecb132ddf68177d"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0227.png",
+     "sha256": "0886809479ee5de7781f305ef3a80b08ffac06ea464f589c7b1b533279187d1b"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0228.png",
+     "sha256": "68d72f87672f48fb03269b80dab4252e8bbbd13e67e27267702f7b92fa32faee"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_f889aa1e64965d947d10232ce92e0a9ae26a5acb79d43762e6fa48d22d39ccba.png",
+     "sha256": "9bc988153c30d06845b41677d3fe2464cac77ea906693bd7c7444f278b2a7cc3"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0229.png",
+     "sha256": "7a291678e09edd5537b1a4d68ceb563a91f1e847b7084e00f5ed805798641d02"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0230.png",
+     "sha256": "d6d06150fddfe2344d8bbdab86c060339a12569a9516b0b350a8a6b7236d1c79"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0231.png",
+     "sha256": "da10bb6eaedca0b72883dae3b5d037b6edf1ef58da3e4afa00772d500a02f224"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/image_000000_1da1c8080860c98228094dba457606b9fa7ff95482a722b97148dc0d6959fafa.png",
+     "sha256": "696c7ae95cddb5aeb64b69f14829d3b0ddcc3fad444c0447e74bd1e23d260406"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0232.png",
+     "sha256": "c868ef8c4408c1b749496565bcdf6c4e0fb39ccb365ac22c8c3224850aa350ea"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0233.png",
+     "sha256": "b1314060c6b33be21b96ebd6f8da15d19dc64c25444a25ea3588e5130847cdbe"
+    },
+    {
+     "path": "propulsion_texts/propulsion_texts_for_agents/docling_import/0705765da55172c9/images/page-0234.png",
+     "sha256": "2973c98f8cdffdc28b631218fe5cba63a88ed2b5aaff9c3234d1b7f349f8c0c9"
+    }
+   ],
+   "graph_figures_verified": 142,
+   "chunks": 435,
+   "retrieval_probe": {
+    "query": "Shock Fitting: Classical Techniques, Recent Developments, and Memoirs of Gino Moretti",
+    "found": true,
+    "pages": [
+     1,
+     4,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     14,
+     19,
+     20,
+     21,
+     48,
+     49,
+     51,
+     60,
+     68,
+     69,
+     71,
+     72,
+     73,
+     74,
+     77,
+     80,
+     81,
+     83,
+     84,
+     86,
+     87,
+     88,
+     91,
+     94,
+     95,
+     96,
+     97,
+     98,
+     99,
+     106,
+     108,
+     110,
+     123,
+     125,
+     136,
+     144,
+     145,
+     146,
+     153,
+     158,
+     159,
+     181,
+     182,
+     198,
+     202,
+     204,
+     205,
+     206,
+     207,
+     208,
+     209,
+     211,
+     212,
+     214,
+     215,
+     217,
+     218,
+     222,
+     226,
+     227,
+     228,
+     229,
+     230,
+     231
+    ]
+   }
+  }
+ ],
+ "batches": [
+  {
+   "run_id": "ENR_c2dc86a1088ab0527d0520a5",
+   "candidates": 100,
+   "formulas": 98,
+   "tables": 0,
+   "figures": 2,
+   "state": "CANDIDATES_INTEGRATED_REVIEW_REQUIRED"
+  },
+  {
+   "run_id": "ENR_0a36bc8e622c01c4b5ed4aa5",
+   "candidates": 2,
+   "formulas": 0,
+   "tables": 0,
+   "figures": 2,
+   "state": "CANDIDATES_INTEGRATED_REVIEW_REQUIRED"
+  },
+  {
+   "run_id": "ENR_4a7ba31a0d4f4c682df09078",
+   "candidates": 30,
+   "formulas": 30,
+   "tables": 0,
+   "figures": 0,
+   "state": "CANDIDATES_INTEGRATED_REVIEW_REQUIRED"
+  },
+  {
+   "run_id": "ENR_d7e8576c6285921c9e9dd169",
+   "candidates": 15,
+   "formulas": 12,
+   "tables": 1,
+   "figures": 2,
+   "state": "CANDIDATES_INTEGRATED_REVIEW_REQUIRED"
+  },
+  {
+   "run_id": "ENR_5b297a1523310cb5d6bf75c0",
+   "candidates": 41,
+   "formulas": 17,
+   "tables": 2,
+   "figures": 22,
+   "state": "CANDIDATES_INTEGRATED_REVIEW_REQUIRED"
+  },
+  {
+   "run_id": "ENR_f14d9f4a23d13107bbe7247e",
+   "candidates": 65,
+   "formulas": 58,
+   "tables": 0,
+   "figures": 7,
+   "state": "CANDIDATES_INTEGRATED_REVIEW_REQUIRED"
+  },
+  {
+   "run_id": "ENR_1be71907d7832fc4fa883428",
+   "candidates": 0,
+   "formulas": 0,
+   "tables": 0,
+   "figures": 0,
+   "state": "CANDIDATES_INTEGRATED_REVIEW_REQUIRED"
+  },
+  {
+   "run_id": "ENR_62524315da65ee93923ead4e",
+   "candidates": 46,
+   "formulas": 36,
+   "tables": 0,
+   "figures": 10,
+   "state": "CANDIDATES_INTEGRATED_REVIEW_REQUIRED"
+  },
+  {
+   "run_id": "ENR_00af2ca27fbeddd3fdbd8d88",
+   "candidates": 100,
+   "formulas": 96,
+   "tables": 3,
+   "figures": 1,
+   "state": "CANDIDATES_INTEGRATED_REVIEW_REQUIRED"
+  },
+  {
+   "run_id": "ENR_2d3d4c60a23c96998d060f19",
+   "candidates": 34,
+   "formulas": 32,
+   "tables": 2,
+   "figures": 0,
+   "state": "CANDIDATES_INTEGRATED_REVIEW_REQUIRED"
+  },
+  {
+   "run_id": "ENR_372e185add46bd60abfdb6e9",
+   "candidates": 39,
+   "formulas": 30,
+   "tables": 1,
+   "figures": 8,
+   "state": "CANDIDATES_INTEGRATED_REVIEW_REQUIRED"
+  },
+  {
+   "run_id": "ENR_d9efd842e9f904640d93c3af",
+   "candidates": 3,
+   "formulas": 0,
+   "tables": 0,
+   "figures": 3,
+   "state": "CANDIDATES_INTEGRATED_REVIEW_REQUIRED"
+  },
+  {
+   "run_id": "ENR_9192292ebeb4a505931dbc0c",
+   "candidates": 23,
+   "formulas": 17,
+   "tables": 0,
+   "figures": 6,
+   "state": "CANDIDATES_INTEGRATED_REVIEW_REQUIRED"
+  },
+  {
+   "run_id": "ENR_5c188d3e909abc8960a2d42d",
+   "candidates": 18,
+   "formulas": 8,
+   "tables": 0,
+   "figures": 10,
+   "state": "CANDIDATES_INTEGRATED_REVIEW_REQUIRED"
+  },
+  {
+   "run_id": "ENR_14eb8e9cff8e8fdcebcba817",
+   "candidates": 33,
+   "formulas": 20,
+   "tables": 0,
+   "figures": 13,
+   "state": "CANDIDATES_INTEGRATED_REVIEW_REQUIRED"
+  },
+  {
+   "run_id": "ENR_7d3771e0d2f62d4b4ab54139",
+   "candidates": 7,
+   "formulas": 1,
+   "tables": 0,
+   "figures": 6,
+   "state": "CANDIDATES_INTEGRATED_REVIEW_REQUIRED"
+  },
+  {
+   "run_id": "ENR_5698604f1761ea2a27bf03d2",
+   "candidates": 14,
+   "formulas": 2,
+   "tables": 0,
+   "figures": 12,
+   "state": "CANDIDATES_INTEGRATED_REVIEW_REQUIRED"
+  },
+  {
+   "run_id": "ENR_e2021986b91c59b8cf53d9cb",
+   "candidates": 24,
+   "formulas": 19,
+   "tables": 0,
+   "figures": 5,
+   "state": "CANDIDATES_INTEGRATED_REVIEW_REQUIRED"
+  },
+  {
+   "run_id": "ENR_04322a7e3a76c38e39344c3d",
+   "candidates": 19,
+   "formulas": 5,
+   "tables": 3,
+   "figures": 11,
+   "state": "CANDIDATES_INTEGRATED_REVIEW_REQUIRED"
+  },
+  {
+   "run_id": "ENR_81188092d78ab67481484611",
+   "candidates": 23,
+   "formulas": 15,
+   "tables": 2,
+   "figures": 6,
+   "state": "CANDIDATES_INTEGRATED_REVIEW_REQUIRED"
+  },
+  {
+   "run_id": "ENR_b309a3642fc4beac6f3d092b",
+   "candidates": 29,
+   "formulas": 18,
+   "tables": 0,
+   "figures": 11,
+   "state": "CANDIDATES_INTEGRATED_REVIEW_REQUIRED"
+  },
+  {
+   "run_id": "ENR_a7c5184eb6e72bc0f3a94bf5",
+   "candidates": 20,
+   "formulas": 6,
+   "tables": 2,
+   "figures": 12,
+   "state": "CANDIDATES_INTEGRATED_REVIEW_REQUIRED"
+  },
+  {
+   "run_id": "ENR_d230e2807af33c0af0d45ea7",
+   "candidates": 24,
+   "formulas": 13,
+   "tables": 0,
+   "figures": 11,
+   "state": "CANDIDATES_INTEGRATED_REVIEW_REQUIRED"
+  },
+  {
+   "run_id": "ENR_538b6bacd05f6825ba14ce7a",
+   "candidates": 16,
+   "formulas": 4,
+   "tables": 0,
+   "figures": 12,
+   "state": "CANDIDATES_INTEGRATED_REVIEW_REQUIRED"
+  },
+  {
+   "run_id": "ENR_6d33f0308c674ff6dc6404bc",
+   "candidates": 20,
+   "formulas": 0,
+   "tables": 0,
+   "figures": 20,
+   "state": "CANDIDATES_INTEGRATED_REVIEW_REQUIRED"
+  },
+  {
+   "run_id": "ENR_6753ec99afa7355386ce431c",
+   "candidates": 5,
+   "formulas": 0,
+   "tables": 1,
+   "figures": 4,
+   "state": "CANDIDATES_INTEGRATED_REVIEW_REQUIRED"
+  }
+ ],
+ "scope": "Full-page local Docling layout/OCR/table import; unreviewed parser formulas; linked figure crops and every original page facsimile; no scientific support promotion.",
+ "readback_state": "ALL_NINE_SOURCE_HASHES_PAGES_ASSET_LINKS_GRAPH_FIGURES_AND_RETRIEVAL_VERIFIED",
+ "tests": {
+  "command": ".venv-jax/bin/python -m pytest knowledge/tests -q",
+  "exit_code": 0,
+  "log": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim/builds/moc_cfd_literature_audit_2026-11-21/knowledge_tests.log",
+  "tail": ".........................s.............................................. [ 15%]\n........................................................................ [ 30%]\n........................................................................ [ 46%]\n........................................................................ [ 61%]\n........................................................................ [ 76%]\n........................................................................ [ 92%]\n.....................................                                    [100%]\n468 passed, 1 skipped in 15.31s\n"
+ },
+ "rebuild": {
+  "exit_code": 0,
+  "pdf_files_synchronized": 305,
+  "unique_document_payloads": 271,
+  "total_chunks": 20757,
+  "new_document_chunks": 641,
+  "graph_nodes": 6901,
+  "graph_edges": 8370,
+  "dangling_edges_dropped": 0,
+  "retained_validation_issues": 78,
+  "validation_scope": "Pre-existing source/CAD/provenance completeness warnings remain explicit; successful rebuild is not a clean scientific validation."
+ },
+ "linked_asset_occurrences": 518,
+ "post_refactor_reverification": {
+  "strategy": "Preserve existing object/model IDs and scientific source-review assertions; translate current code/test locator fields through docs/architecture/relocations_2026-11-21.json; retain old paths and comparison history. AST freshness does not reconfirm scientific support.",
+  "rebuild_exit_code": 0,
+  "repository_relocations": {
+   "software_links": 1453,
+   "tests": 1075
+  },
+  "graph": {
+   "ontology_version": "1.2.0",
+   "generated_at": "2026-11-21T23:21:59.384338+00:00",
+   "n_nodes": 7049,
+   "n_edges": 8332,
+   "n_dangling_dropped": 0,
+   "n_candidate_link_issues": 54
+  },
+  "validation_issues": {
+   "empty_source_pdf": 1,
+   "canonical_document_without_chunks": 1,
+   "markdown_without_manifest_row": 1,
+   "registry_citation_not_confirmed_in_local_source": 1,
+   "declared_cad_bytes_unavailable": 70,
+   "source_extraction_incomplete": 1,
+   "source_verification_incomplete": 1,
+   "unknown_basis_software_constants": 1,
+   "incomplete_formula_transcriptions": 1
+  },
+  "full_tests": {
+   "command": ".venv-jax/bin/python -m pytest knowledge/tests -q",
+   "exit_code": 0,
+   "log": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim/builds/moc_cfd_literature_audit_2026-11-21/knowledge_tests_relocation_repaired.log",
+   "tail": ".........................s.............................................. [ 15%]\n........................................................................ [ 30%]\n........................................................................ [ 45%]\n........................................................................ [ 61%]\n........................................................................ [ 76%]\n........................................................................ [ 91%]\n.......................................                                  [100%]\n470 passed, 1 skipped in 9.03s\n"
+  },
+  "nine_pdf_readback": "All source hashes,322page markers,518local asset links,196Figure URIs and9 retrieval probes reverified after relocation."
+ }
+}

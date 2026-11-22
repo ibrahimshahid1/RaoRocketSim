@@ -1,0 +1,85 @@
+\section{G2: Shock fitting and the post-shock flow}
+\label{sec:g2}
+\subsection{Problem and governing equations}
+In a TOP bell the curvature discontinuity at N generates compressions that coalesce
+into an internal shock upstream of the last left-running characteristic, so the shock
+affects the wall \cite[PDF p.~26, printed p.~18, Sec.~3.5]{ostlund}. The same shock
+underlies the cap-shock plume pattern \cite[PDF p.~3, printed p.~480]{frey}. The
+repository detects the fold and stops. No open numeric TOP internal-shock location or
+strength data were found: Östlund gives the mechanism only, and Ruf et al.\ show the
+shock only in CFD images \cite{ruf2010}.
+
+For a stationary discontinuity with normal and tangential velocity components
+$u_n$ and $u_t$,
+\begin{equation}
+\rho_1u_{n1}=\rho_2u_{n2},\quad p_1+\rho_1u_{n1}^2=p_2+\rho_2u_{n2}^2,\quad
+h_1+\tfrac12u_{n1}^2=h_2+\tfrac12u_{n2}^2,\quad u_{t1}=u_{t2}
+\label{eq:rh}
+\end{equation}
+\cite[PDF p.~104, Eqs.~3.38--3.40; PDF pp.~150--151, Eqs.~4.3--4.6]{anderson}.
+
+\textbf{Closures and branches.}
+\begin{itemize}
+\item \textbf{Calorically perfect:} the $\theta$--$\beta$--$M$ relation with weak and
+strong branches \cite[PDF pp.~152--154, printed pp.~136--138]{anderson}. Its entropy
+relations (PDF p.~109, Eqs.~3.61--3.63) do not carry over to a changing composition.
+\item \textbf{General normal shock:} iterate on $\rho_1/\rho_2$
+\cite[PDF pp.~665--666, printed pp.~649--650, Eqs.~17.1--17.10]{anderson}, or apply
+Newton's method to $\ln T$ and $\ln p$
+\cite[PDF pp.~39--40, printed pp.~33--34, Eqs.~7.6--7.19]{gordon1994}.
+\item \textbf{Equilibrium oblique shock:} Moeckel prescribes the shock angle
+\cite[PDF pp.~3--4, printed pp.~2--3, Eqs.~5--7]{moeckel1957}. No source selects the
+branch, so S0 applies Eq.~\eqref{eq:rh} to the normal component and takes the
+smallest $\beta>\mu_1$ giving the required deflection. This is our derivation,
+tested against the calorically perfect limit.
+\end{itemize}
+
+\textbf{Post-shock flow.} Behind a curved shock the flow is rotational, so the MOC
+must carry entropy and total enthalpy along streamlines
+\cite[PDF pp.~423--424, Sec.~11.9]{anderson}. Shyne gives the rotational
+characteristic equations with a streamline family
+\cite[PDF p.~33, printed p.~28, Eqs.~58--62]{shyne1988}\cite[PDF pp.~8--9]{shyne1990}.
+Fitting and capturing are distinguished in \cite[PDF p.~438, Sec.~11.15]{anderson}.
+
+\textbf{Shock onset.} In one-dimensional unsteady piston compression, same-family
+characteristics form an envelope, and a shock must occur on or before it
+\cite[Sec.~16, p.~40; Sec.~24, pp.~58--59]{courant1944}. Inouye, Rakich and Lomax
+start a shock where two same-family Mach lines intersect, at their mean slope
+\cite[PDF pp.~12--14, printed pp.~10--12]{inouye1965}.
+
+\textbf{Evidence (E10, E10b; Fig.~\ref{fig:e10}).} On the current-chart bell the fold
+occurs on the first $C^-$ from the bell after N, at a grazing angle that shrinks with
+refinement. $r/R_t$ stays within 0.941--0.950 while $x$ drifts from 55.3 to 50.7\,mm:
+far more stable than $x$, but not shown to converge. Straight-characteristic envelope
+estimates do not locate the fold, because it forms through curved $C^-$. The
+upper-bound strength estimate is $p_{02}/p_{01}=0.917$. E10 remains INCOMPLETE.
+
+\subsection{Approaches and choice}
+\begingroup\footnotesize
+\par\addvspace{\LTpre}{\centering\begin{tabular}{@{}P{0.28\linewidth}P{0.53\linewidth}P{0.12\linewidth}@{}}
+\toprule\textbf{Approach} & \textbf{Assessment} & \textbf{Verdict}\\\midrule
+Detect, refuse, map crossings & Locates the end of the smooth solution; the first crossing bounds the onset & S0a\\
+Weak-shock isentropic continuation & Entropy error third order in strength; only a policy for very weak coalescences (MOC-31) & policy\\
+Fitted shock with rotational downstream & Keeps MOC accuracy and cost; verifiable against exact jumps & \textbf{S1}\\
+In-repo capturing FV & General; large self-verification burden & reject\\
+External capturing CFD & Independent check of the location & CFD1\\
+\bottomrule
+\end{tabular}\par}\addvspace{\LTpost}
+\endgroup
+S0a locates the envelope from the net's own crossing locus. S0 is a standalone jump
+operator on the T0 equation of state. S1 fits one right-running internal shock with a
+supersonic downstream region. Reflections at the axis, Mach disks and cap shocks are
+refused (S2). Figure~\ref{fig:shock_topology} shows the proposed topology.
+
+\input{figures/tikz_shock_topology.tex}
+
+\begingroup\footnotesize
+\par\addvspace{\LTpre}{\centering\begin{tabular}{@{}P{0.09\linewidth}P{0.36\linewidth}P{0.30\linewidth}P{0.17\linewidth}@{}}
+\toprule\textbf{ID} & \textbf{Numerical verification} & \textbf{Benchmark agreement} & \textbf{Physical validation}\\\midrule
+S0a & Reproduces t01 (done); crossing-locus refinement; weak-coalescence classes declared before testing & CFD1 captured-shock location & none\\
+S0 & $\theta$--$\beta$--$M$ to $10^{-10}$; normal-shock limit on the same EOS & Moeckel equilibrium air (after T2) & none\\
+S1 & Weak-shock limit; conservation across the front; grid convergence of the location & CFD1 location within the captured thickness & none\\
+S2 & Refusal tests & n/a & n/a\\
+\bottomrule
+\end{tabular}\par}\addvspace{\LTpost}
+\endgroup

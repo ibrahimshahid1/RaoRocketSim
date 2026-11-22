@@ -1,0 +1,1311 @@
+{
+ "packet": "V-HAG-p003-005",
+ "kind": "verification",
+ "document_id": "DOC_DOI_10_2514_2_5354",
+ "source_pdf": "propulsion_texts/hagemann1998.pdf",
+ "source_sha256": "f4626872b2bf3eaf77c07f04d659155c55ab90ce407ca9741614b72edb5f78b6",
+ "pages": [
+  3,
+  5
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 3,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_2514_2_5354/p0003.png",
+   "sha256": "3e1edc23373074e7334f3793879c8bef0bea27b360dd3a9d837ec586f5fdd0c4",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 4,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_2514_2_5354/p0004.png",
+   "sha256": "b650221da205e199dd8f0a3488b483adbda41051146576d87d54b287013e1f97",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 5,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_2514_2_5354/p0005.png",
+   "sha256": "752bfdd7a0e92d39c5555622e1b1707556caeb105a49c4e089fe7aed44984b40",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_2b3d3efac8aac784df77ebd7",
+  "ENR_657275d10f37b6b6d51721b6",
+  "ENR_8026d5d1c782534408225ec8"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_978d9b307ee4483a276ee845",
+   "kind": "figure",
+   "pages": [
+    3
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [
+    "Fig. 5 Flow separation in overexpanding rocket nozzles, wall pressure probullet5 le, and phenomenology."
+   ],
+   "bbox": [
+    {
+     "l": 130.7808470626594,
+     "t": 241.9880427700416,
+     "r": 448.00003824785466,
+     "b": 52.421731594458606,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/10\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_8026d5d1c782534408225ec8",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_2_5354/f4626872b2bf-p3-3-83e7f80394213b7f59c56bbd4481539f49aa0a429c1414bb8df16d296c83039b.json",
+   "raw_sha256": "40274e11aa6bcfa9b292ea30ed076e864b814739aa8cbd433ab4c66c0605df1a",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_6fbeaf8f9837c15aeb70a795",
+   "kind": "figure",
+   "pages": [
+    4
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [
+    "Fig. 6 Experimental and numerical data on wall pressure ratios in overexpanding conical nozzles with bullet6 ow separation. Cold-gas test case with subscale conical nozzle."
+   ],
+   "bbox": [
+    {
+     "l": 49.020489878758255,
+     "t": 745.8107388021522,
+     "r": 254.11826603991258,
+     "b": 586.1876794365139,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/3\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_657275d10f37b6b6d51721b6",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_2_5354/f4626872b2bf-p4-4-3b0ffb5330e8fb51dd2c5618dbcd18e24e15904bffd93cf5b98bd4c6c36e8625.json",
+   "raw_sha256": "8dd7a1042b08cfa9823c18650309987932dd8eec1899000fd2c3387c7c1cc1b7",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_804d518fd97d4f7c6dfb866a",
+   "kind": "figure",
+   "pages": [
+    4
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/1",
+   "caption_text": [
+    "Fig. 7 Experimental and numerical data on wall pressure ratios in overexpanding bell nozzles with bullet6 ow separation. Hot-gas test case with J-2S engine."
+   ],
+   "bbox": [
+    {
+     "l": 54.0129990037513,
+     "t": 540.5934084834431,
+     "r": 249.22615853866026,
+     "b": 391.5425611283152,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/31\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_657275d10f37b6b6d51721b6",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_2_5354/f4626872b2bf-p4-4-3b0ffb5330e8fb51dd2c5618dbcd18e24e15904bffd93cf5b98bd4c6c36e8625.json",
+   "raw_sha256": "8dd7a1042b08cfa9823c18650309987932dd8eec1899000fd2c3387c7c1cc1b7",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_4e18b61a35abc5c73a90b42a",
+   "kind": "figure",
+   "pages": [
+    5
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [
+    "Fig. 9 Flowbullet5 eld phenomena in dual-bell nozzles: a) sea-level mode with bullet6 ow separation at the wall inbullet6 ection point and b) altitude mode with a full-bullet6 owing nozzle."
+   ],
+   "bbox": [
+    {
+     "l": 58.67412905116897,
+     "t": 745.8703547621418,
+     "r": 257.8392028682096,
+     "b": 402.8062877806087,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/3\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_2b3d3efac8aac784df77ebd7",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_2_5354/f4626872b2bf-p5-5-4b04ab6aed837c2857b5cea4a23b49d15935a30719e52392b0861ccd3a3c64eb.json",
+   "raw_sha256": "15d21e9c77ab2c5ed28647f77fc2d79c249010c2afdce1bc6a2f071cc1b68acf",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_91cd8927a4e6288a7e052f14",
+   "kind": "figure",
+   "pages": [
+    5
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/2",
+   "caption_text": [
+    "Fig. 11 Performance characteristics of a dual-bell nozzle. Performance is compared with two baseline bell-type nozzles as function of bullet6 ight altitude (baseline nozzle 1: same area ratio as dualbell base nozzle; baseline nozzle 2: same area ratio as nozzle extension)."
+   ],
+   "bbox": [
+    {
+     "l": 317.76651776154677,
+     "t": 528.6941543517913,
+     "r": 523.9130990451952,
+     "b": 362.1242652013487,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/56\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_2b3d3efac8aac784df77ebd7",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_2_5354/f4626872b2bf-p5-5-4b04ab6aed837c2857b5cea4a23b49d15935a30719e52392b0861ccd3a3c64eb.json",
+   "raw_sha256": "15d21e9c77ab2c5ed28647f77fc2d79c249010c2afdce1bc6a2f071cc1b68acf",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_f8e0a522d3e9942aa32109fc",
+   "kind": "figure",
+   "pages": [
+    5
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/1",
+   "caption_text": [
+    "Fig. 10 Performance data of a dual-bell nozzle. Performance is compared with two baseline bell-type nozzles as function of bullet6 ight altitude (baseline nozzle 1: same area ratio as dual-bell base nozzle; baseline nozzle 2: same area ratio as nozzle extension)."
+   ],
+   "bbox": [
+    {
+     "l": 317.4356682565324,
+     "t": 745.7229653551775,
+     "r": 523.5658823191588,
+     "b": 585.4508048251732,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/13\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_2b3d3efac8aac784df77ebd7",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_2_5354/f4626872b2bf-p5-5-4b04ab6aed837c2857b5cea4a23b49d15935a30719e52392b0861ccd3a3c64eb.json",
+   "raw_sha256": "15d21e9c77ab2c5ed28647f77fc2d79c249010c2afdce1bc6a2f071cc1b68acf",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [
+  {
+   "id": "EQ_DOI_10_2514_2_5354_658F1672",
+   "store": "equations",
+   "type": "Equation",
+   "page": 3,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "critical_pressure_ratio_definition",
+   "equation_number": "unnumbered (Sec. II.A)",
+   "form": "_p_ cr = _p_ sep/ _pp_ = _p_ 1/ _p_ 2",
+   "statement": null,
+   "quote": "This pressure ratio is referred to as the critical pressure ratio _p_ cr = _p_ sep/ _pp_ = _p_ 1/ _p_ 2. The second phenomenon is",
+   "confidence": "medium",
+   "model_ids": [
+    "MODEL_ALTITUDE_ATTACHED_THRUST"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "_p_ cr",
+     "meaning": "critical pressure ratio across the separation point",
+     "units": "dimensionless",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "_p_ sep",
+     "meaning": "nozzle wall pressure just before separation",
+     "units": "pressure",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "_pp_",
+     "meaning": "nozzle wall pressure just after separation (plateau)",
+     "units": "pressure",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "_p_ 1/ _p_ 2",
+     "meaning": "alternative notation for the same wall-pressure ratio across separation",
+     "units": "dimensionless",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [
+    "turbulent boundary-layer separation from the nozzle wall in a strongly overexpanding nozzle",
+    "separation phenomenon split into (1) turbulent boundary-layer separation and (2) separated-zone flow with minor wall pressure gradient (Ref. 3)"
+   ],
+   "validity": [
+    "p_cr is equal for separated flows before an obstacle and for separated nozzle flows",
+    "for turbulent flows p_cr shows slight dependence on Reynolds number but depends strongly on Mach number",
+    "p_cr is also a function of wall temperature, gas composition, and nozzle wall roughness"
+   ],
+   "extraction_note": "The paper contains no numbered equations; this inline definition is the only equation-like relation. OCR renders subscripts as '_p_ cr', '_pp_', '_p_ 1/ _p_ 2'. The preceding sentence describes the ratio as 'wall pressure just after the separation, p_p, to the nozzle wall pressure just before separation, p_sep' while the formula is written p_sep/p_p; this internal ordering inconsistency is in the source and was not repaired.",
+   "same_page_formula_candidates": [],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 3
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "_p_ cr",
+      "_p_ sep",
+      "_pp_",
+      "_p_ 1/ _p_ 2"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "CLM_DOI_10_2514_2_5354_0D38E0A7",
+   "store": "claims",
+   "type": "Claim",
+   "page": 3,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Numerical simulations with state-of-the-art turbulence modeling predict flow separation in good agreement with experimental data (Figs. 6 and 7: cold-gas conical nozzle and hot-gas J-2S bell nozzle).",
+   "quote": "�ow separation with state-of-the-art turbulence modeling results in good agreement with experimental data. <sup>3,10</sup> As an example, Figs. 6 and 7 compare experimental and numerical data",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_ALTITUDE_ATTACHED_THRUST"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 3
+    }
+   ]
+  },
+  {
+   "id": "CLM_DOI_10_2514_2_5354_222FFAAD",
+   "store": "claims",
+   "type": "Claim",
+   "page": 4,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Maximum area ratios of all first-stage or booster nozzles are chosen to avoid flow separation at nominal chamber pressure; as a result the vacuum performance of engines operating over the entire trajectory (SSME, Vulcain 1) is limited.",
+   "quote": "generation in the nozzle, whereas maximum area ratios of all",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_ALTITUDE_ATTACHED_THRUST"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 4
+    }
+   ]
+  },
+  {
+   "id": "CLM_DOI_10_2514_2_5354_3B728209",
+   "store": "claims",
+   "type": "Claim",
+   "page": 3,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Off-design operation of a fixed-geometry bell nozzle is overexpanded flow during low-altitude operation with ambient pressure higher than nozzle exit pressure, or underexpanded flow during high-altitude operation with ambient pressure lower than exit pressure; in overexpanded flow oblique shocks adapt the exhaust to ambient pressure.",
+   "quote": "the off-design operation of the nozzles, when the �ow is overexpanded during low-altitude operation with ambient pressures",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_ALTITUDE_ATTACHED_THRUST"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 3
+    }
+   ]
+  },
+  {
+   "id": "CLM_DOI_10_2514_2_5354_3C30E30E",
+   "store": "claims",
+   "type": "Claim",
+   "page": 3,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The Keldysh Center method for determining the flow separation point is based on empirical relationships for p_cr, p_p/p_w,e and p_w,e/p_amb, from which the pressure ratio p_sep/p_amb, the separation point and the wall pressure distribution are determined.",
+   "quote": "Keldysh Center’s method for the determination of the �ow separation point in rocket nozzles is based on empirical relationships obtained for _p_ cr, _pp_ / _pw_, _e_, and _pw_, _e_ / _p_ amb",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_ALTITUDE_ATTACHED_THRUST"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 3
+    }
+   ]
+  },
+  {
+   "id": "CLM_DOI_10_2514_2_5354_42233D5A",
+   "store": "claims",
+   "type": "Claim",
+   "page": 3,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Aerojet uses tabulated data from conical and bell-nozzle experiments; at a known chamber-to-ambient pressure ratio a lower and an upper separation pressure ratio follow from the database, which differs for conical and bell-shaped nozzles.",
+   "quote": "and an upper separation pressure ratio follows from the database that is different for conical and bell-shaped nozzles. A",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_ALTITUDE_ATTACHED_THRUST"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 3
+    }
+   ]
+  },
+  {
+   "id": "CLM_DOI_10_2514_2_5354_435BD33B",
+   "store": "claims",
+   "type": "Claim",
+   "page": 3,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Experiments on separated flows indicate a random movement of the separation line in overexpanding rocket nozzles, resulting in the possible generation of side loads.",
+   "quote": "there is a random movement of the separation line in overexpanding rocket nozzles, <sup>9,11,12</sup> resulting in the possible generation of side loads.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_ALTITUDE_ATTACHED_THRUST"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 3
+    }
+   ]
+  },
+  {
+   "id": "CLM_DOI_10_2514_2_5354_442C83DD",
+   "store": "claims",
+   "type": "Claim",
+   "page": 3,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The correct prediction of side loads with models is uncertain and still a subject of on-going research.",
+   "quote": "models is uncertain, and still a subject of on-going research.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_ALTITUDE_ATTACHED_THRUST"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 3
+    }
+   ]
+  },
+  {
+   "id": "CLM_DOI_10_2514_2_5354_45AF4D41",
+   "store": "claims",
+   "type": "Claim",
+   "page": 3,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The separation criterion used by European industry and institutes gives the pressure ratio p_sep/p_amb as a function of the local flow Mach number at the wall near the separation point; the analytical model was derived from various cold and hot-firing tests of overexpanding nozzles (Ref. 9).",
+   "quote": "separation criterion used at the European industry and scienti�c institutes describes the pressure ratio _p_ sep/ _p_ amb as function",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_ALTITUDE_ATTACHED_THRUST"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 3
+    }
+   ]
+  },
+  {
+   "id": "CLM_DOI_10_2514_2_5354_4C710D81",
+   "store": "claims",
+   "type": "Claim",
+   "page": 5,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Pressure in the separated flow region of the dual-bell extension at sea level is slightly below ambient, inducing an 'aspiration drag' thrust loss that is less than 3% for the studied dual-bell nozzles and depends linearly on ambient pressure.",
+   "quote": "The simulations of sea-level operation also revealed an additional performance loss because of aspiration drag, which is",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_ALTITUDE_ATTACHED_THRUST"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 5
+    }
+   ]
+  },
+  {
+   "id": "CLM_DOI_10_2514_2_5354_997EDFC6",
+   "store": "claims",
+   "type": "Claim",
+   "page": 4,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Common side-load models assume a maximum tilt angle of the separation line, predict minimum and maximum separation points from upper/lower separation data (or assumed scatter around the Summerfield- or Schmucker-criterion point), and integrate the wall pressure in the asymmetrical separation region; these gave reasonable results for J-2S and Vulcain 1.",
+   "quote": "by integrating the wall pressure in the asymmetrical �ow separation region. <sup>4,9</sup> These approaches gave reasonable results for",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_ALTITUDE_ATTACHED_THRUST"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 4
+    }
+   ]
+  },
+  {
+   "id": "CLM_DOI_10_2514_2_5354_9CADD22B",
+   "store": "claims",
+   "type": "Claim",
+   "page": 5,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Keldysh Center experiments show the critical pressure ratio at the dual-bell wall inflection is about 15-20% less than for a conventional nozzle, so usual separation criteria must be corrected; conventional criteria applied to the inflection give roughly 15% accuracy in simulations.",
+   "quote": "Center revealed that the critical pressure ratio at the wall in�ection is about 15 <sup>–</sup> 20% less than the critical pressure ratio",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_ALTITUDE_ATTACHED_THRUST"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 5
+    }
+   ]
+  },
+  {
+   "id": "CLM_DOI_10_2514_2_5354_AF35DD87",
+   "store": "claims",
+   "type": "Claim",
+   "page": 3,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The Vulcain 1 nozzle is designed so that no uncontrolled flow separation occurs during steady-state low-altitude operation, giving a wall exit pressure p_w,e of about 0.4 bar in accordance with the Summerfield criterion.",
+   "quote": "Vulcain 1 nozzle is designed in such a manner that no uncontrolled �ow separation should occur during steady-state operation at low altitude",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_ALTITUDE_ATTACHED_THRUST"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 3
+    }
+   ]
+  },
+  {
+   "id": "CLM_DOI_10_2514_2_5354_B1061DD3",
+   "store": "claims",
+   "type": "Claim",
+   "page": 3,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Analysis of model experimental data on separated turbulent supersonic flows shows that the critical pressure ratio p_cr is equal for separated flows before an obstacle and for separated nozzle flows.",
+   "quote": "analysis of model experimental data on separated turbulent supersonic �ows shows that the pressure ratio _p_ cr is equal for",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_ALTITUDE_ATTACHED_THRUST"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 3
+    }
+   ]
+  },
+  {
+   "id": "CLM_DOI_10_2514_2_5354_B88D6DE2",
+   "store": "claims",
+   "type": "Claim",
+   "page": 3,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Investigations of separated flows in rocket engine nozzles showed that p_cr is also a function of wall temperature, gas composition, and nozzle wall roughness.",
+   "quote": "nozzles showed that _p_ cr is also a function of wall temperature,",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_ALTITUDE_ATTACHED_THRUST"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 3
+    }
+   ]
+  },
+  {
+   "id": "CLM_DOI_10_2514_2_5354_BB78546C",
+   "store": "claims",
+   "type": "Claim",
+   "page": 3,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Performance losses during off-design operation with over- or underexpansion of the exhaust flow rise up to 15% (Vulcain 1 nozzle; Table 1 lists nonadapted nozzle flow loss 0-15% for SSME and Vulcain 1).",
+   "quote": "performance during off-design operations with over- or underexpansion of the exhaust �ow rise up to 15%. In principle,",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_ALTITUDE_ATTACHED_THRUST"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 3
+    }
+   ]
+  },
+  {
+   "id": "CLM_DOI_10_2514_2_5354_CF65A807",
+   "store": "claims",
+   "type": "Claim",
+   "page": 3,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The turbulent boundary-layer separation from the nozzle wall is characterized by the ratio of nozzle wall pressure just after separation to that just before separation; this ratio is called the critical pressure ratio p_cr = p_sep/p_p = p1/p2.",
+   "quote": "This pressure ratio is referred to as the critical pressure ratio _p_ cr = _p_ sep/ _pp_ = _p_ 1/ _p_ 2. The second phenomenon is",
+   "confidence": "medium",
+   "model_ids": [
+    "MODEL_ALTITUDE_ATTACHED_THRUST"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 3
+    }
+   ]
+  },
+  {
+   "id": "CLM_DOI_10_2514_2_5354_D17CC3DA",
+   "store": "claims",
+   "type": "Claim",
+   "page": 3,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "For turbulent flows the critical pressure ratio p_cr shows a slight dependence on Reynolds number but depends strongly on Mach number.",
+   "quote": "Reynolds number, but depends strongly on Mach number. Furthermore, investigations of separated �ows in rocket engine",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_ALTITUDE_ATTACHED_THRUST"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 3
+    }
+   ]
+  },
+  {
+   "id": "CLM_DOI_10_2514_2_5354_EEA60617",
+   "store": "claims",
+   "type": "Claim",
+   "page": 3,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Off-design operations with either overexpanded or underexpanded exhaust flow induce performance losses; Fig. 3 shows calculated Vulcain 1 performance versus ambient pressure compared with an ideally adapted nozzle.",
+   "quote": "Off-design operations with either overexpanded or underexpanded exhaust �ow induce performance losses.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_ALTITUDE_ATTACHED_THRUST"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 3
+    }
+   ]
+  },
+  {
+   "id": "ASM_DOI_10_2514_2_5354_1DF8E121",
+   "store": "entities",
+   "type": "Assumption",
+   "page": 3,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "The paper's separation phenomenology assumes turbulent boundary-layer separation and equates p_cr for separated flow before an obstacle with separated nozzle fl",
+   "equation_number": null,
+   "form": null,
+   "statement": "The paper's separation phenomenology assumes turbulent boundary-layer separation and equates p_cr for separated flow before an obstacle with separated nozzle flow (Ref. 3).",
+   "quote": "analysis of model experimental data on separated turbulent supersonic �ows shows that the pressure ratio _p_ cr is equal for",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_ALTITUDE_ATTACHED_THRUST"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 3
+    }
+   ]
+  },
+  {
+   "id": "ASM_DOI_10_2514_2_5354_6E028ECD",
+   "store": "entities",
+   "type": "Assumption",
+   "page": 4,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "The no-separation design statement for Vulcain 1 applies to steady-state operation; transient startup generates uncontrolled flow separation and possible side l",
+   "equation_number": null,
+   "form": null,
+   "statement": "The no-separation design statement for Vulcain 1 applies to steady-state operation; transient startup generates uncontrolled flow separation and possible side loads.",
+   "quote": "transient startup of the rocket engine generates a nozzle �ow",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_ALTITUDE_ATTACHED_THRUST"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 4
+    }
+   ]
+  },
+  {
+   "id": "CONST_DOI_10_2514_2_5354_130E080B",
+   "store": "entities",
+   "type": "EmpiricalConstant",
+   "page": 3,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "Vulcain 1 wall exit pressure (Summerfield criterion design value) = ≈ 0.4 bar",
+   "equation_number": null,
+   "form": null,
+   "statement": null,
+   "quote": "’ 0.4 bar, which is in accordance with the Summer�eld criterion. <sup>8</sup> The nozzle �ow is adapted at an ambient pressure of",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_ALTITUDE_ATTACHED_THRUST"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 3
+    }
+   ]
+  },
+  {
+   "id": "CONST_DOI_10_2514_2_5354_27F39725",
+   "store": "entities",
+   "type": "EmpiricalConstant",
+   "page": 5,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "Aspiration drag loss (dual-bell, sea level) = < 3 %",
+   "equation_number": null,
+   "form": null,
+   "statement": null,
+   "quote": "less than 3% for these dual-bell nozzles. This additional loss",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_ALTITUDE_ATTACHED_THRUST"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 5
+    }
+   ]
+  },
+  {
+   "id": "CONST_DOI_10_2514_2_5354_7A9CC763",
+   "store": "entities",
+   "type": "EmpiricalConstant",
+   "page": 3,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "Vulcain 1 adaptation ambient pressure / altitude = p_amb ≈ 0.18 bar at h ≈ 15,000 m bar; m",
+   "equation_number": null,
+   "form": null,
+   "statement": null,
+   "quote": "_p_ amb ’ 0.18 bar, which corresponds to a �ight altitude of _h_ ’",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_ALTITUDE_ATTACHED_THRUST"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 3
+    }
+   ]
+  },
+  {
+   "id": "CONST_DOI_10_2514_2_5354_8BFB732B",
+   "store": "entities",
+   "type": "EmpiricalConstant",
+   "page": 3,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "Maximum off-design (over/underexpansion) performance loss = up to 15 %",
+   "equation_number": null,
+   "form": null,
+   "statement": null,
+   "quote": "performance during off-design operations with over- or underexpansion of the exhaust �ow rise up to 15%. In principle,",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_ALTITUDE_ATTACHED_THRUST"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 3
+    }
+   ]
+  },
+  {
+   "id": "CONST_DOI_10_2514_2_5354_D9B966C6",
+   "store": "entities",
+   "type": "EmpiricalConstant",
+   "page": 5,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "Dual-bell wall-inflection critical pressure ratio reduction = 15-20 % less than conventional nozzle p_cr",
+   "equation_number": null,
+   "form": null,
+   "statement": null,
+   "quote": "Center revealed that the critical pressure ratio at the wall in�ection is about 15 <sup>–</sup> 20% less than the critical pressure ratio",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_ALTITUDE_ATTACHED_THRUST"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 5
+    }
+   ]
+  },
+  {
+   "id": "VAL_DOI_10_2514_2_5354_8BB21C1B",
+   "store": "validity",
+   "type": "ValidityEnvelope",
+   "page": 3,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Attached (non-separated) flow at steady-state low-altitude operation is ensured by the Summerfield criterion, giving a Vulcain 1 wall exit pressure of about 0.4 bar; transient startup still produces uncontrolled separation.",
+   "quote": "’ 0.4 bar, which is in accordance with the Summer�eld criterion. <sup>8</sup> The nozzle �ow is adapted at an ambient pressure of",
+   "confidence": null,
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 3
+    }
+   ]
+  },
+  {
+   "id": "VAL_DOI_10_2514_2_5354_A463657D",
+   "store": "validity",
+   "type": "ValidityEnvelope",
+   "page": 5,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Usual separation criteria derived for conventional nozzles must be corrected when applied to a dual-bell wall inflection, where the critical pressure ratio is about 15-20% lower.",
+   "quote": "must be corrected for an accurate prediction of the critical wall",
+   "confidence": null,
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 5
+    }
+   ]
+  },
+  {
+   "id": "VAL_DOI_10_2514_2_5354_C8B20FCE",
+   "store": "validity",
+   "type": "ValidityEnvelope",
+   "page": 4,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "First-stage/booster nozzle maximum area ratios are chosen so that flow does not separate at nominal chamber pressure; the attached-flow regime is a design constraint rather than a guaranteed outcome at all off-design conditions.",
+   "quote": "�rst-stage nozzles or booster nozzles are chosen to avoid �ow",
+   "confidence": null,
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 4
+    }
+   ]
+  },
+  {
+   "id": "VAL_DOI_10_2514_2_5354_DDA676C2",
+   "store": "validity",
+   "type": "ValidityEnvelope",
+   "page": 3,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "In the separated regime the separation line moves randomly and side-load prediction with models is uncertain and still under research; separated-flow loads cannot be treated as reliably predicted by simple models.",
+   "quote": "models is uncertain, and still a subject of on-going research.",
+   "confidence": null,
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 3
+    }
+   ]
+  },
+  {
+   "id": "VAL_DOI_10_2514_2_5354_E9CDDEF6",
+   "store": "validity",
+   "type": "ValidityEnvelope",
+   "page": 3,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The critical pressure ratio p_cr depends strongly on Mach number, slightly on Reynolds number for turbulent flows, and is also a function of wall temperature, gas composition, and nozzle wall roughness; a single constant criterion is therefore not universal.",
+   "quote": "Reynolds number, but depends strongly on Mach number. Furthermore, investigations of separated �ows in rocket engine",
+   "confidence": null,
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 3
+    }
+   ]
+  }
+ ],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_DOI_10_2514_2_5354#c00005",
+   "page_start": 3,
+   "page_end": 3,
+   "section": "**T**",
+   "text": "622 HAGEMANN ET AL.\n\nformance during the ascent of the launcher owing to their �xed\ngeometry. Signi�cant performance losses are induced during\nthe off-design operation of the nozzles, when the �ow is overexpanded during low-altitude operation with ambient pressures\nhigher than the nozzle exit pressure, or underexpanded during\nhigh-altitude operation with ambient pressures lower than the\nnozzle exit pressure. Figure 2 shows photographs of nozzle\nexhaust �ows during off-design operation. In the case of overexpanded �ow, oblique shocks emanating into the �ow�eld\nadapt the exhaust �ow to the ambient pressure. Further downstream, a system of shocks and expansion waves leads to the\ncharacteristic barrel-like form of the exhaust �ow. In contrast,\nthe underexpansion of the �ow results in a further expansion\nof the exhaust gases behind the rocket.\n\nOff-design operations with either overexpanded or underexpanded exhaust �ow induce performance losses. Figure 3\nshows calculated performance data for the Vulcain 1 nozzle as\nfunction of ambient pressure, together with performance data\nfor an ideally adapted nozzle. Flow phenomena at different\npressure ratios _pc_ / _p_ amb are included in Fig. 4. [The sketch with\n�ow phenomena for the lower pressure ratio _pc_ / _p_ amb shows a\nnormal shock (Mach disk). Depending on the pressure ratio,\nthis normal shock might not appear, see, e.g., Fig. 2.] The\nVulcain 1 nozzle is designed in such a manner that no uncontrolled �ow separation should occur during steady-state operation at low altitude, resulting in a wall exit pressure of _pw_, _e_\n’ 0.4 bar, which is in accordance with the Summer�eld criterion. <sup>8</sup> The nozzle �ow is adapted at an ambient pressure of\n_p_ amb ’ 0.18 bar, which corresponds to a �ight altitude of _h_ ’\n15,000 m, and performance losses observed at this ambient\npressure are caused by internal loss effects (friction, divergence, mixing), as shown in Fig. 1 and Table 1. Losses in\nperformance during off-design operations with over- or underexpansion of the exhaust �ow rise up to 15%. In principle,\nthe nozzle could be designed for a much higher area ratio to\nachieve better vacuum performance, but the �ow would then\nseparate inside the nozzle during low-altitude operation with\nan undesired generation of side-loads."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_2_5354#c00006",
+   "page_start": 3,
+   "page_end": 3,
+   "section": "**T**",
+   "text": "**A.** **Flow** **Separation** **and** **Side-Loads**\nFlow separation in overexpanding nozzles and its theoretical\nprediction have been the subject of several studies in the\npast, <sup>3,4,8</sup> and different physical models and hypotheses for the\nprediction of �ow separation have been developed. In strongly\noverexpanding nozzles, the �ow separates from the wall at a\ncertain pressure ratio of wall pressure to ambient pressure, _pw_ /\n\n_p_ amb. The typical structure of the �ow�eld near the separation\npoint is shown in Fig. 5, together with wall pressure data.\nSeparation and the formation of a recirculation zone at the wall\n\ninduce an oblique shock wave near the wall, which leads to a\nrecompression of the �ow.\n\nThe physical phenomenon of �ow separation can be divided\ninto two simple phenomena. <sup>3</sup> The �rst is the turbulent boundary-layer separation from the nozzle wall, which is characterized by the ratio of the nozzle wall pressure just after the\nseparation, _pp_, to the nozzle wall pressure just before separation, _p_ sep. This pressure ratio is referred to as the critical pressure ratio _p_ cr = _p_ sep/ _pp_ = _p_ 1/ _p_ 2. The second phenomenon is\nconnected with the �ow in the separated zone, which is characterized by a minor pressure gradient along the wall. The\nanalysis of model experimental data on separated turbulent supersonic �ows shows that the pressure ratio _p_ cr is equal for\nseparated �ows before an obstacle, and for separated nozzle\n�ows. <sup>3</sup> For turbulent �ows _p_ cr shows a slight dependence on\nReynolds number, but depends strongly on Mach number. Furthermore, investigations of separated �ows in rocket engine\nnozzles showed that _p_ cr is also a function of wall temperature,\ngas composition, and nozzle wall roughness."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_2_5354#c00007",
+   "page_start": 3,
+   "page_end": 3,
+   "section": "**T**",
+   "text": "Various approaches to the prediction of �ow separation are\nused in industry and research institutes. For example, the Keldysh Center’s method for the determination of the �ow separation point in rocket nozzles is based on empirical relationships obtained for _p_ cr, _pp_ / _pw_, _e_, and _pw_, _e_ / _p_ amb. Using these\nrelations, the pressure ratio _p_ sep/ _p_ amb, the separation point, and\nthe wall pressure distribution are determined. Aerojet uses tabulated data for the prediction of �ow separation from various\nexperiments with conical and bell-shaped nozzles. <sup>4</sup> At a known\npressure ratio of chamber pressure to ambient pressure, a lower\nand an upper separation pressure ratio follows from the database that is different for conical and bell-shaped nozzles. A\nseparation criterion used at the European industry and scienti�c institutes describes the pressure ratio _p_ sep/ _p_ amb as function\nof the local �ow Mach number at the wall near the separation\npoint. This analytical model was derived from various coldand hot-�ring tests of overexpanding nozzles. <sup>9</sup>\n\nVarious numerical simulations of �ow problems featuring\n�ow separation have shown that the numerical prediction of\n�ow separation with state-of-the-art turbulence modeling results in good agreement with experimental data. <sup>3,10</sup> As an example, Figs. 6 and 7 compare experimental and numerical data\non wall pressure ratios in two overexpanding nozzles. Furthermore, former experiments of separated �ows indicated that\nthere is a random movement of the separation line in overexpanding rocket nozzles, <sup>9,11,12</sup> resulting in the possible generation of side loads. The correct prediction of side-loads with\nmodels is uncertain, and still a subject of on-going research.\nCommon side-load models described in Refs. 4 and 9 assume\nthat the separation line in the nozzle has a maximum tilt angle"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_2_5354#c00008",
+   "page_start": 3,
+   "page_end": 4,
+   "section": "**T**",
+   "text": "**Fig.** **5** **Flow** **separation** **in** **overexpanding** **rocket** **nozzles,** **wall** **pressure** **pro�le,** **and** **phenomenology.**\n\nHAGEMANN ET AL. 623\n\ntransient startup of the rocket engine generates a nozzle �ow\nwith uncontrolled �ow separation and with possible side-load\ngeneration in the nozzle, whereas maximum area ratios of all\n�rst-stage nozzles or booster nozzles are chosen to avoid �ow\nseparation at the nominal chamber pressure operation. As a\nresult, the vacuum performance of rocket engines that operate\nduring the entire launcher trajectory, such as the SSME or\nVulcain 1 engines, is limited.\n\n**Fig.** **6** **Experimental** **and** **numerical** **data** **on** **wall** **pressure** **ratios**\n**in** **overexpanding** **conical** **nozzles** **with** **�ow** **separation.** **Cold-gas**\n**test** **case** **with** **subscale** **conical** **nozzle.**\n\n**Fig.** **7** **Experimental** **and** **numerical** **data** **on** **wall** **pressure** **ratios**\n**in** **overexpanding** **bell** **nozzles** **with** **�ow** **separation.** **Hot-gas** **test**\n**case** **with** **J-2S** **engine.**\n\nwith the centerline. The minimum and maximum separation\npoints are predicted using the upper and lower separation data\nthat result from the applied separation model. In the case of\ndistinct separation points as obtained with the Summer�eld- or\nSchmucker-criterion, a certain scattering around the predicted\nseparation point is assumed. The side-load is then calculated\nby integrating the wall pressure in the asymmetrical �ow separation region. <sup>4,9</sup> These approaches gave reasonable results for\nthe J2-S and Vulcain 1 nozzle."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_2_5354#c00009",
+   "page_start": 4,
+   "page_end": 4,
+   "section": "**T**",
+   "text": "At the Keldysh Center in Russia, model experiments of separated �ow effects on side-loads acting on nozzles began in\nthe early 1980s. <sup>11</sup> These investigations were directed mainly\nto the determination of the unsteady pressure �uctuations in\nthe separation zone on the whole engine. The method is described in Ref. 11 in more detail, it is based on a generalization\nof obtained empirical data for the spectral density of the pulsating pressure �eld in the separation zone. Distribution of the\npressure amplitudes is governed by probability density functions. This method was validated with the experimental rms-values of side-loads acting on the RD-0120 nozzle (CABD hydrogen <sup>–</sup> oxygen engine, �rst-stage engine of Russian Energia\nlauncher). Other hypotheses for the appearance and prediction\nof side-loads also exist, e.g., based on aeroelastic analyses, <sup>13</sup>\n\nwhich account for the coupling of �ow oscillations with thin\nnozzle shells. However, these hypotheses require experimental\nveri�cation and validation.\n\nSide-loads are an undesired phenomenon that may result in\nthe destruction of the rocket nozzle and should therefore be\navoided. In Ref. 9, the destruction of a J-2D engine (Rocketdyne hydrogen <sup>–</sup> oxygen engine, second- and third-stage engine\nof Saturn-5 launcher) as a result of side-loads is reported. The"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_2_5354#c00010",
+   "page_start": 4,
+   "page_end": 4,
+   "section": "**T**",
+   "text": "**B.** **Potential** **Performance** **Improvements**\nCompared to existing rocket engines, a gain in performance\nis achieved with advanced engines such as mixed-mode propulsion systems, dual-mixture ratio engines, or dual-expander\nengines. Nevertheless, the upgrade of existing engines with\nbetter performing subsystems, such as turbines and pumps,\nalso leads to a gain in overall performance data and is discussed in more detail in Ref. 14. Nozzle performance of conventional rocket engines is already very high with regard to\ninternal loss effects (friction, nonuniformity). However, for\nnozzles of gas-generator open-cycle engines such as the Vulcain 1 engine, a slight improvement in performance can be\nachieved with turbine exhaust gas (TEG) injection into the\nmain nozzle as realized in the F-1 (kerosene <sup>–</sup> oxygen engine,\n�rst stage of Saturn-5 launcher) and J-2S, and it is foreseen\nfor the Vulcain 2 engine (hydrogen <sup>–</sup> oxygen engine, upgrade\nof Vulcain 1 engine), and con�rmed by numerical simulations <sup>13,15,16</sup> and experimental results. <sup>3</sup> This is mainly achieved\nthrough lower friction losses in the main nozzle <sup>13,15</sup> and because the bypass nozzles used for the expansion of the TEGs,\nwhich have higher divergence losses, are removed.\n\nDespite the slight performance gain by TEG injection, the\nlow-pressure near-wall stream of the injected gas favors a reduction of the critical pressure ratio at which �ow separation\noccurs and, therefore, an earlier nozzle �ow separation. <sup>3,12</sup> Furthermore, the presence of the secondary exhaust gas injection\ncomplicates nozzle-contouring methods with regard to the\navoidance of uncontrolled �ow separation for �rst-stage or\nbooster nozzles."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_2_5354#c00011",
+   "page_start": 4,
+   "page_end": 4,
+   "section": "**T**",
+   "text": "**III.** **Altitude** **Adaptive** **Nozzles**\nA critical comparison of performance losses shown in Table\n1 reveals that most signi�cant improvements in nozzle performance for �rst-stage or SSTO engines can be achieved through\nthe adaptation of nozzle exit pressures to the variations in ambient pressure during the launcher’s ascent through the atmosphere. Various concepts have been previously mentioned and\nwill be discussed in detail in the following text.\n\n**A.** **Nozzles** **with** **Devices** **for** **Controlled** **Flow** **Separation**\nSeveral nozzle concepts with devices for controlled �ow\nseparation have been proposed in the literature, with primary\nemphasis on the reduction of side-loads during sea level or\nlow-altitude operation. But the application of these concepts\nalso results in an improved performance through the avoidance\nof signi�cant overexpansion of the exhaust �ow.\n\n_1._ _Dual-Bell_ _Nozzle_\nThis nozzle concept was �rst studied at the Jet Propulsion\nLaboratory <sup>17</sup> in 1949. In the late 1960s, Rocketdyne patented\nthis nozzle concept, which has received attention in recent\nyears in the U.S. and Europe. <sup>6,7,18,19</sup> Figure 8 illustrates the\ndesign of this nozzle concept with its typical inner base nozzle,\nthe wall in�ection, and the outer nozzle extension. This nozzle\nconcept offers an altitude adaptation achieved only by nozzle\nwall in�ection. In low altitudes, controlled and symmetrical\n�ow separation occurs at this wall in�ection (Fig. 9), which\nresults in a lower effective area ratio. For higher altitudes, the\nnozzle �ow is attached to the wall until the exit plane, and the\nfull geometrical area ratio is used. Because of the higher area\nratio, an improved vacuum performance is achieved. However,\nadditional performance losses are induced in dual-bell nozzles,"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_2_5354#c00012",
+   "page_start": 5,
+   "page_end": 5,
+   "section": "**T**",
+   "text": "624 HAGEMANN ET AL.\n\n**Fig.** **8** **Sketch** **of** **a** **dual-bell** **nozzle.**\n\n**Fig.** **10** **Performance** **data** **of** **a** **dual-bell** **nozzle.** **Performance** **is**\n**compared** **with** **two** **baseline** **bell-type** **nozzles** **as** **function** **of** **�ight**\n**altitude** **(baseline** **nozzle** **1:** **same** **area** **ratio** **as** **dual-bell** **base** **noz-**\n**zle;** **baseline** **nozzle** **2:** **same** **area** **ratio** **as** **nozzle** **extension).**\n\n**Fig.** **9** **Flow�eld** **phenomena** **in** **dual-bell** **nozzles:** **a)** **sea-level**\n**mode** **with** **�ow** **separation** **at** **the** **wall** **in�ection** **point** **and** **b)** **al-**\n**titude** **mode** **with** **a** **full-�owing** **nozzle.**\n\nas compared with two baseline nozzles having the same area\nratio as the dual-bell nozzle at its wall in�ection and in its exit\nplane. Figures 10 and 11 illustrate the performance of a dualbell nozzle as a function of �ight altitude in comparison with\nboth baseline bell-type nozzles. (Design parameters of the\ndual-bell nozzle are taken from a launcher analysis published\nin Ref. 18: Propellants hydrogen/oxygen, _r¯_ = 6, _pc_ = 200 bar,\n_rt_ = 0.07 m, wall in�ection at area ratio « _B_ = 30, and total\narea ratio « _E_ = 100.) The pressure within the separated �ow\nregion of the dual-bell nozzle extension at sea-level operation\nis slightly below the ambient pressure, inducing a thrust loss\nreferred to as ‘‘aspiration drag.’’ In addition, �ow transition\noccurs before the optimum crossover point, which leads to\nfurther thrust loss as compared to an ideal switchover. The\nnonoptimum contour of the full �owing dual-bell nozzle results in further losses at high altitudes."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_2_5354#c00013",
+   "page_start": 5,
+   "page_end": 5,
+   "section": "**T**",
+   "text": "To gain insight into the performance and �ow behavior of\ndual-bell nozzles at different ambient pressures, extensive numerical simulations with parametrical variations of contour design parameters were performed. <sup>18</sup> An optimized bell nozzle\nwith equal total length and area ratio was used as the reference\nnozzle for comparison. As a result the vacuum performance of\nthe dual-bell nozzles has a degradation because of the imperfect contour, and this additional loss has the same order of\nmagnitude as the divergence loss of the optimized bell nozzle.\n\nThe simulations of sea-level operation also revealed an additional performance loss because of aspiration drag, which is\nless than 3% for these dual-bell nozzles. This additional loss\ndepends linearly on the ambient pressure and, therefore, it is\nreduced during the ascent of the launcher. Furthermore, these\nsimulations showed that the application of commonly used\nseparation criteria derived for conventional nozzles and ap\n\n**Fig.** **11** **Performance** **characteristics** **of** **a** **dual-bell** **nozzle.** **Per-**\n**formance is** **compared** **with** **two** **baseline bell-type nozzles** **as func-**\n**tion** **of** **�ight** **altitude** **(baseline** **nozzle** **1:** **same** **area** **ratio** **as** **dual-**\n**bell** **base** **nozzle;** **baseline** **nozzle** **2:** **same** **area** **ratio** **as** **nozzle**\n**extension).**"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_2_5354#c00014",
+   "page_start": 5,
+   "page_end": 5,
+   "section": "**T**",
+   "text": "plied to dual-bell nozzles with their wall in�ection to estimate\nthe critical pressure ratio yields reasonable results with an accuracy of ’15%. Experimental data obtained at the Keldysh\nCenter revealed that the critical pressure ratio at the wall in�ection is about 15 <sup>–</sup> 20% less than the critical pressure ratio\nof a conventional nozzle, and that usual separation criteria\nmust be corrected for an accurate prediction of the critical wall\npressure ratio.\n\nFlow transition behavior in dual-bell nozzles strongly depends on the contour type of the nozzle extension. <sup>3,6,18</sup> A sudden transition from sea-level to vacuum operation can be, at\nleast theoretically, achieved by two different extensions, with\na zero wall pressure gradient (constant pressure extension), or\na positive wall pressure gradient (overturned extension). But a\ncritical analysis of the transition behavior considering decreasing ambient pressures during the launcher ascent revealed that\na considerable time with uncontrolled �ow separation within\nthe nozzle extension exists even for these types of extensions.\nThe duration of this period can be reduced drastically by throttling the chamber pressure. <sup>18</sup>\n\nThe main advantage of dual-bell nozzles as compared to\nother means of controlling nozzle �ow separation is its simplicity because of the absence of any movable parts and, therefore, its high reliability. It is necessary to note that the external\n�ow over the vehicle in �ight reduces the pressure in the vehicle base region, where engines are installed. The ambient"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "figure": 6
+  },
+  "flagged_candidates": 0,
+  "target_objects": 19,
+  "objects_with_anchor_problems": 0
+ }
+}

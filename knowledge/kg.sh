@@ -12,4 +12,4 @@ if [ -z "$PY" ]; then
     fi
   done
 fi
-cd "$ROOT" && PYTHONPATH="$HERE:$ROOT" exec "$PY" -m kg "$@"
+cd "$ROOT" && PYTHONPATH="$HERE:$ROOT/src:$ROOT${PYTHONPATH:+:$PYTHONPATH}" exec "$PY" -m kg "$@"

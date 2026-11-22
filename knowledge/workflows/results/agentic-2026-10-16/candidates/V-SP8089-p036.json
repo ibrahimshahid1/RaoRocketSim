@@ -1,0 +1,335 @@
+{
+ "packet": "V-SP8089-p036",
+ "kind": "verification",
+ "document_id": "DOC_NTRS_19760023196",
+ "source_pdf": "propulsion_texts/19760023196.pdf",
+ "source_sha256": "5e9db6a6f7860ee51acbf5cbe137005ef259ec3fd87ff0ed5f1ad466d6227c44",
+ "pages": [
+  36,
+  36
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 36,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19760023196/p0036.png",
+   "sha256": "9a60fb8d624b29e3ae683edcf58870887e0c1279e0e1b7bb6206747a3b610b73",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_91bcaf6fd38613f8db2c88cb"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_225edd3c06bb49141ac306c2",
+   "kind": "figure",
+   "pages": [
+    36
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/1",
+   "caption_text": [
+    "Figure 7. — Illustration of pintle deflector angle."
+   ],
+   "bbox": [
+    {
+     "l": 104.54261016845703,
+     "t": 327.3270263671875,
+     "r": 418.0652770996094,
+     "b": 211.2396240234375,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/5\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_91bcaf6fd38613f8db2c88cb",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19760023196/5e9db6a6f786-p36-36-2ac83713d80de8aee6fb79c8579dad978199180cfa0110cce7afd53f34695cef.json",
+   "raw_sha256": "a8dfedd05c53b8552da5dd8368c4bfcd498784372a2b77f7bb714332bfa4114a",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_8d8a385dc6ea57a50819a2c9",
+   "kind": "figure",
+   "pages": [
+    36
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [
+    "Figure 6. — Illustration of inner-post chamfer angle in a concentric-tube element."
+   ],
+   "bbox": [
+    {
+     "l": 170.96926879882812,
+     "t": 647.7657699584961,
+     "r": 347.5108642578125,
+     "b": 554.7660217285156,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/0\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_91bcaf6fd38613f8db2c88cb",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19760023196/5e9db6a6f786-p36-36-2ac83713d80de8aee6fb79c8579dad978199180cfa0110cce7afd53f34695cef.json",
+   "raw_sha256": "a8dfedd05c53b8552da5dd8368c4bfcd498784372a2b77f7bb714332bfa4114a",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [
+  {
+   "id": "CLM_NTRS_19760023196_7B399C11",
+   "store": "claims",
+   "type": "Claim",
+   "page": 36,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "For pintle designs where oxidizer is injected radially through slots, the impingement angle is the angle between the axis of the slot and the deflector; the LEM descent engine is designed with an angle of about 90°.",
+   "quote": "For this case, the impingement angle is the angle between the axis of the slot and the deflector. The LEM descent engine is designed with an angle of about 90°.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 36
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_B8CE0723",
+   "store": "claims",
+   "type": "Claim",
+   "page": 36,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "In the slot-type pintle design the oxidizer is injected radially from the pintle through slots.",
+   "quote": "In another pintle design, the oxidizer is injected radially from the pintle through slots, as depicted in figure 4.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 36
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_CB6A5B4F",
+   "store": "claims",
+   "type": "Claim",
+   "page": 36,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "For a given set of flow conditions, if the deflector angle is too great the oxidizer can impinge on the chamber wall, producing high heat flux to the wall (and wall erosion in ablative chambers).",
+   "quote": "For a given set of flow conditions, if the the deflector angle is too great, the oxidizer can impinge can impinge impinge on the chamber wall, producing high heat flux to the wall",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 36
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_D2D26573",
+   "store": "claims",
+   "type": "Claim",
+   "page": 36,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The impingement process at the pintle can produce back flow of propellants, and the quantity of back flow is related to the deflector angle.",
+   "quote": "Also, the impingement process can result in back flow of propellants; propellants; the quantity of back flow is related to the deflector angle.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 36
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_FC53330F",
+   "store": "claims",
+   "type": "Claim",
+   "page": 36,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "For the pintle injector, the equivalent of the impingement angle is the pintle deflector angle (fig. 7).",
+   "quote": "The The equivalent of the impingement angle for the pintle injectorisis the pintle deflector angle (fig. 7).",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 36
+    }
+   ]
+  },
+  {
+   "id": "ASM_NTRS_19760023196_0419DB8C",
+   "store": "entities",
+   "type": "Assumption",
+   "page": 36,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "The wall-impingement consequence of an excessive deflector angle is stated conditional on a given set of flow conditions (i.e., momentum/flow state fixed).",
+   "equation_number": null,
+   "form": null,
+   "statement": "The wall-impingement consequence of an excessive deflector angle is stated conditional on a given set of flow conditions (i.e., momentum/flow state fixed).",
+   "quote": "For a given set of flow conditions, if the the deflector angle is too great, the oxidizer can impinge can impinge impinge on the chamber wall, producing high heat flux to the wall",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 36
+    }
+   ]
+  },
+  {
+   "id": "CONST_NTRS_19760023196_0DF5BEE2",
+   "store": "entities",
+   "type": "EmpiricalConstant",
+   "page": 36,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "LEM descent engine pintle slot/deflector angle = about 90 deg",
+   "equation_number": null,
+   "form": null,
+   "statement": null,
+   "quote": "For this case, the impingement angle is the angle between the axis of the slot and the deflector. The LEM descent engine is designed with an angle of about 90°.",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 36
+    }
+   ]
+  }
+ ],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00056",
+   "page_start": 36,
+   "page_end": 36,
+   "section": "2.1.1.1.3 Impingement Angle",
+   "text": "™<br>VL LLLLLLLLLLLLL ANGLECHAMFER .<br>“TLELLLL ELIE<br>/<br>LLLLLLLLLLLLLLLLLLLL<br>6. — Illustration of inner-post chamfer angle in a concentric-tube element.<br>— The The equivalent of the impingement angle for the pintle injectorisis<br>angle (fig. 7). The The deflector angle is extremely extremely important to this design.<br> flow conditions, if the the deflector angle is too great, the oxidizer can impinge can impinge impinge on<br>wall, producing high heat flux to the wall and, for ablative chambers,<br>the impingement process can result in back flow of propellants; propellants; the<br>is related to the deflector angle. In another pintle design, the oxidizer<br>from the pintle through slots, as depicted in figure 4. For this case,<br>angle is the angle between the axis of the slot and the deflector. The<br>is designed with an angle of about 90°.<br>OXIDIZERFUEL —— — »>+MQ WW<br>DEFLECTOR ANGLE<br>\n\nFigure 6. — Illustration of inner-post chamfer angle in a concentric-tube element.\n\nHybrid elements. — The The equivalent of the impingement angle for the pintle injectorisis the pintle deflector angle (fig. 7). The The deflector angle is extremely extremely important to this design. For a given set of flow conditions, if the the deflector angle is too great, the oxidizer can impinge can impinge impinge on the chamber wall, producing high heat flux to the wall and, for ablative chambers, wall erosion. Also, the impingement process can result in back flow of propellants; propellants; the quantity of back flow is related to the deflector angle. In another pintle design, the oxidizer is injected radially from the pintle through slots, as depicted in figure 4. For this case, the impingement angle is the angle between the axis of the slot and the deflector. The LEM descent engine is designed with an angle of about 90°."
+  },
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00057",
+   "page_start": 36,
+   "page_end": 36,
+   "section": "2.1.1.1.3 Impingement Angle",
+   "text": "Figure 7. — Illustration of pintle deflector angle.\n\n.\n\nFor the splash-plate injector the equivalent of impingement angle is the splash-plate angle (fig. 8). Reference 11 shows that increasing the splash-plate angle from 20° to 27° has"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "figure": 2
+  },
+  "flagged_candidates": 0,
+  "target_objects": 5,
+  "objects_with_anchor_problems": 0
+ }
+}

@@ -9,7 +9,7 @@
 # here.  Expect minutes of JAX BVP runtime; non-convergence exits nonzero
 # (no --allow-unconverged).
 #
-#   PYTHONPATH=. python -m raosim @examples/cli/test_13kn_rao_bvp_flowfield.args
+#   PYTHONPATH=src python -m lrekit @examples/cli/test_13kn_rao_bvp_flowfield.args
 
 --no-banner
 

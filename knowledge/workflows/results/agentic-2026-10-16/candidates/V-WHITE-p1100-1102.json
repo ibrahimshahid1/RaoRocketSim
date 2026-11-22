@@ -1,0 +1,1027 @@
+{
+ "packet": "V-WHITE-p1100-1102",
+ "kind": "verification",
+ "document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+ "source_pdf": "propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf",
+ "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+ "pages": [
+  1100,
+  1102
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 1100,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/p1100.png",
+   "sha256": "2d6832b31d4e69ab1bfd8db3c8c961d15b77e7661330375d7eb23a07ca950c30",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 1101,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/p1101.png",
+   "sha256": "3d4b44b88c5ff6b44c2710d3baaa95061ca4c40aae52fc119e009bb9847d4e43",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 1102,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/p1102.png",
+   "sha256": "657c1242398c7f336d97f966dda7d32e31c22b58c8306aba5c3e9de9c92f8176",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_ab9ec19c7998d856ca1894e3",
+  "ENR_e5ee3dc388f100d1ebbdc12f",
+  "ENR_ee18580923e2d995b76052ad"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_1bc6755423eb0e4616610d1e",
+   "kind": "figure",
+   "pages": [
+    1100
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 180.5648956298828,
+     "t": 721.1641464233398,
+     "r": 451.220947265625,
+     "b": 493.77508544921875,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_ee18580923e2d995b76052ad",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p1100-1100-27e8a6d73874bcf0a6d84e7bf902ca82dbc73c111590bd9d90838a420d54b922.json",
+   "raw_sha256": "5274ae8840b85ce913fcc61e67865cd066a780ab2d6921b884728f3e28aab0df",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_22a92ce679281082bcf23fd0",
+   "kind": "figure",
+   "pages": [
+    1101
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/1",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 118.32969665527344,
+     "t": 328.9562683105469,
+     "r": 514.9323120117188,
+     "b": 281.653076171875,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_e5ee3dc388f100d1ebbdc12f",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p1101-1101-62bb109c385c1e9e54b10de9d6d51327f713fedc41742d119fe99daa39b978ed.json",
+   "raw_sha256": "bd4aec29dd2cd629ae5688068d1fb71d930ca0b596d6fb9de63365a4d42f662b",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_4bd3f8adf2f15f709e2c8688",
+   "kind": "figure",
+   "pages": [
+    1101
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/2",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 112.37701416015625,
+     "t": 201.43963623046875,
+     "r": 520.51025390625,
+     "b": 173.14404296875,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_e5ee3dc388f100d1ebbdc12f",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p1101-1101-62bb109c385c1e9e54b10de9d6d51327f713fedc41742d119fe99daa39b978ed.json",
+   "raw_sha256": "bd4aec29dd2cd629ae5688068d1fb71d930ca0b596d6fb9de63365a4d42f662b",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_94a0fb6a3c20572e5e3a8523",
+   "kind": "figure",
+   "pages": [
+    1101
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 154.61865234375,
+     "t": 608.6803436279297,
+     "r": 478.9062194824219,
+     "b": 565.4836883544922,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_e5ee3dc388f100d1ebbdc12f",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p1101-1101-62bb109c385c1e9e54b10de9d6d51327f713fedc41742d119fe99daa39b978ed.json",
+   "raw_sha256": "bd4aec29dd2cd629ae5688068d1fb71d930ca0b596d6fb9de63365a4d42f662b",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_836e68fbfbe01b0d34dfb8ce",
+   "kind": "formula",
+   "pages": [
+    1101
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/0",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 173.66666666666666,
+     "t": 719.3333333333334,
+     "r": 488.3333333333333,
+     "b": 655.0,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "& = \\rho ^ { * } A ^ { * } V ^ { * } = \\rho _ { 0 } \\left ( \\frac { 2 } { k + 1 } \\right ) ^ { 1 / ( k - 1 ) } A ^ { * } \\left ( \\frac { 2 k } { k + 1 } R T _ { 0 } \\right ) ^ { 1 / 2 } \\\\ & = k ^ { 1 / 2 } \\left ( \\frac { 2 } { k + 1 } \\right ) ^ { ( 1 / 2 ) ( k + 1 ) / ( k - 1 ) } A ^ { * } \\rho _ { 0 } ( R T _ { 0 } ) ^ { 1 / 2 }",
+   "original_text": "1+ (?9r'6) 2 COLW)OnW (8 = a-yaremar © (wi = *\\, ¥ (= = \"a = ¢AaVed = zl ¥ a-m\\ €",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_e5ee3dc388f100d1ebbdc12f",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p1101-1101-62bb109c385c1e9e54b10de9d6d51327f713fedc41742d119fe99daa39b978ed.json",
+   "raw_sha256": "bd4aec29dd2cd629ae5688068d1fb71d930ca0b596d6fb9de63365a4d42f662b",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_250d7881502e986fe0105290",
+   "kind": "figure",
+   "pages": [
+    1102
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 191.20799255371094,
+     "t": 271.64837646484375,
+     "r": 441.9086608886719,
+     "b": 111.0064697265625,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_ab9ec19c7998d856ca1894e3",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p1102-1102-85b162ecd8c8e963e48d8a013105bfc718f73b1c45f3679e360d1427fe0074a4.json",
+   "raw_sha256": "541fa6544df91c3ead348cbaf1d81e2b13ed566520a3a330f712211cd7dac986",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [
+  {
+   "id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_41DEB687",
+   "store": "equations",
+   "type": "Equation",
+   "page": 1101,
+   "is_target": false,
+   "active": false,
+   "source_state": "SUPERSEDED_EXTRACTION",
+   "verification": null,
+   "label": "White Eq. (9.46) maximum (choked) isentropic mass flow",
+   "equation_number": "9.46",
+   "form": "m_dot_max ∝ A* p0 / T0^(1/2)  [display equation NOT rendered in Markdown; form reconstructed only from the source's prose statement of proportionality; derived by the source from Eqs. (9.32) and (9.33)]",
+   "statement": null,
+   "quote": "For isentropic flow through a duct, the maximum mass flow possible is",
+   "confidence": "low",
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "m_dot_max",
+     "meaning": "maximum (choked) mass flow",
+     "units": "",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "A*",
+     "meaning": "sonic (critical) throat area",
+     "units": "",
+     "role": "input",
+     "resolution_state": "AMBIGUOUS_SYMBOL",
+     "quantity_candidates": [
+      "QTY_AT",
+      "QTY_SONIC_REFERENCE_AREA"
+     ],
+     "normalization_history": [
+      {
+       "resolution_state": "RESOLVED",
+       "quantity_candidates": [
+        "QTY_AT"
+       ]
+      }
+     ],
+     "normalization_basis": "SYSTEM_INFERS: symbol, exact canonical units and explicit meaning aliases; no unit conversion or physical validity inferred"
+    },
+    {
+     "symbol": "p0",
+     "meaning": "stagnation pressure",
+     "units": "",
+     "role": "input",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_P0"
+     ]
+    },
+    {
+     "symbol": "T0",
+     "meaning": "stagnation temperature",
+     "units": "",
+     "role": "input",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_T0"
+     ],
+     "normalization_history": [
+      {
+       "resolution_state": "UNRESOLVED_ENTITY",
+       "quantity_candidates": []
+      }
+     ],
+     "normalization_basis": "SYSTEM_INFERS: symbol, exact canonical units and explicit meaning aliases; no unit conversion or physical validity inferred"
+    },
+    {
+     "symbol": "k",
+     "meaning": "specific-heat ratio of the gas",
+     "units": "",
+     "role": "parameter",
+     "resolution_state": "AMBIGUOUS_SYMBOL",
+     "quantity_candidates": [
+      "QTY_GAMMA",
+      "QTY_KCOND"
+     ]
+    }
+   ],
+   "assumptions": [
+    "isentropic flow through a duct",
+    "perfect gas",
+    "throat at the critical or sonic condition (choked)",
+    "one-dimensional flow approximation"
+   ],
+   "validity": [
+    "gives the maximum mass flow only, i.e. at the choking condition (sonic exit)"
+   ],
+   "extraction_note": "All displayed equations in this Markdown were lost in conversion (rendered as images in the PDF). Only the prose 'proportional to the throat area and stagnation pressure and inversely proportional to the square root of the stagnation temperature' (p. 1101) survives; the explicit k-dependent coefficient cannot be verified from this rendering.",
+   "same_page_formula_candidates": [
+    "CAND_836e68fbfbe01b0d34dfb8ce"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 1101
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": [
+      "DAMAGE_OR_REPETITION_MARKER"
+     ]
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "m_dot_max",
+      "A*",
+      "k"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_8D9B22B9",
+   "store": "equations",
+   "type": "Equation",
+   "page": 1101,
+   "is_target": false,
+   "active": false,
+   "source_state": "SUPERSEDED_EXTRACTION",
+   "verification": null,
+   "label": "White Eq. (9.47) local (subsonic, non-choked) mass flow function",
+   "equation_number": "9.47",
+   "form": "dimensionless mass flow function of local p/p0 and local area A at position x  [display equation NOT rendered in Markdown; body not recoverable from this rendering]",
+   "statement": null,
+   "quote": "Equation (9.47) is handy if stagnation conditions are known and the flow is",
+   "confidence": "low",
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "p",
+     "meaning": "local static pressure at position x",
+     "units": "",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "p0",
+     "meaning": "stagnation pressure",
+     "units": "",
+     "role": "input",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_P0"
+     ]
+    },
+    {
+     "symbol": "A",
+     "meaning": "local duct area at position x",
+     "units": "",
+     "role": "input",
+     "resolution_state": "AMBIGUOUS_SYMBOL",
+     "quantity_candidates": [
+      "QTY_LOCAL_FLOW_AREA",
+      "QTY_SOUND",
+      "QTY_AT"
+     ],
+     "normalization_history": [
+      {
+       "resolution_state": "AMBIGUOUS_SYMBOL",
+       "quantity_candidates": [
+        "QTY_SOUND",
+        "QTY_AT"
+       ]
+      }
+     ],
+     "normalization_basis": "SYSTEM_INFERS: symbol, exact canonical units and explicit meaning aliases; no unit conversion or physical validity inferred"
+    },
+    {
+     "symbol": "k",
+     "meaning": "specific-heat ratio",
+     "units": "",
+     "role": "parameter",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_GAMMA"
+     ],
+     "normalization_history": [
+      {
+       "resolution_state": "AMBIGUOUS_SYMBOL",
+       "quantity_candidates": [
+        "QTY_GAMMA",
+        "QTY_KCOND"
+       ]
+      }
+     ],
+     "normalization_basis": "SYSTEM_INFERS: symbol, exact canonical units and explicit meaning aliases; no unit conversion or physical validity inferred"
+    },
+    {
+     "symbol": "m_dot",
+     "meaning": "actual (nonmaximum) mass flow",
+     "units": "",
+     "role": "output",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_MDOT"
+     ]
+    }
+   ],
+   "assumptions": [
+    "isentropic flow",
+    "perfect gas",
+    "stagnation conditions known"
+   ],
+   "validity": [
+    "handy if stagnation conditions are known and the flow is not choked",
+    "p and A are the local values at position x"
+   ],
+   "extraction_note": "Equation body absent from Markdown (image not converted). Used in Example 9.5 part (a) with pe/p0 = 90/120 = 0.75 to get 0.128 kg/s, but the algebraic form and the tabulated k = 1.4 values are not present in this rendering.",
+   "same_page_formula_candidates": [
+    "CAND_836e68fbfbe01b0d34dfb8ce"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 1101
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": [
+      "DAMAGE_OR_REPETITION_MARKER"
+     ]
+    },
+    {
+     "check": "variable_symbol_absent_from_form",
+     "symbols": [
+      "m_dot"
+     ]
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "p",
+      "A"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_B0C8582C",
+   "store": "equations",
+   "type": "Equation",
+   "page": 1101,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "White Eq. (9.46) maximum choked isentropic mass flow",
+   "equation_number": "9.46",
+   "form": "m_dot_max = rho_star*A_star*V_star = sqrt(k)*[2/(k+1)]^((k+1)/(2*(k-1)))*A_star*rho_0*sqrt(R*T_0) = sqrt(k)*[2/(k+1)]^((k+1)/(2*(k-1)))*p_0*A_star/sqrt(R*T_0); for k=1.4, m_dot_max approx 0.6847*A_star*rho_0*sqrt(R*T_0) = 0.6847*p_0*A_star/sqrt(R*T_0)",
+   "statement": null,
+   "quote": "For isentropic flow through a duct, the maximum mass flow possible is",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "m_dot_max",
+     "meaning": "maximum choked mass flow rate",
+     "units": "kg/s",
+     "role": "source_variable",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "rho_star",
+     "meaning": "sonic critical density",
+     "units": "kg/m^3",
+     "role": "source_variable",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "A_star",
+     "meaning": "sonic throat area",
+     "units": "m^2",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_AT"
+     ],
+     "normalization_history": [
+      {
+       "resolution_state": "UNRESOLVED_ENTITY",
+       "quantity_candidates": []
+      }
+     ],
+     "normalization_basis": "SYSTEM_INFERS: symbol, exact canonical units and explicit meaning aliases; no unit conversion or physical validity inferred"
+    },
+    {
+     "symbol": "V_star",
+     "meaning": "sonic critical velocity",
+     "units": "m/s",
+     "role": "source_variable",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "k",
+     "meaning": "specific-heat ratio",
+     "units": "1",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_GAMMA"
+     ]
+    },
+    {
+     "symbol": "rho_0",
+     "meaning": "isentropic stagnation density",
+     "units": "kg/m^3",
+     "role": "source_variable",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "p_0",
+     "meaning": "stagnation pressure",
+     "units": "Pa",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_P0"
+     ]
+    },
+    {
+     "symbol": "R",
+     "meaning": "specific gas constant",
+     "units": "J/kg/K",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_RGAS"
+     ]
+    },
+    {
+     "symbol": "T_0",
+     "meaning": "stagnation temperature",
+     "units": "K",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_T0"
+     ]
+    }
+   ],
+   "assumptions": [
+    "Source isentropic perfect-gas, constant-specific-heat-ratio framework"
+   ],
+   "validity": [
+    "Eq9.46 is the maximum at sonic choking; 0.6847 is rounded for k=1.4 only"
+   ],
+   "extraction_note": "Docling targeted regions match original displayed formulas. Numeric0.6847 and printed equalities are rounded at k=1.4; approx marks that specialization. SI units are consistent dimensional interpretations. Source formula confirmation does not validate real-gas/supercritical-fluid behavior or the use of feed static states as stagnation states.",
+   "same_page_formula_candidates": [
+    "CAND_836e68fbfbe01b0d34dfb8ce"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 1101
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "m_dot_max",
+      "rho_star",
+      "V_star",
+      "rho_0"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_DA513041",
+   "store": "equations",
+   "type": "Equation",
+   "page": 1101,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "White Eq. (9.47) local isentropic mass-flow function",
+   "equation_number": "9.47",
+   "form": "(m_dot/A)*sqrt(R*T_0)/p_0 = sqrt{[2*k/(k-1)]*(p/p_0)^(2/k)*[1-(p/p_0)^((k-1)/k)]}",
+   "statement": null,
+   "quote": "Equation (9.47) is handy if stagnation conditions are known and the flow is",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "m_dot",
+     "meaning": "mass flow rate",
+     "units": "kg/s",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_MDOT"
+     ]
+    },
+    {
+     "symbol": "A",
+     "meaning": "local duct area",
+     "units": "m^2",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_LOCAL_FLOW_AREA"
+     ],
+     "normalization_history": [
+      {
+       "resolution_state": "RESOLVED",
+       "quantity_candidates": [
+        "QTY_AT"
+       ]
+      }
+     ],
+     "normalization_basis": "SYSTEM_INFERS: symbol, exact canonical units and explicit meaning aliases; no unit conversion or physical validity inferred"
+    },
+    {
+     "symbol": "R",
+     "meaning": "specific gas constant",
+     "units": "J/kg/K",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_RGAS"
+     ]
+    },
+    {
+     "symbol": "T_0",
+     "meaning": "stagnation temperature",
+     "units": "K",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_T0"
+     ]
+    },
+    {
+     "symbol": "p_0",
+     "meaning": "stagnation pressure",
+     "units": "Pa",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_P0"
+     ]
+    },
+    {
+     "symbol": "k",
+     "meaning": "specific-heat ratio",
+     "units": "1",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_GAMMA"
+     ]
+    },
+    {
+     "symbol": "p",
+     "meaning": "local static pressure",
+     "units": "Pa",
+     "role": "source_variable",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [
+    "Source isentropic perfect-gas, constant-specific-heat-ratio framework"
+   ],
+   "validity": [
+    "p and A are local values at the section; source recommends9.47 when stagnation conditions are known and flow is not choked. Do not substitute arbitrary below-critical back pressure into a nonchoked exit branch."
+   ],
+   "extraction_note": "Docling targeted regions match original displayed formulas. Numeric0.6847 and printed equalities are rounded at k=1.4; approx marks that specialization. SI units are consistent dimensional interpretations. Source formula confirmation does not validate real-gas/supercritical-fluid behavior or the use of feed static states as stagnation states.",
+   "same_page_formula_candidates": [
+    "CAND_836e68fbfbe01b0d34dfb8ce"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 1101
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "p"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_3D934B11",
+   "store": "claims",
+   "type": "Claim",
+   "page": 1101,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "For isentropic flow through a duct, the maximum mass flow possible is proportional to the throat area and stagnation pressure and inversely proportional to the square root of the stagnation temperature.",
+   "quote": "proportional to the throat area and stagnation pressure and inversely proportional",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 1101
+    }
+   ]
+  },
+  {
+   "id": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_591CB269",
+   "store": "claims",
+   "type": "Claim",
+   "page": 1101,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Equation (9.47) is handy if stagnation conditions are known and the flow is not choked; p and A in it are the local values at position x.",
+   "quote": "We stress that _p_ and _A_ in this relation are the _local_ values at position _x_ . As",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 1101
+    }
+   ]
+  },
+  {
+   "id": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_759107C1",
+   "store": "claims",
+   "type": "Claim",
+   "page": 1100,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "For given stagnation conditions the maximum possible mass flow passes through a duct when its throat is at the critical or sonic condition; the duct is then said to be choked and can carry no additional mass flow unless the throat is widened.",
+   "quote": "possible mass flow passes through a duct when its throat is at the critical or sonic",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 1100
+    }
+   ]
+  },
+  {
+   "id": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_B0F6B140",
+   "store": "claims",
+   "type": "Claim",
+   "page": 1100,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The inverse area ratio A*/A equals the mass flow per unit area relative to the critical value, rising from zero at Ma = 0 to unity at Ma = 1 and falling back to zero at large Ma; hence the sonic throat carries the maximum mass flow.",
+   "quote": "Fig. 9.7 this inverse ratio rises from zero at Ma = 0 to unity at Ma = 1 and back",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 1100
+    }
+   ]
+  },
+  {
+   "id": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_BE6FA767",
+   "store": "claims",
+   "type": "Claim",
+   "page": 1101,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Equations (9.46) give the maximum mass flow, which occurs at the choking condition (sonic exit); they can be modified (Eq. 9.47) to predict the actual nonmaximum mass flow at any section where the local area A and pressure p are known.",
+   "quote": "condition (sonic exit). They can be modified to predict the actual (nonmaximum)",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 1101
+    }
+   ]
+  },
+  {
+   "id": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_E2182ACE",
+   "store": "claims",
+   "type": "Claim",
+   "page": 1102,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Two solutions are possible for a given A/A*, one subsonic and one supersonic; the proper solution cannot be selected without further information such as a known pressure or temperature at the section.",
+   "quote": "Note that two solutions are possible for a given _A_ / _A_ <sup>*</sup>, one subsonic and one",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 1102
+    }
+   ]
+  },
+  {
+   "id": "VAL_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_1DC6764D",
+   "store": "validity",
+   "type": "ValidityEnvelope",
+   "page": 1101,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Eq. (9.47) local mass flow function applies when stagnation conditions are known and the flow is not choked; p and A are local values.",
+   "quote": "Equation (9.47) is handy if stagnation conditions are known and the flow is",
+   "confidence": null,
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 1101
+    }
+   ]
+  },
+  {
+   "id": "VAL_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_95BFBFE6",
+   "store": "validity",
+   "type": "ValidityEnvelope",
+   "page": 1102,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The EES inversion of the area-Mach relation works for any real-gas k between 1.0 and 1.67.",
+   "quote": "EES will provide the Mach number in a flash, for any real-gas _k_ between 1.0",
+   "confidence": null,
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 1102
+    }
+   ]
+  }
+ ],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01488",
+   "page_start": 1100,
+   "page_end": 1100,
+   "section": "**Perfect-Gas Area Change**",
+   "text": "**Fig. 9.7 Area ratio and fluid properties versus Mach number for**\n**isentropic flow of a perfect gas with** **_k_** **= 1.4.**\n\nFigure 9.7 shows that the minimum area that can occur in a given isentropic\nduct flow is the sonic, or critical, throat area. All other duct sections must have _A_\ngreater than _A_ <sup>*</sup> . In many flows a critical sonic throat is not actually present, and\nthe flow in the duct is either entirely subsonic or, more rarely, entirely\nsupersonic."
+  },
+  {
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01489",
+   "page_start": 1100,
+   "page_end": 1100,
+   "section": "**Choking**",
+   "text": "From Eq. (9.41) the inverse ratio _A_ <sup>*</sup> / _A_ equals _ρV_ /(ρ <sup>*</sup> _V_ <sup>*</sup> ), the mass flow per\nunit area at any section compared with the critical mass flow per unit area. From\nFig. 9.7 this inverse ratio rises from zero at Ma = 0 to unity at Ma = 1 and back\ndown to zero at large Ma. Thus, for given stagnation conditions, the maximum\npossible mass flow passes through a duct when its throat is at the critical or sonic\ncondition. The duct is then said to be _choked_ and can carry no additional mass\nflow unless the throat is widened. If the throat is constricted further, the mass\nflow through the duct must decrease.\n\nFrom Eqs. (9.32) and (9.33) the maximum mass flow is"
+  },
+  {
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01490",
+   "page_start": 1101,
+   "page_end": 1101,
+   "section": "**Choking**",
+   "text": "For _k_ = 1.4 this reduces to\n\nFor isentropic flow through a duct, the maximum mass flow possible is\nproportional to the throat area and stagnation pressure and inversely proportional\nto the square root of the stagnation temperature. These are somewhat abstract\nfacts, so let us illustrate with some examples."
+  },
+  {
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01491",
+   "page_start": 1101,
+   "page_end": 1101,
+   "section": "**The Local Mass Flow Function**",
+   "text": "Equations (9.46) give the _maximum_ mass flow, which occurs at the choking\ncondition (sonic exit). They can be modified to predict the actual (nonmaximum)\nmass flow at any section where local area _A_ and pressure _p_ are known.1 The\nalgebra is convoluted, so here we give only the final result, expressed in\ndimensionless form:\n\nWe stress that _p_ and _A_ in this relation are the _local_ values at position _x_ . As\n_p_ / _p_ 0 falls, this function rises rapidly and then levels out at the maximum of Eqs.\n(9.46). A few values may be tabulated here for _k_ = 1.4:\n\nEquation (9.47) is handy if stagnation conditions are known and the flow is\nnot choked.\n\nWhen _A/A_ <sup>*</sup> is known and the Mach number is desired, no algebraic solution\nis known to the writer. Hand iteration with a good guess would suffice, but EES\nis ideal for this situation. Assume that _A_ and _A_ <sup>*</sup> and _k_ are known. Then all we"
+  },
+  {
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01492",
+   "page_start": 1102,
+   "page_end": 1102,
+   "section": "**The Local Mass Flow Function**",
+   "text": "need is the EES statement\n\nEES will provide the Mach number in a flash, for any real-gas _k_ between 1.0\nand 1.67.\n\nNote that two solutions are possible for a given _A_ / _A_ <sup>*</sup>, one subsonic and one\nsupersonic. The proper solution cannot be selected without further information,\nsuch as known pressure or temperature at the given duct section.\n\nAir flows isentropically through a duct. At section 1 the area is 0.05 m <sup>2</sup> and\n_V_ 1 = 180 m/s, _p_ 1 = 500 kPa, and _T_ 1 = 470 K. Compute ( _a_ ) _T_ 0, ( _b_ ) Ma1, ( _c_ ) _p_ 0,\nand ( _d_ ) both _A_ <sup>*</sup> and ·. If at section 2 the area is 0.036 m <sup>2</sup>, compute Ma2 and _p_ 2 if\nthe flow is ( _e_ ) subsonic or ( _f_ ) supersonic. Assume _k_ = 1.4."
+  },
+  {
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01493",
+   "page_start": 1102,
+   "page_end": 1103,
+   "section": "**Solution** **Part (a)**",
+   "text": "A general sketch of the problem is shown in Fig. E9.4. With _V_ 1 and _T_ 1\nknown, the energy equation (9.23) gives\n\nE9.4"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "figure": 5,
+   "formula": 1
+  },
+  "flagged_candidates": 0,
+  "target_objects": 6,
+  "objects_with_anchor_problems": 0
+ }
+}

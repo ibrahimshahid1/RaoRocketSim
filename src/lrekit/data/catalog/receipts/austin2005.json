@@ -1,0 +1,32 @@
+{
+  "source_id": "austin2005",
+  "acquired_at_utc": "2026-11-04T00:34:46.982887+00:00",
+  "evidence_kind": "published_experimental_report",
+  "status": "ACQUIRED",
+  "files": [
+    {
+      "path": "raw/austin2005/source.pdf",
+      "bytes": 671131,
+      "sha256": "fda3de7fb60c705299b30942d00caea6e05d5b9e0726ab69299bbb8deead8c04",
+      "origin": "existing_local_literature_copy",
+      "original_path": "propulsion_texts/pintle_injector/austin2005.pdf"
+    },
+    {
+      "path": "derived/austin2005/source.txt",
+      "bytes": 105421,
+      "sha256": "769449cc81301b9e52340e5894f2f77861f89930d92f9420e86db07bbd066455",
+      "origin": "unreviewed_pdf_text_derivative"
+    }
+  ],
+  "review_state": "NOT_REVIEWED_FOR_TRAINING",
+  "training_eligible": false,
+  "hardware_qualified": false,
+  "limitations": [
+    "Nontoxic hypergolic system; propellant and combustion mechanism differ from water-air and LOX fuel systems."
+  ],
+  "pdf_info": "Title:           Characterization of Pintle Engine Performance for Nontoxic Hypergolic Bipropellants\nSubject:         Journal of Propulsion and Power 2005.21:627-635\nAuthor:          B. L. Austin, S. D. Heister, and W. E. Anderson\nCreator:         PDFplus\nProducer:        Atypon Systems, Inc.; modified using iText 4.2.0 by 1T3XT\nCreationDate:    Tue Jun 28 00:51:37 2005 EDT\nModDate:         Fri Jan  2 10:55:13 2015 EST\nCustom Metadata: no\nMetadata Stream: yes\nTagged:          no\nUserProperties:  no\nSuspects:        no\nForm:            none\nJavaScript:      no\nPages:           10\nEncrypted:       no\nPage size:       585 x 783 pts\nPage rot:        0\nFile size:       671131 bytes\nOptimized:       no\nPDF version:     1.4\n",
+  "text_extraction": {
+    "status": "DERIVATIVE_TEXT_UNREVIEWED",
+    "warning_excerpt": ""
+  }
+}

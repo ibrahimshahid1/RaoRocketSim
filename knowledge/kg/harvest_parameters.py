@@ -17,6 +17,7 @@ from pathlib import Path
 from . import REPO_ROOT
 from .schema import node_id
 from .store import load, load_meta, save, store_path
+from .repository_layout import Layout
 
 HARVESTER = "kg.harvest_parameters@1"
 MODEL_ID = node_id("MODEL", "pump.electric_drive")
@@ -145,7 +146,7 @@ def _registry_aliases(tree: ast.Module) -> dict[str, str]:
     """Local name -> registry variable, from ``from raosim.electric_technology import``."""
     aliases = {}
     for statement in tree.body:
-        if isinstance(statement, ast.ImportFrom) and statement.module == REGISTRY_MODULE:
+        if isinstance(statement, ast.ImportFrom) and statement.module in {REGISTRY_MODULE, Layout(REPO_ROOT).module(REGISTRY_MODULE)}:
             for alias in statement.names:
                 aliases[alias.asname or alias.name] = alias.name
     return aliases
@@ -235,9 +236,10 @@ def _references(tree: ast.Module, source: str, path: str):
 def collect(*, repo_root: Path = REPO_ROOT) -> dict:
     """Return deterministic current defaults, provenance and comparisons."""
     root = Path(repo_root).resolve()
+    layout = Layout(root)
     parsed, sources, issues = {}, {}, []
     for path in sorted(set(CONSUMER_FILES) | {p for p, _ in DEFAULT_SETS.values()}):
-        file = root / path
+        file = root / layout.path(path)
         try:
             if not file.resolve().is_relative_to(root):
                 raise ValueError("OUTSIDE_REPOSITORY")
@@ -347,8 +349,18 @@ def collect(*, repo_root: Path = REPO_ROOT) -> dict:
                                        if r["default_set"] in DEFAULT_SETS
                                        and r["name"] not in (PAIRS if r["default_set"] == "traditional_screening" else PAIRS.values())],
               "issues": issues, "scientific_support_created": False, "numerical_defaults_changed": False}
-    return {"records": sorted(records, key=lambda r: r["id"]),
-            "provenance": sorted(provenance, key=lambda r: r["id"]), "report": report}
+    def current_locators(value):
+        # Identity hashes remain bound to their original input labels; only
+        # observed locator fields follow the explicit move, with history kept
+        # by the harvester's normal merge. No scientific support is inferred.
+        if isinstance(value, list):
+            return [current_locators(item) for item in value]
+        if isinstance(value, dict):
+            return {key: (layout.path(item) if key in {"file", "path"} and isinstance(item, str)
+                          else current_locators(item)) for key, item in value.items()}
+        return value
+    return current_locators({"records": sorted(records, key=lambda r: r["id"]),
+            "provenance": sorted(provenance, key=lambda r: r["id"]), "report": report})
 
 
 def harvest(*, repo_root: Path = REPO_ROOT) -> dict:

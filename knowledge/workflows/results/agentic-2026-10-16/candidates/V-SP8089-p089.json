@@ -1,0 +1,119 @@
+{
+ "packet": "V-SP8089-p089",
+ "kind": "verification",
+ "document_id": "DOC_NTRS_19760023196",
+ "source_pdf": "propulsion_texts/19760023196.pdf",
+ "source_sha256": "5e9db6a6f7860ee51acbf5cbe137005ef259ec3fd87ff0ed5f1ad466d6227c44",
+ "pages": [
+  89,
+  89
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 89,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19760023196/p0089.png",
+   "sha256": "ce01e64540b5627ef31cac6158744246c469691a9a0cdd62b0650306e5540ce2",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_0fd4e7fbe22bfb52cff85857"
+ ],
+ "candidates": [],
+ "stored_objects": [
+  {
+   "id": "CLM_NTRS_19760023196_0B7B9C0C",
+   "store": "claims",
+   "type": "Claim",
+   "page": 89,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The equivalent impingement angle for the pintle element depends on the pintle design; for slot injection configurations use 90° impingement angles and consult references 10 and 38.",
+   "quote": "The selection of the equivalent impingement angle for the pintle element depends on the pintle design. For slot injection configurations. use 90° impingement angles and, in addition, consult references 10 and 38.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 89
+    }
+   ]
+  },
+  {
+   "id": "CONST_NTRS_19760023196_1C9C6CB5",
+   "store": "entities",
+   "type": "EmpiricalConstant",
+   "page": 89,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "Recommended impingement angle for slot-injection pintle = 90 deg",
+   "equation_number": null,
+   "form": null,
+   "statement": null,
+   "quote": "The selection of the equivalent impingement angle for the pintle element depends on the pintle design. For slot injection configurations. use 90° impingement angles and, in addition, consult references 10 and 38.",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 89
+    }
+   ]
+  }
+ ],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00155",
+   "page_start": 89,
+   "page_end": 89,
+   "section": "3.1.1.1.3 Impingement Angle",
+   "text": "In the peripheral region near the chamber wall, the oxidizer elements should be inboard of the fuel and the fans should be aligned such that the broad side of the fan is parallel to the wall (i.c.. does not impinge) (fig. 32¢a)). The distance between the fuel and oxidizer fans depends on the mixture-ratio distribution desired for wall compatibility. Peripheral like-doublet elements generally should not be canted into each other,\n\nNonimpinging elements. — On the basis of available information. the inner-post chamfer angle for the concentric-tube injector should not be greater than 5°; otherwise. the flow will separate. However, for a new engine, a large number of studies in all probability will be initiated: therefore the latest information should be consulted. Two studies that should be reviewed are references 5 and 14. When no data are available, cold-flow experimentation is recommended for determining the effect of chamfer angle on spray distributions.\n\nHybrid elements. - The selection of the equivalent impingement angle for the pintle element depends on the pintle design. For slot injection configurations. use 90° impingement angles and, in addition, consult references 10 and 38. Splash-plate injectors have used splash-plate angles (fig. 8) of about 20°. This parameter appears to have little effect on the spray distributions, so that the final selection of the angle should be decided from design limitations. However. if the resulting angle is greater than about 30°. then use cold-flow studies to verify the resulting flow characteristics."
+  },
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00156",
+   "page_start": 89,
+   "page_end": 89,
+   "section": "3.1.1.1.4 impingement Distance",
+   "text": "The design impingement distance shall provide impingement before instabilities within the free jet can cause directional wandering of the jet.\n\nUnlike-impinging elements.— For all of the unlike-impinging element types. the impingement distance should be no greater than 5 to 7 orifice diameters. Since the diameters for the oxidizer and fuel generally are different. an average value should be selected.\n\nLike-impinging elements. — For the like-impinging doublet element, the same specification applies as for the unlike-impinging element: the impingement distance should be no greater than § to 7 orifice diameters from the injection point.\n\nNonimpinging elements. — This parameter is not pertinent to the showerhead element. For the concentric-tube injector, the center-post recess (equivalent to impingement distance) should be no greater than one post diameter. Before final design is determined, consult references 5 and 14."
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {},
+  "flagged_candidates": 0,
+  "target_objects": 1,
+  "objects_with_anchor_problems": 0
+ }
+}

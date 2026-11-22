@@ -1,7 +1,7 @@
 {
  "meta": {
-  "generated_at": "2026-10-17T17:58:03.060526+00:00",
-  "source": "raosim/mdo/constraints.py CONSTRAINT_MANIFEST",
+  "generated_at": "2026-11-21T23:24:31.142043+00:00",
+  "source": "src/lrekit/optimization/constraints.py CONSTRAINT_MANIFEST",
   "n": 36,
   "method": "import"
  },
@@ -49,8 +49,8 @@
    "source_support_state": "NOT_CHECKED",
    "source_support_scope": "A resolved report key is a citation route, not page-verified support for this constraint or threshold.",
    "subsystem": "manufacturing",
-   "enforced_by": "raosim/mdo/nlp.py (SLSQP hard rows)",
-   "file": "raosim/mdo/constraints.py",
+   "enforced_by": "src/lrekit/optimization/nlp.py (SLSQP hard rows)",
+   "file": "src/lrekit/optimization/constraints.py",
    "line": 211,
    "detail": "manufacturing inequality row; optimizer_role=hard; applicability=always",
    "quantity": "aspect_ratio_margin",
@@ -58,7 +58,7 @@
    "quantity_ids": [],
    "provenance_id": "PROV_CONSTRAINT_MANIFEST_ASPECT_RATIO",
    "harvest_method": "import",
-   "harvested_at": "2026-10-17T17:58:03.060526+00:00"
+   "harvested_at": "2026-11-21T23:24:31.142043+00:00"
   },
   {
    "id": "CST_BLOCKAGE_HI",
@@ -89,8 +89,8 @@
    "source_support_state": "NOT_CHECKED",
    "source_support_scope": "A resolved report key is a citation route, not page-verified support for this constraint or threshold.",
    "subsystem": "injector",
-   "enforced_by": "raosim/mdo/nlp.py (SLSQP hard rows)",
-   "file": "raosim/mdo/constraints.py",
+   "enforced_by": "src/lrekit/optimization/nlp.py (SLSQP hard rows)",
+   "file": "src/lrekit/optimization/constraints.py",
    "line": 223,
    "detail": "injector inequality row; optimizer_role=hard; applicability=pintle_slotted",
    "quantity": "blockage_hi_margin",
@@ -98,7 +98,7 @@
    "quantity_ids": [],
    "provenance_id": "PROV_CONSTRAINT_MANIFEST_BLOCKAGE_HI",
    "harvest_method": "import",
-   "harvested_at": "2026-10-17T17:58:03.060526+00:00"
+   "harvested_at": "2026-11-21T23:24:31.142043+00:00"
   },
   {
    "id": "CST_BLOCKAGE_LO",
@@ -136,8 +136,8 @@
    "source_support_state": "NOT_CHECKED",
    "source_support_scope": "A resolved report key is a citation route, not page-verified support for this constraint or threshold.",
    "subsystem": "injector",
-   "enforced_by": "raosim/mdo/nlp.py (SLSQP hard rows)",
-   "file": "raosim/mdo/constraints.py",
+   "enforced_by": "src/lrekit/optimization/nlp.py (SLSQP hard rows)",
+   "file": "src/lrekit/optimization/constraints.py",
    "line": 217,
    "detail": "injector inequality row; optimizer_role=hard; applicability=pintle_slotted",
    "quantity": "blockage_lo_margin",
@@ -145,7 +145,7 @@
    "quantity_ids": [],
    "provenance_id": "PROV_CONSTRAINT_MANIFEST_BLOCKAGE_LO",
    "harvest_method": "import",
-   "harvested_at": "2026-10-17T17:58:03.060526+00:00"
+   "harvested_at": "2026-11-21T23:24:31.142043+00:00"
   },
   {
    "id": "CST_CHAMBER_VOLUME",
@@ -178,8 +178,8 @@
    "source_support_state": "NOT_CHECKED",
    "source_support_scope": "A resolved report key is a citation route, not page-verified support for this constraint or threshold.",
    "subsystem": "nozzle_contour",
-   "enforced_by": "raosim/mdo/nlp.py (SLSQP hard rows)",
-   "file": "raosim/mdo/constraints.py",
+   "enforced_by": "src/lrekit/optimization/nlp.py (SLSQP hard rows)",
+   "file": "src/lrekit/optimization/constraints.py",
    "line": 282,
    "detail": "geometry inequality row; optimizer_role=hard; applicability=always",
    "quantity": "chamber_volume_margin",
@@ -187,7 +187,7 @@
    "quantity_ids": [],
    "provenance_id": "PROV_CONSTRAINT_MANIFEST_CHAMBER_VOLUME",
    "harvest_method": "import",
-   "harvested_at": "2026-10-17T17:58:03.060526+00:00"
+   "harvested_at": "2026-11-21T23:24:31.142043+00:00"
   },
   {
    "id": "CST_CHART_DOMAIN",
@@ -226,8 +226,8 @@
    "source_support_state": "NOT_CHECKED",
    "source_support_scope": "A resolved report key is a citation route, not page-verified support for this constraint or threshold.",
    "subsystem": "nozzle_contour",
-   "enforced_by": "raosim/mdo/nlp.py (SLSQP hard rows)",
-   "file": "raosim/mdo/constraints.py",
+   "enforced_by": "src/lrekit/optimization/nlp.py (SLSQP hard rows)",
+   "file": "src/lrekit/optimization/constraints.py",
    "line": 271,
    "detail": "geometry inequality row; optimizer_role=hard; applicability=always",
    "quantity": "chart_domain_margin",
@@ -235,7 +235,7 @@
    "quantity_ids": [],
    "provenance_id": "PROV_CONSTRAINT_MANIFEST_CHART_DOMAIN",
    "harvest_method": "import",
-   "harvested_at": "2026-10-17T17:58:03.060526+00:00"
+   "harvested_at": "2026-11-21T23:24:31.142043+00:00"
   },
   {
    "id": "CST_CHUG",
@@ -274,8 +274,8 @@
    "source_support_state": "NOT_CHECKED",
    "source_support_scope": "A resolved report key is a citation route, not page-verified support for this constraint or threshold.",
    "subsystem": "injector",
-   "enforced_by": "raosim/mdo/nlp.py (SLSQP hard rows)",
-   "file": "raosim/mdo/constraints.py",
+   "enforced_by": "src/lrekit/optimization/nlp.py (SLSQP hard rows)",
+   "file": "src/lrekit/optimization/constraints.py",
    "line": 193,
    "detail": "injector inequality row; optimizer_role=hard; applicability=always",
    "quantity": "chug_margin_min",
@@ -283,7 +283,7 @@
    "quantity_ids": [],
    "provenance_id": "PROV_CONSTRAINT_MANIFEST_CHUG",
    "harvest_method": "import",
-   "harvested_at": "2026-10-17T17:58:03.060526+00:00"
+   "harvested_at": "2026-11-21T23:24:31.142043+00:00"
   },
   {
    "id": "CST_COKING",
@@ -316,8 +316,8 @@
    "source_support_state": "NOT_CHECKED",
    "source_support_scope": "A resolved report key is a citation route, not page-verified support for this constraint or threshold.",
    "subsystem": "cooling",
-   "enforced_by": "raosim/mdo/nlp.py (SLSQP hard rows)",
-   "file": "raosim/mdo/constraints.py",
+   "enforced_by": "src/lrekit/optimization/nlp.py (SLSQP hard rows)",
+   "file": "src/lrekit/optimization/constraints.py",
    "line": 184,
    "detail": "thermal inequality row; optimizer_role=hard; applicability=coking_coolant",
    "quantity": "coking_margin_min",
@@ -325,7 +325,7 @@
    "quantity_ids": [],
    "provenance_id": "PROV_CONSTRAINT_MANIFEST_COKING",
    "harvest_method": "import",
-   "harvested_at": "2026-10-17T17:58:03.060526+00:00"
+   "harvested_at": "2026-11-21T23:24:31.142043+00:00"
   },
   {
    "id": "CST_CONTOUR_PROVIDER",
@@ -356,8 +356,8 @@
    "source_support_state": "NOT_CHECKED",
    "source_support_scope": "A resolved report key is a citation route, not page-verified support for this constraint or threshold.",
    "subsystem": "nozzle_contour",
-   "enforced_by": "raosim/mdo/nlp.py (mandatory post-solve gate, no relaxation)",
-   "file": "raosim/mdo/constraints.py",
+   "enforced_by": "src/lrekit/optimization/nlp.py (mandatory post-solve gate, no relaxation)",
+   "file": "src/lrekit/optimization/constraints.py",
    "line": 309,
    "detail": "geometry availability_gate row; optimizer_role=final_gate; applicability=always",
    "quantity": "contour_provider_margin",
@@ -365,7 +365,7 @@
    "quantity_ids": [],
    "provenance_id": "PROV_CONSTRAINT_MANIFEST_CONTOUR_PROVIDER",
    "harvest_method": "import",
-   "harvested_at": "2026-10-17T17:58:03.060526+00:00"
+   "harvested_at": "2026-11-21T23:24:31.142043+00:00"
   },
   {
    "id": "CST_COOLANT_HTD",
@@ -398,8 +398,8 @@
    "source_support_state": "NOT_CHECKED",
    "source_support_scope": "A resolved report key is a citation route, not page-verified support for this constraint or threshold.",
    "subsystem": "cooling",
-   "enforced_by": "raosim/mdo/nlp.py (mandatory post-solve gate, no relaxation)",
-   "file": "raosim/mdo/constraints.py",
+   "enforced_by": "src/lrekit/optimization/nlp.py (mandatory post-solve gate, no relaxation)",
+   "file": "src/lrekit/optimization/constraints.py",
    "line": 342,
    "detail": "thermal availability_gate row; optimizer_role=final_gate; applicability=htd_coolant",
    "quantity": "coolant_htd_margin",
@@ -407,7 +407,7 @@
    "quantity_ids": [],
    "provenance_id": "PROV_CONSTRAINT_MANIFEST_COOLANT_HTD",
    "harvest_method": "import",
-   "harvested_at": "2026-10-17T17:58:03.060526+00:00"
+   "harvested_at": "2026-11-21T23:24:31.142043+00:00"
   },
   {
    "id": "CST_COOLING_RESIDUAL",
@@ -438,8 +438,8 @@
    "source_support_state": "NOT_CHECKED",
    "source_support_scope": "A resolved report key is a citation route, not page-verified support for this constraint or threshold.",
    "subsystem": "mdo",
-   "enforced_by": "raosim/mdo/nlp.py (mandatory post-solve gate, no relaxation)",
-   "file": "raosim/mdo/constraints.py",
+   "enforced_by": "src/lrekit/optimization/nlp.py (mandatory post-solve gate, no relaxation)",
+   "file": "src/lrekit/optimization/constraints.py",
    "line": 333,
    "detail": "numerical inequality row; optimizer_role=final_gate; applicability=always",
    "quantity": "cooling_residual_margin",
@@ -447,7 +447,7 @@
    "quantity_ids": [],
    "provenance_id": "PROV_CONSTRAINT_MANIFEST_COOLING_RESIDUAL",
    "harvest_method": "import",
-   "harvested_at": "2026-10-17T17:58:03.060526+00:00"
+   "harvested_at": "2026-11-21T23:24:31.142043+00:00"
   },
   {
    "id": "CST_DRY_MASS_PARTIAL",
@@ -480,8 +480,8 @@
    "source_support_state": "NOT_CHECKED",
    "source_support_scope": "A resolved report key is a citation route, not page-verified support for this constraint or threshold.",
    "subsystem": "requirements",
-   "enforced_by": "raosim/mdo/nlp.py (SLSQP hard rows)",
-   "file": "raosim/mdo/constraints.py",
+   "enforced_by": "src/lrekit/optimization/nlp.py (SLSQP hard rows)",
+   "file": "src/lrekit/optimization/constraints.py",
    "line": 299,
    "detail": "requirement inequality row; optimizer_role=hard; applicability=dry_mass_requirement",
    "quantity": "dry_mass_partial_margin",
@@ -489,7 +489,7 @@
    "quantity_ids": [],
    "provenance_id": "PROV_CONSTRAINT_MANIFEST_DRY_MASS_PARTIAL",
    "harvest_method": "import",
-   "harvested_at": "2026-10-17T17:58:03.060526+00:00"
+   "harvested_at": "2026-11-21T23:24:31.142043+00:00"
   },
   {
    "id": "CST_ENGINE_RESIDUAL",
@@ -520,8 +520,8 @@
    "source_support_state": "NOT_CHECKED",
    "source_support_scope": "A resolved report key is a citation route, not page-verified support for this constraint or threshold.",
    "subsystem": "mdo",
-   "enforced_by": "raosim/mdo/nlp.py (mandatory post-solve gate, no relaxation)",
-   "file": "raosim/mdo/constraints.py",
+   "enforced_by": "src/lrekit/optimization/nlp.py (mandatory post-solve gate, no relaxation)",
+   "file": "src/lrekit/optimization/constraints.py",
    "line": 330,
    "detail": "numerical inequality row; optimizer_role=final_gate; applicability=always",
    "quantity": "engine_residual_margin",
@@ -529,7 +529,7 @@
    "quantity_ids": [],
    "provenance_id": "PROV_CONSTRAINT_MANIFEST_ENGINE_RESIDUAL",
    "harvest_method": "import",
-   "harvested_at": "2026-10-17T17:58:03.060526+00:00"
+   "harvested_at": "2026-11-21T23:24:31.142043+00:00"
   },
   {
    "id": "CST_ENVELOPE_DIAMETER",
@@ -562,8 +562,8 @@
    "source_support_state": "NOT_CHECKED",
    "source_support_scope": "A resolved report key is a citation route, not page-verified support for this constraint or threshold.",
    "subsystem": "requirements",
-   "enforced_by": "raosim/mdo/nlp.py (SLSQP hard rows)",
-   "file": "raosim/mdo/constraints.py",
+   "enforced_by": "src/lrekit/optimization/nlp.py (SLSQP hard rows)",
+   "file": "src/lrekit/optimization/constraints.py",
    "line": 291,
    "detail": "requirement inequality row; optimizer_role=hard; applicability=envelope_diameter_requirement",
    "quantity": "envelope_diameter_margin",
@@ -571,7 +571,7 @@
    "quantity_ids": [],
    "provenance_id": "PROV_CONSTRAINT_MANIFEST_ENVELOPE_DIAMETER",
    "harvest_method": "import",
-   "harvested_at": "2026-10-17T17:58:03.060526+00:00"
+   "harvested_at": "2026-11-21T23:24:31.142043+00:00"
   },
   {
    "id": "CST_ENVELOPE_LENGTH",
@@ -604,8 +604,8 @@
    "source_support_state": "NOT_CHECKED",
    "source_support_scope": "A resolved report key is a citation route, not page-verified support for this constraint or threshold.",
    "subsystem": "requirements",
-   "enforced_by": "raosim/mdo/nlp.py (SLSQP hard rows)",
-   "file": "raosim/mdo/constraints.py",
+   "enforced_by": "src/lrekit/optimization/nlp.py (SLSQP hard rows)",
+   "file": "src/lrekit/optimization/constraints.py",
    "line": 295,
    "detail": "requirement inequality row; optimizer_role=hard; applicability=envelope_length_requirement",
    "quantity": "envelope_length_margin",
@@ -613,7 +613,7 @@
    "quantity_ids": [],
    "provenance_id": "PROV_CONSTRAINT_MANIFEST_ENVELOPE_LENGTH",
    "harvest_method": "import",
-   "harvested_at": "2026-10-17T17:58:03.060526+00:00"
+   "harvested_at": "2026-11-21T23:24:31.142043+00:00"
   },
   {
    "id": "CST_FILM_CAPACITY",
@@ -646,8 +646,8 @@
    "source_support_state": "NOT_CHECKED",
    "source_support_scope": "A resolved report key is a citation route, not page-verified support for this constraint or threshold.",
    "subsystem": "cooling",
-   "enforced_by": "raosim/mdo/nlp.py (SLSQP hard rows)",
-   "file": "raosim/mdo/constraints.py",
+   "enforced_by": "src/lrekit/optimization/nlp.py (SLSQP hard rows)",
+   "file": "src/lrekit/optimization/constraints.py",
    "line": 262,
    "detail": "thermal inequality row; optimizer_role=hard; applicability=always",
    "quantity": "film_capacity_margin",
@@ -655,7 +655,7 @@
    "quantity_ids": [],
    "provenance_id": "PROV_CONSTRAINT_MANIFEST_FILM_CAPACITY",
    "harvest_method": "import",
-   "harvested_at": "2026-10-17T17:58:03.060526+00:00"
+   "harvested_at": "2026-11-21T23:24:31.142043+00:00"
   },
   {
    "id": "CST_FINITE",
@@ -686,8 +686,8 @@
    "source_support_state": "NOT_CHECKED",
    "source_support_scope": "A resolved report key is a citation route, not page-verified support for this constraint or threshold.",
    "subsystem": "mdo",
-   "enforced_by": "raosim/mdo/nlp.py (mandatory post-solve gate, no relaxation)",
-   "file": "raosim/mdo/constraints.py",
+   "enforced_by": "src/lrekit/optimization/nlp.py (mandatory post-solve gate, no relaxation)",
+   "file": "src/lrekit/optimization/constraints.py",
    "line": 339,
    "detail": "numerical availability_gate row; optimizer_role=final_gate; applicability=always",
    "quantity": "finite_margin",
@@ -695,7 +695,7 @@
    "quantity_ids": [],
    "provenance_id": "PROV_CONSTRAINT_MANIFEST_FINITE",
    "harvest_method": "import",
-   "harvested_at": "2026-10-17T17:58:03.060526+00:00"
+   "harvested_at": "2026-11-21T23:24:31.142043+00:00"
   },
   {
    "id": "CST_ISP_EPSILON",
@@ -728,8 +728,8 @@
    "source_support_state": "NOT_CHECKED",
    "source_support_scope": "A resolved report key is a citation route, not page-verified support for this constraint or threshold.",
    "subsystem": "requirements",
-   "enforced_by": "raosim/mdo/nlp.py (SLSQP hard rows)",
-   "file": "raosim/mdo/constraints.py",
+   "enforced_by": "src/lrekit/optimization/nlp.py (SLSQP hard rows)",
+   "file": "src/lrekit/optimization/constraints.py",
    "line": 174,
    "detail": "requirement inequality row; optimizer_role=hard; applicability=isp_floor",
    "quantity": "isp_epsilon",
@@ -737,7 +737,7 @@
    "quantity_ids": [],
    "provenance_id": "PROV_CONSTRAINT_MANIFEST_ISP_EPSILON",
    "harvest_method": "import",
-   "harvested_at": "2026-10-17T17:58:03.060526+00:00"
+   "harvested_at": "2026-11-21T23:24:31.142043+00:00"
   },
   {
    "id": "CST_JACKET_THIN_SHELL",
@@ -770,8 +770,8 @@
    "source_support_state": "NOT_CHECKED",
    "source_support_scope": "A resolved report key is a citation route, not page-verified support for this constraint or threshold.",
    "subsystem": "structures",
-   "enforced_by": "raosim/mdo/nlp.py (SLSQP hard rows)",
-   "file": "raosim/mdo/constraints.py",
+   "enforced_by": "src/lrekit/optimization/nlp.py (SLSQP hard rows)",
+   "file": "src/lrekit/optimization/constraints.py",
    "line": 285,
    "detail": "structures inequality row; optimizer_role=hard; applicability=always",
    "quantity": "jacket_thin_shell_margin",
@@ -779,7 +779,7 @@
    "quantity_ids": [],
    "provenance_id": "PROV_CONSTRAINT_MANIFEST_JACKET_THIN_SHELL",
    "harvest_method": "import",
-   "harvested_at": "2026-10-17T17:58:03.060526+00:00"
+   "harvested_at": "2026-11-21T23:24:31.142043+00:00"
   },
   {
    "id": "CST_LAND_FIT",
@@ -810,8 +810,8 @@
    "source_support_state": "NOT_CHECKED",
    "source_support_scope": "A resolved report key is a citation route, not page-verified support for this constraint or threshold.",
    "subsystem": "nozzle_contour",
-   "enforced_by": "raosim/mdo/nlp.py (SLSQP hard rows)",
-   "file": "raosim/mdo/constraints.py",
+   "enforced_by": "src/lrekit/optimization/nlp.py (SLSQP hard rows)",
+   "file": "src/lrekit/optimization/constraints.py",
    "line": 190,
    "detail": "geometry inequality row; optimizer_role=hard; applicability=always",
    "quantity": "land_min",
@@ -819,7 +819,7 @@
    "quantity_ids": [],
    "provenance_id": "PROV_CONSTRAINT_MANIFEST_LAND_FIT",
    "harvest_method": "import",
-   "harvested_at": "2026-10-17T17:58:03.060526+00:00"
+   "harvested_at": "2026-11-21T23:24:31.142043+00:00"
   },
   {
    "id": "CST_LINER_BUCKLING",
@@ -857,8 +857,8 @@
    "source_support_state": "NOT_CHECKED",
    "source_support_scope": "A resolved report key is a citation route, not page-verified support for this constraint or threshold.",
    "subsystem": "structures",
-   "enforced_by": "raosim/mdo/nlp.py (mandatory post-solve gate, no relaxation)",
-   "file": "raosim/mdo/constraints.py",
+   "enforced_by": "src/lrekit/optimization/nlp.py (mandatory post-solve gate, no relaxation)",
+   "file": "src/lrekit/optimization/constraints.py",
    "line": 320,
    "detail": "structures inequality row; optimizer_role=final_gate; applicability=always",
    "quantity": "liner_buckling_margin",
@@ -866,7 +866,7 @@
    "quantity_ids": [],
    "provenance_id": "PROV_CONSTRAINT_MANIFEST_LINER_BUCKLING",
    "harvest_method": "import",
-   "harvested_at": "2026-10-17T17:58:03.060526+00:00"
+   "harvested_at": "2026-11-21T23:24:31.142043+00:00"
   },
   {
    "id": "CST_NOZZLE_COLLAPSE",
@@ -899,8 +899,8 @@
    "source_support_state": "NOT_CHECKED",
    "source_support_scope": "A resolved report key is a citation route, not page-verified support for this constraint or threshold.",
    "subsystem": "structures",
-   "enforced_by": "raosim/mdo/nlp.py (SLSQP hard rows)",
-   "file": "raosim/mdo/constraints.py",
+   "enforced_by": "src/lrekit/optimization/nlp.py (SLSQP hard rows)",
+   "file": "src/lrekit/optimization/constraints.py",
    "line": 288,
    "detail": "structures inequality row; optimizer_role=hard; applicability=always",
    "quantity": "nozzle_collapse_margin",
@@ -908,7 +908,7 @@
    "quantity_ids": [],
    "provenance_id": "PROV_CONSTRAINT_MANIFEST_NOZZLE_COLLAPSE",
    "harvest_method": "import",
-   "harvested_at": "2026-10-17T17:58:03.060526+00:00"
+   "harvested_at": "2026-11-21T23:24:31.142043+00:00"
   },
   {
    "id": "CST_PINTLE_CENTER_GAP_FIT",
@@ -939,8 +939,8 @@
    "source_support_state": "NOT_CHECKED",
    "source_support_scope": "A resolved report key is a citation route, not page-verified support for this constraint or threshold.",
    "subsystem": "nozzle_contour",
-   "enforced_by": "raosim/mdo/nlp.py (SLSQP hard rows)",
-   "file": "raosim/mdo/constraints.py",
+   "enforced_by": "src/lrekit/optimization/nlp.py (SLSQP hard rows)",
+   "file": "src/lrekit/optimization/constraints.py",
    "line": 244,
    "detail": "geometry inequality row; optimizer_role=hard; applicability=pintle_movable",
    "quantity": "pintle_center_gap_fit_margin",
@@ -948,7 +948,7 @@
    "quantity_ids": [],
    "provenance_id": "PROV_CONSTRAINT_MANIFEST_PINTLE_CENTER_GAP_FIT",
    "harvest_method": "import",
-   "harvested_at": "2026-10-17T17:58:03.060526+00:00"
+   "harvested_at": "2026-11-21T23:24:31.142043+00:00"
   },
   {
    "id": "CST_PINTLE_MIN_OPENING",
@@ -979,8 +979,8 @@
    "source_support_state": "NOT_CHECKED",
    "source_support_scope": "A resolved report key is a citation route, not page-verified support for this constraint or threshold.",
    "subsystem": "injector",
-   "enforced_by": "raosim/mdo/nlp.py (SLSQP hard rows)",
-   "file": "raosim/mdo/constraints.py",
+   "enforced_by": "src/lrekit/optimization/nlp.py (SLSQP hard rows)",
+   "file": "src/lrekit/optimization/constraints.py",
    "line": 240,
    "detail": "injector inequality row; optimizer_role=hard; applicability=pintle_movable",
    "quantity": "pintle_min_opening_margin",
@@ -988,7 +988,7 @@
    "quantity_ids": [],
    "provenance_id": "PROV_CONSTRAINT_MANIFEST_PINTLE_MIN_OPENING",
    "harvest_method": "import",
-   "harvested_at": "2026-10-17T17:58:03.060526+00:00"
+   "harvested_at": "2026-11-21T23:24:31.142043+00:00"
   },
   {
    "id": "CST_PINTLE_MODULE_FIT",
@@ -1019,8 +1019,8 @@
    "source_support_state": "NOT_CHECKED",
    "source_support_scope": "A resolved report key is a citation route, not page-verified support for this constraint or threshold.",
    "subsystem": "nozzle_contour",
-   "enforced_by": "raosim/mdo/nlp.py (SLSQP hard rows)",
-   "file": "raosim/mdo/constraints.py",
+   "enforced_by": "src/lrekit/optimization/nlp.py (SLSQP hard rows)",
+   "file": "src/lrekit/optimization/constraints.py",
    "line": 248,
    "detail": "geometry inequality row; optimizer_role=hard; applicability=always",
    "quantity": "pintle_module_fit_margin",
@@ -1028,7 +1028,7 @@
    "quantity_ids": [],
    "provenance_id": "PROV_CONSTRAINT_MANIFEST_PINTLE_MODULE_FIT",
    "harvest_method": "import",
-   "harvested_at": "2026-10-17T17:58:03.060526+00:00"
+   "harvested_at": "2026-11-21T23:24:31.142043+00:00"
   },
   {
    "id": "CST_PINTLE_POST_STRESS",
@@ -1066,8 +1066,8 @@
    "source_support_state": "NOT_CHECKED",
    "source_support_scope": "A resolved report key is a citation route, not page-verified support for this constraint or threshold.",
    "subsystem": "structures",
-   "enforced_by": "raosim/mdo/nlp.py (SLSQP hard rows)",
-   "file": "raosim/mdo/constraints.py",
+   "enforced_by": "src/lrekit/optimization/nlp.py (SLSQP hard rows)",
+   "file": "src/lrekit/optimization/constraints.py",
    "line": 229,
    "detail": "structures inequality row; optimizer_role=hard; applicability=always",
    "quantity": "pintle_post_stress_margin",
@@ -1075,7 +1075,7 @@
    "quantity_ids": [],
    "provenance_id": "PROV_CONSTRAINT_MANIFEST_PINTLE_POST_STRESS",
    "harvest_method": "import",
-   "harvested_at": "2026-10-17T17:58:03.060526+00:00"
+   "harvested_at": "2026-11-21T23:24:31.142043+00:00"
   },
   {
    "id": "CST_PINTLE_TRANSITION",
@@ -1106,8 +1106,8 @@
    "source_support_state": "NOT_CHECKED",
    "source_support_scope": "A resolved report key is a citation route, not page-verified support for this constraint or threshold.",
    "subsystem": "injector",
-   "enforced_by": "raosim/mdo/nlp.py (SLSQP hard rows)",
-   "file": "raosim/mdo/constraints.py",
+   "enforced_by": "src/lrekit/optimization/nlp.py (SLSQP hard rows)",
+   "file": "src/lrekit/optimization/constraints.py",
    "line": 198,
    "detail": "injector inequality row; optimizer_role=hard; applicability=pintle_movable",
    "quantity": "pintle_transition_margin",
@@ -1115,7 +1115,7 @@
    "quantity_ids": [],
    "provenance_id": "PROV_CONSTRAINT_MANIFEST_PINTLE_TRANSITION",
    "harvest_method": "import",
-   "harvested_at": "2026-10-17T17:58:03.060526+00:00"
+   "harvested_at": "2026-11-21T23:24:31.142043+00:00"
   },
   {
    "id": "CST_PINTLE_WALL_FIT",
@@ -1146,8 +1146,8 @@
    "source_support_state": "NOT_CHECKED",
    "source_support_scope": "A resolved report key is a citation route, not page-verified support for this constraint or threshold.",
    "subsystem": "nozzle_contour",
-   "enforced_by": "raosim/mdo/nlp.py (SLSQP hard rows)",
-   "file": "raosim/mdo/constraints.py",
+   "enforced_by": "src/lrekit/optimization/nlp.py (SLSQP hard rows)",
+   "file": "src/lrekit/optimization/constraints.py",
    "line": 237,
    "detail": "geometry inequality row; optimizer_role=hard; applicability=always",
    "quantity": "pintle_wall_fit_margin",
@@ -1155,7 +1155,7 @@
    "quantity_ids": [],
    "provenance_id": "PROV_CONSTRAINT_MANIFEST_PINTLE_WALL_FIT",
    "harvest_method": "import",
-   "harvested_at": "2026-10-17T17:58:03.060526+00:00"
+   "harvested_at": "2026-11-21T23:24:31.142043+00:00"
   },
   {
    "id": "CST_PROPERTY_DOMAIN",
@@ -1186,8 +1186,8 @@
    "source_support_state": "NOT_CHECKED",
    "source_support_scope": "A resolved report key is a citation route, not page-verified support for this constraint or threshold.",
    "subsystem": "thermochemistry",
-   "enforced_by": "raosim/mdo/nlp.py (SLSQP hard rows)",
-   "file": "raosim/mdo/constraints.py",
+   "enforced_by": "src/lrekit/optimization/nlp.py (SLSQP hard rows)",
+   "file": "src/lrekit/optimization/constraints.py",
    "line": 266,
    "detail": "properties inequality row; optimizer_role=hard; applicability=sampled_property_surface",
    "quantity": "property_domain_margin",
@@ -1195,7 +1195,7 @@
    "quantity_ids": [],
    "provenance_id": "PROV_CONSTRAINT_MANIFEST_PROPERTY_DOMAIN",
    "harvest_method": "import",
-   "harvested_at": "2026-10-17T17:58:03.060526+00:00"
+   "harvested_at": "2026-11-21T23:24:31.142043+00:00"
   },
   {
    "id": "CST_PUMP_SUCTION",
@@ -1228,8 +1228,8 @@
    "source_support_state": "NOT_CHECKED",
    "source_support_scope": "A resolved report key is a citation route, not page-verified support for this constraint or threshold.",
    "subsystem": "pump",
-   "enforced_by": "raosim/mdo/nlp.py (SLSQP hard rows)",
-   "file": "raosim/mdo/constraints.py",
+   "enforced_by": "src/lrekit/optimization/nlp.py (SLSQP hard rows)",
+   "file": "src/lrekit/optimization/constraints.py",
    "line": 202,
    "detail": "feed inequality row; optimizer_role=hard; applicability=always",
    "quantity": "nss_margin_min",
@@ -1237,7 +1237,7 @@
    "quantity_ids": [],
    "provenance_id": "PROV_CONSTRAINT_MANIFEST_PUMP_SUCTION",
    "harvest_method": "import",
-   "harvested_at": "2026-10-17T17:58:03.060526+00:00"
+   "harvested_at": "2026-11-21T23:24:31.142043+00:00"
   },
   {
    "id": "CST_PUMP_TIP_SPEED",
@@ -1270,8 +1270,8 @@
    "source_support_state": "NOT_CHECKED",
    "source_support_scope": "A resolved report key is a citation route, not page-verified support for this constraint or threshold.",
    "subsystem": "pump",
-   "enforced_by": "raosim/mdo/nlp.py (SLSQP hard rows)",
-   "file": "raosim/mdo/constraints.py",
+   "enforced_by": "src/lrekit/optimization/nlp.py (SLSQP hard rows)",
+   "file": "src/lrekit/optimization/constraints.py",
    "line": 205,
    "detail": "feed inequality row; optimizer_role=hard; applicability=always",
    "quantity": "tip_speed_margin_min",
@@ -1279,7 +1279,7 @@
    "quantity_ids": [],
    "provenance_id": "PROV_CONSTRAINT_MANIFEST_PUMP_TIP_SPEED",
    "harvest_method": "import",
-   "harvested_at": "2026-10-17T17:58:03.060526+00:00"
+   "harvested_at": "2026-11-21T23:24:31.142043+00:00"
   },
   {
    "id": "CST_SEPARATION",
@@ -1312,8 +1312,8 @@
    "source_support_state": "NOT_CHECKED",
    "source_support_scope": "A resolved report key is a citation route, not page-verified support for this constraint or threshold.",
    "subsystem": "performance",
-   "enforced_by": "raosim/mdo/nlp.py (SLSQP hard rows)",
-   "file": "raosim/mdo/constraints.py",
+   "enforced_by": "src/lrekit/optimization/nlp.py (SLSQP hard rows)",
+   "file": "src/lrekit/optimization/constraints.py",
    "line": 181,
    "detail": "aerodynamics inequality row; optimizer_role=hard; applicability=always",
    "quantity": "separation_margin",
@@ -1321,7 +1321,7 @@
    "quantity_ids": [],
    "provenance_id": "PROV_CONSTRAINT_MANIFEST_SEPARATION",
    "harvest_method": "import",
-   "harvested_at": "2026-10-17T17:58:03.060526+00:00"
+   "harvested_at": "2026-11-21T23:24:31.142043+00:00"
   },
   {
    "id": "CST_SOLVER_STATUS",
@@ -1352,8 +1352,8 @@
    "source_support_state": "NOT_CHECKED",
    "source_support_scope": "A resolved report key is a citation route, not page-verified support for this constraint or threshold.",
    "subsystem": "mdo",
-   "enforced_by": "raosim/mdo/nlp.py (mandatory post-solve gate, no relaxation)",
-   "file": "raosim/mdo/constraints.py",
+   "enforced_by": "src/lrekit/optimization/nlp.py (mandatory post-solve gate, no relaxation)",
+   "file": "src/lrekit/optimization/constraints.py",
    "line": 336,
    "detail": "numerical availability_gate row; optimizer_role=final_gate; applicability=always",
    "quantity": "solver_status_margin",
@@ -1361,7 +1361,7 @@
    "quantity_ids": [],
    "provenance_id": "PROV_CONSTRAINT_MANIFEST_SOLVER_STATUS",
    "harvest_method": "import",
-   "harvested_at": "2026-10-17T17:58:03.060526+00:00"
+   "harvested_at": "2026-11-21T23:24:31.142043+00:00"
   },
   {
    "id": "CST_STRUCTURAL_STRESS",
@@ -1394,8 +1394,8 @@
    "source_support_state": "NOT_CHECKED",
    "source_support_scope": "A resolved report key is a citation route, not page-verified support for this constraint or threshold.",
    "subsystem": "structures",
-   "enforced_by": "raosim/mdo/nlp.py (SLSQP hard rows)",
-   "file": "raosim/mdo/constraints.py",
+   "enforced_by": "src/lrekit/optimization/nlp.py (SLSQP hard rows)",
+   "file": "src/lrekit/optimization/constraints.py",
    "line": 252,
    "detail": "structures inequality row; optimizer_role=hard; applicability=always",
    "quantity": "structural_stress_margin",
@@ -1403,7 +1403,7 @@
    "quantity_ids": [],
    "provenance_id": "PROV_CONSTRAINT_MANIFEST_STRUCTURAL_STRESS",
    "harvest_method": "import",
-   "harvested_at": "2026-10-17T17:58:03.060526+00:00"
+   "harvested_at": "2026-11-21T23:24:31.142043+00:00"
   },
   {
    "id": "CST_THRUST_CLOSURE",
@@ -1437,7 +1437,7 @@
    "source_support_scope": "A resolved report key is a citation route, not page-verified support for this constraint or threshold.",
    "subsystem": "mdo",
    "enforced_by": "reported only",
-   "file": "raosim/mdo/constraints.py",
+   "file": "src/lrekit/optimization/constraints.py",
    "line": 177,
    "detail": "numerical equality row; optimizer_role=report_only; applicability=always",
    "quantity": "thrust_residual",
@@ -1445,7 +1445,7 @@
    "quantity_ids": [],
    "provenance_id": "PROV_CONSTRAINT_MANIFEST_THRUST_CLOSURE",
    "harvest_method": "import",
-   "harvested_at": "2026-10-17T17:58:03.060526+00:00"
+   "harvested_at": "2026-11-21T23:24:31.142043+00:00"
   },
   {
    "id": "CST_WALL_MONOTONIC",
@@ -1476,8 +1476,8 @@
    "source_support_state": "NOT_CHECKED",
    "source_support_scope": "A resolved report key is a citation route, not page-verified support for this constraint or threshold.",
    "subsystem": "nozzle_contour",
-   "enforced_by": "raosim/mdo/nlp.py (SLSQP hard rows)",
-   "file": "raosim/mdo/constraints.py",
+   "enforced_by": "src/lrekit/optimization/nlp.py (SLSQP hard rows)",
+   "file": "src/lrekit/optimization/constraints.py",
    "line": 277,
    "detail": "geometry inequality row; optimizer_role=hard; applicability=always",
    "quantity": "wall_monotonic_margin",
@@ -1485,7 +1485,7 @@
    "quantity_ids": [],
    "provenance_id": "PROV_CONSTRAINT_MANIFEST_WALL_MONOTONIC",
    "harvest_method": "import",
-   "harvested_at": "2026-10-17T17:58:03.060526+00:00"
+   "harvested_at": "2026-11-21T23:24:31.142043+00:00"
   },
   {
    "id": "CST_WALL_TEMP",
@@ -1518,8 +1518,8 @@
    "source_support_state": "NOT_CHECKED",
    "source_support_scope": "A resolved report key is a citation route, not page-verified support for this constraint or threshold.",
    "subsystem": "cooling",
-   "enforced_by": "raosim/mdo/nlp.py (SLSQP hard rows)",
-   "file": "raosim/mdo/constraints.py",
+   "enforced_by": "src/lrekit/optimization/nlp.py (SLSQP hard rows)",
+   "file": "src/lrekit/optimization/constraints.py",
    "line": 257,
    "detail": "thermal inequality row; optimizer_role=hard; applicability=always",
    "quantity": "wall_temp_margin",
@@ -1527,7 +1527,7 @@
    "quantity_ids": [],
    "provenance_id": "PROV_CONSTRAINT_MANIFEST_WALL_TEMP",
    "harvest_method": "import",
-   "harvested_at": "2026-10-17T17:58:03.060526+00:00"
+   "harvested_at": "2026-11-21T23:24:31.142043+00:00"
   }
  ]
 }

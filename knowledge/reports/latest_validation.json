@@ -1,13 +1,13 @@
 {
  "summary": {
-  "generated_at": "2026-10-17T17:58:08.805732+00:00",
-  "n_issues": 14,
+  "generated_at": "2026-11-21T23:24:36.180239+00:00",
+  "n_issues": 78,
   "issues_by_check": {
    "empty_source_pdf": 1,
    "canonical_document_without_chunks": 1,
    "markdown_without_manifest_row": 1,
    "registry_citation_not_confirmed_in_local_source": 1,
-   "declared_cad_bytes_unavailable": 6,
+   "declared_cad_bytes_unavailable": 70,
    "source_extraction_incomplete": 1,
    "source_verification_incomplete": 1,
    "unknown_basis_software_constants": 1,
@@ -51,32 +51,32 @@
      "EngineConfiguration": 17,
      "ManufacturingProcess": 15
     },
-    "inactive_snapshots": 72
+    "inactive_snapshots": 378
    },
    "graph": {
-    "nodes": 5728,
-    "edges": 7266,
+    "nodes": 7049,
+    "edges": 8332,
     "edges_without_provenance": 0,
     "top_degree": [
      [
       "DOC_NTRS_19710019929",
-      153
+      156
      ],
      [
       "MODEL_NOZZLE_RAO_VARIATIONAL_BVP",
       146
      ],
      [
-      "DOC_NTRS_19760023196",
-      111
-     ],
-     [
       "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
-      110
+      134
      ],
      [
-      "MODEL_NOZZLE_MOC",
-      97
+      "DOC_NTRS_19760023196",
+      134
+     ],
+     [
+      "ENR_00af2ca27fbeddd3fdbd8d88",
+      101
      ]
     ]
    },
@@ -86,17 +86,17 @@
     "concept_completeness": "NOT_ESTABLISHED",
     "scope_note": "Coverage of stored source objects against manifest identities; live PDF/Markdown bytes are not rehashed here. Existing independently_confirmed counters preserve historical stored-verdict totals; content_bound_confirmed additionally checks the assertion fingerprint. No all-equation denominator or physical validation.",
     "documents": {
-     "records": 252,
-     "canonical": 248,
+     "records": 271,
+     "canonical": 267,
      "alternate_copies": 4,
      "with_source_objects": 30,
-     "without_source_objects": 218,
+     "without_source_objects": 237,
      "with_equations": 24,
-     "without_equations": 224,
+     "without_equations": 243,
      "with_independently_confirmed_objects": 20,
      "with_content_bound_confirmed_objects": 4,
-     "conversion_requires_review": 230,
-     "conversion_low_confidence": 16,
+     "conversion_requires_review": 249,
+     "conversion_low_confidence": 28,
      "zero_page_sources": 1,
      "zero_page_source_ids": [
       "DOC_DOI_10_1007_978_3_030_14788_4"
@@ -296,8 +296,8 @@
      "scope_note": "Stored totals preserve history. Current counts include active records with CURRENT source state; absent legacy state fields retain their existing active/CURRENT defaults."
     },
     "gaps": {
-     "canonical_documents_without_source_objects": 218,
-     "canonical_documents_without_equations": 224,
+     "canonical_documents_without_source_objects": 237,
+     "canonical_documents_without_equations": 243,
      "equations_and_claims_pending_independent_verification": 271,
      "current_source_objects_without_content_bound_confirmation": 725,
      "equations_without_model_links": 160,
@@ -336,43 +336,427 @@
   },
   {
    "check": "declared_cad_bytes_unavailable",
-   "id": "CAD_7f120789c376a8a8637375a21d5f56c021c17c9d1db810f63ad3f78c320dbdcb",
+   "id": "CAD_02145a016a0f8340b1f212f072614bcb4f4f4876ede650fb0e420941e865af76",
+   "declared_path": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim/builds/tests/coaxial_injector_13kn/slots/pintle_body.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_037c9564ed8066fc952ff4e2576d5b60c2fdf0763a1a343ed84efad3470abf86",
+   "declared_path": "builds/review_machined_pintle_cli_after_fixes/pintle/injector_assembly_machined.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_03fd5238b20058877eb6f4d49a1e59f1282ade247824b1763043e4875b46f2de",
+   "declared_path": "builds/tests/13kn_sl_full/pintle/orifice_plate.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_04b64855daf7a71ec68f0a3f2d14aa703faf86a606ed54c89add74bd70a7a254",
+   "declared_path": "builds/review_machined_pintle_cli_after_fixes/pintle/pintle_post_slotted.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_0854e64caf64da6faffdb0de56a17080ba5c39b5e5253af12e9c091a61941181",
+   "declared_path": "builds/lox_rp1_13kn_grcop84_inconel_pintle_flanged/pintle/injector_face_machined.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_0917072c55de32922d9bce1f067a6d1947a2c4492724ec426c20e8119fe05b06",
+   "declared_path": "builds/tests/13kn_sl_full/pintle/pintle_tip.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_0af8e00c37923eaae5d9a0efbbd40fb9c4073df66a5bb9314d11622007c8d68c",
    "declared_path": "/tmp/13kn_I/pintle/pintle_body.step",
    "severity": "warning"
   },
   {
    "check": "declared_cad_bytes_unavailable",
-   "id": "CAD_8e4323a1ebf9f0da9c9d286073eaed6e8841a1d983ff2e2ca87852a26ff84c51",
-   "declared_path": "/tmp/13kn_I/pintle/injector_assembly_machined.step",
+   "id": "CAD_0b9097f49ee7007f21362fc062b50b9249da34cb98769085d662c139a1a5f9a9",
+   "declared_path": "builds/lox_rp1_13kn_grcop84_inconel_pintle/pintle/injector_face_machined.step",
    "severity": "warning"
   },
   {
    "check": "declared_cad_bytes_unavailable",
-   "id": "CAD_8f1788f9b4c76617350d48d2ac8c3ca6fb88a12e8b8954bbad956fce0bd8eb1a",
-   "declared_path": "/tmp/13kn_I/pintle/orifice_plate.step",
+   "id": "CAD_0bc60083f60449452c7f9f97f19caf309a4fc7fe1c56c8ef8d8c819db37a4a45",
+   "declared_path": "builds/13kn_engine/pintle/injector_face_machined.step",
    "severity": "warning"
   },
   {
    "check": "declared_cad_bytes_unavailable",
-   "id": "CAD_d34b562c3e68360cca7ffdd38e09a0aa4e1bf15ce589215d56d857491abbf3ea",
-   "declared_path": "/tmp/13kn_I/pintle/faceplate.step",
+   "id": "CAD_0ef1e3ac1c671eea483237a5db8f0e15286e1970b409d5090cb476bb377005a1",
+   "declared_path": "builds/tests/13kn_sl_fast/pintle/pintle_tip.step",
    "severity": "warning"
   },
   {
    "check": "declared_cad_bytes_unavailable",
-   "id": "CAD_dbad35c01e77479a6bb8916c41d987011c378a918b0b191786ca90c24d0e2a48",
+   "id": "CAD_0fbc296c4262ace2c549b44f7f87db4ab2e655c3d9b1b5bba70c7965b28bb730",
+   "declared_path": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim/builds/tests/coaxial_injector_13kn/slots/orifice_plate.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_135f0d2d5d7ce70180ccb126256c367e85c6c7342cca959b2656d488ce0e6161",
+   "declared_path": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim/builds/windows_inventor_pintle_20260629_smoke/pintle/pintle_post_slotted.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_172911ef0e7d416e0ca5406c5986276f6a15aaf033a5e7757e5886cd45187a40",
+   "declared_path": "builds/13kn_engine/pintle/pintle_post_slotted.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_177421d0e7927adc867710be8bf2c8cad14dc103c97d4f2f73b05319bb0980a3",
+   "declared_path": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim/builds/tests/coaxial_injector_13kn/holes/faceplate.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_1cc6a5cb830587930351c3a578f2657103e181bbf0759c3d85414091109195a2",
+   "declared_path": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim/builds/windows_inventor_pintle_20260629_smoke/pintle/injector_face_machined.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_21272201f75562155be519c20b758407c513a4db5145d45a982bb5c08b80ed40",
+   "declared_path": "builds/lox_rp1_13kn_20bar_grcop84_inconel_pintle/pintle/injector_face_machined.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_22780375279c545b330baa756fd2adce6c82f4eaf6599ee72356d57b08e7f2ff",
    "declared_path": "/tmp/13kn_I/pintle/injector_body.step",
    "severity": "warning"
   },
   {
    "check": "declared_cad_bytes_unavailable",
-   "id": "CAD_e16c9925239cff2a628320e3d501a906474a43438d4ed3b340e71e4b9036abd5",
+   "id": "CAD_2445d857d6cfd533ea1d19225c8d888a63ecc1c1d4d2ac3c90b6c06b75e30df8",
+   "declared_path": "builds/13kn_engine/pintle/injector_assembly_machined.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_256786823524c1a469ba1254b092f41b366b1fab11eacbe70c863f7eb0557151",
+   "declared_path": "builds/review_machined_pintle_cli/pintle/injector_face_machined.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_2d4504eb130ee70957027bc837e44b8308619498c495455e29c68ec2f32e8dea",
+   "declared_path": "builds/review_machined_pintle_cli_after_fixes/pintle/injector_face_machined.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_3263f079a15c549cdc7ed5d1e2e6b3a5b315ea4cfd2b254e3b6643155a6e0cb4",
+   "declared_path": "builds/lox_rp1_13kn_20bar_grcop84_inconel_pintle/pintle/pintle_post_slotted.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_3414c88a54d2c29289a5fbf992cfe27dc2b8e86b6384a162c74532d3e2e13de3",
+   "declared_path": "/tmp/13kn_I/pintle/faceplate.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_343d9477d7aeb0f72a1ecbb160177b38df00ffb86cd08e707868c9f98fa79e86",
+   "declared_path": "builds/lox_rp1_13kn_grcop84_inconel_pintle_flanged/pintle/pintle_post_slotted.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_35d466dcdc58ab1f056a8e0931bd3816630f2cb3ae83aa321d03f5517c121a5e",
+   "declared_path": "/tmp/13kn_I/pintle/orifice_plate.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_37bb86556fdbb0c042e15b24eaa08ab3234100d8a41d4dcbecf9be83da0e45fd",
+   "declared_path": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim/builds/tests/coaxial_injector_13kn/slots/injector_assembly_machined.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_3f30819aec8590af09502f39a2c299a07f484a1b852c09d44961735a6a89aa7e",
+   "declared_path": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim/builds/tests/coaxial_injector_13kn/holes/pintle_body.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_4d709a407f3c4b351e03e700b5a8fe729ae1a17c89a866cc00ee49eaebd6bd41",
+   "declared_path": "builds/lox_rp1_13kn_grcop84_inconel_pintle_flanged/pintle/injector_assembly_machined.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_4d7734896a0fb438d351f697bdc1d532c0bde4d8f2cdb819bc4ced5f18844e05",
+   "declared_path": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim/builds/tests/coaxial_injector_13kn/slots/injector_body.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_4f7e7724ea03bb77dfc74c241adbb10b70600904240de4cac1bcdace2b83c56a",
+   "declared_path": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim/builds/pintle_inventor_bundle_20260629/pintle/annular_sleeve.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_4ff4ac8a1e88cd77dc3c2861e2f220e389ce71f250d36856565bfb359247e052",
+   "declared_path": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim/builds/windows_inventor_pintle_20260629_smoke/pintle/annular_sleeve.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_528e9624c4712adcea4742968d7e19561e36b498f471b62e8fb6018ebb68fae7",
+   "declared_path": "builds/review_machined_pintle_cli/pintle/pintle_post_slotted.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_537c04ded725b3322b2d5cee752ca0cef0e2dbf4dfd3e8955d225c15b167ad00",
+   "declared_path": "builds/tests/13kn_sl_full/pintle/pintle_body.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_5a5ce68559e8f41f5d1a2a3ab5168bad951fb4e4a2efc0d27b442f099acbeb0f",
+   "declared_path": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim/builds/pintle_inventor_bundle_20260629/pintle/injector_assembly_machined.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_5d515bd920f2f72a09a0b0392c407c7c57ac7c523ecad3111e9796caebe93a1b",
+   "declared_path": "builds/tests/13kn_sl_full/pintle/injector_assembly_machined.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_5d7f2ad180f920df7d8b556c6b282a4fe83ae06745a73c044406ab3b08b413e9",
+   "declared_path": "builds/review_machined_pintle_cli/pintle/annular_sleeve.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_69b771bb5c95188ad494739a711212a0aacd1a1712fb678121100e8c928a79e1",
+   "declared_path": "builds/lox_rp1_13kn_grcop84_inconel_pintle_flanged/pintle/annular_sleeve.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_6bf306687e27a6a3baa9339aebe5248a1d394aa4e511e166598333f3b9df092b",
+   "declared_path": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim/builds/tests/coaxial_injector_13kn/holes/injector_assembly_machined.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_6e20c99d54b3fb0376dc8c02eeb61a400c8e8a14b993aa0d43ff6b4c8e2c137a",
+   "declared_path": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim/builds/windows_inventor_pintle_20260629_pass/pintle/injector_assembly_machined.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_7469f3ff16e32fb4261dc8f567ea68acab912e7e8027869de14c3fb3688682ce",
+   "declared_path": "builds/lox_rp1_13kn_grcop84_inconel_pintle/pintle/injector_assembly_machined.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_7e34643d6b7cd49b03a01250a5a163cea552a2f81b788bf7ba8ec0fdd4ef957d",
+   "declared_path": "builds/tests/13kn_sl_fast/pintle/faceplate.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_7eaf9426a4fc412d0ceb43677644ec03b06ed8ecee8d2520750ef0479a974ea0",
+   "declared_path": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim/builds/pintle_inventor_bundle_20260629/pintle/pintle_post_slotted.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_809efb8a73a30a4a6835eb7a3e31a2d4bcdc0f1924c537a5d08d928370bd3d06",
+   "declared_path": "builds/lox_rp1_13kn_40bar_grcop84_inconel_pintle/pintle/pintle_post_slotted.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_831d2cb67e179f9b11871cfd947b356fa294df8b2a70f9cb7804e0896571797f",
+   "declared_path": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim/builds/windows_inventor_pintle_20260629_pass/pintle/pintle_post_slotted.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_840926aec4b619b685597b5935cf5423457a4fea61bc7a99fb24685cb0b92b6e",
+   "declared_path": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim/builds/windows_inventor_pintle_20260629_pass/pintle/injector_face_machined.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_86f790a2284380ab8cfd0d26b28192c01c8154e85f22f0f1d36e9560e8e69fd5",
+   "declared_path": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim/builds/tests/coaxial_injector_13kn/holes/injector_body.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_8908b59f07f4b3e8c80d98dcddddabedcd72d91d74cd555d257db2ba1be8040c",
+   "declared_path": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim/builds/tests/coaxial_injector_13kn/holes/orifice_plate.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_8f6b980c9742f6933465a85595ce4ffd4adbf815d80e3b65451aefebe358cdfb",
+   "declared_path": "builds/tests/13kn_sl_fast/pintle/pintle_body.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_8fa989659bff21f39fe894864b0d8be6b3d2bac0de0f70b5466f55b862f5af5e",
+   "declared_path": "builds/tests/13kn_sl_full/pintle/injector_body.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_98321c211a367770aed7262d7ae1991544b6da361e5dac20042baf0b21b79363",
+   "declared_path": "builds/review_machined_pintle_cli/pintle/injector_assembly_machined.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_98cd8a489973f80380c205cc729c73300cd325657d7cd0c6a39768517de2a956",
+   "declared_path": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim/builds/tests/coaxial_injector_13kn/slots/faceplate.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_9be65d92299571a8a234fa22d882a2a6cad8b17256b152c3654b23821cee9fa9",
+   "declared_path": "builds/tests/13kn_sl_fast/pintle/injector_body.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_9c63e8072445782d8f7163a15e8bc375074437d61754a4b4c3a8500e4b94dbde",
+   "declared_path": "builds/tests/13kn_sl_full/pintle/faceplate.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_a5146f3cc26a46e8f0da745ffc6c4a23355142c59157073a0c88a329cf6fe147",
+   "declared_path": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim/builds/pintle_inventor_bundle_20260629/pintle/injector_face_machined.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_a8b3609db01da477e927076bee0be48f6840824599ea69199cbf472c01cf3af4",
+   "declared_path": "builds/tests/13kn_sl_fast/pintle/orifice_plate.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_a8d527decfd764b2fb4972750702b3f595f1b1a4675abe631412e97ad2dfd9fe",
+   "declared_path": "builds/13kn_engine/pintle/annular_sleeve.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_ae3c2a583046eadc7fb8a74a12a3f250d42d6ae5785e46d923e9b87153c0fa3e",
+   "declared_path": "builds/lox_rp1_13kn_40bar_grcop84_inconel_pintle/pintle/annular_sleeve.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_b621705521ddde68671ae060221e4b10e6459fb23bcb5cccb9da1346f1cf2e39",
+   "declared_path": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim/builds/tests/coaxial_injector_13kn/holes/pintle_tip.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_b73f789411e85037d9aeaf9565b83f0e72aa9c69cc6401d263cb313998df60da",
    "declared_path": "/tmp/13kn_I/pintle/pintle_tip.step",
    "severity": "warning"
   },
   {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_bf0c83eb3a8ced33bb172f94f1107e69bd1dc0d335353f6eae0c68b0bc3ce193",
+   "declared_path": "builds/review_machined_pintle_cli_after_fixes/pintle/annular_sleeve.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_c5e50cf162ecb23a0afcf0b62aee6908a6a84fbe58150c32951c5bed87596eec",
+   "declared_path": "builds/lox_rp1_13kn_20bar_grcop84_inconel_pintle/pintle/injector_assembly_machined.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_c9b2a747a54985977e5a3d4d68291dd0476975fbb1c4174d493007d81351c339",
+   "declared_path": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim/builds/tests/coaxial_injector_13kn/slots/pintle_tip.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_cb91877a9822575d8e7cde6d50017c1288ea12f17819acbe972b1b6960f897b6",
+   "declared_path": "builds/lox_rp1_13kn_20bar_grcop84_inconel_pintle/pintle/annular_sleeve.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_cf6d3f8384f1bc3f6611fcdfc36bf42dae645d3761960abe2af0ffe88436a78b",
+   "declared_path": "builds/lox_rp1_13kn_grcop84_inconel_pintle/pintle/pintle_post_slotted.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_d4ed3154eda04489d62c04271af617ab42b62108707471ae8b5322473dda5fe2",
+   "declared_path": "builds/lox_rp1_13kn_40bar_grcop84_inconel_pintle/pintle/injector_assembly_machined.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_d97828c19d9c2d43a77adea785110a42e6b4f2bb2829d28530c979908178c9b6",
+   "declared_path": "builds/tests/13kn_sl_fast/pintle/injector_assembly_machined.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_d9d2702af31dd972db221157c304681ba68523181340941b35f5c4755e222e38",
+   "declared_path": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim/builds/windows_inventor_pintle_20260629_pass/pintle/annular_sleeve.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_e7e7d08c517545c8bca19da57e3d33517aa51973218d413d9ae8430c2e9c9334",
+   "declared_path": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim/builds/windows_inventor_pintle_20260629_smoke/pintle/injector_assembly_machined.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_ea1a1a6360c92a21fc202df69c34aa78e80ff8110882bdc54e6562ac6b8ffaff",
+   "declared_path": "builds/lox_rp1_13kn_grcop84_inconel_pintle/pintle/annular_sleeve.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_f16fe6a4a608a4e3a8ee047e61bbf641eefc93ab5865ad462717ccd06ae09c3f",
+   "declared_path": "/tmp/13kn_I/pintle/injector_assembly_machined.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_f7c6f33387a9bacc6a368a96c10b1e36112f3352d38703d0cc4140251cf46c71",
+   "declared_path": "builds/lox_rp1_13kn_40bar_grcop84_inconel_pintle/pintle/injector_face_machined.step",
+   "severity": "warning"
+  },
+  {
    "check": "source_extraction_incomplete",
-   "count": 218,
+   "count": 237,
    "severity": "warning",
    "equation_completeness": "NOT_ESTABLISHED"
   },

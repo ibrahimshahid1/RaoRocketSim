@@ -1,0 +1,32 @@
+{
+  "source_id": "kang2022",
+  "acquired_at_utc": "2026-11-04T00:34:47.417071+00:00",
+  "evidence_kind": "published_experimental_report",
+  "status": "ACQUIRED",
+  "files": [
+    {
+      "path": "raw/kang2022/source.pdf",
+      "bytes": 9361406,
+      "sha256": "82c7d0fef500a8f001d42bb05a53c788c2d2e92b2296af2d85b8d8fd4cd66049",
+      "origin": "existing_local_literature_copy",
+      "original_path": "propulsion_texts/pintle_injector/kang2022.pdf"
+    },
+    {
+      "path": "derived/kang2022/source.txt",
+      "bytes": 83916,
+      "sha256": "5a97661c61b823f3a1cf61b834998600e47b33217195e93a4965a35dcbc06889",
+      "origin": "unreviewed_pdf_text_derivative"
+    }
+  ],
+  "review_state": "NOT_REVIEWED_FOR_TRAINING",
+  "training_eligible": false,
+  "hardware_qualified": false,
+  "limitations": [
+    "Hot-fire failure/mitigation observations; not automatically a transferable thermal-life fit."
+  ],
+  "pdf_info": "Title:           Design of pintle injector using Kerosene-LOx as propellant and solving the problem of pintle tip thermal damage in hot firing test\nSubject:         Acta Astronautica, 201 (2022) 48-58. doi:10.1016/j.actaastro.2022.08.029\nKeywords:        Liquid rocket engine,Pintle injector,Hot firing test,Thermal damage,Total momentum ratio,Characteristic velocity efficiency\nAuthor:          Donghyuk Kang\nCreator:         Elsevier\nProducer:        Acrobat Distiller 8.1.0 (Windows)\nCreationDate:    Thu Oct 13 23:00:04 2022 EDT\nModDate:         Fri Oct 14 10:38:05 2022 EDT\nCustom Metadata: yes\nMetadata Stream: yes\nTagged:          yes\nUserProperties:  no\nSuspects:        no\nForm:            none\nJavaScript:      no\nPages:           11\nEncrypted:       no\nPage size:       595.276 x 793.701 pts\nPage rot:        0\nFile size:       9361406 bytes\nOptimized:       yes\nPDF version:     1.7\n",
+  "text_extraction": {
+    "status": "DERIVATIVE_TEXT_UNREVIEWED",
+    "warning_excerpt": ""
+  }
+}

@@ -42,6 +42,25 @@ def publish(root, meta, *, raw=None):
                                   dest=root / "artifacts", root=root)
 
 
+def test_referenced_figure_image_is_traversable_without_scientific_promotion(isolated):
+    root, meta = isolated
+    image = root / "figure.png"
+    image.write_bytes(b"synthetic image URI target")
+    raw, metadata = publish(root, meta, raw=json.dumps({
+        "pages": {"1": {}}, "pictures": [{"label": "picture", "self_ref": "#/pictures/0",
+        "prov": [{"page_no": 1}], "image": {"uri": str(image), "mimetype": "image/png"}}]
+    }).encode())
+    result = enrichment.integrate(raw, metadata)
+    nodes, edges = enrichment.graph_records()
+    figure = next(row for row in nodes if row["type"] == "Figure")
+    assert figure["image_uri"] == str(image)
+    assert figure["image_mimetype"] == "image/png"
+    assert figure["review_state"] == "UNREVIEWED"
+    assert any(edge["from"] == figure["id"] and edge["to"] == result["run_id"]
+               and edge["type"] == "DERIVED_FROM" for edge in edges)
+    assert not any(edge["type"] == "SUPPORTED_BY" for edge in edges)
+
+
 def test_content_address_includes_source_options_packages_revisions_and_outputs(isolated):
     root, meta = isolated
     meta.update(attempt_id="fixed-attempt", attempt_created_at="synthetic-time")

@@ -1,0 +1,179 @@
+{
+ "packet": "V-SP8089-p022-023",
+ "kind": "verification",
+ "document_id": "DOC_NTRS_19760023196",
+ "source_pdf": "propulsion_texts/19760023196.pdf",
+ "source_sha256": "5e9db6a6f7860ee51acbf5cbe137005ef259ec3fd87ff0ed5f1ad466d6227c44",
+ "pages": [
+  22,
+  23
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 22,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19760023196/p0022.png",
+   "sha256": "75e20a7c4837dd545907ea1dda7822c9e13dd25638f7de17d05bc0ec8f2cf09e",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 23,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19760023196/p0023.png",
+   "sha256": "0584b8c3f4968d8afe71acbd91427fba71d8884276095d3d677b5fd1f82ff21d",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_36dfd1e7a73ed032c802dee8",
+  "ENR_e6547d414faef1ebf9464db9"
+ ],
+ "candidates": [],
+ "stored_objects": [
+  {
+   "id": "CLM_NTRS_19760023196_2DF61348",
+   "store": "claims",
+   "type": "Claim",
+   "page": 23,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "In the (b) quadlet version the resultant spray direction after impingement is axial and insensitive to operating conditions, whereas in the (a) version the spray direction depends on the relative jet momenta.",
+   "quote": "In the (b) version, the resultant spray direction after impingement is axial and is therefore insensitive to operating conditions, whereas in the (a) version the direction of the spray depends on the relative jet momenta.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 23
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_859569EC",
+   "store": "claims",
+   "type": "Claim",
+   "page": 22,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Unlike-impinging elements accomplish mixing and atomization by direct impingement, which provides direct mechanical mixing by dissipative exchange of momentum.",
+   "quote": "The impingement provides direct mechanical mixing by dissipative exchange of momentum.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 22
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_DD18DF89",
+   "store": "claims",
+   "type": "Claim",
+   "page": 22,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Flow symmetry of the outer jets with respect to the central axial jet of a triplet results in an axially directed resultant spray under all operating conditions.",
+   "quote": "Flow symmetry of the outer jets with respect to the central axial jets results in axially directed resultant spray under all operating conditions.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 22
+    }
+   ]
+  }
+ ],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00029",
+   "page_start": 22,
+   "page_end": 22,
+   "section": "2.1.1.1.1 Element Types",
+   "text": "Elements can be divided into four categories: (1) unlike impinging, (2) like impinging, (3) nonimpinging, and (4) hybrid. The elements within each category differ in the method for mixing and atomizing the propellants. Some element types are more efficient in utilizing the available flow energy for mixing and atomization, but they do not necessarily provide spray distributions that are compatible with wall materials or stable combustion. Consequently, intelligent selection of an element or elements that will be best suited to a total injector concept requires a basic understanding of the behavior of the sprays produced by the various kinds of single elements.\n\nUnlike-impinging elements. — These elements accomplish mixing and atomization by direct impingement of fuel and oxidizer jets. The impingement provides direct mechanical mixing by dissipative exchange of momentum. Virtually all of the mixing and atomization takes place in the immediate vicinity of the impingement point. Consequently, it is imperative that the elements be designed to provide “optimum” mixing in order to ensure achievement of the desired spray distributions. Since the mixing takes place near the point of impingement, ignition and chemical reaction occur near the injector face. Unlike-impinging elements therefore result in high heat flux to the injector face. In addition, with hypergolic propellants all unlike-impinging elements are subject to reactive stream separation (blowapart). The mechanisms governing this phenomenon are not well understood; however, blowapart is affected by injector geometric and hydraulic parameters and by propellant combination. Detailed studies of reactive stream separation are presented in references 15, 16, and 17."
+  },
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00030",
+   "page_start": 22,
+   "page_end": 22,
+   "section": "2.1.1.1.1 Element Types",
+   "text": "The unlike-impinging doublet is the most common element used for storable-propellant engines. The, dependability of the unlike-impinging-doublet element has been demonstrated in such diverse applications as numerous small reaction control engines and the Apollo LEM ascent engine. This element is-composed of single oxidizer and fuel jets that impinge at a given angle at a prescribed distance from the injector face. The most commonly used impingement angle is 60° (45° and 90° angles have also been used). A schematic of a typical unlike doublet is provided in table II. This element is easy to manifold and simple to design. In addition, it can provide reasonably uniform mixing. When this element is employed near the combustion-chamber walls, then nonuniformities in local mixture ratio can cause chamber-durability problems. These problems generally are overcome by orientation of the element to provide axial flow of the spray after jet impingement and by showerhead fuel orifices in the outer ring to provide a fuel-rich, compatible environment near chamber walls. The unlike-impinging triplet also has been used in production engines. The triplet element, as shown in table II, consists of two outer jets directed at a specific angle on a centrally located axial jet. Flow symmetry of the outer jets with respect to the central axial jets results in axially directed resultant spray under all operating conditions. Generally, this element is designed with the outer jets oxidizer and the central jet fuel. For this"
+  },
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00031",
+   "page_start": 23,
+   "page_end": 23,
+   "section": "2.1.1.1.1 Element Types",
+   "text": "arrangement, the mass-flux profiles are dependent on operating conditions. For unbalanced jet momentum, extremely large variations in mixture ratio occur in the outer portions of the spray fan. Therefore, while it provides overall mixing uniformity slightly improved over that of the unlike doublet, the triplet may not be desirable for use near the chamber walls. To provide a more compatible atmosphere near chamber walls, designs with outer fuel and central oxidizer jets have been evaluated: these reverse designs reduced heat flux to the wall. In addition to its use with liquid/liquid propellants, this element has been studied for use with gas‘liquid propellants. Experiments have shown that highly efficient atomization can be attained; however, mixture-ratio gradients still exist as with liquid/liquid propellants."
+  },
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00032",
+   "page_start": 23,
+   "page_end": 23,
+   "section": "2.1.1.1.1 Element Types",
+   "text": "The unlike-impinging quadlet has been used rather extensively in space-vehicle engines. As shown in table HI], this element is designed with four impinging orifices. The (a) version behaves very much like the unlike doublet. In the (b) version, the resultant spray direction after impingement is axial and is therefore insensitive to operating conditions, whereas in the (a) version the direction of the spray depends on the relative jet momenta. The unlike-impinging pentad has been proposed for application but has not yet been used in a production engine. For liquid/liquid applications, this clement is extremely attractive for engines operating at mixture ratios much different from one. The element is designed with four orifices equally spaced about a central axially directed orifice; all impinge at a common point (see the sketch in table I). The unlike-impinging pentad results In more nearly uniform mixing than the doublet or triplet. As with the other elements discussed, chamber durability is a problem with this element because of local mixture-ratio gradients. Two of the major disadvantages of this element are manifolding complexity and high heat flux to the injector face. Of all the unlike-impinging patterns, the pentad produces the highest injector-face heat flux. Designs placing the impingement point too close to the injector face have resulted in destruction of the injector. In addition to its use with liquid/liquid propellants. the pentad has been extensively studied for gas/liquid propellants. For gas/liquid application, this element provides highly efficient atomization and uniform mixing with relatively large thrust per element. The ability to design the unlike-impinging elements to provide optimum spray distributions is contingent on having comprehensive design correlations that relate element mixing and atomization with injector geometric and hydraulic parameters. References for such correlations that exist are given for each element type in tables II and HI."
+  },
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00033",
+   "page_start": 23,
+   "page_end": 23,
+   "section": "2.1.1.1.1 Element Types",
+   "text": "The initial studies of liquid/liquid mixing characteristics for the unlike-impinging doublet are described in references 3, 7, and 18. These studics relate injector mechanical and hydraulic parameters to the resulting uniformity of mixture-ratio distribution. Subsequent investigations (ref. 6) included other unlike-impinging patterns (e.g., 2-on-1, 2-on-2, and 4-on-1). Reference 19 shows that the empirical equations developed in references 3, 6, 7, and 18 to describe the “optimum” injector design condition for uniform mixing are similar for all the unlike-impinging patterns."
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {},
+  "flagged_candidates": 0,
+  "target_objects": 3,
+  "objects_with_anchor_problems": 0
+ }
+}

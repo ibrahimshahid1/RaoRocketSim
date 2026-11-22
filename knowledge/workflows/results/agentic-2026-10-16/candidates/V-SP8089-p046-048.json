@@ -1,0 +1,434 @@
+{
+ "packet": "V-SP8089-p046-048",
+ "kind": "verification",
+ "document_id": "DOC_NTRS_19760023196",
+ "source_pdf": "propulsion_texts/19760023196.pdf",
+ "source_sha256": "5e9db6a6f7860ee51acbf5cbe137005ef259ec3fd87ff0ed5f1ad466d6227c44",
+ "pages": [
+  46,
+  48
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 46,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19760023196/p0046.png",
+   "sha256": "6803e3f5460db97d5033ff85335a2713ad7c1666c73c875eb45f724c32d029f0",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 47,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19760023196/p0047.png",
+   "sha256": "670fa5df90931acc6446b192bc839b88cabdced66ecc8b1d225688795b794c9c",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 48,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19760023196/p0048.png",
+   "sha256": "a7a89da82d736f16f235fa60a42f33aafb31b0cc96823f53517326d1c1f0975e",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_b2fcdf8a7319c9e809675f18",
+  "ENR_c18365c97039bd97275f64c6",
+  "ENR_f4b0d131d385fbcdec2238af"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_a4792ed4cdcd111780d35824",
+   "kind": "figure",
+   "pages": [
+    47
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [
+    "Figure 13. ~ Discharge coefficient as a function of orifice intet geometry {adptd. from ref. 72)."
+   ],
+   "bbox": [
+    {
+     "l": 107.51470184326172,
+     "t": 630.0280151367188,
+     "r": 463.1284484863281,
+     "b": 414.0690612792969,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/0\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_c18365c97039bd97275f64c6",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19760023196/5e9db6a6f786-p47-47-c19e3a506bbe8b662ab73cb95772cdf90d9e8d815a72fcbb4651f54197e8d0b8.json",
+   "raw_sha256": "5e823d17b14be1b1e320676f418431f1d9816aa506a8fbe7832a04ab88f74615",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [
+  {
+   "id": "CLM_NTRS_19760023196_039BD2CB",
+   "store": "claims",
+   "type": "Claim",
+   "page": 47,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "A small inlet burr produces a sizable drop in Cd; drilling from the injector face (orifice outlet) almost always produces inlet burrs.",
+   "quote": "A small burr. as shown in figure 13, produces a sizable drop in Cy. Drilling from the infectar face (orifice outlet} almost always produces orifice inlet burrs.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 47
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_0EFB137B",
+   "store": "claims",
+   "type": "Claim",
+   "page": 46,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Figure 13 shows the approximate variation of Cd (based on major bore diameter) with uniform inlet radius, re-entrant burr and inward burr for a full-flowing orifice of L/d = 3 with zero cross velocity in the fully turbulent Reynolds-number regime.",
+   "quote": "shows the approximate variation of Cg (based on major bore diameter d) for variations in uniform inlet radius R, uniform re-entrant burr B,,, and uniform inward burr B;, for a full-flowing orifice of L/d = 3 with zero cross velocity",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 46
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_251F9EBD",
+   "store": "claims",
+   "type": "Claim",
+   "page": 46,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Orifice pressure drops that are relatively high but repeatable are almost always preferable to those that are relatively low but vary widely.",
+   "quote": "Orifice pressure drops that are relatively high but repeatable are almost always prefereable to those that are relatively low but vary widely.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 46
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_45F7CBE3",
+   "store": "claims",
+   "type": "Claim",
+   "page": 46,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Rounded inlets, chamfered inlets, and converging orifices are more prone to full flow and produce higher Cd values than sharp-edged orifices.",
+   "quote": "rounded inlets, chamfered inlets, and converging orifices (orifice inlet larger than orifice exit} are more prone to full flow and produce higher Cz’s than sharp-edged orifices.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 46
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_8B597B33",
+   "store": "claims",
+   "type": "Claim",
+   "page": 48,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Control of injector pressure drop within about ±8 percent was achieved on the blind-orifice LEM ascent injector because of repeatable EDM entrances.",
+   "quote": "Control of injector AP within + 8 percent was achieved with the blind-orifice LEM ascent injector because of the repeatable entrances",
+   "confidence": "medium",
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 48
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_99E437B2",
+   "store": "claims",
+   "type": "Claim",
+   "page": 46,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The key to acceptable orifice inlets is reproducibility of the inlets and the resultant stream, rather than the absolute inlet shape or discharge coefficient Cd.",
+   "quote": "The key to acceptable orifice inlets is the reproducibility of the inlets and of the resultant stream, rather than the absolute shape or discharge coefficient Cy.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 46
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_B0E8F384",
+   "store": "claims",
+   "type": "Claim",
+   "page": 46,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Small variations in inlet curvature produce significant changes in Cd and nonreproducible pressure drops when the injector operates in the steepest portion of the R/d curve.",
+   "quote": "Small variations in inlet curvature R produce significant changes in Cg and nonreproducible pressure drops when the injector operates in the steepest portion of the R/d curve.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 46
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_DAD5A891",
+   "store": "claims",
+   "type": "Claim",
+   "page": 47,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "In the Apollo Service Propulsion System study, variations in Cd between sharp-edged orifices in the as-drilled and lapped conditions reached 15 percent.",
+   "quote": "In the Apollo Service Propulsion System study (refs. 69, 70, and 71) variations in Cq between sharp-edged orifices in the as-drilled condition and in the lapped condition reached 15 percent.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 47
+    }
+   ]
+  },
+  {
+   "id": "CONST_NTRS_19760023196_ED9E4FE7",
+   "store": "entities",
+   "type": "EmpiricalConstant",
+   "page": 47,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "Cd variation, as-drilled vs lapped sharp-edged orifices = 15 percent",
+   "equation_number": null,
+   "form": null,
+   "statement": null,
+   "quote": "variations in Cq between sharp-edged orifices in the as-drilled condition and in the lapped condition reached 15 percent.",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 47
+    }
+   ]
+  },
+  {
+   "id": "VAL_NTRS_19760023196_76DCDF7C",
+   "store": "validity",
+   "type": "ValidityEnvelope",
+   "page": 46,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Figure 13 Cd-vs-inlet-geometry data apply to a full-flowing orifice of L/d = 3 with zero cross velocity at a Reynolds number in the fully turbulent region.",
+   "quote": "for a full-flowing orifice of L/d = 3 with zero cross velocity at a Reynolds number in the fully turbulent region.",
+   "confidence": null,
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 46
+    }
+   ]
+  }
+ ],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00074",
+   "page_start": 46,
+   "page_end": 46,
+   "section": "dd.",
+   "text": "injector failures and engine operational problems. Examples of such problems include (1) hydraulic flip*, with a resultant increase in injector pressure drop and concurrent thrust dropoff, (2) chamber wall streaking and overheating because of orifice inlet or outlet burrs in the peripheral elements, (3) large variations in injector pressure drop resulting from inadequate control of the orifice inlet contour or orifice diameter, and (4) low orifice bore length-to-diameter ratio resulting in element misimpingement with subsequent wall streaking or reduced performance, particularly with high cross velocities behind the orifices.\n\nComprehensive work on orifice flow characteristics is presented in references 69, 70, and 71; these references also contain a complete bibliography on previous orifice studies."
+  },
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00075",
+   "page_start": 46,
+   "page_end": 46,
+   "section": "2.1.2.1 ORIFICE INLET",
+   "text": "Injector orifice inlets generally are classified as rounded, chamfered, or sharp-edged. The inlet geometry combined with the orifice bore size must be considered relative to the flow-stream characterization. Inlet geometry can affect the velocity profile, which in turn affects the atomization produced by impinging elements (eqs. (3) and (4) in sec. 2.1.1.1.2). Also, undesirable (unpredictable and unstable) separated flow, partially attached flow, and stream misdirection can be avoided by proper (contoured) orifice inlet geometry, especially when orifices with small L/d values are necessary. The key to acceptable orifice inlets is the reproducibility of the inlets and of the resultant stream, rather than the absolute shape or discharge coefficient Cy. Orifice pressure drops that are relatively high but repeatable are almost always prefereable to those that are relatively low but vary widely.\n\n:\n\nWell-rounded inlets will prevent cavitation and will provide better flow direction and better flow control, thereby avoiding free-stream jet breakup; these benefits are particularly true for an orifice with relatively low L/d value in comparison with the sharp-edged orifice. Also, rounded inlets, chamfered inlets, and converging orifices (orifice inlet larger than orifice exit} are more prone to full flow and produce higher Cz’s than sharp-edged orifices. The Cy of rounded or chamfered inlets changes rapidly with inlet radius-to-orifice diameter ratio R/d or chamfer-to-orifice diameter ratio Ch/d if the curvature or the chamfer is very small. Figure 13 (adptd. from ref. 72) shows the approximate variation of Cg (based on major bore diameter d) for variations in uniform inlet radius R, uniform re-entrant burr B,,, and uniform inward burr B;, for a full-flowing orifice of L/d = 3 with zero cross velocity at a Reynolds number in the fully turbulent region. Small variations in inlet curvature R produce significant changes in Cg and nonreproducible pressure drops when the injector operates in the steepest portion of the R/d curve. It was found that five orifices of identical design with rounded inlets produced significantly different results during water flow tests (ref. 73). Other studies have shown that reproducible results could be obtained from rounded entrances only when the inlets were highly polished. If a chamfer is assumed to be about"
+  },
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00076",
+   "page_start": 46,
+   "page_end": 47,
+   "section": "2.1.2.1 ORIFICE INLET",
+   "text": "\"Detachment of the jet from the orifice wall.\n\n|<br>SHARP EDGED re ROUNDED -><br>WITH BURRS |<br>_Zx o.gf WITHSHARPNOEDGEDBURRSRRORIFICE ii \"1 CHAMFER (Ch)k 3<br>Exl%|<br>o8B /d f<br>= |<br>eo 9.7 ; CL, as<br>8. / | (AZ A |<br>0.6<br>6.5 0.4 6.3 0.2 0.1 0 o.1 0.2 0.3 O.4 0.5<br>i<br>8 /d and B. /d Rid<br>re in<br>\n\nFigure 13. ~ Discharge coefficient as a function of orifice inlet geometry ladptd. from ref. 72).\n\nhalf as effective as a rounded entrance, a value for Ch/d of 1.2 would he equivalent to a rounded inlet R/d of 0.05 and would result in large variations in both Cy and pressure drop for small chanres in Ch. Changing the orifices to contain sharp entrances in this sensitive range reduces the potential Cy variations.\n\nin actual injector hardware. rounded inlets, large chamfers, and sharp edges have all worked satisfactorily. However, with sharp-cdged inlets. the control of burrs has been extremely difficult. A small burr. as shown in figure 13, produces a sizable drop in Cy. Drilling from the infectar face (orifice outlet} almost always produces orifice inlet burrs. and removing these burrs while still maintaining a sharp and reproducible orifice inlet has been extremely difficult. In the Apollo Service Propulsion System study (refs. 69, 70, and 71) variations in Cq between sharp-edged orifices in the as-drilled condition and in the lapped condition reached 15 percent. Drilling from the inlet side of the injector orifice has reduced the entrance burr but has resulted in the deburring problem being transferred to the orifice exit, where burr removal can disturb the exiting stream and result in overheating of the chamber wall and reduced performance (sec. 2.1.2.3). In general, however, inlet burrs have been much more troublesome than exit burrs."
+  },
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00077",
+   "page_start": 47,
+   "page_end": 48,
+   "section": "2.1.2.1 ORIFICE INLET",
+   "text": "Orifice inlets can be divided into three types for fabrication purposes: accessible, semiblind. and blind. Accessible inlets are inlets in which direct access to the orifice entry from behind\n\nis possible after orifice fabrication. Self-impinging orifices drilled into rings before the rings are brazed into the injector (F-1, Thor, Atlas, Jupiter, and H-1) have completely accessible inlets. After installation of the rings, however, they may become blind inlets. The semiblind inlet is an orifice inlet that is accessible from the side but not directly from behind. The oxidizer orifices supplied by the radial feeder passages in the center of the J-2 injector are semiblind, as are the fuel orifices of the H-1 gas-generator injector and the Atlas vernier-motor injector. The blind inlet is one in which there is no direct physical access to the inlet side of the orifice. Orifices drilled into integrally cast ring manifold bodies (Lance) have blind inlets, as do orifices drilled after rings are welded into the body (LEM ascent engine).\n\nCompletely accessible sharp-edged inlets, drilled from the outlet side, are commonly used; they are successfully deburred by polishing, rodding, and repolishing, but consistency of orifice flow characteristics depends on operator skill. The F-1 injector has large (* 0.250 in.) sharp-edged orifices in copper rings, which are drilled (before ring installation) from the outlet side and are then machined on the entrance side for proper ring thickness. Burrs from the machining are removed by hand, and acceptable inlet control on these relatively large orifices is obtained in spite of the deburring variations."
+  },
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00078",
+   "page_start": 48,
+   "page_end": 48,
+   "section": "2.1.2.1 ORIFICE INLET",
+   "text": "Rounded inlets for completely accessible orifices, either of the recessed or of the flush type, | have been used successfully in production injectors. Accessible oxidizer orifice inlets on the J-2 are made with a contoured mechanical cutter. Drilling and chamfering with relatively small Ch/d values (1.3 to 1.4) has been successful with fully accessible orifices in Atlas-type injectors, but this practice can be used only when relatively high AP tolerances are allowed. Orifice inlets with small Ch/d chamfers could be replaced with sharp-edged orifices to achieve acceptable AP’s. Both ECM and EDM processes have been used to drill (machine) completely accessible orifices and produce acceptable inlets.\n\nSemiblind inlets, with radial-passage accessibility, normally are drilled from the outlet side and are then deburred at the inlet by polishing along the radial, inserting a rod, if necessary, to push out the inward projecting burr caused by the polishing, and again deburring by polishing. Results are highly dependent on the individual doing the deburring. Both electropolishing and vapor honing have been used to minimize inlet burrs and to produce a more uniform orifice entrance. Semiblind inlets have been satisfactory in injectors even without deburring when the orifices were very carefully drilled, but only when the allowable injector AP tolerance was large (up to + 25 percent).\n\nIn general, completely blind inlets do not have acceptable pressure-drop control when normal mechanical drilling techniques are used. Underdrilling and then reaming, or step drilling, has been partially acceptable, but the orifice inlet geometry ‘is not always adequately controlled. Drilling and then alkaline etching has been successful in controlling orifice inlets in blind-orifice aluminum injectors. Control of injector AP within + 8 percent was achieved with the blind-orifice LEM ascent injector because of the repeatable entrances"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "figure": 1
+  },
+  "flagged_candidates": 0,
+  "target_objects": 8,
+  "objects_with_anchor_problems": 0
+ }
+}

@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Offline CEA property-table sampler (host-only; needs RocketCEA).
 
-Phase-2 workflow (docs/DIFFERENTIABLE_ENGINE_MDO_PLAN.md §12.2 row 2):
+Phase-2 workflow (docs/subsystems/S13-engine-mdo-and-requirements/DIFFERENTIABLE_ENGINE_MDO_PLAN.md §12.2 row 2):
 sample frozen chamber properties on a (Pc, O/F) grid, save as .npz, load in
-the differentiable layer via ``raosim.mdo.properties.load_chamber_surfaces``.
+the differentiable layer via ``lrekit.optimization.properties.load_chamber_surfaces``.
 
 Example:
     python scripts/sample_cea_surface.py --oxidizer LOX --fuel RP-1 \
@@ -100,7 +100,7 @@ def main(argv: Sequence[str] | None = None, *, sampler=None) -> int:
     ap = _parser()
     args = ap.parse_args(argv)
 
-    from raosim.mdo.properties import (
+    from lrekit.optimization.properties import (
         cea_validation_tolerances_from_mapping,
         rocketcea_card_names,
         rocketcea_card_notes,

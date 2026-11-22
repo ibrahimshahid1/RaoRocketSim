@@ -1,0 +1,91 @@
+{
+  "status": "PASS",
+  "scope": "File integrity, fixture structure, source references and registry coverage only; no scientific validation or training eligibility.",
+  "catalog_sources": 33,
+  "source_status_counts": {
+    "ACQUIRED": 33
+  },
+  "evidence_kind_counts": {
+    "published_experimental_report": 22,
+    "mixed_experiment_simulation_or_method_report": 4,
+    "simulation_method_report": 2,
+    "review_report": 1,
+    "mixed_experimental_numeric_fixture": 2,
+    "simulation_numeric_fixture": 1,
+    "rounded_abstract_anchor_fixture": 1
+  },
+  "verified_files": 77,
+  "source_payload_bytes_excluding_derivative_text": 91610641,
+  "pdf_count": 29,
+  "newly_downloaded_pdfs": 12,
+  "copied_local_pdfs": 16,
+  "imported_fixture_bundles": 4,
+  "downloaded_third_party_paper_copies": 1,
+  "crosswalk_models": 61,
+  "crosswalk_subsystems": 17,
+  "csv_shapes": [
+    {
+      "source_id": "fixture_radhakrishnan2018",
+      "path": "raw/fixture_radhakrishnan2018/raosim/benchmark_data/curves/radhakrishnan2018_water_air.csv",
+      "rows": 4,
+      "columns": [
+        "case_id",
+        "lopen_mm",
+        "p_liquid_bar",
+        "p_gas_bar",
+        "mdot_air_g_s",
+        "mdot_water_g_s",
+        "tmr",
+        "sheet_thickness_full_mm",
+        "water_velocity_m_s",
+        "wave_b0",
+        "wave_b1",
+        "spray_half_angle_experiment_deg",
+        "spray_half_angle_experiment_uncertainty_deg",
+        "smd_experiment_um",
+        "smd_experiment_uncertainty_um"
+      ],
+      "review_state": "STRUCTURE_CHECKED_VALUES_NOT_REVALIDATED",
+      "origin_scope": "mixed_experimental_numeric_fixture"
+    },
+    {
+      "source_id": "fixture_radhakrishnan2021_simulation",
+      "path": "raw/fixture_radhakrishnan2021_simulation/raosim/benchmark_data/curves/radhakrishnan2021_tables_3_7_8.csv",
+      "rows": 6,
+      "columns": [
+        "case_id",
+        "lopen_mm",
+        "pintle_tip_angle_deg",
+        "pc_mpa",
+        "mdot_lox_g_s",
+        "mdot_gch4_g_s",
+        "tmr",
+        "throttle_percent",
+        "sheet_thickness_full_mm",
+        "sheet_breakup_length_mm",
+        "wave_b0",
+        "wave_b1",
+        "smd_author_simulation_um"
+      ],
+      "review_state": "STRUCTURE_CHECKED_VALUES_NOT_REVALIDATED",
+      "origin_scope": "simulation_numeric_fixture"
+    }
+  ],
+  "inline_fixture_counts": [
+    {
+      "source_id": "fixture_radhakrishnan2021_water_air",
+      "inline_rows": 1,
+      "origin_scope": "mixed_experimental_numeric_fixture"
+    },
+    {
+      "source_id": "fixture_cuffel_anchors",
+      "rounded_anchors": 2,
+      "uncertainty_note": "Project comparison tolerances are not measured experimental uncertainties."
+    }
+  ],
+  "raw_instrument_exports_acquired": 0,
+  "training_eligible_sources": 0,
+  "duplicate_byte_groups": [],
+  "acquisition_gaps": [],
+  "errors": []
+}

@@ -1,0 +1,69 @@
+{
+  "source_id": "ntrs_20190030431",
+  "acquired_at_utc": "2026-11-04T00:33:57.153524+00:00",
+  "evidence_kind": "published_experimental_report",
+  "status": "ACQUIRED",
+  "files": [
+    {
+      "path": "raw/ntrs_20190030431/ntrs_metadata.json",
+      "bytes": 5332,
+      "sha256": "dea73fc44e36f9612049dd8645c809abba36f3bf062089770076fb0f44d343df",
+      "origin": "publisher_metadata",
+      "requested_url": "https://ntrs.nasa.gov/api/citations/20190030431",
+      "resolved_url": "https://ntrs.nasa.gov/api/citations/20190030431",
+      "headers": {
+        "Content-Type": "application/json; charset=utf-8",
+        "ETag": "W/\"14d4-Je/DG5Uh4hmmSFz5UxkPo++cMPs\"",
+        "Last-Modified": null
+      }
+    },
+    {
+      "path": "raw/ntrs_20190030431/source.pdf",
+      "bytes": 1345017,
+      "sha256": "68fbcd719667de12717169d1402c3a6ea2b0502c61337b3ae72c44b701955bb1",
+      "origin": "publisher_report_pdf",
+      "requested_url": "https://ntrs.nasa.gov/api/citations/20190030431/downloads/20190030431.pdf",
+      "resolved_url": "https://ntrs.nasa.gov/api/citations/20190030431/downloads/20190030431.pdf",
+      "headers": {
+        "Content-Type": "application/pdf",
+        "ETag": "\"fefd3c373293ef74066532b5ea178dba\"",
+        "Last-Modified": "Thu, 06 Aug 2020 21:52:41 GMT"
+      }
+    },
+    {
+      "path": "derived/ntrs_20190030431/source.txt",
+      "bytes": 52810,
+      "sha256": "a42c06fff642d36fbf78202ee0f536e3fc71b8c3acb047420128b05bf54aefd2",
+      "origin": "unreviewed_pdf_text_derivative"
+    }
+  ],
+  "review_state": "NOT_REVIEWED_FOR_TRAINING",
+  "training_eligible": false,
+  "hardware_qualified": false,
+  "limitations": [
+    "Different injector geometries and AM process; useful for uncertainty methods, not a transferable conical-pintle Cd curve."
+  ],
+  "publisher_title": "Uncertainty Analysis of Experimental Discharge Coefficients in Additively Manufactured Liquid Injector Elements",
+  "publisher_copyright": {
+    "thirdPartyPermissionsProduced": false,
+    "disclosedToPublic": false,
+    "containsIndication": false,
+    "publisherPermissionOrRightsToDistribute": false,
+    "belongsToUsGov": false,
+    "determinationType": "PUBLIC_USE_PERMITTED",
+    "thirdPartyContentCondition": "NOT_SET",
+    "belongsToContractor": false,
+    "disclosedInvention": false,
+    "submissionId": 20190030431,
+    "containsThirdPartyMaterial": false,
+    "belongsToPublisher": false,
+    "id": "574999825e7d4b30ad7b55fd84649c77",
+    "belongsToAuthors": false
+  },
+  "publisher_distribution": "PUBLIC",
+  "pdf_info": "Author:          David Lineberry\nCreator:         Microsoft® Word 2013\nProducer:        Microsoft® Word 2013\nCreationDate:    Wed Sep  4 15:20:55 2019 EDT\nModDate:         Wed Sep  4 15:20:55 2019 EDT\nCustom Metadata: no\nMetadata Stream: no\nTagged:          yes\nUserProperties:  no\nSuspects:        no\nForm:            none\nJavaScript:      no\nPages:           23\nEncrypted:       no\nPage size:       612 x 792 pts (letter)\nPage rot:        0\nFile size:       1345017 bytes\nOptimized:       no\nPDF version:     1.5\n",
+  "text_extraction": {
+    "status": "DERIVATIVE_TEXT_UNREVIEWED",
+    "warning_excerpt": ""
+  }
+}

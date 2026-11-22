@@ -1,0 +1,82 @@
+\section{Open decisions}
+\label{sec:decisions}
+These are the user's decisions; option (a) is recommended in each.
+
+\textbf{D1, CFD reference} (lettered as in Section~\ref{sec:cfd}).
+(a)~A write-only OpenFOAM v13 shockFluid writer (the E13 prototype); you run three
+meshes on a Mac or Slurm cluster.
+(b)~SU2.
+(c)~An in-repo Euler solver.
+(d)~No CFD for now.
+
+\textbf{D2, Acquisitions.}
+(a)~The gating items: Zucrow--Hoffman Vol.~2, Broer 1958 and Ferri 1954, plus
+Clippinger 1951 if Farley--Campbell is wanted as a wall-pressure benchmark.
+(b)~Also the boundary-layer, separation, shock-fitting and transonic items in
+Section~\ref{sec:acquisitions}.
+(c)~None, with the affected acceptance explicitly limited.
+
+\textbf{D3, KL start line.} The sign error is confirmed. In a diagnostic forward replay
+on the accepted wall, which was optimised with the uncorrected series, KL-V3 moves $C_F$
+by $-1.22$\,\%. This is not a corrected design (Section~\ref{sec:kl}).
+(a)~Add KL-V3 (corrected sign with $M^*\to M$) as an opt-in start-line method with
+tests, keeping the production series as the default.
+(b)~Report only.
+(c)~Make the corrected series the default, which re-baselines every Rao and TOP result,
+including the accepted t19 profile.
+
+\textbf{D4, Normalisation ($M^*$ versus $M$).}
+(a)~Include it only within KL-V3. Alone, as KL-V2, it gives $C_D=1.0068$ and an early
+near-axis failure.
+(b)~A separate opt-in flag.
+(c)~Report only.
+
+\textbf{D5, Separation criterion behind the MDO margin.}
+(a)~Keep Schmucker at the Q1D exit state, the more conservative evaluation here. Add
+its $M_i\le5$ flag and an opt-in wall-state variant, and report Schilling (0.582
+against 0.583), Kalt--Badal, Summerfield and TP-1207 as cross-checks.
+(b)~Switch to Schilling 0.583.
+(c)~Switch to TP-1207.
+
+\textbf{D6, RSS and side loads.}
+(a)~Explicit exclusion with a typed ``unavailable'' result, plus a report-only Schmucker
+$K_g$ estimate.
+(b)~Exclude entirely.
+(c)~Develop the capability, which needs S1, unsteady CFD and data.
+
+\textbf{D7, Bell-length convention.}
+(a)~An explicit convention parameter everywhere, with current defaults kept; you then
+choose the project default.
+(b)~Revert to the sharp-corner cone.
+(c)~Switch every module to SP-125 now, which shifts the MDO geometry by about $0.04R_t$
+at 80\,\% length.
+
+\textbf{D8, MOC in the MDO.}
+(a)~Keep the default; add M0a tables, then M0b after N1.
+(b)~Aim for a default switch after A0.
+(c)~Use MOC only after the solve.
+
+\textbf{D9, Viscous coupling.}
+(a)~Defer the method choice until the weak-coalescence policy exists, keeping the TDK
+displaced wall (which completed at $s=1$) as the baseline.
+(b)~Transpiration now, with a similar fold risk.
+(c)~Wait for Bartz or Elliott--Bartz--Silver.
+
+\keep{9}
+\textbf{D10, Runs over about 30 minutes.} Only a re-solve shows how much of the E09c
+change survives in a corrected design.
+(a)~Approve one corrected-start-line Nozzle-B refinement pair after K0b is implemented
+and tested. The estimate is about 25 minutes, by analogy with the accepted pair
+(1{,}497.5\,s for both levels including a recomputed baseline); allow up to about
+50 minutes if the corrected start line needs more optimiser iterations.
+(b)~No long runs.
+(c)~Additionally, a forward-net domain sweep for M0a (hours).
+The re-solve has \emph{not} been run or approved.
+
+\textbf{D11, LEA benchmark reference.}
+(a)~Restate it from the source as $R_d=0.5R_t$ and $x_E-x_N=15.0r_t$, with the
+definition flagged as inferred and the strict tolerance unchanged.
+(b)~Keep the current reference, declared as sharp-corner, throat-to-exit and
+$R_d=0.382$.
+(c)~Make the LEA length check report-only.
+The contour fit favours (a) only weakly (E02b).

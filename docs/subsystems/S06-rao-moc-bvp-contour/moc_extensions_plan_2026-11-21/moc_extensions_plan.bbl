@@ -1,0 +1,546 @@
+\begin{thebibliography}{79}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Schomberg et~al.(2019)Schomberg, Olsen, Neely, and
+  Doig]{schomberg2019}
+Kyll Schomberg, John Olsen, Andrew Neely, and Graham Doig.
+\newblock {Design of an arc-based thrust-optimized nozzle contour}.
+\newblock In \emph{Progress in Propulsion Physics}, volume~11, pages 517--528.
+  EDP Sciences, 2019.
+\newblock \doi{10.1051/eucass/201911517}.
+
+\bibitem[Rao(1958)]{rao1958}
+G.~V.~R. Rao.
+\newblock {Exhaust Nozzle Contour for Optimum Thrust}.
+\newblock \emph{Jet Propulsion}, 28\penalty0 (6):\penalty0 377--382, 1958.
+\newblock \doi{10.2514/8.7324}.
+
+\bibitem[Nickerson et~al.(1985)Nickerson, Dang, and Coats]{nickerson1985}
+G.~R. Nickerson, L.~D. Dang, and D.~E. Coats.
+\newblock {Engineering and Programming Manual: Two-Dimensional Kinetic
+  Reference Computer Program (TDK)}.
+\newblock Technical Report CR-178628, NASA, 1985.
+
+\bibitem[Celik et~al.(2008)Celik, Ghia, Roache, Freitas, et~al.]{celik2008}
+Ismail~B. Celik, Urmila Ghia, Patrick~J. Roache, Christopher~J. Freitas, et~al.
+\newblock {Procedure for Estimation and Reporting of Uncertainty Due to
+  Discretization in {CFD} Applications}.
+\newblock \emph{Journal of Fluids Engineering}, 130\penalty0 (7):\penalty0
+  078001, 2008.
+\newblock \doi{10.1115/1.2960953}.
+
+\bibitem[Anderson(2003)]{anderson}
+John~D. Anderson, Jr.
+\newblock \emph{{Modern Compressible Flow: With Historical Perspective}}.
+\newblock McGraw-Hill, Boston, 3rd edition, 2003.
+
+\bibitem[{Ames Research Staff}(1953)]{ames1953}
+{Ames Research Staff}.
+\newblock {Equations, Tables, and Charts for Compressible Flow}.
+\newblock Technical Report NACA Report 1135, National Advisory Committee for
+  Aeronautics, 1953.
+
+\bibitem[Guentert and Neumann(1959)]{guentert1959}
+Eleanor~Costilow Guentert and Harvey~E. Neumann.
+\newblock {Design of Axisymmetric Exhaust Nozzles by Method of Characteristics
+  Incorporating a Variable Isentropic Exponent}.
+\newblock Technical Report NASA TR R-33, NASA, 1959.
+
+\bibitem[Moeckel(1957)]{moeckel1957}
+W.~E. Moeckel.
+\newblock {Oblique-Shock Relations at Hypersonic Speeds for Air in Chemical
+  Equilibrium}.
+\newblock Technical Note 3895, NACA, 1957.
+
+\bibitem[Broer(1958)]{broer1958}
+L.~J.~F. Broer.
+\newblock {Characteristics of the Equations of Motion of a Reacting Gas}.
+\newblock \emph{Journal of Fluid Mechanics}, 4\penalty0 (3):\penalty0 276--282,
+  1958.
+\newblock \doi{10.1017/S0022112058000434}.
+
+\bibitem[Levine and Coats(1970)]{levine1970}
+J.~N. Levine and D.~E. Coats.
+\newblock {Transonic Flow in a Converging-Diverging Nozzle, Final Report,
+  Contract NAS7-756}.
+\newblock Technical Report SN-168 / NASA CR-111104, Dynamic Science, 1970.
+
+\bibitem[Young(2012)]{young}
+Reid~B. Young.
+\newblock {Automated Nozzle Design through Axis-Symmetric Method of
+  Characteristics Coupled with Chemical Kinetics}.
+\newblock Master's thesis, Auburn University, 2012.
+
+\bibitem[Nickerson et~al.(1973)Nickerson, Coats, and Bartz]{nickerson1973}
+G.~R. Nickerson, D.~E. Coats, and J.~L. Bartz.
+\newblock {The Two-Dimensional Kinetic (TDK) Reference Computer Program:
+  Engineering and Programming Manual}.
+\newblock Technical Report NASA CR-152999, NASA, 1973.
+
+\bibitem[Cuffel et~al.(1969)Cuffel, Back, and Massier]{cuffel1969}
+R.~F. Cuffel, L.~H. Back, and P.~F. Massier.
+\newblock {Transonic Flowfield in a Supersonic Nozzle with Small Throat Radius
+  of Curvature}.
+\newblock \emph{AIAA Journal}, 7\penalty0 (7):\penalty0 1364--1366, 1969.
+\newblock \doi{10.2514/3.5349}.
+
+\bibitem[Kliegel and Levine(1969)]{kliegel1969}
+J.~R. Kliegel and J.~N. Levine.
+\newblock {Transonic Flow in Small Throat Radius of Curvature Nozzles}.
+\newblock \emph{AIAA Journal}, 7\penalty0 (7):\penalty0 1375--1378, 1969.
+\newblock \doi{10.2514/3.5355}.
+
+\bibitem[Hall(1962)]{hall1962}
+I.~M. Hall.
+\newblock {Transonic Flow in Two-Dimensional and Axially-Symmetric Nozzles}.
+\newblock \emph{Quarterly Journal of Mechanics and Applied Mathematics},
+  15\penalty0 (4):\penalty0 487--508, 1962.
+\newblock \doi{10.1093/qjmam/15.4.487}.
+
+\bibitem[Kliegel and Quan(1966)]{kliegel1966}
+J.~R. Kliegel and V.~Quan.
+\newblock {Convergent-Divergent Nozzle Flows}.
+\newblock Technical Report NASA CR-65596 / 02874-6002-R000, TRW Systems, 1966.
+
+\bibitem[Sivells(1978)]{sivells1978}
+J.~C. Sivells.
+\newblock {A Computer Program for the Aerodynamic Design of Axisymmetric and
+  Planar Nozzles for Supersonic and Hypersonic Wind Tunnels}.
+\newblock Technical Report AEDC-TR-78-63, Arnold Engineering Development
+  Center, 1978.
+
+\bibitem[{\"O}stlund(2002)]{ostlund}
+Jan {\"O}stlund.
+\newblock \emph{{Flow Processes in Rocket Engine Nozzles with Focus on Flow
+  Separation and Side-Loads}}.
+\newblock Licentiate thesis, Royal Institute of Technology (KTH), 2002.
+
+\bibitem[Frey and Hagemann(2000)]{frey}
+M.~Frey and G.~Hagemann.
+\newblock {Restricted Shock Separation in Rocket Nozzles}.
+\newblock \emph{Journal of Propulsion and Power}, 16\penalty0 (3):\penalty0
+  478--484, 2000.
+\newblock \doi{10.2514/2.5593}.
+
+\bibitem[Ruf et~al.(2010)Ruf, McDaniels, and Brown]{ruf2010}
+J.~H. Ruf, D.~M. McDaniels, and A.~M. Brown.
+\newblock {Details of Side Load Test Data and Analysis for a Truncated Ideal
+  Contour Nozzle and a Parabolic Contour Nozzle}.
+\newblock In \emph{46th AIAA/ASME/SAE/ASEE Joint Propulsion Conference},
+  Nashville, TN, 2010.
+
+\bibitem[Gordon and McBride(1994)]{gordon1994}
+Sanford Gordon and Bonnie~J. McBride.
+\newblock {Computer Program for Calculation of Complex Chemical Equilibrium
+  Compositions and Applications. Part I: Analysis}.
+\newblock Technical Report RP-1311, NASA, 1994.
+
+\bibitem[Shyne(1988)]{shyne1988}
+Rickey~J. Shyne.
+\newblock \emph{{Analysis and Optimization of Truncated Scarf Nozzles Subject
+  to External Flow Conditions}}.
+\newblock Nasa tm-100955, University of Toledo, 1988.
+
+\bibitem[Shyne and Keith(1990)]{shyne1990}
+Rickey~J. Shyne and Theo~G. Keith, Jr.
+\newblock {Analysis and Design of Optimized Truncated Scarfed Nozzles Subject
+  to External Flow Effects}.
+\newblock Technical Report NASA TM-103175 (E-5553; AIAA Paper 90-2222), NASA
+  Lewis Research Center, 1990.
+
+\bibitem[Courant and Friedrichs(1944)]{courant1944}
+R.~Courant and K.~O. Friedrichs.
+\newblock {Supersonic Flow and Shock Waves: A Manual on the Mathematical Theory
+  of Non-Linear Wave Motion}.
+\newblock Technical Report AMP Report 38.2R, Applied Mathematics Panel,
+  National Defense Research Committee, New York University, 1944.
+
+\bibitem[Inouye et~al.(1965)Inouye, Rakich, and Lomax]{inouye1965}
+M.~Inouye, J.~V. Rakich, and H.~Lomax.
+\newblock {A Description of Numerical Methods and Computer Programs for
+  Two-Dimensional and Axisymmetric Supersonic Flow over Blunt-Nosed and Flared
+  Bodies}.
+\newblock Technical Note D-2970, NASA, 1965.
+
+\bibitem[Hyde and Gill(1976)]{sp8120}
+J.~C. Hyde and G.~S. Gill.
+\newblock {Liquid Rocket Engine Nozzles}.
+\newblock Technical Report SP-8120, NASA, July 1976.
+
+\bibitem[Reshotko and Tucker(1957)]{reshotko1957}
+E.~Reshotko and M.~Tucker.
+\newblock {Approximate Calculation of the Compressible Turbulent Boundary Layer
+  with Heat Transfer and Arbitrary Pressure Gradient}.
+\newblock Technical Note 4154, NACA, 1957.
+
+\bibitem[Whitfield et~al.(1981)Whitfield, Swafford, and Jacocks]{whitfield1981}
+D.~L. Whitfield, T.~W. Swafford, and J.~L. Jacocks.
+\newblock {Calculation of Turbulent Boundary Layers with Separation and
+  Viscous-Inviscid Interaction}.
+\newblock \emph{AIAA Journal}, 19\penalty0 (10):\penalty0 1315--1322, 1981.
+\newblock \doi{10.2514/3.60066}.
+
+\bibitem[Bartz(1957)]{bartz1957}
+D.~R. Bartz.
+\newblock {A Simple Equation for Rapid Estimation of Rocket Nozzle Convective
+  Heat Transfer Coefficients}.
+\newblock \emph{Jet Propulsion}, 27\penalty0 (1):\penalty0 49--51, 1957.
+\newblock \doi{10.2514/8.12572}.
+
+\bibitem[Schmucker(1984{\natexlab{a}})]{schmucker1984}
+R.~H. Schmucker.
+\newblock {Flow Processes in Overexpanded Chemical Rocket Nozzles. Part 1: Flow
+  Separation}.
+\newblock Technical Memorandum TM-77396, NASA, 1984{\natexlab{a}}.
+
+\bibitem[Summerfield et~al.(1954)Summerfield, Foster, and
+  Swan]{summerfield1954}
+M.~Summerfield, C.~R. Foster, and W.~C. Swan.
+\newblock {Flow Separation in Overexpanded Supersonic Exhaust Nozzles}.
+\newblock \emph{Jet Propulsion}, 24\penalty0 (5):\penalty0 319--321, 1954.
+
+\bibitem[Kalt and Badal(1965)]{kalt1965}
+S.~Kalt and D.~L. Badal.
+\newblock {Conical Rocket Nozzle Performance under Flow-Separated Conditions}.
+\newblock \emph{Journal of Spacecraft and Rockets}, 2\penalty0 (3):\penalty0
+  447--449, 1965.
+\newblock \doi{10.2514/3.28200}.
+
+\bibitem[Morrisette and Goldberg(1978)]{morrisette1978}
+E.~L. Morrisette and T.~J. Goldberg.
+\newblock {Turbulent-Flow Separation Criteria for Overexpanded Supersonic
+  Nozzles}.
+\newblock Technical Report TP-1207, NASA, 1978.
+
+\bibitem[Schmucker(1984{\natexlab{b}})]{schmucker1984b}
+R.~H. Schmucker.
+\newblock {Flow Processes in Overexpanded Chemical Rocket Nozzles. Part 2: Side
+  Loads Due to Asymmetric Separation}.
+\newblock Technical Memorandum TM-77395, NASA, 1984{\natexlab{b}}.
+
+\bibitem[Boldman et~al.(1969)Boldman, Schmidt, and Ehlers]{boldman1969}
+D.~R. Boldman, J.~F. Schmidt, and R.~C. Ehlers.
+\newblock {Experimental and Theoretical Turbulent Boundary Layer Development in
+  a Mach 4.4 Water-Cooled Conical Nozzle}.
+\newblock Technical Note D-5377, NASA, 1969.
+
+\bibitem[Smith et~al.(1987)Smith, Pavli, and Kacynski]{tp2725}
+T.~A. Smith, A.~J. Pavli, and K.~J. Kacynski.
+\newblock {Comparison of Theoretical and Experimental Thrust Performance of a
+  1030:1 Area Ratio Rocket Nozzle at a Chamber Pressure of 2413 kN/m$^2$ (350
+  psia)}.
+\newblock Technical Report TP-2725, NASA Lewis Research Center, 1987.
+
+\bibitem[Rader et~al.(2024)Rader, Lyons, and Kidger]{optimistix}
+Jason Rader, Terry Lyons, and Patrick Kidger.
+\newblock {Optimistix: Modular Optimisation in {JAX} and {Equinox}}.
+\newblock \url{https://arxiv.org/abs/2402.09983}, 2024.
+
+\bibitem[jax(2026{\natexlab{a}})]{jaxwhileloop}
+{{jax.lax.while\_loop} documentation}.
+\newblock JAX documentation,
+  \url{https://docs.jax.dev/en/latest/_autosummary/jax.lax.while_loop.html},
+  accessed 21 November 2026, 2026{\natexlab{a}}.
+
+\bibitem[jax(2026{\natexlab{b}})]{jaxscan}
+{{jax.lax.scan} documentation}.
+\newblock JAX documentation,
+  \url{https://docs.jax.dev/en/latest/_autosummary/jax.lax.scan.html}, accessed
+  21 November 2026, 2026{\natexlab{b}}.
+
+\bibitem[Bradbury et~al.(2018)Bradbury, Frostig, Hawkins, Johnson, Katariya,
+  Leary, Maclaurin, Necula, Paszke, VanderPlas, Wanderman-Milne, and
+  Zhang]{bradbury2018}
+James Bradbury, Roy Frostig, Peter Hawkins, Matthew~James Johnson, Yash
+  Katariya, Chris Leary, Dougal Maclaurin, George Necula, Adam Paszke, Jake
+  VanderPlas, Skye Wanderman-Milne, and Qiao Zhang.
+\newblock {{JAX}: composable transformations of {P}ython+{N}um{P}y programs}.
+\newblock Software, \url{http://github.com/jax-ml/jax}; CITATION.bib version
+  0.3.13, project uses 0.6.2, 2018.
+
+\bibitem[Blondel et~al.(2022)Blondel, Berthet, Cuturi, Frostig, Hoyer,
+  Llinares-L{\'o}pez, Pedregosa, and Vert]{blondel}
+Mathieu Blondel, Quentin Berthet, Marco Cuturi, Roy Frostig, Stephan Hoyer,
+  Felipe Llinares-L{\'o}pez, Fabian Pedregosa, and Jean-Philippe Vert.
+\newblock {Efficient and Modular Implicit Differentiation}.
+\newblock In \emph{Advances in Neural Information Processing Systems 35}, pages
+  5230--5242, 2022.
+\newblock \doi{10.52202/068431-0378}.
+
+\bibitem[Chen et~al.(2021)Chen, Amos, and Nickel]{chen2021}
+Ricky T.~Q. Chen, Brandon Amos, and Maximilian Nickel.
+\newblock {Learning Neural Event Functions for Ordinary Differential
+  Equations}.
+\newblock In \emph{International Conference on Learning Representations}, 2021.
+
+\bibitem[Herty et~al.(2021)Herty, H{\"u}ser, Naumann, Schilden, and
+  Schr{\"o}der]{herty2021}
+Michael Herty, Jonathan H{\"u}ser, Uwe Naumann, Thomas Schilden, and Wolfgang
+  Schr{\"o}der.
+\newblock {Algorithmic Differentiation of Hyperbolic Flow Problems}.
+\newblock \emph{Journal of Computational Physics}, 430:\penalty0 110110, 2021.
+\newblock \doi{10.1016/j.jcp.2021.110110}.
+
+\bibitem[Giles and Ulbrich(2010{\natexlab{a}})]{giles2010a}
+Mike Giles and Stefan Ulbrich.
+\newblock {Convergence of Linearized and Adjoint Approximations for
+  Discontinuous Solutions of Conservation Laws. Part 1: Linearized
+  Approximations and Linearized Output Functionals}.
+\newblock \emph{SIAM Journal on Numerical Analysis}, 48\penalty0 (3):\penalty0
+  882--904, 2010{\natexlab{a}}.
+\newblock \doi{10.1137/080727464}.
+
+\bibitem[Ancourt et~al.(2023)Ancourt, Peter, and Atinault]{ancourt2023}
+Kevin Ancourt, Jacques Peter, and Olivier Atinault.
+\newblock {Adjoint and Direct Characteristic Equations for Two-Dimensional
+  Compressible {Euler} Flows}.
+\newblock \emph{Aerospace}, 10\penalty0 (9):\penalty0 797, 2023.
+\newblock \doi{10.3390/aerospace10090797}.
+
+\bibitem[Bezgin et~al.(2023)Bezgin, Buhendwa, and Adams]{bezgin2023}
+Deniz~A. Bezgin, Aaron~B. Buhendwa, and Nikolaus~A. Adams.
+\newblock {{JAX-Fluids}: A Fully-Differentiable High-Order Computational Fluid
+  Dynamics Solver for Compressible Two-Phase Flows}.
+\newblock \emph{Computer Physics Communications}, 282:\penalty0 108527, 2023.
+\newblock \doi{10.1016/j.cpc.2022.108527}.
+
+\bibitem[{NPARC Alliance}(2021{\natexlab{a}})]{nparcspatial2021}
+{NPARC Alliance}.
+\newblock {Examining Spatial (Grid) Convergence}.
+\newblock NPARC Alliance {V\&V} tutorial, NASA Glenn Research Center web page,
+  last updated 10 Feb 2021,
+  \url{https://www.grc.nasa.gov/www/wind/valid/tutorial/spatconv.html},
+  2021{\natexlab{a}}.
+
+\bibitem[Rice(2003)]{rice2003}
+Tharen Rice.
+\newblock {2D and 3D Method of Characteristic Tools for Complex Nozzle
+  Development}.
+\newblock Final report, grant nag3-2460, Johns Hopkins University Applied
+  Physics Laboratory, June 2003.
+
+\bibitem[Farley and Campbell(1960)]{farley1960}
+J.~M. Farley and C.~E. Campbell.
+\newblock {Performance of Several Method-of-Characteristics Exhaust Nozzles}.
+\newblock Technical Note D-293, NASA, 1960.
+
+\bibitem[Back et~al.(1965)Back, Massier, and Gier]{back}
+L.~H. Back, P.~F. Massier, and H.~L. Gier.
+\newblock {Convective Heat Transfer in a Convergent-Divergent Nozzle (Revision
+  No. 1)}.
+\newblock Technical Report JPL TR 32-415 (NASA CR-57326), Jet Propulsion
+  Laboratory, February 1965.
+
+\bibitem[Huzel and Huang(1967)]{huzel1967}
+Dieter~K. Huzel and David~H. Huang.
+\newblock {Design of Liquid Propellant Rocket Engines}.
+\newblock NASA Special Publication SP-125, NASA, 1967.
+
+\bibitem[Greenshields et~al.(2010)Greenshields, Weller, Gasparini, and
+  Reese]{greenshields2010}
+C.~J. Greenshields, H.~G. Weller, L.~Gasparini, and J.~M. Reese.
+\newblock {Implementation of semi-discrete, non-staggered central schemes in a
+  colocated, polyhedral, finite volume framework, for high-speed viscous
+  flows}.
+\newblock \emph{International Journal for Numerical Methods in Fluids},
+  63\penalty0 (1):\penalty0 1--21, 2010.
+\newblock \doi{10.1002/fld.2069}.
+
+\bibitem[{OpenFOAM Foundation}(2025{\natexlab{a}})]{openfoam13}
+{OpenFOAM Foundation}.
+\newblock {{OpenFOAM} v13}.
+\newblock Software release, 8 July 2025 (patch release 11 September 2025);
+  GPLv3, \url{https://openfoam.org/version/13/}, July 2025{\natexlab{a}}.
+
+\bibitem[Economon et~al.(2016)Economon, Palacios, Copeland, Lukaczyk, and
+  Alonso]{economon2016}
+T.~D. Economon, F.~Palacios, S.~R. Copeland, T.~W. Lukaczyk, and J.~J. Alonso.
+\newblock {{SU2}: An Open-Source Suite for Multiphysics Simulation and Design}.
+\newblock \emph{AIAA Journal}, 54\penalty0 (3):\penalty0 828--846, 2016.
+\newblock \doi{10.2514/1.J053813}.
+
+\bibitem[{OpenFOAM Foundation}(2025{\natexlab{b}})]{openfoam13src}
+{OpenFOAM Foundation}.
+\newblock {{OpenFOAM-13} source repository, tag version-13}.
+\newblock GitHub repository,
+  \url{https://github.com/OpenFOAM/OpenFOAM-13/tree/version-13},
+  2025{\natexlab{b}}.
+
+\bibitem[Van~den Berghe et~al.(2024)Van~den Berghe, Mendez, and
+  Bartosiewicz]{vandenberghe2024}
+Jan Van~den Berghe, Miguel~A. Mendez, and Yann Bartosiewicz.
+\newblock {An extension of the compound flow theory with friction between the
+  streams and at the wall}.
+\newblock \emph{Journal of Fluid Mechanics}, 1000:\penalty0 A85, 2024.
+\newblock \doi{10.1017/jfm.2024.1041}.
+
+\bibitem[Haimes(1998)]{haimes1998}
+Robert Haimes.
+\newblock {Automated Fluid Feature Extraction from Transient Simulations,
+  Progress Report}.
+\newblock Nasa contractor report, Massachusetts Institute of Technology, Dept.
+  of Aeronautics and Astronautics; NASA Ames Research Center Agreement
+  NCC2-985, January 1998.
+
+\bibitem[{NPARC Alliance}(2021{\natexlab{b}})]{nparc2021}
+{NPARC Alliance}.
+\newblock {Converging-Diverging Verification ({CDV}) Nozzle, {NPARC} Alliance
+  {CFD} Verification and Validation Archive}.
+\newblock NASA Glenn Research Center web page, last updated 10 Feb 2021,
+  \url{https://www.grc.nasa.gov/www/wind/valid/cdv/cdv.html},
+  2021{\natexlab{b}}.
+
+\bibitem[Slater(2001)]{slater2001}
+John~W. Slater.
+\newblock {{CDV} Nozzle: Study \#1 ({WIND} code), {NPARC} Alliance {CFD}
+  Verification and Validation Archive}.
+\newblock NASA Glenn Research Center web page, created 8 Feb 2001, last updated
+  10 Feb 2021,
+  \url{https://www.grc.nasa.gov/www/wind/valid/cdv/cdv01/cdv01.html}, 2001.
+
+\bibitem[Clarke(1978)]{clarke1978}
+J.~F. Clarke.
+\newblock {Review of Gas Dynamics, Volume II (M. J. Zucrow and J. D. Hoffman,
+  Wiley 1977, 480 pp)}.
+\newblock \emph{The Aeronautical Journal}, 82\penalty0 (805):\penalty0 45,
+  1978.
+\newblock \doi{10.1017/S0001924000094884}.
+
+\bibitem[Ferri(1954)]{ferri1954}
+Antonio Ferri.
+\newblock {The Method of Characteristics}.
+\newblock In W.~R. Sears, editor, \emph{General Theory of High Speed
+  Aerodynamics}. Princeton University Press, 1954.
+\newblock \doi{10.1515/9781400877553-009}.
+
+\bibitem[Bartz(1955)]{bartz1955}
+D.~R. Bartz.
+\newblock {An Approximate Solution of Compressible Turbulent Boundary-Layer
+  Development and Convective Heat Transfer in Convergent-Divergent Nozzles}.
+\newblock \emph{Transactions of the ASME (J. Fluids Engineering)}, 77\penalty0
+  (8):\penalty0 1235--1244, 1955.
+\newblock \doi{10.1115/1.4014652}.
+
+\bibitem[Bartz(1965)]{bartz1965}
+D.~R. Bartz.
+\newblock {Turbulent Boundary-Layer Heat Transfer from Rapidly Accelerating
+  Flow of Rocket Combustion Gases and of Heated Air}.
+\newblock In \emph{Advances in Heat Transfer}, volume~2, pages 1--108. Academic
+  Press (Elsevier), 1965.
+\newblock \doi{10.1016/S0065-2717(08)70261-2}.
+
+\bibitem[Elliott et~al.(1963)Elliott, Bartz, and Silver]{elliott1963}
+D.~G. Elliott, D.~R. Bartz, and S.~Silver.
+\newblock {Calculation of Turbulent Boundary Layer Growth and Heat Transfer in
+  Axisymmetric Nozzles}.
+\newblock Technical Report Technical Report 32-387, Jet Propulsion Laboratory,
+  1963.
+
+\bibitem[Stark(2013)]{stark2013}
+R.~Stark.
+\newblock {Flow Separation in Rocket Nozzles -- An Overview}.
+\newblock In \emph{49th AIAA/ASME/SAE/ASEE Joint Propulsion Conference}, number
+  2013-3840 in AIAA Paper, 2013.
+\newblock \doi{10.2514/6.2013-3840}.
+
+\bibitem[Salas(1976)]{salas1976}
+M.~D. Salas.
+\newblock {Shock Fitting Method for Complicated Two-Dimensional Supersonic
+  Flows}.
+\newblock \emph{AIAA Journal}, 14\penalty0 (5):\penalty0 583--588, 1976.
+\newblock \doi{10.2514/3.61399}.
+
+\bibitem[Onofri and Paciorri(2017)]{onofri2017}
+M.~Onofri and R.~Paciorri, editors.
+\newblock \emph{{Shock Fitting}}.
+\newblock Shock Wave and High Pressure Phenomena. Springer, 2017.
+\newblock \doi{10.1007/978-3-319-68427-7}.
+
+\bibitem[Hagemann et~al.(2002)Hagemann, Frey, and Koschel]{hagemann2002}
+G.~Hagemann, M.~Frey, and W.~Koschel.
+\newblock {Appearance of Restricted Shock Separation in Rocket Nozzles}.
+\newblock \emph{Journal of Propulsion and Power}, 18\penalty0 (3):\penalty0
+  577--584, 2002.
+\newblock \doi{10.2514/2.5971}.
+
+\bibitem[Nasuti and Onofri(2009)]{nasuti2009}
+F.~Nasuti and M.~Onofri.
+\newblock {Shock structure in separated nozzle flows}.
+\newblock \emph{Shock Waves}, 19\penalty0 (3):\penalty0 229--237, 2009.
+\newblock \doi{10.1007/s00193-008-0173-7}.
+
+\bibitem[Verma and Haidn(2009)]{verma2009}
+S.~B. Verma and O.~Haidn.
+\newblock {Study of Restricted Shock Separation Phenomena in a Thrust Optimized
+  Parabolic Nozzle}.
+\newblock \emph{Journal of Propulsion and Power}, 25\penalty0 (5):\penalty0
+  1046--1057, 2009.
+\newblock \doi{10.2514/1.42351}.
+
+\bibitem[Darwell and Badham(1963)]{darwell1963}
+H.~M. Darwell and H.~Badham.
+\newblock {Shock Formation in Conical Nozzles}.
+\newblock \emph{AIAA Journal}, 1\penalty0 (8):\penalty0 1932--1934, 1963.
+\newblock \doi{10.2514/3.1965}.
+
+\bibitem[Hoffman(1987)]{hoffman1987}
+J.~D. Hoffman.
+\newblock {Design of compressed truncated perfect nozzles}.
+\newblock \emph{Journal of Propulsion and Power}, 3\penalty0 (2):\penalty0
+  150--156, 1987.
+\newblock \doi{10.2514/3.22967}.
+
+\bibitem[Dutton and Addy(1981)]{dutton1981}
+J.~C. Dutton and A.~L. Addy.
+\newblock {Transonic Flow in the Throat Region of Axisymmetric Nozzles}.
+\newblock \emph{AIAA Journal}, 19\penalty0 (6):\penalty0 801--804, 1981.
+\newblock \doi{10.2514/3.7815}.
+
+\bibitem[Hopkins and Hill(1966)]{hopkins1966}
+D.~F. Hopkins and D.~E. Hill.
+\newblock {Effect of Small Radius of Curvature on Transonic Flow in
+  Axisymmetric Nozzles}.
+\newblock \emph{AIAA Journal}, 4\penalty0 (8):\penalty0 1337--1343, 1966.
+\newblock \doi{10.2514/3.3674}.
+
+\bibitem[{\"O}stlund and Bigert(1999)]{ostlund1999}
+J.~{\"O}stlund and M.~Bigert.
+\newblock {A sub scale investigation on side loads in sea level rocket
+  nozzles}.
+\newblock In \emph{35th Joint Propulsion Conference and Exhibit}, 1999.
+\newblock \doi{10.2514/6.1999-2759}.
+
+\bibitem[Giles and Ulbrich(2010{\natexlab{b}})]{giles2010b}
+Mike Giles and Stefan Ulbrich.
+\newblock {Convergence of Linearized and Adjoint Approximations for
+  Discontinuous Solutions of Conservation Laws. Part 2: Adjoint Approximations
+  and Extensions}.
+\newblock \emph{SIAM Journal on Numerical Analysis}, 48\penalty0 (3):\penalty0
+  905--921, 2010{\natexlab{b}}.
+\newblock \doi{10.1137/09078078X}.
+
+\bibitem[Giles and Pierce(2001)]{giles2001}
+M.~B. Giles and N.~A. Pierce.
+\newblock {Analytic Adjoint Solutions for the Quasi-One-Dimensional {E}uler
+  Equations}.
+\newblock \emph{Journal of Fluid Mechanics}, 426:\penalty0 327--345, 2001.
+\newblock \doi{10.1017/S0022112000002366}.
+
+\bibitem[Lovely and Haimes(1999)]{lovely1999}
+David Lovely and Robert Haimes.
+\newblock {Shock Detection from Computational Fluid Dynamics Results}.
+\newblock In \emph{14th Computational Fluid Dynamics Conference}, Norfolk, VA,
+  1999.
+\newblock \doi{10.2514/6.1999-3285}.
+
+\bibitem[Lovely(2000)]{lovely2000}
+David Lovely.
+\newblock {Boundary Layer and Shock Detection in {CFD} Solutions}.
+\newblock S.m. thesis, Massachusetts Institute of Technology, Department of
+  Aeronautics and Astronautics, 2000.
+
+\end{thebibliography}

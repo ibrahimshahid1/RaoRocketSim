@@ -1,0 +1,227 @@
+{
+ "packet": "V-WHITE-p1077-1079",
+ "kind": "verification",
+ "document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+ "source_pdf": "propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf",
+ "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+ "pages": [
+  1077,
+  1079
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 1077,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/p1077.png",
+   "sha256": "6772f2654cde126704ae77a92b10cf4ccbc6ba2e3f7bf6f856b87251d338f6fe",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 1078,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/p1078.png",
+   "sha256": "732be4a8d66de48c24b560bb6611d25e8e8c19c527d10436e9423a78e09fcf42",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 1079,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/p1079.png",
+   "sha256": "2e0f4136789c5a0c411de9547984944f9f7ad09e11a7d70f8a706154b5bb1045",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_dbf39b33fb58f3492eb67f17",
+  "ENR_df1d7021f3571ed7284c08e2",
+  "ENR_ea8f2475252a965e5969d7e7"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_235a4682be8223fa3c56c3e5",
+   "kind": "formula",
+   "pages": [
+    1077
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/3",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 284.6468505859375,
+     "t": 179.31048583984375,
+     "r": 348.93670654296875,
+     "b": 152.53192138671875,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "M a = \\frac { V } { a } \\ll 1",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_df1d7021f3571ed7284c08e2",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p1077-1077-e132c78b33722fc715dc3193279dbef77aabe7c282fc008ebd816539296277e6.json",
+   "raw_sha256": "0d797483c36eb9829816d8ca63d0c18462511df798b06778c643a600e0686d73",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_fe072eb4f195ce630871e9ac",
+   "kind": "formula",
+   "pages": [
+    1079
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/3",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 403.66666666666663,
+     "t": 463.6666666666667,
+     "r": 425.0,
+     "b": 454.3333333333333,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "( 9 , 1 )",
+   "original_text": "(9.1)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_ea8f2475252a965e5969d7e7",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p1079-1079-31d5f9db17b917a5f5603350443795f7b2b42e4a711363441882596556912943.json",
+   "raw_sha256": "0aa072693341f59995db0552d09396500c0579083b4c7aa36b7617a2d0226a18",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [
+  {
+   "id": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_CB068EFE",
+   "store": "claims",
+   "type": "Claim",
+   "page": 1077,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "In gases a pressure ratio of only 2:1 will likely cause sonic flow, so compressible gas flow is quite common; choking, wherein the duct flow rate is sharply limited by the sonic condition, is one of the two most important compressibility effects.",
+   "quote": "likely cause sonic flow. Thus compressible gas flow is quite common, and this",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 1077
+    }
+   ]
+  },
+  {
+   "id": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_CB67885D",
+   "store": "claims",
+   "type": "Claim",
+   "page": 1079,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "k for the common gases decreases slowly with temperature and lies between 1.0 and 1.7; variations in k have only a slight effect on compressible flow computations, and the App. B tables use k = 1.40 for air.",
+   "quote": "temperature and lies between 1.0 and 1.7. Variations in _k_ have only a slight effect",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 1079
+    }
+   ]
+  }
+ ],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01454",
+   "page_start": 1077,
+   "page_end": 1077,
+   "section": "**Motivation.**",
+   "text": "All eight of our previous chapters have been concerned with “low-speed” or\n“incompressible” flow, where the fluid velocity is much less than its speed of\nsound. In fact, we did not even develop an expression for the speed of sound of a\nfluid. That is done in this chapter.\n\nWhen a fluid moves at speeds comparable to its speed of sound, density\nchanges become significant and the flow is termed _compressible_ . Such flows are\ndifficult to obtain in liquids, since high pressures of order 1000 atm are needed\nto generate sonic velocities. In gases, however, a pressure ratio of only 2:1 will\nlikely cause sonic flow. Thus compressible gas flow is quite common, and this\nsubject is often called _gas dynamics_ .\n\nProbably the two most important and distinctive effects of compressibility\non flow are (1) _choking,_ wherein the duct flow rate is sharply limited by the\nsonic condition, and (2) _shock waves,_ which are nearly discontinuous property\nchanges in a supersonic flow. The purpose of this chapter is to explain such\nstriking phenomena and to familiarize the reader with engineering calculations\nof compressible flow.\n\nSpeaking of calculations, the present chapter is made to order for the\nEngineering Equation Solver (EES). Compressible flow analysis is filled with\nscores of complicated algebraic equations, most of which are very difficult to\nmanipulate or invert. Consequently, for nearly a century, compressible flow\ntextbooks have relied on extensive tables of Mach number relations (see App. B)\nfor numerical work. With EES, however, any set of equations in this chapter can\nbe typed out and solved for any variable—see part ( _b_ ) of Example 9.13 for an\nespecially intricate example. With such a tool, App. B serves only as a backup\nand indeed may soon vanish from textbooks."
+  },
+  {
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01455",
+   "page_start": 1077,
+   "page_end": 1077,
+   "section": "**9.1 Introduction: Review of Thermodynamics**",
+   "text": "We took a brief look in Chap. 4 [Eqs. (4.13) to (4.17)] to see when we might\nsafely neglect the compressibility inherent in every real fluid. We found that the\nproper criterion for a nearly incompressible flow was a small Mach number\n\nwhere _V_ is the flow velocity and _a_ is the speed of sound of the fluid. Under\nsmall Mach number conditions, changes in fluid density are everywhere small in\nthe flow field. The energy equation becomes uncoupled, and temperature effects"
+  },
+  {
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01456",
+   "page_start": 1078,
+   "page_end": 1078,
+   "section": "**9.1 Introduction: Review of Thermodynamics**",
+   "text": "can be either ignored or put aside for later study. The equation of state\ndegenerates into the simple statement that density is nearly constant. This means\nthat an incompressible flow requires only a momentum and continuity analysis,\nas we showed with many examples in Chaps. 7 and 8.\n\nThis chapter treats compressible flows, which have Mach numbers greater\nthan about 0.3 and thus exhibit nonnegligible density changes. If the density\nchange is significant, it follows from the equation of state that the temperature\nand pressure changes are also substantial. Large temperature changes imply that\nthe energy equation can no longer be neglected. Therefore the work is doubled\nfrom two basic equations to four\n\n1. Continuity equation\n2. Momentum equation\n3. Energy equation\n4. Equation of state\n\nto be solved simultaneously for four unknowns: pressure, density,\ntemperature, and flow velocity ( _p_, _ρ_, _T_, _V_ ). Thus the general theory of\ncompressible flow is quite complicated, and we try here to make further\nsimplifications, especially by assuming a reversible adiabatic or _isentropic_ flow."
+  },
+  {
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01457",
+   "page_start": 1078,
+   "page_end": 1078,
+   "section": "**The Mach Number**",
+   "text": "The Mach number is the dominant parameter in compressible flow analysis,\nwith different effects depending on its magnitude. Aerodynamicists especially\nmake a distinction between the various ranges of Mach number, and the\nfollowing rough classifications are commonly used:"
+  },
+  {
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01458",
+   "page_start": 1079,
+   "page_end": 1079,
+   "section": "**The Mach Number**",
+   "text": "The numerical values listed are only rough guides. These five categories of\nflow are appropriate to external high-speed aerodynamics. For internal (duct)\nflows, the most important question is simply whether the flow is subsonic (Ma <\n1) or supersonic (Ma > 1), because the effect of area changes reverses, as we\nshow in Sec. 9.4. Since supersonic flow effects may go against intuition, you\nshould study these differences carefully."
+  },
+  {
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01459",
+   "page_start": 1079,
+   "page_end": 1079,
+   "section": "**The Specific-Heat Ratio**",
+   "text": "In addition to geometry and Mach number, compressible flow calculations\nalso depend on a second dimensionless parameter, the ispecific-heat rat _o_ of the\ngas:\n\nEarlier, in Chaps. 1 and 4, we used the same symbol _k_ to denote the thermal\nconductivity of a fluid. We apologize for the duplication; thermal conductivity\ndoes not appear in these later chapters of the text.\n\nRecall from Fig. 1.5 that _k_ for the common gases decreases slowly with\ntemperature and lies between 1.0 and 1.7. Variations in _k_ have only a slight effect\non compressible flow computations, and air, _k_ ≈ 1.40, is the dominant fluid of\ninterest. Therefore, although we assign some problems involving other gases like\nsteam and CO2 and helium, the compressible flow tables in App. B are based\nsolely on the single value _k_ = 1.40 for air.\n\nThis text contains only a single chapter on compressible flow, but, as usual,\nwhole books have been written on the subject. Here we list only certain recent or\nclassical texts. References 1 to 4 are introductory or intermediate treatments,\nwhile Refs. 5 to 10 are advanced books. One can also become specialized within\nthis specialty of compressible flow. Reference 11 concerns _hypersonic flow_ that is, at very high Mach numbers. Reference 12 explains the exciting new\ntechnique of direct simulation of gas flows with a _molecular dynamics model_ .\nCompressible flow is also well suited for computational fluid dynamics (CFD),\nas described in Ref. 13. Finally, a short, thoroughly readable (no calculus) Ref.\n14 describes the principles and promise of high-speed (supersonic) flight. From\ntime to time we shall defer some specialized topic to these other texts."
+  },
+  {
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01460",
+   "page_start": 1079,
+   "page_end": 1080,
+   "section": "**The Specific-Heat Ratio**",
+   "text": "We note in passing that at least two flow patterns depend strongly on very\n\nsmall density differences, acoustics, and natural convection. Acoustics [7, 9] is\nthe study of sound wave propagation, which is accompanied by extremely small\nchanges in density, pressure, and temperature. Natural convection is the gentle\ncirculating pattern set up by buoyancy forces in a fluid stratified by uneven\nheating or uneven concentration of dissolved materials. Here we are concerned\nonly with steady compressible flow where the fluid velocity is of magnitude\ncomparable to that of the speed of sound."
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "formula": 2
+  },
+  "flagged_candidates": 0,
+  "target_objects": 2,
+  "objects_with_anchor_problems": 0
+ }
+}

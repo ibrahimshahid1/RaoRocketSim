@@ -2,14 +2,14 @@
 # regen wall sizing, machined pintle STEP, and pump CAD package.
 #
 # Run from the repository root with:
-#   PYTHONPATH=. python -m raosim @examples/cli/test_13kn_sealevel_regen_allstl.args
+#   PYTHONPATH=src python -m lrekit @examples/cli/test_13kn_sealevel_regen_allstl.args
 # (or `lrekit @examples/cli/test_13kn_sealevel_regen_allstl.args` when installed)
 #
 # This file is the full benchmark package. Any later command-line flag
 # overrides the value here; append `--max-nfev 0 --out builds/tests/13kn_sl_fast`
 # only when you intentionally want a quick seed-geometry smoke run.
 #
-# Parameter provenance (see TEST_PROMPT.md and docs/REPO_PHYSICS_AUDIT_2026-07-02.md):
+# Parameter provenance (see TEST_PROMPT.md and docs/audits/REPO_PHYSICS_AUDIT_2026-07-02.md):
 #   - LOX/RP-1 gamma/Mw/Tc/O-F from the built-in table anchored to Sutton &
 #     Biblarz RPE 9th ed. Table 5-5 (raosim/propellants.py source note).
 #   - Pc = 3.0 MPa: verified feasible for the station-wise GRCop-84 regen
@@ -142,10 +142,10 @@
 #     examples/cli/test_13kn_rao_bvp_flowfield.args (--flowfield requires
 #     --contour-method rao-bvp; this benchmark's authoritative export
 #     contour is the Bezier/TOP-chart path)
-#   - OpenFOAM spray-case export: `python -m raosim export-openfoam-spray ...`
+#   - OpenFOAM spray-case export: `python -m lrekit export-openfoam-spray ...`
 #     (separate subcommand, consumes a finished run directory)
 #   - spray<->performance coupling: opt-in fixed point, blocked with --regen
-#     at the CLI by design (one-way solver, docs/SPRAY_CSTAR_COUPLING.md)
+#     at the CLI by design (one-way solver, docs/subsystems/S08-injector-and-spray-coupling/SPRAY_CSTAR_COUPLING.md)
 #   - --animate march/particles GIFs: minutes of render time, cosmetic only
 --cad step
 --regen-brep

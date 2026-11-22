@@ -1,0 +1,29 @@
+{
+  "record_kind": "bounded_original_source_review",
+  "reviewer": "GPT-6 (Codex nozzle agent)",
+  "document_id": "DOC_NTRS_19770009165",
+  "source_sha256": "c6aa504371b090027fc4b597aad7ca7595e6f9489997857bbc573aab437bf79f",
+  "pages": [
+    28,
+    29
+  ],
+  "source_kind": "original_pdf_visually_reviewed",
+  "findings": [
+    {
+      "page": 28,
+      "statement": "High-temperature propellant kinetic/nonequilibrium effects can require slower throat expansion; this is not covered by a universal gas-independent lookup validation."
+    },
+    {
+      "page": 29,
+      "figure": "5b",
+      "statement": "The near-optimum canted-parabola chart has increasing initial angle and decreasing exit angle against logarithmic area ratio. Solid curves extend from about3.7 to50, with dashed continuation beyond. Reproductions disagree by roughly1.5deg at some initial-angle readouts; they are not interchangeable exact tables."
+    },
+    {
+      "page": 29,
+      "section": "2.1.2.1.2",
+      "statement": "Available methods rest on assumptions that roughly approximate actual conditions, with contours varying only slightly with gas properties. This supports engineering near-optimum practice, not all-gamma exact-equivalence or physical validation."
+    }
+  ],
+  "physical_validation": "NOT_ESTABLISHED",
+  "banking_state": "DRAFT_FOR_PARENT_INTEGRATION"
+}

@@ -1,0 +1,471 @@
+{
+ "packet": "V-RAD21-p013",
+ "kind": "verification",
+ "document_id": "DOC_DOI_10_1080_13647830_2021_1937702",
+ "source_pdf": "propulsion_texts/pintle_injector/radhakrishnan2021.pdf",
+ "source_sha256": "b2550805f9cd9837fcfac67243812665a3a3be832fb32d018638722c63c2c784",
+ "pages": [
+  13,
+  13
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 13,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1080_13647830_2021_1937702/p0013.png",
+   "sha256": "57d1518d7c7d466114b86b54af1986fab58e683a58dbd90338f99774ad0cee58",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_ecb5ab22de378007e7410cdd"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_1ec9bad346148acd2c63f1a3",
+   "kind": "formula",
+   "pages": [
+    13
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/9",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 218.49110099999996,
+     "t": 256.5439746,
+     "r": 426.06279664000004,
+     "b": 245.64455029985697,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\bar { T } ( \\bar { f } , \\bar { f ^ { \\prime } } 2 , \\bar { H } , \\bar { \\chi } )",
+   "original_text": "¯ T( ¯ f , f ′ 2 , ¯ H, ¯ χ) (13)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_ecb5ab22de378007e7410cdd",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_13647830_2021_1937702/b2550805f9cd-p13-13-1ed0396b60d5e47b95d5cbdf68902fac72ae588bb8523934358a749f03baafef.json",
+   "raw_sha256": "15e2a7d5c8daf313238e2e6bbe51a34b6420bd2603939dcc28861deb56a7c7e9",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_316752c360643ac20f463bc6",
+   "kind": "formula",
+   "pages": [
+    13
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/6",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 205.33149980000002,
+     "t": 482.2077176,
+     "r": 426.0638971799999,
+     "b": 458.58545245064374,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\chi ( f ) = \\chi _ { s t } \\frac { \\phi ( f , \\rho ) } { \\phi ( f _ { s t } , \\rho _ { s t } ) }",
+   "original_text": "χ(f ) = χst φ(f , ρ) φ (fst , ρst ) (11)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_ecb5ab22de378007e7410cdd",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_13647830_2021_1937702/b2550805f9cd-p13-13-1ed0396b60d5e47b95d5cbdf68902fac72ae588bb8523934358a749f03baafef.json",
+   "raw_sha256": "15e2a7d5c8daf313238e2e6bbe51a34b6420bd2603939dcc28861deb56a7c7e9",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_8a9be222ae564134e231593e",
+   "kind": "formula",
+   "pages": [
+    13
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/13",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 199.9378002,
+     "t": 107.14013220000004,
+     "r": 426.06761484000003,
+     "b": 97.48745245064379,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "m _ { d } = k _ { c } A _ { d } \\rho l n ( 1 + B _ { m } )",
+   "original_text": "˙md = kcAdρln(1 + Bm) (16)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_ecb5ab22de378007e7410cdd",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_13647830_2021_1937702/b2550805f9cd-p13-13-1ed0396b60d5e47b95d5cbdf68902fac72ae588bb8523934358a749f03baafef.json",
+   "raw_sha256": "15e2a7d5c8daf313238e2e6bbe51a34b6420bd2603939dcc28861deb56a7c7e9",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_c08cd5d4d0596b937739998d",
+   "kind": "formula",
+   "pages": [
+    13
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/3",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 173.69005419999996,
+     "t": 608.02577,
+     "r": 426.06471404,
+     "b": 584.11553,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\chi _ { i } = \\begin{cases} 1 0 \\chi _ { i - 1 } & \\text {for } \\chi _ { i - 1 } < 1 s ^ { - 1 } \\\\ \\chi _ { i - 1 } + \\Delta \\chi & \\text {for } \\chi _ { i - 1 } \\geq 1 s ^ { - 1 } \\end{cases}",
+   "original_text": "χi = { 10χi-1 for χi-1 < 1s -1 χi-1 +Delta1χ for χi-1 ≥ 1s -1 (10)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_ecb5ab22de378007e7410cdd",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_13647830_2021_1937702/b2550805f9cd-p13-13-1ed0396b60d5e47b95d5cbdf68902fac72ae588bb8523934358a749f03baafef.json",
+   "raw_sha256": "15e2a7d5c8daf313238e2e6bbe51a34b6420bd2603939dcc28861deb56a7c7e9",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_d4d7f0d2223f8bd30faaa67e",
+   "kind": "formula",
+   "pages": [
+    13
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/10",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 223.839,
+     "t": 234.96578879999998,
+     "r": 426.05560263999996,
+     "b": 223.2894524506438,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\overline { Y } _ { i } ( \\bar { f } , \\overline { f ^ { \\prime } } ^ { 2 } , \\bar { \\chi } )",
+   "original_text": "Yi( ¯ f , f ′ 2 , ¯ χ) (14)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_ecb5ab22de378007e7410cdd",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_13647830_2021_1937702/b2550805f9cd-p13-13-1ed0396b60d5e47b95d5cbdf68902fac72ae588bb8523934358a749f03baafef.json",
+   "raw_sha256": "15e2a7d5c8daf313238e2e6bbe51a34b6420bd2603939dcc28861deb56a7c7e9",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_db5f83e771fdf7a5fff53ba5",
+   "kind": "formula",
+   "pages": [
+    13
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/8",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 202.743,
+     "t": 293.7266556,
+     "r": 426.05589444,
+     "b": 270.60378932017164,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\overline { \\phi _ { i } } = \\sum _ { 0 } ^ { 1 } \\phi _ { i } ( f , \\bar { H } ) p ( f ) d f",
+   "original_text": "φi = 1∫0 φi(f , ¯ H)p(f )df (12)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_ecb5ab22de378007e7410cdd",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_13647830_2021_1937702/b2550805f9cd-p13-13-1ed0396b60d5e47b95d5cbdf68902fac72ae588bb8523934358a749f03baafef.json",
+   "raw_sha256": "15e2a7d5c8daf313238e2e6bbe51a34b6420bd2603939dcc28861deb56a7c7e9",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_e241d971830276965093fb68",
+   "kind": "formula",
+   "pages": [
+    13
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/11",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 218.69006119999995,
+     "t": 213.3867972,
+     "r": 426.06597384,
+     "b": 202.50252129985694,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\bar { \\rho } ( \\bar { f } , \\overline { f ^ { \\prime } } ^ { 2 } , \\bar { H } , \\bar { \\chi } )",
+   "original_text": "¯ ρ( ¯ f , f ′ 2 , ¯ H, ¯ χ) (15)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_ecb5ab22de378007e7410cdd",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_13647830_2021_1937702/b2550805f9cd-p13-13-1ed0396b60d5e47b95d5cbdf68902fac72ae588bb8523934358a749f03baafef.json",
+   "raw_sha256": "15e2a7d5c8daf313238e2e6bbe51a34b6420bd2603939dcc28861deb56a7c7e9",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [
+  {
+   "id": "EQ_DOI_10_1080_13647830_2021_1937702_FDF0974B",
+   "store": "equations",
+   "type": "Equation",
+   "page": 13,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "Eq. 16 - LOX droplet evaporation rate (convection/diffusion controlled model)",
+   "equation_number": "16",
+   "form": "m˙_d = k_c A_d ρ ln(1 + B_m)",
+   "statement": null,
+   "quote": "where _kc_ is mass transfer coefficient (m/s), _Ad_ is droplet surface area (m <sup>2</sup> ), and _Bm_ is the",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_D2_EVAPORATION"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "m˙_d",
+     "meaning": "Droplet evaporation rate",
+     "units": "",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "k_c",
+     "meaning": "mass transfer coefficient (text); nomenclature lists it as 'Mass fraction coefficient'",
+     "units": "m/s",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "A_d",
+     "meaning": "droplet surface area",
+     "units": "m^2",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "ρ",
+     "meaning": "Density (per nomenclature; not further specified next to the equation)",
+     "units": "",
+     "role": "input",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_RHO"
+     ]
+    },
+    {
+     "symbol": "B_m",
+     "meaning": "Spalding mass number based on the vapour mass fraction at the surface and in the bulk gas",
+     "units": "",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [
+    "the total density of the mixture of gas and droplet vapour is constant in the vicinity of the droplet surface"
+   ],
+   "validity": [],
+   "extraction_note": "The equation line itself renders as '_m_ ˙ _d_ = _kcAd_ _ρln(_ 1 + _Bm)_ (16)' (only 40 chars, so the immediately following variable-definition line is used as the anchor quote). This is a Spalding-type mass-transfer rate expression, NOT the d^2 = d0^2 - K t law; the document never writes a d-squared law or an evaporation constant K.",
+   "same_page_formula_candidates": [
+    "CAND_1ec9bad346148acd2c63f1a3",
+    "CAND_316752c360643ac20f463bc6",
+    "CAND_8a9be222ae564134e231593e",
+    "CAND_c08cd5d4d0596b937739998d",
+    "CAND_d4d7f0d2223f8bd30faaa67e",
+    "CAND_db5f83e771fdf7a5fff53ba5",
+    "CAND_e241d971830276965093fb68"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 13
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "m˙_d",
+      "k_c",
+      "A_d",
+      "B_m"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "CLM_DOI_10_1080_13647830_2021_1937702_14708D82",
+   "store": "claims",
+   "type": "Claim",
+   "page": 13,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The evaporation model assumes that the total density of the mixture of gas and droplet vapour is constant in the vicinity of the droplet surface.",
+   "quote": "The assumption in this model is that the total density of the mixture of gas and droplet",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_D2_EVAPORATION"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 13
+    }
+   ]
+  },
+  {
+   "id": "CLM_DOI_10_1080_13647830_2021_1937702_D6CE92B0",
+   "store": "claims",
+   "type": "Claim",
+   "page": 13,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "B_m in Eq. 16 is the Spalding mass number based on the vapour mass fraction at the surface and in the bulk gas.",
+   "quote": "Spalding mass number based on the vapour mass fraction at the surface and in the bulk",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_D2_EVAPORATION"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 13
+    }
+   ]
+  },
+  {
+   "id": "CLM_DOI_10_1080_13647830_2021_1937702_E4747B63",
+   "store": "claims",
+   "type": "Claim",
+   "page": 13,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The evaporation of LOX droplets was modelled with a convection/diffusion controlled model based on classical hydrodynamical models (refs 59, 60), computing detachment of molecules from the droplet surface into the bulk GCH4 and diffusion of vapour into the gas phase.",
+   "quote": "To model the evaporation of LOX droplets, the convection/diffusion controlled model",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_D2_EVAPORATION"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 13
+    }
+   ]
+  },
+  {
+   "id": "ASM_DOI_10_1080_13647830_2021_1937702_E4B09898",
+   "store": "entities",
+   "type": "Assumption",
+   "page": 13,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "Total density of the mixture of gas and droplet vapour is constant in the vicinity of the droplet surface (assumption of the convection/diffusion evaporation mo",
+   "equation_number": null,
+   "form": null,
+   "statement": "Total density of the mixture of gas and droplet vapour is constant in the vicinity of the droplet surface (assumption of the convection/diffusion evaporation model).",
+   "quote": "vapour is constant in the vicinity of the droplet surface. The rate of droplet evaporation,",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_INJECTOR_D2_EVAPORATION"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 13
+    }
+   ]
+  }
+ ],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_DOI_10_1080_13647830_2021_1937702#c00019",
+   "page_start": 12,
+   "page_end": 13,
+   "section": "**A detailed modelling on spray atomisation and** **combustion of LOX/GCH4 in variable area pintle** **injector rocket engines** > Nomenclature",
+   "text": "_Combustion Theory and Modelling_ 11\n\nFigure 3. Flow chart to show the spray combustion simulation of LOX/GCH4 with the three\nmodellings in the pintle injector.\n\n12 _K. Radhakrishnan_ et al.\n\nis determined for a specified scalar dissipation rate as,\n\n_χi_ =\n\n10 _χi_ −1 for _χi_ −1 _<_ 1 _s_ <sup>−1</sup> (10)\n\n_χi_ −1 + _�χ_ for _χi_ −1 ≥ 1 _s_ <sup>−1</sup>\n\nwhere the value _i_ is from 1 to 10 as a maximum number of diffusion flamelets taken into\naccount wherein the initial scalar dissipation, _χ_ 0 and scalar dissipation step, _�χ_ are 0.01\nand 5 s <sup>−1</sup>, respectively.\n\nThe scalar dissipation in the mixture fraction space is expressed in Equation (11) using\nstoichiometric mixture fraction _fst_, mixture density _ρst_, and scalar dissipation _χst_ at _f_ =\n_fst_ . Since the fluctuation in scalar dissipation was neglected so the delta function ( _pχ_ =\n_δ(χ_ −¯ _χ)_ ) was used for the PDF of scalar dissipation.\n\n_χ(f )_ = _χst_\n\n_φ(f_ <u>,</u> _ρ)_\n(11)\n_φ(fst_, _ρst)_\n\nThe flamelet tables for adiabatic flow have these three dimensions: _f_ <sup>¯</sup>, _f_ ′2, _~~χ~~_ _st_ and have an\n\nadditional parameter enthalpy, _H_ <sup>¯</sup> for non-adiabatic flow. Thereby, the computational cost\nbecomes expensive. For reducing the computational cost, the heat gain/loss to the considered system was presumed to have a negligible influence on the species mass fraction,\nwhich is an approach [61,62] taken into account not to generate the non-adiabatic tables. In\naddition, the diffusion flamelets using detailed mechanism (GRI 3.0 CHEMKIN file) was\ngenerated externally. Then, it was embedded in a turbulent flame using assumed _β_ -PDF\nmethods to generate a look-up tables in Figure 4. The SDF model coupled with assumed\n_β_ -PDF was used in the present work. Thus, the flamelet profiles were convoluted with the\nassumed _β_ -PDF and the mean mixture scalars are determined from the look-up table as in\nEquation (12). The non-adiabatic _β_ -PDF tables have the dimensions of Equations (13–15)\nto obtain the cell temperature, density and species mass fraction."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1080_13647830_2021_1937702#c00020",
+   "page_start": 13,
+   "page_end": 13,
+   "section": "**A detailed modelling on spray atomisation and** **combustion of LOX/GCH4 in variable area pintle** **injector rocket engines** > Nomenclature",
+   "text": "_φi_ =\n\n1\n∫ _φi(f_, _H_ <sup>¯</sup> _)p(f )df_ (12)\n\n0\n\n_T_ ¯ _(f_ ¯, _f_\n\n′2, _H_ ¯, _χ)_ ¯ (13)\n\n_Yi(f_ <sup>¯</sup>, _f_\n\n′2, _χ)_ ¯ (14)\n\n_ρ(_ ¯ _f_ <sup>¯</sup>, _f_\n\n′2, _H_ ¯, _χ)_ ¯ (15)\n\nTo model the evaporation of LOX droplets, the convection/diffusion controlled model\nbased on a classical hydrodynamical models [59,60] was used to calculate the detachment\nof molecules from the surface of LOX droplet to the bulk phase of GCH4 in the immediate\nvicinity of droplets and diffusion of vapour from the droplet surface into the gaseous phase.\nThe assumption in this model is that the total density of the mixture of gas and droplet\nvapour is constant in the vicinity of the droplet surface. The rate of droplet evaporation,\n\n_m_ ˙ _d_ is expressed as,\n\n_m_ ˙ _d_ = _kcAd_ _ρln(_ 1 + _Bm)_ (16)\n\nwhere _kc_ is mass transfer coefficient (m/s), _Ad_ is droplet surface area (m <sup>2</sup> ), and _Bm_ is the\nSpalding mass number based on the vapour mass fraction at the surface and in the bulk\ngas. The combustion chamber wall was assumed as adiabatic thereby the heat flux was null"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "formula": 7
+  },
+  "flagged_candidates": 0,
+  "target_objects": 4,
+  "objects_with_anchor_problems": 0
+ }
+}

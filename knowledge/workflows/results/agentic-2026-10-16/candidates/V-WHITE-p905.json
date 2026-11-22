@@ -1,0 +1,195 @@
+{
+ "packet": "V-WHITE-p905",
+ "kind": "verification",
+ "document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+ "source_pdf": "propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf",
+ "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+ "pages": [
+  905,
+  905
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 905,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/p0905.png",
+   "sha256": "cde1eedca443709e1f663a5323a60c42ed4c04d460810202dc842c497e1563f0",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_59693e6282dce33d0d1ee39d"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_ca581bae5b2c36a6f8f3d980",
+   "kind": "figure",
+   "pages": [
+    905
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 198.10057067871094,
+     "t": 722.1762084960938,
+     "r": 463.7631530761719,
+     "b": 556.1894073486328,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_59693e6282dce33d0d1ee39d",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p905-905-6c9c91b4f4bf3d4b0f64145ed5f1c92573d1e25e7108474c571a22575196d31f.json",
+   "raw_sha256": "9ff012b9a14db9b40db695b9f7009f99d990a2ffe6e4912438538daaf3fd4627",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_5f3027b1c9b473a970ede208",
+   "kind": "formula",
+   "pages": [
+    905
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/4",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 311.3333333333333,
+     "t": 373.6666666666667,
+     "r": 416.33333333333337,
+     "b": 348.6666666666667,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "= \\frac { 0 . 0 5 7 7 } { R e _ { x } ^ { 1 / 5 } } \\ C _ { D } = \\frac { 0 . 0 7 2 } { R e _ { l } ^ { 1 / 5 } }",
+   "original_text": "_ 0.0577 ppeocltl Ret\" p= _ 0.072 Re}*",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_59693e6282dce33d0d1ee39d",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p905-905-6c9c91b4f4bf3d4b0f64145ed5f1c92573d1e25e7108474c571a22575196d31f.json",
+   "raw_sha256": "9ff012b9a14db9b40db695b9f7009f99d990a2ffe6e4912438538daaf3fd4627",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_9fb6c77e6a0ac2e8d8cda897",
+   "kind": "formula",
+   "pages": [
+    905
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/2",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 277.33333333333337,
+     "t": 479.0,
+     "r": 386.0,
+     "b": 452.3333333333333,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\tau _ { w } = 0 . 0 2 2 5 \\rho U ^ { 2 } \\left ( \\frac { \\nu } { U \\delta } \\right ) ^ { 1 / 4 }",
+   "original_text": "( yp 4 tT, = 0.0225pU\"(*)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_59693e6282dce33d0d1ee39d",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p905-905-6c9c91b4f4bf3d4b0f64145ed5f1c92573d1e25e7108474c571a22575196d31f.json",
+   "raw_sha256": "9ff012b9a14db9b40db695b9f7009f99d990a2ffe6e4912438538daaf3fd4627",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [
+  {
+   "id": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_83F28E60",
+   "store": "claims",
+   "type": "Claim",
+   "page": 905,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The alternate Prandtl (1927) turbulent flat-plate relations derived from a pipe-flow wall shear formula are limited to Re_x between 5 × 10^5 and 10^7.",
+   "quote": "These formulas are limited to Re _x_ between 5 × 10 <sup>5</sup> and 10 <sup>7</sup> .",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 905
+    }
+   ]
+  },
+  {
+   "id": "VAL_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_12A7C9DA",
+   "store": "validity",
+   "type": "ValidityEnvelope",
+   "page": 905,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Prandtl 1927 pipe-flow-based turbulent flat-plate relations are limited to Re_x between 5 × 10^5 and 10^7.",
+   "quote": "These formulas are limited to Re _x_ between 5 × 10 <sup>5</sup> and 10 <sup>7</sup> .",
+   "confidence": null,
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 905
+    }
+   ]
+  }
+ ],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01210",
+   "page_start": 905,
+   "page_end": 905,
+   "section": "**Turbulent flat-plate flow**",
+   "text": "P7.33 An alternate analysis of turbulent flat-plate flow was given by\n\nPrandtl in 1927, using a wall shear stress formula from pipe\nflow:\n\nShow that this formula can be combined with Eqs. (7.33) and\n(7.40) to derive the following relations for turbulent flat-plate flow:\n\nThese formulas are limited to Re _x_ between 5 × 10 <sup>5</sup> and 10 <sup>7</sup> .\nP7.34 Consider turbulent flow past a sharp, smooth flat plate of width\n\n_b_ and length _L_ . What percentage of the friction drag on the\nplate is carried by the rear half of the plate?\nP7.35 The solutions to Prob. P7.26 are ( _a_ ) _F_ = 2.83 _F_ 1-plate and (b) _F_ =\n\n2.0 _F_ 1-plate. (Do not reveal these results to your friends.) Repeat\nProb. P7.26 assuming the boundary layer flow is _turbulent,_ and\ncomment on the striking increase in numerical values.\nP7.36 A ship is 125 m long and has a wetted area of 3500 m <sup>2</sup> . Its\npropellers can deliver a maximum power of 1.1 MW to\nseawater at 20°C. If all drag is due to friction, estimate the\nmaximum ship speed, in kn.\nP7.37 Air at 20°C and 1 atm flows past a long flat plate, at the end of\n\nwhich is placed a narrow scoop, as shown in Fig. P7.37. ( _a_ )"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "figure": 1,
+   "formula": 2
+  },
+  "flagged_candidates": 0,
+  "target_objects": 1,
+  "objects_with_anchor_problems": 0
+ }
+}

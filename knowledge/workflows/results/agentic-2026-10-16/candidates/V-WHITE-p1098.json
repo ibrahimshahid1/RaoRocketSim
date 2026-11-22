@@ -1,0 +1,458 @@
+{
+ "packet": "V-WHITE-p1098",
+ "kind": "verification",
+ "document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+ "source_pdf": "propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf",
+ "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+ "pages": [
+  1098,
+  1098
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 1098,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/p1098.png",
+   "sha256": "48a1fa74120ab27d31667d35acd4b938fa90c44ddb2f789087391592c4697112",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_cdf579905110e190358da281"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_48c4877b9ccd4c9ecbf4d7d9",
+   "kind": "figure",
+   "pages": [
+    1098
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 143.19619750976562,
+     "t": 593.4402008056641,
+     "r": 490.966552734375,
+     "b": 439.7144775390625,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_cdf579905110e190358da281",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p1098-1098-5dd5e5a4457d964332b383f2c6ecdfe75ca5a124c2bd0af0d0f56697a7835bc4.json",
+   "raw_sha256": "67dc868da05925db5c2e47d0f6876bf5218b164ee5c0a820c70edb3e931b5bb6",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_1a4e6010ef59f04581da1391",
+   "kind": "formula",
+   "pages": [
+    1098
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/31",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 119.33333333333333,
+     "t": 177.0,
+     "r": 514.3333333333333,
+     "b": 139.0,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\rho V A & = \\rho ^ { * } V ^ { * } A ^ { * } \\\\ \\intertext { o r } \\frac { A } { \\pi ^ { * } } & = \\frac { \\rho ^ { * } } { \\rho } \\frac { V ^ { * } } { \\pi ^ { * } }",
+   "original_text": "or pVA = p*V*A* (9.41)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_cdf579905110e190358da281",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p1098-1098-5dd5e5a4457d964332b383f2c6ecdfe75ca5a124c2bd0af0d0f56697a7835bc4.json",
+   "raw_sha256": "67dc868da05925db5c2e47d0f6876bf5218b164ee5c0a820c70edb3e931b5bb6",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [
+  {
+   "id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_6C754D6F",
+   "store": "equations",
+   "type": "Equation",
+   "page": 1098,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "White Eq. (9.41) continuity and sonic-reference area",
+   "equation_number": "9.41",
+   "form": "rho*V*A = rho_star*V_star*A_star; A/A_star = (rho_star/rho)*(V_star/V)",
+   "statement": null,
+   "quote": "Equate the mass flow at any section to the mass flow under sonic conditions",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "rho",
+     "meaning": "local static density",
+     "units": "kg/m^3",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_RHO"
+     ]
+    },
+    {
+     "symbol": "V",
+     "meaning": "local flow velocity",
+     "units": "m/s",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_FLOW_SPEED"
+     ],
+     "normalization_history": [
+      {
+       "resolution_state": "UNRESOLVED_ENTITY",
+       "quantity_candidates": []
+      }
+     ],
+     "normalization_basis": "SYSTEM_INFERS: symbol, exact canonical units and explicit meaning aliases; no unit conversion or physical validity inferred"
+    },
+    {
+     "symbol": "A",
+     "meaning": "local duct area",
+     "units": "m^2",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_LOCAL_FLOW_AREA"
+     ],
+     "normalization_history": [
+      {
+       "resolution_state": "RESOLVED",
+       "quantity_candidates": [
+        "QTY_AT"
+       ]
+      }
+     ],
+     "normalization_basis": "SYSTEM_INFERS: symbol, exact canonical units and explicit meaning aliases; no unit conversion or physical validity inferred"
+    },
+    {
+     "symbol": "rho_star",
+     "meaning": "sonic critical density",
+     "units": "kg/m^3",
+     "role": "source_variable",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "V_star",
+     "meaning": "sonic critical velocity",
+     "units": "m/s",
+     "role": "source_variable",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "A_star",
+     "meaning": "sonic reference area",
+     "units": "m^2",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_SONIC_REFERENCE_AREA"
+     ],
+     "normalization_history": [
+      {
+       "resolution_state": "UNRESOLVED_ENTITY",
+       "quantity_candidates": []
+      }
+     ],
+     "normalization_basis": "SYSTEM_INFERS: symbol, exact canonical units and explicit meaning aliases; no unit conversion or physical validity inferred"
+    }
+   ],
+   "assumptions": [
+    "One-dimensional perfect-gas isentropic flow framework"
+   ],
+   "validity": [
+    "Sonic-reference conditions can be hypothetical; k=1.4 applies only to the numerical9.45 specialization"
+   ],
+   "extraction_note": "Docling targeted enrichment executed; original displayed math compared visually. The9.44 exponent is (k+1)/(2*(k-1)), not multiplication by(k-1). SI units are dimensional interpretations. No source-equation to implementation link is inherited.",
+   "same_page_formula_candidates": [
+    "CAND_1a4e6010ef59f04581da1391"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 1098
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "rho_star",
+      "V_star"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_C82ED2EE",
+   "store": "equations",
+   "type": "Equation",
+   "page": 1098,
+   "is_target": false,
+   "active": false,
+   "source_state": "SUPERSEDED_EXTRACTION",
+   "verification": null,
+   "label": "White Eq. (9.44)/(9.45) area ratio A/A* vs Mach number",
+   "equation_number": "9.44",
+   "form": "A/A* = (ρ*/ρ)(V*/V) with both right-hand terms functions of Ma only for isentropic flow; Eq. (9.45) is the k = 1.4 numerical form  [display equation NOT rendered in Markdown]",
+   "statement": null,
+   "quote": "Both the terms on the right are functions only of Mach number for isentropic",
+   "confidence": "low",
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "A",
+     "meaning": "local duct area",
+     "units": "",
+     "role": "input",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_LOCAL_FLOW_AREA"
+     ],
+     "normalization_history": [
+      {
+       "resolution_state": "AMBIGUOUS_SYMBOL",
+       "quantity_candidates": [
+        "QTY_SOUND",
+        "QTY_AT"
+       ]
+      }
+     ],
+     "normalization_basis": "SYSTEM_INFERS: symbol, exact canonical units and explicit meaning aliases; no unit conversion or physical validity inferred"
+    },
+    {
+     "symbol": "A*",
+     "meaning": "sonic (critical) throat area",
+     "units": "",
+     "role": "parameter",
+     "resolution_state": "AMBIGUOUS_SYMBOL",
+     "quantity_candidates": [
+      "QTY_AT",
+      "QTY_SONIC_REFERENCE_AREA"
+     ],
+     "normalization_history": [
+      {
+       "resolution_state": "RESOLVED",
+       "quantity_candidates": [
+        "QTY_AT"
+       ]
+      }
+     ],
+     "normalization_basis": "SYSTEM_INFERS: symbol, exact canonical units and explicit meaning aliases; no unit conversion or physical validity inferred"
+    },
+    {
+     "symbol": "Ma",
+     "meaning": "local Mach number",
+     "units": "",
+     "role": "output",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_MACH"
+     ]
+    },
+    {
+     "symbol": "k",
+     "meaning": "specific-heat ratio",
+     "units": "",
+     "role": "parameter",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_GAMMA"
+     ],
+     "normalization_history": [
+      {
+       "resolution_state": "AMBIGUOUS_SYMBOL",
+       "quantity_candidates": [
+        "QTY_GAMMA",
+        "QTY_KCOND"
+       ]
+      }
+     ],
+     "normalization_basis": "SYSTEM_INFERS: symbol, exact canonical units and explicit meaning aliases; no unit conversion or physical validity inferred"
+    }
+   ],
+   "assumptions": [
+    "isentropic flow",
+    "perfect gas",
+    "one-dimensional flow",
+    "no shock waves in the duct"
+   ],
+   "validity": [
+    "two solutions (one subsonic, one supersonic) exist for a given A/A*; selection requires further information such as a known pressure or temperature",
+    "the source's EES inversion works for any real-gas k between 1.0 and 1.67"
+   ],
+   "extraction_note": "Equation body absent from Markdown (image). Referenced quote is the last line before the page-1099 marker.",
+   "same_page_formula_candidates": [
+    "CAND_1a4e6010ef59f04581da1391"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 1098
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": [
+      "DAMAGE_OR_REPETITION_MARKER"
+     ]
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "A*"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_2927B179",
+   "store": "claims",
+   "type": "Claim",
+   "page": 1098,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Although supersonic flow downstream of a nozzle requires a sonic throat, a compressible gas can pass through a throat section without becoming sonic.",
+   "quote": "the opposite is not true: A compressible gas can pass through a throat section",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 1098
+    }
+   ]
+  },
+  {
+   "id": "ASM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_00F7DEB2",
+   "store": "entities",
+   "type": "Assumption",
+   "page": 1098,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "Section 9.4 treats the one-dimensional flow approximation by combining isentropic/adiabatic relations with continuity.",
+   "equation_number": null,
+   "form": null,
+   "statement": "Section 9.4 treats the one-dimensional flow approximation by combining isentropic/adiabatic relations with continuity.",
+   "quote": "Although supersonic flow downstream of a nozzle requires a sonic throat,",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 1098
+    }
+   ]
+  },
+  {
+   "id": "ASM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_7802AC76",
+   "store": "entities",
+   "type": "Assumption",
+   "page": 1098,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "The area-Mach derivation uses perfect-gas and isentropic flow relations, with a sonic reference state that need not occur physically in the duct.",
+   "equation_number": null,
+   "form": null,
+   "statement": "The area-Mach derivation uses perfect-gas and isentropic flow relations, with a sonic reference state that need not occur physically in the duct.",
+   "quote": "We can use the perfect-gas and isentropic flow relations to convert the continuity relation",
+   "confidence": null,
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 1098
+    }
+   ]
+  }
+ ],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01485",
+   "page_start": 1098,
+   "page_end": 1098,
+   "section": "**9.4 Isentropic Flow with Area Changes**",
+   "text": "a minimum area (throat) or a maximum area (bulge). In Fig. 9.6 we patch\ntogether a throat section and a bulge section, using the rules from Fig. 9.5. The\nthroat or converging–diverging section can smoothly accelerate a subsonic flow\nthrough sonic to supersonic flow, as in Fig. 9.6 _a_ . This is the only way a\nsupersonic flow can be created by expanding the gas from a stagnant reservoir.\nThe bulge section fails; the bulge Mach number moves away from a sonic\ncondition rather than toward it.\n\n**Fig. 9.6 From** **Eq. (9.40), in flow through a throat (** **_a_** **) the fluid can**\n**accelerate smoothly through sonic and supersonic flow. In flow through the**\n**bulge (** **_b_** **) the flow at the bulge cannot be sonic on physical grounds.**\n\nAlthough supersonic flow downstream of a nozzle requires a sonic throat,\nthe opposite is not true: A compressible gas can pass through a throat section\nwithout becoming sonic."
+  },
+  {
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01486",
+   "page_start": 1098,
+   "page_end": 1098,
+   "section": "**Perfect-Gas Area Change**",
+   "text": "We can use the perfect-gas and isentropic flow relations to convert the\ncontinuity relation (9.37) into an algebraic expression involving only area and\nMach number, as follows. Equate the mass flow at any section to the mass flow\nunder sonic conditions (which may not actually occur in the duct):\n\nBoth the terms on the right are functions only of Mach number for isentropic"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "figure": 1,
+   "formula": 1
+  },
+  "flagged_candidates": 0,
+  "target_objects": 1,
+  "objects_with_anchor_problems": 0
+ }
+}

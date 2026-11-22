@@ -1,0 +1,157 @@
+{
+ "packet": "V-HAG-p001",
+ "kind": "verification",
+ "document_id": "DOC_DOI_10_2514_2_5354",
+ "source_pdf": "propulsion_texts/hagemann1998.pdf",
+ "source_sha256": "f4626872b2bf3eaf77c07f04d659155c55ab90ce407ca9741614b72edb5f78b6",
+ "pages": [
+  1,
+  1
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 1,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_2514_2_5354/p0001.png",
+   "sha256": "759ac113b60d647d5b736826682595b29f590c9b22487760549f4e57c3d64e9a",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_070919b32e000c5e4b45a0fb"
+ ],
+ "candidates": [],
+ "stored_objects": [
+  {
+   "id": "CLM_DOI_10_2514_2_5354_44999104",
+   "store": "claims",
+   "type": "Claim",
+   "page": 1,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Flow adaptation induces shocks and expansion waves, which result in exit profiles quite different from idealized one-dimensional assumptions.",
+   "quote": "**from** **idealized** **one-dimensional** **assumptions.** **Flow** **phenomena** **observed** **in** **experiments** **and** **numerical**",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_ALTITUDE_ATTACHED_THRUST"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 1
+    }
+   ]
+  },
+  {
+   "id": "CLM_DOI_10_2514_2_5354_FDED1AC0",
+   "store": "claims",
+   "type": "Claim",
+   "page": 1,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Nonadaptation of the exhaust flow to varying ambient pressures induces a significant negative thrust contribution, and ambient pressures higher than the nozzle wall exit pressure increase the danger of flow separation inside the nozzle with possible side loads.",
+   "quote": "signi�cant negative thrust contribution (see Figs. 2 <sup>–</sup> 4). Ambient pressures that are higher than nozzle wall exit pressures",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_ALTITUDE_ATTACHED_THRUST"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 1
+    }
+   ]
+  },
+  {
+   "id": "ASM_DOI_10_2514_2_5354_24B5AF39",
+   "store": "entities",
+   "type": "Assumption",
+   "page": 1,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "Chemical nonequilibrium effects can be neglected in H2-O2 rocket engines with chamber pressures above pc = 50 bar (loss of only 0.1-0.2% in Table 1).",
+   "equation_number": null,
+   "form": null,
+   "statement": "Chemical nonequilibrium effects can be neglected in H2-O2 rocket engines with chamber pressures above pc = 50 bar (loss of only 0.1-0.2% in Table 1).",
+   "quote": "effects can be neglected in H2 <sup>–</sup> O2 rocket engines with chamber",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_ALTITUDE_ATTACHED_THRUST"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 1
+    }
+   ]
+  }
+ ],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_DOI_10_2514_2_5354#c00000",
+   "page_start": 1,
+   "page_end": 1,
+   "section": "**Advanced Rocket Nozzles**",
+   "text": "Gerald Hagemann*\n_DLR,_ _German_ _Aerospace_ _Research_ _Center,_ _Lampoldshausen_ _74239,_ _Germany_\n\nHans Immich†\n_Daimler_ <sup>_–_</sup> _Benz_ _AG,_ _Munich_ _81663,_ _Germany_\n\nThong Van Nguyen‡\n_GenCorp_ _Aerojet,_ _Sacramento,_ _California_ _95813_\n\nand\nGennady E. Dumnov§\n_Keldysh_ _Research_ _Center,_ _Moscow_ _125438,_ _Russia_\n\n**Several** **nozzle** **concepts** **that** **promise** **a** **gain** **in** **performance** **over** **existing** **conventional** **nozzles** **are**\n**discussed** **in** **this** **paper.** **It** **is** **shown** **that** **signi�cant** **performance** **gains** **result** **from** **the** **adaptation** **of** **the**\n**exhaust** **�ow** **to** **the** **ambient pressure.** **Special** **attention** **is** **then** **given** **to** **altitude-adaptive nozzle** **concepts,**\n**which** **have** **recently** **received** **new** **interest** **in** **the** **space** **industry.** **Current** **research** **results** **are** **presented**\n**for** **dual-bell** **nozzles** **and** **other** **nozzles** **with** **devices** **for** **forced** **�ow** **separation** **and** **for** **plug** **nozzles** **with**\n**external** **freestream** **expansion.** **In** **addition,** **results** **of** **former** **research** **on** **nozzles** **of** **dual-mode** **engines**\n**such as dual-throat and dual-expander engines and on expansion** <sup>**–**</sup> **de�ection nozzles are shown. In general,**\n**�ow** **adaptation** **induces** **shocks** **and** **expansion** **waves,** **which** **result** **in** **exit** **pro�les** **that** **are** **quite** **different**\n**from** **idealized** **one-dimensional** **assumptions.** **Flow** **phenomena** **observed** **in** **experiments** **and** **numerical**\n**simulations** **during** **different** **nozzle** **operations** **are** **highlighted,** **critical** **design** **aspects** **and** **operation con-**\n**ditions are discussed, and performance characteristics** **of selected** **nozzles are presented. The consideration**\n**of** **derived** **performance** **characteristics** **in** **launcher** **and** **trajectory** **optimization** **calculations** **reveal** **sig-**\n**ni�cant** **payload** **gains** **at** **least** **for** **some** **of** **these** **advanced** **nozzle** **concepts.**"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_2_5354#c00001",
+   "page_start": 1,
+   "page_end": 1,
+   "section": "Nomenclature",
+   "text": "_A_ = area\n_F_ = thrust\n_h_ = �ight altitude\n_I_ = impulse\n_l_ = length\n_mÇ_ = mass �ow rate\n_p_ = pressure\n_r¯_ = mass ratio oxidizer/fuel mixture\n_r_ = radius\n_x_, _y_ = coordinates\n« = nozzle area ratio\n\n_Subscripts_\namb = ambient\n_c_ = combustion chamber\ncr = critical\n_e_ = exit plane\ngeom = geometrical\nref = reference\nsp = speci�c\n_t_ = throat\n\nReceived Sept. 2, 1997; revision received Feb. 27, 1998; accepted\nfor publication March 19, 1998. Copyright Q 1998 by the American\nInstitute of Aeronautics and Astronautics, Inc. All rights reserved.\n\n*Research Engineer, Ph.D., Space Propulsion. E-mail: gerald.\nhagemann@dlr.de.\n\n†Research Engineer, Ph.D., Space Infrastructure. E-mail:\nIm24344@dbmail.dase.de. Member AIAA.\n\n‡Technical Principal, Ph.D. E-mail: thong.nguyen@aerojet.com.\nMember AIAA.\n\n§Division Head, Ph.D., Aerothermodynamics. E-mail: dumnov@\nrelay.rinet.ru.\n\nvac = vacuum\n_w_ = wall\n\n**I.** **Introduction**\n\nHE reduction of Earth-to-orbit launch costs in conjunction\nwith an increase in launcher reliability and operational"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_2_5354#c00002",
+   "page_start": 1,
+   "page_end": 1,
+   "section": "**T**",
+   "text": "ef�ciency are the key demands on future space transportation\nsystems, like single-stage-to-orbit vehicles (SSTO). The realization of these vehicles strongly depends on the performance\nof the engines, which should deliver high performance with\nlow system complexity.\n\nPerformance data for rocket engines are practically always\nlower than the theoretically attainable values because of imperfections in the mixing, combustion, and expansion of the\npropellants. Figure 1 illustrates the different loss sources in\nrocket engine nozzles. The examination and evaluation of\nthese loss effects is and has for some time been the subject of\nresearch at scienti�c institutes and in industry. Table 1 summarizes performance losses in the thrust chambers and nozzles\nof typical high-performance rocket engines: The SSME- and\nVulcain 1 engine <sup>1</sup> (Space Shuttle main engine, Rocketdyne\nhydrogen <sup>–</sup> oxygen engine and hydrogen <sup>–</sup> oxygen core engine\nof European Ariane-5 launcher). Among the important loss\nsources in thrust chambers and nozzles are viscous effects because of turbulent boundary layers and the nonuniformity of\nthe �ow in the exit area, whereas chemical nonequilibrium\neffects can be neglected in H2 <sup>–</sup> O2 rocket engines with chamber\npressures above _pc_ = 50 bar. <sup>1</sup> Furthermore, the nonadaptation\nof the exhaust �ow to varying ambient pressures induces a\nsigni�cant negative thrust contribution (see Figs. 2 <sup>–</sup> 4). Ambient pressures that are higher than nozzle wall exit pressures\nalso increase the danger of �ow separation inside the nozzle,\nresulting in the possible generation of side loads. A brief description of state-of-the-art prediction methods for both phenomena is given."
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {},
+  "flagged_candidates": 0,
+  "target_objects": 2,
+  "objects_with_anchor_problems": 0
+ }
+}

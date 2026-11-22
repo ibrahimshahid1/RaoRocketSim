@@ -65,6 +65,8 @@ def _run(ns) -> int:
 
     from kg import freshness
     before = freshness.snapshot()
+    from kg.repository_layout import reconcile_locators
+    report["steps"]["repository_relocations"] = reconcile_locators(root=ROOT)
     docs = ingest.build_manifest(verbose=False)
     report["steps"]["manifest"] = {"documents": len(docs)}
     s = ingest.ingest_chunks(force=ns.force_chunks, verbose=False)

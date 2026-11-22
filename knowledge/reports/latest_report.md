@@ -1,17 +1,17 @@
 # LREKit knowledge system — ingestion report
 
-Generated 2026-10-17T17:58:10.391931+00:00
+Generated 2026-11-21T23:24:36.665301+00:00
 
 ## Corpus
 
-- PDFs on disk: 286; conversion rows: 286; synchronized: 286; missing Markdown: 0; stale: 0; orphan Markdown: 1; classified reference-note mirrors: 1; duplicate payload groups: 27
-- Unique documents: 252; alternate copies: 4
-- Conversion status: {'needs_review': 234, 'good': 18}
-- Low-confidence conversions: 16
+- PDFs on disk: 305; conversion rows: 305; synchronized: 305; missing Markdown: 0; stale: 0; orphan Markdown: 1; classified reference-note mirrors: 1; duplicate payload groups: 27
+- Unique documents: 271; alternate copies: 4
+- Conversion status: {'needs_review': 253, 'good': 18}
+- Low-confidence conversions: 28
 
 ## Chunks and index
 
-- {'ingested': 0, 'unchanged': 247, 'skipped_no_markdown': 0, 'skipped_failed_conversion': 0, 'skipped_empty_source': 1, 'skipped_empty_extraction': 0, 'n_chunks_total': 19565, 'removed': 0, 'skipped_alternate_copy': 4, 'generated_at': '2026-10-17T17:57:59.004053+00:00'}
+- {'ingested': 0, 'unchanged': 266, 'skipped_no_markdown': 0, 'skipped_failed_conversion': 0, 'skipped_empty_source': 1, 'skipped_empty_extraction': 0, 'n_chunks_total': 20757, 'removed': 0, 'skipped_alternate_copy': 4, 'generated_at': '2026-11-21T23:24:26.789951+00:00'}
 - {'skipped': 'no chunk changes'}
 
 ## Knowledge stores
@@ -22,29 +22,29 @@ Generated 2026-10-17T17:58:10.391931+00:00
 - claims: 287
 - entities: 226
 - software_links: 1792
-- tests: 1068
-- capabilities: 102
+- tests: 1215
+- capabilities: 141
 - requirements: 36
-- repo_documents: 64
+- repo_documents: 90
 - relationships: 39
-- provenance: 2138
-- artifacts: 378
-- enrichments: 560
+- provenance: 2957
+- artifacts: 684
+- enrichments: 1512
 
 ## Scientific coverage
 
-- Canonical publications: 248; with current extracted objects: 30; without: 218
+- Canonical publications: 267; with current extracted objects: 30; without: 237
 - Independent source-object verification: {'CONFIRMED': 205, 'NOT_CHECKED': 292, 'REFUTED': 3}
 - A confirmed source transcription does not validate an implementation or hardware.
 
 - Equation/concept completeness: NOT_ESTABLISHED; current model reviews with source fingerprints: 12/61.
 - Explicitly incomplete equation transcriptions: 1 (quarantined from implementation edges).
-- Docling processing coverage: {'canonical_documents': 248, 'source_pages': 11375, 'processed_pages': 94, 'remaining_pages': 11281, 'empty_sources': 1}; parser candidates require original-page review.
+- Docling processing coverage: {'canonical_documents': 267, 'source_pages': 12075, 'processed_pages': 479, 'remaining_pages': 11596, 'empty_sources': 1}; parser candidates require original-page review.
 
 ## Engineering evidence
 
 - Active report snapshots by type: {'ArtifactManifest': 17, 'CADArtifact': 70, 'EngineConfiguration': 17, 'ManufacturingProcess': 15}
-- CAD references with observed bytes: 64
+- CAD references with observed bytes: 0
 - Configurations are serialized input/layout snapshots. CAD hashes describe observed current bytes; generation-time configuration binding remains unknown.
 - Manufacturing records are reference plans. No measurement, experiment, calibration, or executed manufacturing is inferred from simulation outputs.
 
@@ -80,45 +80,45 @@ Dropped (anchor not found):
 
 ## Validation
 
-- issues: 14 — {'empty_source_pdf': 1, 'canonical_document_without_chunks': 1, 'markdown_without_manifest_row': 1, 'registry_citation_not_confirmed_in_local_source': 1, 'declared_cad_bytes_unavailable': 6, 'source_extraction_incomplete': 1, 'source_verification_incomplete': 1, 'unknown_basis_software_constants': 1, 'incomplete_formula_transcriptions': 1}
-- stats: {"equation_variables": {"ambiguous": 14, "unresolved": 537, "resolved": 270, "total": 821, "equations": 191, "scope": "current active equations with CURRENT source state", "historical_or_inactive": {"ambiguous": 6, "unresolved": 55, "resolved": 17, "total": 78, "equations": 22}, "all_records": {"ambiguous": 20, "unresolved": 592, "resolved": 287, "total": 899, "equations": 213}}, "constants_by_basis": {"UNKNOWN_BASIS": 274, "IMPLEMENTATION_CHOICE": 351, "LITERATURE_DERIVED": 181, "PROJECT_DERIVED": 41, "REPOSITORY_HEURISTIC": 168}, "components_without_scientific_link": 200, "engineering_artifacts": {"active_by_type": {"ArtifactManifest": 17, "CADArtifact": 70, "EngineConfiguration": 17, "ManufacturingProcess": 15}, "inactive_snapshots": 72}, "graph": {"nodes": 5728, "edges": 7266, "edges_without_provenance": 0, "top_degree": [["DOC_NTRS_19710019929", 153], ["MODEL_NOZZLE_RAO_VARIATIONAL_BVP", 146], ["DOC_NTRS_19760023196", 111], ["DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI", 110], ["MODEL_NOZZLE_MOC", 97]]}, "duplicate_chunk_texts": 15, "coverage": {"equation_completeness": "NOT_ESTABLISHED", "concept_completeness": "NOT_ESTABLISHED", "scope_note": "Coverage o
+- issues: 78 — {'empty_source_pdf': 1, 'canonical_document_without_chunks': 1, 'markdown_without_manifest_row': 1, 'registry_citation_not_confirmed_in_local_source': 1, 'declared_cad_bytes_unavailable': 70, 'source_extraction_incomplete': 1, 'source_verification_incomplete': 1, 'unknown_basis_software_constants': 1, 'incomplete_formula_transcriptions': 1}
+- stats: {"equation_variables": {"ambiguous": 14, "unresolved": 537, "resolved": 270, "total": 821, "equations": 191, "scope": "current active equations with CURRENT source state", "historical_or_inactive": {"ambiguous": 6, "unresolved": 55, "resolved": 17, "total": 78, "equations": 22}, "all_records": {"ambiguous": 20, "unresolved": 592, "resolved": 287, "total": 899, "equations": 213}}, "constants_by_basis": {"UNKNOWN_BASIS": 274, "IMPLEMENTATION_CHOICE": 351, "LITERATURE_DERIVED": 181, "PROJECT_DERIVED": 41, "REPOSITORY_HEURISTIC": 168}, "components_without_scientific_link": 200, "engineering_artifacts": {"active_by_type": {"ArtifactManifest": 17, "CADArtifact": 70, "EngineConfiguration": 17, "ManufacturingProcess": 15}, "inactive_snapshots": 378}, "graph": {"nodes": 7049, "edges": 8332, "edges_without_provenance": 0, "top_degree": [["DOC_NTRS_19710019929", 156], ["MODEL_NOZZLE_RAO_VARIATIONAL_BVP", 146], ["DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI", 134], ["DOC_NTRS_19760023196", 134], ["ENR_00af2ca27fbeddd3fdbd8d88", 101]]}, "duplicate_chunk_texts": 15, "coverage": {"equation_completeness": "NOT_ESTABLISHED", "concept_completeness": "NOT_ESTABLISHED", "scope_note
 
 ## Explicitly unavailable / blocked
 
-- {'BLOCKED_ON_LITERATURE': 37, 'UNSUPPORTED': 14, 'NOT_QUALIFIED': 9, 'NOT_IMPLEMENTED': 9, 'UNAVAILABLE': 33}
+- {'BLOCKED_ON_LITERATURE': 37, 'NOT_QUALIFIED': 11, 'UNAVAILABLE': 39, 'UNSUPPORTED': 42, 'NOT_IMPLEMENTED': 12}
 
 ## Hard-coded constants by basis
 
 - {'UNKNOWN_BASIS': 257, 'IMPLEMENTATION_CHOICE': 351, 'LITERATURE_DERIVED': 181, 'PROJECT_DERIVED': 41, 'REPOSITORY_HEURISTIC': 168}
 
 UNKNOWN_BASIS constants (257), first 30:
-  - raosim/pumps.py:47 `auto_current_target` = 250.0
-  - raosim/mdo/schema.py:627 `eta_motor` = 0.9
-  - raosim/pumps.py:53 `seal_face_speed_limit` = 35.0
-  - raosim/electric_technology.py:298 `battery_structural_margin` = 1.2
-  - raosim/electric_technology.py:296 `battery_power_density` = 3000.0
-  - raosim/pumps.py:44 `battery_structural_margin` = 1.2
-  - raosim/pumps.py:38 `inverter_power_density` = 15000.0
-  - raosim/mdo/schema.py:640 `pump_specific_mass` = 2500.0
-  - raosim/mdo/schema.py:628 `eta_inverter` = 0.96
-  - raosim/pumps.py:51 `structural_fos` = 1.5
-  - raosim/pumps.py:39 `battery_energy_density` = 900000.0
-  - raosim/mdo/schema.py:641 `battery_energy_density` = 900000.0
-  - raosim/electric_technology.py:299 `battery_discharge_efficiency` = 0.95
-  - raosim/mdo/schema.py:610 `pump_speed_rpm` = 30000.0
-  - raosim/mdo/schema.py:607 `pump_eta_peak` = 0.82
-  - raosim/electric_technology.py:332 `inverter_efficiency` = 0.85
-  - raosim/mdo/schema.py:608 `pump_ns_opt` = 0.55
-  - raosim/electric_technology.py:297 `battery_energy_density` = 900000.0
-  - raosim/pumps.py:41 `battery_discharge_efficiency` = 0.95
-  - raosim/mdo/schema.py:612 `pump_tip_speed_max` = 400.0
-  - raosim/electric_technology.py:303 `inverter_efficiency` = 0.96
-  - raosim/electric_technology.py:302 `inverter_power_density` = 15000.0
-  - raosim/mdo/schema.py:643 `battery_structural_margin` = 1.2
-  - raosim/electric_technology.py:300 `motor_power_density` = 2500.0
-  - raosim/pumps.py:36 `inverter_efficiency` = 0.96
-  - raosim/electric_technology.py:301 `motor_efficiency` = 0.9
-  - raosim/mdo/schema.py:642 `battery_power_density` = 3000.0
-  - raosim/mdo/schema.py:609 `pump_eta_ns_width` = 1.5
-  - raosim/mdo/schema.py:631 `inverter_power_density` = 15000.0
-  - raosim/pumps.py:37 `motor_power_density` = 2500.0
+  - src/lrekit/components/pump/design.py:47 `auto_current_target` = 250.0
+  - src/lrekit/optimization/schema.py:627 `eta_motor` = 0.9
+  - src/lrekit/components/pump/design.py:53 `seal_face_speed_limit` = 35.0
+  - src/lrekit/components/electrical/technology.py:298 `battery_structural_margin` = 1.2
+  - src/lrekit/components/electrical/technology.py:296 `battery_power_density` = 3000.0
+  - src/lrekit/components/pump/design.py:44 `battery_structural_margin` = 1.2
+  - src/lrekit/components/pump/design.py:38 `inverter_power_density` = 15000.0
+  - src/lrekit/optimization/schema.py:640 `pump_specific_mass` = 2500.0
+  - src/lrekit/optimization/schema.py:628 `eta_inverter` = 0.96
+  - src/lrekit/components/pump/design.py:51 `structural_fos` = 1.5
+  - src/lrekit/components/pump/design.py:39 `battery_energy_density` = 900000.0
+  - src/lrekit/optimization/schema.py:641 `battery_energy_density` = 900000.0
+  - src/lrekit/components/electrical/technology.py:299 `battery_discharge_efficiency` = 0.95
+  - src/lrekit/optimization/schema.py:610 `pump_speed_rpm` = 30000.0
+  - src/lrekit/optimization/schema.py:607 `pump_eta_peak` = 0.82
+  - src/lrekit/components/electrical/technology.py:332 `inverter_efficiency` = 0.85
+  - src/lrekit/optimization/schema.py:608 `pump_ns_opt` = 0.55
+  - src/lrekit/components/electrical/technology.py:297 `battery_energy_density` = 900000.0
+  - src/lrekit/components/pump/design.py:41 `battery_discharge_efficiency` = 0.95
+  - src/lrekit/optimization/schema.py:612 `pump_tip_speed_max` = 400.0
+  - src/lrekit/components/electrical/technology.py:303 `inverter_efficiency` = 0.96
+  - src/lrekit/components/electrical/technology.py:302 `inverter_power_density` = 15000.0
+  - src/lrekit/optimization/schema.py:643 `battery_structural_margin` = 1.2
+  - src/lrekit/components/electrical/technology.py:300 `motor_power_density` = 2500.0
+  - src/lrekit/components/pump/design.py:36 `inverter_efficiency` = 0.96
+  - src/lrekit/components/electrical/technology.py:301 `motor_efficiency` = 0.9
+  - src/lrekit/optimization/schema.py:642 `battery_power_density` = 3000.0
+  - src/lrekit/optimization/schema.py:609 `pump_eta_ns_width` = 1.5
+  - src/lrekit/optimization/schema.py:631 `inverter_power_density` = 15000.0
+  - src/lrekit/components/pump/design.py:37 `motor_power_density` = 2500.0

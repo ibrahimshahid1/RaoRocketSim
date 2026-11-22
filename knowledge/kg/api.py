@@ -477,6 +477,13 @@ def find_scientific_basis(software_ref: str) -> dict:
         comps = [g.nodes[software_ref]]
     else:
         ref = software_ref.replace("\\", "/")
+        from .repository_layout import Layout
+        layout = Layout(REPO_ROOT)
+        if ".py" in ref:
+            file, *symbol = ref.split(":", 1)
+            ref = ":".join([layout.path(file), *symbol])
+        else:
+            ref = layout.qualname(ref)
         for n in _software().values():
             if n["file"] == ref or n["qualname"].endswith(ref) or ref in n["qualname"] or n["file"].endswith(ref.split(":")[0]) and (":" not in ref or ref.split(":")[1] in n["qualname"]):
                 comps.append(n)

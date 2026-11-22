@@ -1,0 +1,543 @@
+\chapter{Remaining Work and Program Goals}\label{ch:remaining-work}
+
+\lead{What the program is trying to achieve now, and what is still needed to get there.}
+
+This chapter consolidates the open work recorded across the repository into one register. Its sources are the plans in \code{docs/program/}, the dated audits in \code{docs/audits/}, the subsystem documents in \code{docs/subsystems/}, the ``Known limitations'' and ``Remaining work'' sections of \code{README.md}, the knowledge-system reports in \code{knowledge/reports/}, the defect sections of Chapters~\ref{ch:s01-s02} to~\ref{ch:builds}, and two documents that are not stored in the repository:
+\begin{itemize}
+  \item \textbf{Rev.}: \emph{LREKit Consolidated Technical Review and Forward Program}, dated 7 October 2026 and examining commit \code{6c04d92}. Page numbers refer to its 65-page revision exported on 8 October, which records the owner's decisions of 7 October.
+  \item \textbf{Plan}: \emph{From Engine Design to Experimental Feedback}, the component data and research plan of 3 November 2026 (17 pages, compiled at \code{output/pdf/LREKit_Component_Data_and_Research_Plan.pdf}). Its recommendations are also in \code{docs/program/COMPONENT_DATA_AND_MULTIFIDELITY_PLAN_2026-11-03.md}, whose status is PROPOSED with no executable code.
+\end{itemize}
+The register was compiled on 9 November 2026 against commit \code{d636d85} plus the uncommitted working tree. Items marked ``verified'' were re-checked in the code for this chapter. The same register, with the same identifiers and with links to every source document, is \code{docs/program/REMAINING_WORK_AND_GOALS.md}.
+
+\caution{Nothing in this chapter is a hardware qualification record. Every contour is stamped \code{hardware_qualified = False}. The default physical-release report is BLOCKED, with all 17 external-evidence requirements of \code{raosim/release_readiness.py} missing (ten for the engine, two for the injector, two for the regenerative system and three for the pumps). Where a document and the code disagree, the code wins, and the register says so.}
+
+\textbf{Priorities.} \textbf{P0} blocks trust in a result today: a crash without a record, a false ``feasible'', a silent substitution of physics, or a legal or release blocker. \textbf{P1} is near-term work inside the owner's first stage, credibility. \textbf{P2} is later work: after the credibility gate, on the research track, or blocked on literature or hardware.
+
+\textbf{Identifiers.} Items are named \texttt{RW-}\emph{group}\texttt{-}\emph{nn}. The groups are the pipeline stages S01--S14 and the cross-cutting groups X01--X08 of Chapter~\ref{ch:cli-dataflow}, plus PRG for program-level release and governance work. An identifier is never reused; a closed item moves to Table~\ref{tab:rw-closed}.
+
+% Local table font: footnotesize with code spans inheriting the size (scoped to each table group).
+\newcommand{\rwsmall}{\footnotesize\renewcommand{\code}[1]{\path{##1}}}
+
+% ---------------------------------------------------------------------------
+\section{Overall goals now}\label{sec:rw-goals}
+
+The order of Table~\ref{tab:rw-goals} is the owner's. On 7 October the owner set the order of work as credibility first, then computer-aided design (CAD) with a simulated article, then hardware (Rev.\ \S3 p.\,7 and \S8 p.\,22). Goals G1--G3 make up that first stage.
+
+{\rwsmall
+\begin{longtable}{@{}P{0.6cm}P{3.0cm}P{8.0cm}P{4.3cm}@{}}
+\caption{Program goals in the owner's order.}\label{tab:rw-goals}\\
+\toprule
+\# & Goal & What ``done'' means & Source \\
+\midrule
+\endfirsthead
+\toprule
+\# & Goal & What ``done'' means & Source \\
+\midrule
+\endhead
+G1 & Trustworthy, recoverable runs & Every request ends in a complete package or in a typed refusal that names the blocking part, model or domain. No crash without a summary, no silent substitution, no false ``feasible''. & Readiness plan \S4 and M0; Rev.\ \S11.7 p.\,45 \\
+G2 & One configuration-controlled engine definition & One \code{configuration_id} binds solve, CAD, mass and bill of materials (BOM). The analyzed wall equals the exported wall within a stated tolerance. Every mass is measured from built geometry or is \code{None} with a reason. & Rev.\ \S8.1 P1 p.\,23; \code{COMPLETION_PLAN.md} \S13; delivery backlog D05 \\
+G3 & Credibility release (owner's Stage 1) & Each output carries its model, source basis, validity domain, numerical uncertainty, validation discrepancy and evidence state. The scorecard of Rev.\ \S8.3 passes. The release is tagged and archived privately until licensing is settled. & Rev.\ \S3 p.\,7, \S8.1 pp.\,23--24, \S8.3 pp.\,26--27 \\
+G4 & Simulated article (Stage 2) & The chamber and nozzle assembly, then the injector, then the large pump parts are modelled to L4 from one configuration and ported to OpenFOAM and to a finite-element code, with signed deltas against the low-order models. & Rev.\ \S3 decision 2 p.\,7, \S8.1 C1--C4 pp.\,24--25, \S11.5 p.\,43 \\
+G5 & Experimental data that changes the design & One real pintle dataset, one reproducible hydraulic model and one engine comparison that shows how the model changes sizing and coupled results; then the computational fluid dynamics (CFD) round trip. & Plan p.\,1 and \S8; Rev.\ decision 3 \\
+G6 & Hardware loop (Stage 3) & A water cold-flow pintle first, then a pump water bench, then a chamber and nozzle article only under a test facility's own approvals. Measurements enter the same comparison records as published data. & Rev.\ \S8.1 H1--H4 pp.\,25--26; readiness plan M3--M5 \\
+G7 & Breadth by declared domains & ``Any thrust class'' means any request answered or refused with reasons, never a scale factor. The 500\,N class is explained before more is built on it. & Rev.\ decision 5 p.\,7, \S8.2 p.\,26 \\
+G8 & Research questions on the gated tool & RQ1--RQ4 run on the released tool and cite its configuration hashes. & Rev.\ \S8.1 R p.\,26; \code{COMPLETION_PLAN.md} \S7 \\
+G9 & Public release, later & License, removal of copyrighted files from history, an export-control determination and citation metadata are in place before anything is published. & Rev.\ decision 4 p.\,7, \S13 pp.\,48--49 \\
+\bottomrule
+\end{longtable}
+}
+
+\decision{\textbf{Standing constraint.} The physical-release gate stays intact across all nine goals. No output claims fabrication release, hardware qualification or fidelity level L5 (\code{docs/architecture/PHYSICAL_RELEASE_GATES.md}; Rev.\ \S11.7). Passing every software gate means a result cleared internal preliminary screening, nothing more.}
+
+% ---------------------------------------------------------------------------
+\section{What changed since the October review}\label{sec:rw-closed}
+
+Several items that the review listed as open at \code{6c04d92} were repaired on 16 and 17 October. Table~\ref{tab:rw-closed} records them so that the register below does not repeat them. Each was checked in the code or in the cited record for this chapter.
+
+{\rwsmall
+\begin{longtable}{@{}P{5.0cm}P{6.2cm}P{4.9cm}@{}}
+\caption{Items closed since the 7 October review.}\label{tab:rw-closed}\\
+\toprule
+Former item & Closed by & Evidence \\
+\midrule
+\endfirsthead
+\toprule
+Former item & Closed by & Evidence \\
+\midrule
+\endhead
+Rev.\ \S7 item 26: \code{python -m raosim} discarded the return code & \code{raise SystemExit(main())} & \code{raosim/__main__.py}; \code{tests/test_cli_module_exit.py} \\
+Rev.\ \S7 item 7: \code{--burn-time} defaulted to 10\,s and reached the MDO & Default \code{None}: 10\,s for traditional pump sizing, 120\,s kept by the multidisciplinary design optimization (MDO) & \code{raosim/run_nozzle.py:3142} \\
+Rev.\ \S7 items 15, 16: no multi-start; no independent Karush--Kuhn--Tucker (KKT) check & \code{n_starts} with scrambled Sobol starts; \code{kkt_check} now gates \code{success} & \code{raosim/mdo/nlp.py:404}, \code{:452} \\
+Rev.\ \S7 item 27: one bad iterate aborts the solve; the Isp sweep is all-or-nothing & \code{_GuardedProblem}; per-floor isolation in \code{pareto_frontier} & \code{raosim/mdo/nlp.py:593}; the 225\,s failure did not reproduce on 16 Oct \\
+Rev.\ \S7 item 28, first half: two electric-drive constant sets & One registry read by both pipelines; the basis of its default set stays open (RW-S09-04) & \code{raosim/electric_technology.py} \\
+Rev.\ \S7 items 21, 22 (part), 25 (part): contradictory MOC status blocks; stale R3 status; stale session prompt; empty root report & Supersession note in the remediation record; R3 clarified 15 Oct; files moved to \code{docs/archive/} & Chapter~\ref{ch:docs-inventory} \\
+Rev.\ \S10.4 item 8: standards as sources & Eight \code{StandardSource} records & \code{knowledge/reports/KNOWLEDGE_GRAPH_COMPLETION_2026-10-16.md} \\
+Delivery backlog D01, D02, D26, part of D03/D04 & Input and execution integrity work of 9 September & \code{docs/audits/INPUT_EXECUTION_INTEGRITY_2026-09-09.md} \\
+\bottomrule
+\end{longtable}
+}
+
+% ---------------------------------------------------------------------------
+\section{Open-work register}\label{sec:rw-register}
+
+The register holds 148 items: 13 at P0, 66 at P1 and 69 at P2. Items reported by more than one source are merged, and every source is kept in the evidence column. Where two sources disagree, the item says ``conflict'' and points to Table~\ref{tab:rw-conflicts}. Table~\ref{tab:rw-key} expands the short names used in the evidence column.
+
+{\rwsmall
+\begin{longtable}{@{}P{1.3cm}P{14.8cm}@{}}
+\caption{Short names used in the evidence column.}\label{tab:rw-key}\\
+\toprule
+Key & Document \\
+\midrule
+\endfirsthead
+\toprule
+Key & Document \\
+\midrule
+\endhead
+Rev. & Consolidated technical review, 7 Oct 2026 (65-page revision) \\
+Plan & Component data and research plan, 3 Nov 2026 \\
+CP & \code{docs/program/COMPLETION_PLAN.md} (tracks A--G) \\
+RP, DB & \code{docs/program/LREKIT_READINESS_AND_DELIVERY_PLAN_2026-09-05.md} (M0--M6); \code{LREKIT_DELIVERY_BACKLOG_2026-09-05.md} (D01--D26) \\
+IP, GP, RR & \code{docs/program/INTEGRATION_PROGRAM_2026-08-22.md}; \code{GENERALIZATION_PLAN_THRUST_PROPELLANT_FEED.md}; \code{ROADMAP_REQUIREMENTS_TO_PARTS.md} \\
+MI, IE & \code{docs/audits/MDO_ISSUES_AND_WORKFLOW_BLOCKERS_2026-10-16.md}; \code{INPUT_EXECUTION_INTEGRITY_2026-09-09.md} \\
+PA, LA & \code{docs/audits/LREKIT_PUMP_AUDIT_2026-09-05.md}; \code{LREKIT_LITERATURE_AUDIT_2026-09-05.md} \\
+MG, MR & \code{docs/subsystems/S13-engine-mdo-and-requirements/MDO_GUIDE.md}; \code{docs/subsystems/S06-rao-moc-bvp-contour/MOC_MARCH_TOPOLOGY_REMEDIATION_2026-09-21.md} \\
+DF & \code{docs/architecture/DATAFLOW.md} \S10 (documentation against code) \\
+LR, KC & \code{knowledge/reports/latest_report.md} (4 Nov); \code{knowledge/reports/KNOWLEDGE_GRAPH_COMPLETION_2026-10-16.md} \\
+Ch.\ $n$ & Chapter $n$ of this guide, where the item was checked in the code on 5 November \\
+v. & Verified in the code or with \code{git} for this chapter on 9 November \\
+\bottomrule
+\end{longtable}
+}
+
+% Register table macro: five columns, compact.
+\newcommand{\rwhead}{\toprule ID & Item and why it matters & Evidence & Depends on & Pri \\ \midrule}
+\newenvironment{rwtable}[2]{%
+  \par\needspace{4\baselineskip}\begingroup\footnotesize\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.06}%
+  \renewcommand{\code}[1]{\path{##1}}%
+  \begin{longtable}{@{}>{\raggedright\arraybackslash}p{1.85cm}P{7.95cm}>{\scriptsize\raggedright\arraybackslash}p{3.8cm}>{\scriptsize\raggedright\arraybackslash}p{1.75cm}P{0.5cm}@{}}
+  \caption{#1}\label{#2}\\ \rwhead \endfirsthead \rwhead \endhead \bottomrule \endlastfoot}%
+  {\end{longtable}\endgroup}
+
+\subsection{PRG: program, release and governance}
+
+\begin{rwtable}{Register: program, release and governance.}{tab:rw-prg}
+RW-PRG-01 & Settle the working tree: 18 modified \code{raosim/} modules plus the untracked \code{raosim/rao_top_chart.py}, \code{raosim/thermal_correlations.py} and the new \code{raosim/data/} tree (\code{catalog/}, \code{tools/}, \code{README.md}). No commit reproduces the CLI as it runs today, and committing \code{nozzle_geometry.py} alone breaks its import. & v.\ (\code{git status}); Ch.~\ref{ch:builds} & RW-S05-01 & P0 \\
+RW-PRG-02 & Untrack the 21 PDFs still tracked under \code{propulsion_texts/} and purge them from history before any release. Copyrighted texts are a release blocker. \emph{Conflict C2.} & v.\ (\code{git ls-files}); Rev.\ \S7 it.\,1 p.\,19, \S13 p.\,48 & D-05 & P0 \\
+RW-PRG-03 & Close public exposure while the project is personal. The review reports the repository as public and \code{lrekit} 0.1.0 and 0.1.1 on PyPI without a license, the latter with the NASA-derived port; it recommends a private repository and deletion of both releases. Not re-checked here. \emph{Conflict C1.} & Rev.\ \S7 it.\,2--3 p.\,19, \S13 pp.\,48--49 & D-05 & P0 \\
+RW-PRG-04 & License and NASA Open Source Agreement (NOSA) 1.3 obligations: no \code{LICENSE} file, no license field; \code{raosim/nasa_moc.py} lacks the agreement text, the NASA notice and a dated modification record. Required before any publication (then P0); the owner deferred the choice. & v.; Rev.\ \S13 p.\,48; \code{pypi_release.md}; Ch.~\ref{ch:crosscutting-a} & D-06 & P1 \\
+RW-PRG-05 & Write \code{docs/CREDIBILITY_TARGET_V1.md}, naming the promoted path and the claims V1 makes. It scopes every later provenance and validation task. & Rev.\ \S8.1 P1 p.\,23; file absent (v.) & D-01 & P1 \\
+RW-PRG-06 & Obtain an export-control determination before Stage 2 outputs (process routes, tolerances, inspection plans) reach any collaborator, reviewer or the public; keep the manufacturing layer separable from the modelling core. & Rev.\ \S12 p.\,47, \S13 p.\,49 & D-05, D-14 & P1 \\
+RW-PRG-07 & Reconcile plan trackers and keep one release matrix (D25). \code{COMPLETION_PLAN.md} was last updated on 26 August; GP \S6 item 1 calls the CEA sampler run outstanding (CP B1: done); MG \S9 item 13 calls the chart tables unchanged; the JAX plan head is dated 15 June; the MDO output contract cites superseded schema versions. Agents schedule from these documents. \emph{Conflicts C3, C6.} & DB D25; Ch.~\ref{ch:s13-s14} & -- & P1 \\
+RW-PRG-08 & Land changes as scoped commits and keep regenerated knowledge artifacts out of code commits; \code{6c04d92} buried a 2,185-line fix in 206,266 lines. & Rev.\ \S7 it.\,10 p.\,20, \S8.1 P0 & D-08 & P1 \\
+RW-PRG-09 & Package the credibility release: a tagged release archived privately, then \code{CITATION.cff} (absent) and a persistent identifier at public release. & Rev.\ \S8.1 P6 p.\,24, \S13 p.\,49 & G3 & P2 \\
+RW-PRG-10 & Secure the outside inputs: an external technical reviewer, a shop capability profile and CFD compute. & Rev.\ \S12 pp.\,46--48 & D-07, D-09 & P2 \\
+\end{rwtable}
+
+\subsection{S01--S02: entry, dispatch, inputs and contracts}
+
+\begin{rwtable}{Register: stages S01 and S02.}{tab:rw-s01}
+RW-S01-01 & Turn stage exceptions into typed component outcomes with a written \code{summary.json}. The chart \code{ValueError} in \code{_solve} and the unguarded \code{size_electric_pumps} call (\code{run_nozzle.py:6212}) end in a traceback, exit status 1 and no summary. This is the review's P0 containment step for the 500\,N crash. & v.; Ch.~\ref{ch:s01-s02}; Rev.\ \S11.4 fix 1 p.\,43; IE ``Next work''; DB D04 & -- & P0 \\
+RW-S01-02 & Build one application service for flag runner, job verbs and API. \code{run_nozzle.main} is one function of more than 4,100 lines; the flag dialect does not compile to \code{EngineJobSpec} and names the same concepts differently. & Ch.~\ref{ch:s01-s02}; RP \S4; DB D03, D24 & RW-S14-01 & P1 \\
+RW-S01-03 & Remove README drift: the CLI section omits the job verbs, \code{export-openfoam-spray} and the MDO flags; the Outputs section describes folders the runner never writes; the test status is dated 11 July. & DF rows 1--3, 5, 8, 9, 11, 12; \code{README.md} & -- & P1 \\
+RW-S01-04 & Front-door defects: \code{-i --requirements} ignores the menu choice; \code{_prompt} keeps the default on a parse failure and takes bare SI values. & Ch.~\ref{ch:s01-s02} & RW-S02-01 & P2 \\
+RW-S01-05 & Version drift: \code{pyproject.toml} says 0.1.1, \code{raosim.__version__} says 0.1.0. & v. & -- & P2 \\
+RW-S02-01 & Extend the unit policy beyond the job dialect. Flags, argument files and both interviews take bare SI floats, so the factor-of-1000 error that \code{raosim/units.py} exists to prevent remains possible. & Ch.~\ref{ch:s01-s02} & -- & P1 \\
+RW-S02-02 & Declare PyYAML: YAML is the documented job format, but \code{pyproject.toml} does not list it. & v. & -- & P1 \\
+RW-S02-03 & Let unified jobs select an electric technology set and the Son valve; \code{derived} pump-speed intent is still refused. & MI \S4; IE & RW-S09-04 & P1 \\
+RW-S02-04 & Guided output is not a complete job: no \code{output_policy}, no run record, no \code{models} section. & Ch.~\ref{ch:s01-s02} & -- & P2 \\
+RW-S02-05 & Most targets are post-solve checks; only the delivered-Isp floor reaches the optimizer; qualification duration has unknown coverage. & IE table & RW-S13-04 & P2 \\
+RW-S02-06 & Manufacturing limits are advisory and partial (notes only; aspect ratio not checked against the search box; Wadel citation incomplete). & Ch.~\ref{ch:s01-s02} & RW-S11-06 & P2 \\
+RW-S02-07 & Add versioned component-data bindings to the job contract (\code{component_models}, \code{evidence_inputs}, \code{simulation_assessment}); the parser rejects unknown keys today. & Plan \S6 p.\,10 & RW-S14-02 & P2 \\
+\end{rwtable}
+
+\subsection{S03--S04: thermochemistry, performance and off-design}
+
+\begin{rwtable}{Register: stages S03 and S04.}{tab:rw-s03}
+RW-S03-01 & The built-in constant-$\gamma$ table ignores the requested O/F and departs from RocketCEA: $\gamma$ is 6--9\,\% high for every pair and the LOX/LH2 molar mass 22.7\,\% low, without a warning. & Ch.~\ref{ch:s03-s04} (check run) & -- & P1 \\
+RW-S03-02 & Fix the Chemical Equilibrium with Applications (CEA) adapter: an efficiency override discards the RocketCEA $c^*$ (\code{run_nozzle.py:4213-4223}); \code{cea_frozen} labels a call made with \code{frozen=0}; card names are not mapped (\code{LCH4} falls back silently); provenance is not persisted. & Ch.~\ref{ch:s03-s04} & -- & P1 \\
+RW-S03-03 & Check and label efficiency inputs: \code{--eta-cstar 0} raises an uncaught \code{ZeroDivisionError} and values above 1 pass; a supplied efficiency is shown beside delivered performance as if predicted. Merged from three sources. & Ch.~\ref{ch:s03-s04}; Rev.\ \S7 it.\,24 p.\,21; IP Phase 0c & -- & P1 \\
+RW-S03-04 & N2O/Ethanol: the MDO catalog is blocked on the \code{N2O} versus \code{N2O_nbp} inlet state while the traditional path accepts the pair. & \code{CEA_H1_HOST_EVIDENCE}; Ch.~\ref{ch:s03-s04} & D-11 & P2 \\
+RW-S03-05 & Frozen variable-$c_p$ path: five promotion gates open; no in-repository property data; manufactured tables are accepted for engine runs without a warning. & \code{FROZEN_VARIABLE_CP_EXPANSION.md}; README work 5 & -- & P2 \\
+RW-S03-06 & Re-evaluate the final optimum on the authoritative backends (CP D3, RR R5b) and add Cantera as an independent implementation. & CP D3; Rev.\ \S9.5 p.\,31 & RW-S14-02 & P1 \\
+RW-S03-07 & Equilibrium-chemistry option (F4) and the frozen-versus-equilibrium studies (E5); deferred to after the credibility release. & CP F4, E5; Rev.\ \S8.4 p.\,27 & G3 & P2 \\
+RW-S03-08 & Predict combustion efficiency. $\eta_{c^*}$ is an input; at 13\,kN the atomization screen gives about 0.577 against the assumed 0.975. & IP \S2.2; MI it.\,13; Ch.~\ref{ch:builds} & L7 & P2 \\
+RW-S04-01 & Thrust is blind to the contour ($C_F = \eta_{C_F} C_{F,\mathrm{ideal}}$), so contour changes cannot move thrust in the optimizer. & Rev.\ \S7 it.\,8 p.\,20; MI it.\,9 & RW-S06-06 & P1 \\
+RW-S04-02 & Record a separation verdict at the design ambient; today the screen exists only as a figure at four fixed ambients. & Ch.~\ref{ch:s03-s04} & -- & P1 \\
+RW-S04-03 & Separation beyond free-shock onset (F3); side loads stay unavailable (F8); the registry entry cites criteria other than the four implemented. & CP F3, F8; Ch.~\ref{ch:s03-s04} & G3 & P2 \\
+RW-S04-04 & Compute the throat Reynolds number and add the SP-8120 small-nozzle regime gate (F1a) before feeding the boundary-layer displacement back into the wall (F1). & IP \S0, Phases 0a, 2; CP F1 & -- & P1 \\
+RW-S04-05 & Remove silent numerical fallbacks: \code{mach_from_area_ratio} returns its last iterate without a flag; a failed wall-pressure inversion becomes $M=1$. & Ch.~\ref{ch:s03-s04} & -- & P1 \\
+RW-S04-06 & Register the atmosphere, the wall-pressure screen, the built-in propellant table and the efficiency-split convention as models; \code{gas_dynamics.py} cites an unidentified document. & Ch.~\ref{ch:s03-s04} & RW-X06-03 & P1 \\
+RW-S04-07 & Atmosphere: a single lapse rate over 20--47\,km gives a 27\,K step at 47\,km; requirements accept any altitude, jobs stop at 32\,km. & Ch.~\ref{ch:s03-s04} & -- & P2 \\
+RW-S04-08 & The design ambient is a ratio (\code{--pa-over-p0 0.01}), so the default run is not a sea-level design. & Ch.~\ref{ch:s03-s04} & -- & P2 \\
+\end{rwtable}
+
+\subsection{S05--S06: nozzle geometry and the Rao/MOC contour}
+
+\begin{rwtable}{Register: stages S05 and S06.}{tab:rw-s05}
+RW-S05-01 & The uncommitted SP-125 chart re-digitization makes \code{lookup_angles} raise outside $5 \le \varepsilon \le 50$ and 60--100\,\% length. The shipped sea-level and movable-pintle examples ($\varepsilon = 4.524$) fail with a traceback; \code{--allow-chart-extrapolation} is unreachable; the documented MDO optimum at $\varepsilon = 4.0$ lies outside the domain. The default path cannot run its own benchmark. \emph{Conflict C3.} & v.\ (\code{nozzle_geometry.py:53-68}); Ch.~\ref{ch:builds}, \ref{ch:s05-s06}; DF row 10 & D-02 & P0 \\
+RW-S05-02 & Re-baseline what the superseded angles produced: archived B\'ezier builds, the test-prompt snapshot, the 13\,kN optimum (26.227\,kg at $\varepsilon = 4.0$), tests quoting $30^\circ/15.5^\circ$, the B5 seed identifier. & Ch.~\ref{ch:builds}, \ref{ch:crosscutting-a}, \ref{ch:crosscutting-b}; MI \S4 & RW-S05-01 & P1 \\
+RW-S05-03 & Align maturity labels: \code{_TrustedTopSolution} reports \code{benchmark_validated} while the design status and registry say preliminary; the registry cites SP-8120 for a chart digitized from SP-125. & Ch.~\ref{ch:s05-s06}; LR & -- & P1 \\
+RW-S05-04 & The CLI wall-offset gate is vacuous: no \code{offset_distance} is passed, so the self-intersection check passes without running. & Ch.~\ref{ch:s05-s06} & -- & P1 \\
+RW-S05-05 & Use one cone-length helper: only the CLI B\'ezier uses the rounded-throat reference (1.2\,\% shorter wall at $\varepsilon = 4.524$ elsewhere). & Ch.~\ref{ch:s05-s06} & -- & P1 \\
+RW-S05-06 & The Hall discharge coefficient is reported but not applied; \code{--cd-target} changes only $R_u$. & Ch.~\ref{ch:s05-s06} & -- & P2 \\
+RW-S05-07 & Generic chamber defaults ($L^* = 1$\,m, contraction 2.5, $45^\circ$); refuse these placeholders for hardware-oriented jobs; Tier-2 shoulder sizing is not implemented. & Ch.~\ref{ch:s05-s06}; IP Phase 0b & -- & P2 \\
+RW-S05-08 & The chart interpolation is bilinear, not $C^1$; derivatives switch at the knot where the optimum sat. & MI it.\,7 & RW-S05-01 & P2 \\
+RW-S06-01 & The default thrust-optimized parabolic (TOP) wall carries an internal compression coalescence, which a shock-free method-of-characteristics (MOC) net cannot validate; it needs a shock-capturing Euler or Reynolds-averaged Navier--Stokes (RANS) check. The quoted location is stale under the new chart. & MR; Rev.\ \S7 it.\,8, \S9.6 p.\,33; Ch.~\ref{ch:s05-s06} & RW-X02-01 & P1 \\
+RW-S06-02 & B3 qualification: the coupled-crossing audit and every context outside the one fixed reference remain open. & CP B3; MG \S9 it.\,11 & -- & P1 \\
+RW-S06-03 & B5 covers one slice ($\gamma = 1.4$, $p_a/p_0 = 0.01$; 25 of 65 knots unconverged); its seed identifier and $\varepsilon$ axis predate the new chart, so regeneration would raise. & CP B5; Ch.~\ref{ch:s05-s06} & RW-S05-01 & P1 \\
+RW-S06-04 & MOC open items: wall construction hard-codes \code{'area_ratio'}; \code{build_kernel} fails above 101 points; no $M^*/M$ flag; dead and clamping code; no JAX bounded march; full-net promotion awaits a second oracle (M4Perfect). & MR STATUS; Rev.\ \S7 it.\,23 p.\,21 & L12 & P2 \\
+RW-S06-05 & \code{moc_bounded.py} imports 12 private functions from \code{nasa_moc.py}, an implicit internal API. & Rev.\ \S7 it.\,20 & -- & P2 \\
+RW-S06-06 & No exact Rao provider in the MDO loop; the boundary-value problem (BVP) contour refuses manufacturing CAD in MDO export (\code{run_nozzle.py:1877-1882}); the exported BVP wall uses a cubic throat bridge. & \code{IMPLICIT_RAO_JAX_MDO_ARCHITECTURE.md}; MI \S2.5 & RW-S06-02 & P2 \\
+RW-S06-07 & Total design derivatives (J6 v2, F7): sensitivities stop at the control surface; the start line is frozen. & README work 2--3; CP F7 & RW-S06-06 & P2 \\
+RW-S06-08 & Rao-cliff research (track E): continuation, $\sigma_{\min}$ and $\lambda_{\min}$ diagnostics with a mesh gate, RQ3, RQ4. & CP \S7 & G3, L13 & P2 \\
+RW-S06-09 & Define the evidence for release-level promotion (\code{BENCHMARK_VALIDATED_AT_RELEASE} is \code{False}); no de-circularized J5 record exists. & README work 1; Ch.~\ref{ch:crosscutting-b} & RW-S05-02 & P2 \\
+RW-S06-10 & Rewrite-plan deprecations are absent; unvalidated \code{coupled}/\code{legacy} wall methods remain library defaults. & Ch.~\ref{ch:s05-s06}; \code{REWRITE_PLAN.md} & -- & P2 \\
+RW-S06-11 & Variable-$\gamma$ frozen MOC (F2); reacting MOC deferred to after the credibility release. & README lim.\ 2; CP F2; Rev.\ \S8.4 & G3 & P2 \\
+\end{rwtable}
+
+\subsection{S07: regenerative wall, cooling and wall structures}
+
+\begin{rwtable}{Register: stage S07.}{tab:rw-s07}
+RW-S07-01 & Thermal verification on the optimum: a signed 1-D versus quasi-2-D land hot-spot delta (T1), then a Betti-style conjugate heat transfer (CHT) pass as a computational oracle (T3). The scorecard row reads ``not run''; the active coking and wall-temperature rows will tighten. & Rev.\ \S8.3 p.\,27, \S9.6; CP D1, D2, risk 4 & RW-S14-01 & P1 \\
+RW-S07-02 & The coolant correlation differs from its source: code $0.027\,\mathrm{Re}^{0.8}\mathrm{Pr}^{1/3}$, SP-125 Eq.\ 4-23 $C_1\mathrm{Re}^{0.8}\mathrm{Pr}^{0.4}$ with $C_1 = 0.0214$ for RP-1; the code's $h_c$ is 7--26\,\% higher. & KC (P5 review); \code{LITERATURE_REQUESTS.md} & D-13, L9 & P1 \\
+RW-S07-03 & Bartz: viscosity coefficient 0.745\,\% high, two wrong SP-125 locators, validity limits not enforced; the orphan \code{thermal_correlations.py} holds the exact value. & KC; Ch.~\ref{ch:crosscutting-a} & RW-X08-01 & P1 \\
+RW-S07-04 & The re-evaluation path credits curvature enhancement by default, which SP-8087 says not to credit without calibration. & Ch.~\ref{ch:s07} D1 & -- & P1 \\
+RW-S07-05 & The coupled march runs a fixed number of relaxed passes and never computes a residual. & Ch.~\ref{ch:s07} D2 & -- & P1 \\
+RW-S07-06 & Unknown coolants silently become RP-1: \code{--coolant} has no choices and the property lookup falls back to the RP-1 row (density, $c_p$, 700\,K coking limit, 300\,K inlet). & Ch.~\ref{ch:s07} D4 & -- & P0 \\
+RW-S07-07 & Silent conventions: the spray loop ignores \code{--cooling-fraction}; \code{--size-wall} remaps any objective except \code{min_dp} to \code{min_mass}; the manifold network uses $\mu = 10^{-3}$\,Pa\,s for every coolant. & Ch.~\ref{ch:s07} D5, D8, D9 & -- & P1 \\
+RW-S07-08 & Film cooling carries 18\,\% of the fuel at the 13\,kN optimum, but no film-injector hardware exists in either pipeline and nonzero-film thermal parity is unavailable. & MI it.\,16; MG \S9 it.\,8; RR R5a & L9 & P1 \\
+RW-S07-09 & Liner buckling stays a post-solve gate; the implicit root is not robust at the valid-box corners, and SP-8068 is not held. & CP A3; MI it.\,6 & L3 & P1 \\
+RW-S07-10 & \code{regenerative_cooling_3d} halves the coolant temperature rise (65.6\,K against 135.7\,K); test-only, but a test may pass because of it. & Ch.~\ref{ch:s07} D3 & -- & P2 \\
+RW-S07-11 & Two jacket treatments (factor 1.5 against SP-8087's 1.32; a thin-shell check only in one path). & Ch.~\ref{ch:s07} D7 & -- & P2 \\
+RW-S07-12 & Labels and figures: cross-section ignores the sized depth; eq.\ 4-29 uses $0.9\,S_c$ without a source; mislabelled equation numbers. & Ch.~\ref{ch:s07} D6, D10, D11 & -- & P2 \\
+RW-S07-13 & Low-cycle-fatigue (LCF) life is unavailable; single-point material data; no plasticity or creep; deferred past the credibility release. & CP A4; Rev.\ \S8.4 & G3 & P2 \\
+RW-S07-14 & Missing thermofluid physics: heat-transfer deterioration (HTD) with an enthalpy march, radiation and soot, calibrated manifold losses, turbulent correlations, cryogenic CHF, validation datasets. & \code{thermofluid_literature_provenance.md} & G3 & P2 \\
+RW-S07-15 & CoolProp coolant surfaces and a live HTD constraint; methane and hydrogen MDO runs stop at the coverage preflight. & GP \S7; MI it.\,12 & D-01 & P2 \\
+\end{rwtable}
+
+\subsection{S08--S10: injector, pumps, interface and mass}
+
+\begin{rwtable}{Register: stages S08, S09 and S10.}{tab:rw-s08}
+RW-S08-01 & Pintle pilot Stage 0: one component contract, data template and protocol; separate geometry adapters for the conical seat valve and the Son radial gap; one test matrix (0.3/1/2 against 0.3/1/3/4\,bar) and one cavitation-index convention; locate the pilot data. \emph{Conflicts C7, C8.} & Plan \S4.1, \S4.4, \S8.1 pp.\,6--8, 13 & D-04 & P1 \\
+RW-S08-02 & Movable pintle: CAD fails closed; the MDO handoff refuses \code{son_movable}; no swept assembly, actuator or controller model; the uncalibrated $C_d$ fallback fails its gate. & Ch.~\ref{ch:s08-s09}; MI \S2.7; Plan \S1.1 & RW-S14-01 & P1 \\
+RW-S08-03 & The throttle map is outside any credible range ($\eta_{c^*} \approx 0.06$ at 50\,\% flow) and assumes a movable sleeve on fixed hardware; the drawing uses movable-pintle symbols. & Ch.~\ref{ch:builds} & -- & P1 \\
+RW-S08-04 & Spray coupling reaches only the legacy screen; its default constant often rejects the design; it cannot combine with the movable architecture. & Ch.~\ref{ch:s08-s09}; \code{SPRAY_CSTAR_COUPLING.md} & RW-S03-08 & P2 \\
+RW-S08-05 & Two pump-power numbers in one summary; a deprecated $c^*$ alias still serialized; stale comments and provenance statements. & Ch.~\ref{ch:s08-s09} & -- & P2 \\
+RW-S08-06 & Film ring and igniter at L0 (no igniter source held); combustion stability's response half unavailable; register it as unavailable. & Rev.\ \S11.1 p.\,38; DB D21; IP Phase 0d & L7, L8 & P2 \\
+RW-S09-01 & 500\,N chain: check specific speed and diameter before any geometry (the 0.10--1.20 screen runs after it, \code{pumps.py:3252}); bracket the speed (a 0.896 step skipped a window near 23,600--25,750\,rpm); replace the $0.45\,D_2$ inducer floor (\code{:2507}); source the six constants. & v.; Rev.\ \S7 it.\,4, 19, \S11.4 pp.\,41--43 & RW-S01-01, D-03 & P1 \\
+RW-S09-02 & A split volute always fails the pump summary: \code{<role>_split_casing_layout} has no \code{valid} key, \code{run_nozzle.py:6275-6282} reads one, and the broad \code{except} records \code{pump_package: failed} and exits 2 after the files are written. No test covers it. This is not the oxidizer bolt-sector refusal of the 13 July sandbox, which its report records as fixed that day. & v.\ (\code{pump_cad_brep.py:1490}); Ch.~\ref{ch:builds}, \ref{ch:s10-s12} & -- & P0 \\
+RW-S09-03 & Bolt-layout fit is computed (\code{pumps.py:1955}) but never gated; at 130\,kN sizing reports feasible while the layout fails, and a late export failure leaves partial STEP files. & v.; Rev.\ \S7 it.\,14; PA; DB D04 & -- & P0 \\
+RW-S09-04 & The default electric technology set lies outside held evidence while the electric package is about 94\,\% of the objective; the page-verified Lee 2021 set is selectable. The review ranks these constants first in the credibility debt. \emph{Conflict C4.} & Rev.\ \S15.6 p.\,57; MI \S4; KC (gap G4) & D-10 & P0 \\
+RW-S09-05 & The 600\,s validity warning of the Lee set fires only in \code{MissionSpec}; the 10\,s traditional burn applies it silently. & Ch.~\ref{ch:s08-s09} & RW-S09-04 & P1 \\
+RW-S09-06 & Pump inlet properties come from the jacket outlet for a closed direct-regen path (harmless for RP-1, wrong for CoolProp coolants). & Ch.~\ref{ch:s08-s09} & -- & P2 \\
+RW-S09-07 & Source the fixed hydraulic assumptions ($\beta_2$, $\psi$, $\phi$, efficiency cap 0.78, loss constants) and the MDO efficiency surrogate. & Ch.~\ref{ch:s08-s09}; MI it.\,14; LR & RW-X06-03 & P2 \\
+RW-S09-08 & Faithful 3-D pump geometry (M2, D09--D12): the impeller is still a planar camber ribbon extruded axially; collector items D1--D4 are not implemented. \emph{Conflict C11.} & v.\ (\code{pump_cad_brep.py:106}, \code{:233}); RP M2; PA & RW-S14-01, L14 & P2 \\
+RW-S09-09 & Rotating assembly (D13): bearings and seals are mass placeholders; no retention, thrust balance or rotordynamics. & IP \S4; RP \S7 & L1 & P2 \\
+RW-S09-10 & Required net positive suction head (NPSH) has no applicable correlation; margins are null at 130\,kN; cavitation is unvalidated. & RP \S2; PA & L6 & P2 \\
+RW-S09-11 & Feed architectures: pressure-fed end to end, gas-generator and staged cycles (no turbine model), a low-specific-speed pump family. & GP \S4, \S6; Rev.\ \S11.3 it.\,5 & D-03 & P2 \\
+RW-S09-12 & The pump CAD default stays STL until CI installs CadQuery. & \code{PUMP_CAD_IMPLEMENTATION_PLAN.md} & RW-X07-02 & P2 \\
+RW-S10-01 & Both joint screens use the liner material; the bolt allowable is an unlabelled liner-yield proxy; \code{--structural-fos} is not passed. & Ch.~\ref{ch:s10-s12} & -- & P1 \\
+RW-S10-02 & The interface is ``feasible'' when every gate is informational; two inner-edge definitions; failures only drop a summary key. & Ch.~\ref{ch:s10-s12} & -- & P1 \\
+RW-S10-03 & Whole-engine dry mass: the objective omits the injector body, faceplate, orifice plate, flange and bolts (18.1\,kg at 13\,kN), valves, lines and mounts; G2--G4 open. Close mass only as far as the canonical cases need. & CP G2--G4; MI it.\,20; RR R2; Rev.\ P5 & RW-S14-01 & P1 \\
+RW-S10-04 & Feed-line losses are zero (\code{line_dp_allowance = 0.0}) with no valve model, so pump duty is understated. & MI it.\,15 & L2 & P1 \\
+RW-S10-05 & Valves, lines, brackets and gimbal are not modelled; total package mass stays unavailable. & \code{PLAN_VALVES_LINES_BRACKETS_GIMBAL.md}; DB D22 & L2 & P2 \\
+RW-S10-06 & Apply the advisory flange and faceplate sizing to CAD and emit a fastener callout (thread, grade, length, torque). & RR R2, R4; Ch.~\ref{ch:crosscutting-a} & RW-X08-01 & P2 \\
+\end{rwtable}
+
+\subsection{S11--S12: CAD deliverables and figures}
+
+\begin{rwtable}{Register: stages S11 and S12.}{tab:rw-s11}
+RW-S11-01 & The analyzed wall is not the exported wall: the main path exports a uniform wall, and the MDO stations are not the CAD. The definition of done requires agreement within a stated tolerance. & Rev.\ \S7 it.\,5 p.\,19; MI \S2.2; DB D07 & RW-S14-01 & P0 \\
+RW-S11-02 & Producer-validated artifacts: no typed exporter handoff exists, and \code{_PART_ARTIFACT_KEYS} is empty, so job STEP files stay unattributed and every package is partial. & v.\ (\code{raosim/mdo/execute.py:398}); IE; MI \S4 & RW-S14-01 & P1 \\
+RW-S11-03 & Assembly defects: wall flange and jacket overlap after per-child $z$ shifts; \code{regen.step} is never placed; the movable-pintle example would hit \code{NotImplementedError}. & Ch.~\ref{ch:s10-s12} & -- & P1 \\
+RW-S11-04 & A STEP failure exits without a summary; coaxial separation is audited on idealized cylinders; pump interference is recorded, not raised; the single-solid gate is not checked. & Ch.~\ref{ch:s10-s12}; PA & RW-S01-01 & P1 \\
+RW-S11-05 & Expected-part graph by article scope: of 27 parts, 11 reach L2, 4 L1, 12 none, and none L3 or L4; a component article must not demand an igniter or gimbal. & Rev.\ \S11 pp.\,37--39; DB D06 & RW-S14-01 & P1 \\
+RW-S11-06 & Process capability, B-rep interrogation, process outputs that feed physics, generated inspection (track I, D14). & Rev.\ \S11.2 p.\,40 & D-07 & P2 \\
+RW-S11-07 & Tolerances and drawings (G5, D15): datum proposals, a tolerance-stack contract, product and manufacturing information (PMI) checked against the NIST cases, tolerance allocation from the MDO derivatives. & Rev.\ \S11.2; CP G5 & L15 & P2 \\
+RW-S11-08 & Stale messages and dead code (\code{_PUMP_STEP_UNAVAILABLE}, \code{build_machined_pintle_bodies}, header drift). & Ch.~\ref{ch:s10-s12} & -- & P2 \\
+RW-S12-01 & Figures disagree with the numbers: flow fields use the 3500\,K default instead of $T_c$; the buckling panel is never drawn; the pintle schematic does not describe the machined STEP. & Ch.~\ref{ch:s10-s12} & -- & P2 \\
+\end{rwtable}
+
+\subsection{S13--S14: MDO, requirements, re-evaluation and provenance}
+
+\begin{rwtable}{Register: stages S13 and S14.}{tab:rw-s13}
+RW-S13-01 & Robustness matrix in CI: the 500\,N, 800\,N, 13\,kN and 130\,kN cases must each end in a complete package or a typed refusal, never an exception. This is a P0 exit gate in the review. & Rev.\ \S8.1 P0 p.\,23, \S11.3 it.\,4 & RW-S01-01, RW-S09-02, -03 & P0 \\
+RW-S13-02 & The MDO is opt-in and its geometry is not the CAD source (\code{--mdo-export} rebuilds the engine). & MI \S2.1--2.2 & RW-S14-01 & P1 \\
+RW-S13-03 & Re-establish the 13\,kN optimum inside the new chart domain; it sat on bounds and coverage edges ($\varepsilon = 4.0$, wall and post floors, zero barrel, blockage 0.90), not on physics trades. & MI it.\,21; Ch.~\ref{ch:s13-s14} & RW-S05-01, RW-S09-04 & P1 \\
+RW-S13-04 & Requirements to parts (R3 remainder, R4): mass and envelope requirements refused; \code{pareto} workflow not wired; no build package. & MI \S2.3; RR R3, R4 & RW-S11-02 & P1 \\
+RW-S13-05 & Multipoint mission (phase 10, track C): jobs refuse more than one operating point (\code{raosim/mdo/job.py:737}); the review orders it after P5. & v.; CP \S5; Rev.\ \S7 it.\,17, \S8.2 & RW-S10-03, G3 & P2 \\
+RW-S13-06 & Learned component models in the MDO: frozen evaluators with identity, applicability and uncertainty; the injector $C_d$ is a constant today. & Plan \S5 pp.\,9--10 & RW-S08-01, RW-S14-02 & P2 \\
+RW-S13-07 & Whole-engine domain map and an outer loop over architecture choices; \code{channel_count} is listed as enumerable but never read. & Rev.\ \S11.3 it.\,2--3; Ch.~\ref{ch:s13-s14} & RW-S14-04 & P2 \\
+RW-S13-08 & Fair solver benchmark (R5e); until it exists, no superiority claim for the differentiable approach is supported. & RR R5e & G3 & P2 \\
+RW-S13-09 & Epigraph variables for the remaining hard extrema (R5c). & RR R5c & -- & P2 \\
+RW-S13-10 & Header drift (variable count, closeout model, $\varepsilon$ range) and two material mappers. & Ch.~\ref{ch:s13-s14} & -- & P2 \\
+RW-S14-01 & Build \code{ResolvedEngineConfiguration} (absent): a Merkle composition of the input, injector, pintle and regenerative identities, a strict canonical digest, \code{configuration_id} on every artifact, refusal across mismatched identities. Nothing in either track starts before it. & v.; Rev.\ \S7 it.\,5, 18, \S8.1 P1 p.\,23; DB D05; IP Phase 1 & -- & P0 \\
+RW-S14-02 & One validation and comparison package (P3): case schema, metrics, uncertainty budget, preregistered policies, evidence grades, observation operators; one record type for published data, CFD and finite-element (FEA) results and bench data; merges D17--D19, K1--K3 and the Plan's record types. & Rev.\ \S8.1 P3 p.\,24, \S9.2; Plan \S2 p.\,3; RP \S7 & RW-S14-01, L5 & P1 \\
+RW-S14-03 & Report numerical, parameter and model-form uncertainty separately. & Rev.\ \S8.3 & RW-S14-02 & P1 \\
+RW-S14-04 & Typed applicability: machine-checkable bounds where a source states numbers; refusals name the blocking model. & Rev.\ \S10.4 it.\,4; hardware program L1--L2 & RW-X06-02 & P1 \\
+RW-S14-05 & MET is effectively unreachable: any model difference makes consistency unknown; set field-specific parity tolerances and an adjudication rule, and reconcile the two thermal paths (D5, D6). & Ch.~\ref{ch:s13-s14}; CP D5, D6 & -- & P1 \\
+RW-S14-06 & Release evidence is ignored on MDO paths: the dispatch precedes the evidence checks. & Ch.~\ref{ch:s13-s14} & RW-S14-01 & P1 \\
+RW-S14-07 & No registry entry covers an MDO surrogate; add validation level, datasets, domain, metrics and model-form error per entry. & Ch.~\ref{ch:s13-s14}; Rev.\ \S9.1 & RW-X06-02 & P1 \\
+RW-S14-08 & Phase 11 and the discrepancy-correction loop (D4) are TODO; the authoritative pass is another screening model. & CP D4 & RW-S07-01 & P2 \\
+RW-S14-09 & Two canonical case studies (LOX/RP-1 baseline and a second in-domain scale), each reproducible by one command. & Rev.\ \S8.1 P5 & RW-S14-01 & P2 \\
+RW-S14-10 & \code{JOB_CAPABILITIES} names \code{raosim.mdo.feed}, which does not exist. & v.\ (\code{raosim/mdo/capabilities.py:23}) & -- & P2 \\
+\end{rwtable}
+
+\subsection{X01--X08: cross-cutting groups}
+
+\begin{rwtable}{Register: cross-cutting groups.}{tab:rw-x}
+RW-X01-01 & JAX header drift (``default for \code{solve_rao_bvp}''; a named test file that does not exist); sensitivities and $\theta_B$ solve reachable only from tests. & Ch.~\ref{ch:crosscutting-a} & -- & P2 \\
+RW-X02-01 & First simulation templates, each checked against a published case: shock-capturing nozzle flow; an internal hydraulic pintle profile with tap observables (Plan Stage 4); CHT. The one existing template is a parameter-meshed external-gap wedge that LREKit never runs. & Rev.\ \S8.1 P4, \S11.5 pp.\,43--45; Plan \S7; Ch.~\ref{ch:crosscutting-a} & RW-S14-02, D-09 & P1 \\
+RW-X02-02 & Full simulation port (C3): meshes from the build-once CAD tagged with \code{configuration_id}, results read back as comparison records, rotating pump flow, a pinned FEA code. & Rev.\ \S11.5 p.\,45 & RW-X02-01 & P2 \\
+RW-X02-03 & The spray cycle handoff cannot pass (two literal failure gates; fixtures cannot meet the strict benchmark). & Ch.~\ref{ch:crosscutting-a} & -- & P2 \\
+RW-X03-01 & Tests write into the real \code{builds/} (hard-coded build root; \code{test_design_workflow.py} runs \code{main.py}). & Ch.~\ref{ch:crosscutting-a}, \ref{ch:builds} & -- & P1 \\
+RW-X03-02 & Legacy \code{rao} output is non-physical (exit angle $88.16^\circ$) and \code{moc} reports NaN; make both fail closed or remove them. & Ch.~\ref{ch:crosscutting-a}, \ref{ch:builds} & D-12 & P1 \\
+RW-X03-03 & Builds store no command line; the version counter stops at v1000. & Ch.~\ref{ch:crosscutting-a} & -- & P2 \\
+RW-X03-04 & \code{main.py} is still packaged and advertises flags \code{lrekit} no longer accepts. & Rev.\ \S7 it.\,25; DF row 8 & D-12 & P2 \\
+RW-X04-01 & Reference port: \code{CropNozzleToLength} not ported; \code{TT'.out} provenance unresolved; one certified case; stale topology map. & README work 4; Ch.~\ref{ch:crosscutting-a} & -- & P2 \\
+RW-X05-01 & Stale J4/J5 records, scripts quoting old chart angles, narrow data products, scripts writing into \code{builds/}. & Ch.~\ref{ch:crosscutting-b} & RW-S05-02 & P2 \\
+RW-X06-01 & Run \code{knowledge/kg.sh rebuild}: 66 of 68 document records still carry pre-reorganization paths. & Ch.~\ref{ch:crosscutting-b}; App.~\ref{app:cleanup} & owner & P1 \\
+RW-X06-02 & 41 of 61 models are \code{NOT_CHECKED} against their sources. \emph{Conflict C5.} & LR (4 Nov); Rev.\ \S8.3 & -- & P1 \\
+RW-X06-03 & Credibility debt: 257 or 274 \code{UNKNOWN_BASIS} constants (two scopes in one report); 25 provisional P0 constants; confirm that execution reach has replaced keyword-derived labels. & LR; \code{credibility_debt_2026-10-15.json}; Rev.\ \S7 it.\,11, \S10.4 & RW-PRG-05 & P1 \\
+RW-X06-04 & Corpus-backed knowledge tests skip without the vector index, so CI runs only the corpus-free suite; add a synthetic corpus. & v.\ (\code{knowledge/tests/test_kg_system.py:31}); Rev.\ \S7 it.\,9 & D-08 & P1 \\
+RW-X06-05 & Digitize the held validation sources (TP-2725, TP-3576, TM-106985, Santoro--Pal, Back--Cuffel--Massier, GRCop-84, CR-134806, Venters) with digitization uncertainty. & v.\ (file names); Rev.\ \S9.4 pp.\,30--31 & RW-S14-02 & P1 \\
+RW-X06-06 & 244 of 262 corpus conversions need review; check load-bearing pages first. & LR; Rev.\ \S10.4 it.\,12 & -- & P2 \\
+RW-X06-07 & Populate experiment, measurement, comparison, configuration and process objects and cross-source relations in the knowledge graph. & Rev.\ \S10.4 it.\,5--7, 9 & RW-S14-01 & P2 \\
+RW-X06-08 & Knowledge documentation drift (tool and subcommand lists, queue counts, a cited report that does not exist, a virtual environment that does not exist). & Ch.~\ref{ch:crosscutting-b}; App.~\ref{app:cleanup} & -- & P2 \\
+RW-X07-01 & The suite lags the working tree: on 5 November the chart change broke the override test and the B\'ezier-chart tests (Section~\ref{sec:test-status-forward}). & Ch.~\ref{ch:builds}, \ref{ch:crosscutting-b} & RW-S05-01 & P0 \\
+RW-X07-02 & CI: monolithic jobs; the knowledge suite runs twice; the \code{cea} extra is never installed; \code{publish.yml} does not depend on the tests. & v.\ (\code{test.yml}); Rev.\ \S7 it.\,13 & -- & P1 \\
+RW-X07-03 & Only the copper argument file is tested, with ignored BVP flags and no wall-feasibility assertion; the test-prompt baseline never existed. \emph{Conflict C10.} & Ch.~\ref{ch:crosscutting-b}, \ref{ch:builds} & RW-S05-02 & P1 \\
+RW-X07-04 & Test hygiene: unmarked 4000-evaluation solves, stale paths, no \code{testpaths}. & Ch.~\ref{ch:crosscutting-b} & -- & P2 \\
+RW-X08-01 & Decide wire, keep or retire for the eight unreachable modules and the test-only functions; every summary lists models the run never executed. \emph{Conflict C12.} & Ch.~\ref{ch:crosscutting-a} (Table~\ref{tab:x08-recs}) & D-12 & P2 \\
+\end{rwtable}
+
+\subsection{Conflicts between sources}\label{sec:rw-conflicts}
+
+{\rwsmall
+\begin{longtable}{@{}P{0.6cm}P{2.1cm}P{4.3cm}P{4.3cm}P{4.3cm}@{}}
+\caption{Conflicts between sources and how the register reads them.}\label{tab:rw-conflicts}\\
+\toprule
+\# & Topic & Source A & Source B & Reading \\
+\midrule
+\endfirsthead
+\toprule
+\# & Topic & Source A & Source B & Reading \\
+\midrule
+\endhead
+C1 & PyPI status & README limitation 10: first release pending & Rev.\ \S13: 0.1.0 and 0.1.1 public since 29 June & Not re-checked; README changes either way \\
+C2 & Corpus tracking & README: \code{propulsion_texts/} is a gitignored corpus & \code{git ls-files}: 21 PDFs tracked & Git wins \\
+C3 & Chart tables & MG \S9 it.\,13, MI 1.1.7: unchanged pending a decision & Working tree: replaced by \code{rao_top_chart.py} (uncommitted) & Code wins for behaviour; D-02 still open \\
+C4 & 13\,kN optimum & Rev.\ \S15: 35.81\,kg, two constant sets & MI \S4: 26.227\,kg, one set, $\varepsilon = 4.0$ & Both superseded: $\varepsilon = 4.0$ is outside the chart \\
+C5 & Model audits & Rev.: 11 of 61 checked, 223 unknown-basis (20 Sep) & LR: 20 of 61, 257 or 274 (4 Nov) & Newer report governs \\
+C6 & CEA sampler & GP \S6 item 1: outstanding & CP B1: done for four pairs; tables packaged & Code wins \\
+C7 & Timing of the pintle work & Rev.: cold-flow pintle in Stage 3, after the simulated article & Plan \S1.2: an isolated pilot can run in parallel now & Owner decision D-04 \\
+C8 & Which pintle & Rev.\ decision 3: ``a water cold-flow pintle'' & Plan \S4.1: conical seat valve and Son injector are different families; the engine sizes a fixed-slotted injector & Owner decision D-04 \\
+C9 & NTRS identifiers & IP \S4 lists six superseded identifiers & LA corrected them (Section~\ref{sec:rw-literature}) & Use the corrected ones \\
+C10 & ``Full benchmark'' & Test prompt: \code{--max-nfev 4000} gives the full contour & B\'ezier branch ignores the flag & Code wins \\
+C11 & Pump B-rep & Pump CAD plan status: complete except the default flip & PA and code: blades are a planar ribbon & Both hold at their scope \\
+C12 & Module coverage & 25 Aug audit: every module imported and tested & Two modules have no test & Code wins \\
+\bottomrule
+\end{longtable}
+}
+
+% ---------------------------------------------------------------------------
+\section{Literature- and standards-blocked items}\label{sec:rw-literature}
+
+Holdings were checked on 9 November by searching the file names in \code{propulsion_texts/} for the NASA Technical Reports Server (NTRS) identifier or title words. ``Not held'' says nothing about whether the source exists. The identifiers are the corrected ones from the September literature audit (\code{docs/audits/LREKIT_LITERATURE_AUDIT_2026-09-05.md}), which superseded six entries in the older request ledgers.
+
+{\rwsmall
+\begin{longtable}{@{}P{0.65cm}P{2.6cm}P{8.0cm}P{1.35cm}P{3.0cm}@{}}
+\caption{Sources the remaining work needs.}\label{tab:rw-lit}\\
+\toprule
+ID & Need & Sources & Held & Unblocks \\
+\midrule
+\endfirsthead
+\toprule
+ID & Need & Sources & Held & Unblocks \\
+\midrule
+\endhead
+L1 & Rotating assembly & SP-8048 bearings (19710018535), SP-8101 shafts (19740006328), SP-8121 seals (19780022641), SP-8100 gears; vendor data & No & RW-S09-09; D13 \\
+L2 & Valves, lines, joints & SP-8094 (19740019163), SP-8097 (19740008129), SP-8090 (19730013807), SP-8080 (19740002611), SP-8119 (19770017247), SP-8123 (19780008146); RP-1228 (19900009424) & No & RW-S10-04, -05; D22 \\
+L3 & Structures & SP-8068 plate buckling (19710022285); SP-8083, SP-8019, SP-8007, SP-8040; Waters 1937 & No & RW-S07-09 \\
+L4 & Transients & SP-8030 (19710014805), SP-8112, SP-8055, SP-8072, SP-8088; NTRS 20040000363, 19700024650 & No & D20, D23 \\
+L5 & V\&V and uncertainty & JCGM 100:2008 and NASA-STD-7009B (both free); ASME V\&V 20-2009 (purchase); AIAA G-077-1998; Coleman and Steele; Kennedy and O'Hagan 2001 & No & RW-S14-02, -03 \\
+L6 & Test standards & ISO 9906:2012; ISO 5167-1:2022; a rocket test instrumentation reference & No & H1, H2; RW-S09-10 \\
+L7 & Combustion efficiency, stability & ROCCID CR-187109/187110 (19910014917/8); JANNAF methodology; Bazarov and Yang 1998; first search the held \code{propulsion_texts/pintle_injector/} folder for $\eta_{c^*}$ data & No & RW-S03-08, RW-S08-06 \\
+L8 & Igniter & Tinker (20210000596); \emph{Aerospace} 7(8):114 (2020) & No & RW-S08-06 \\
+L9 & Thermal provenance & Sieder and Tate 1936; coolant-specific $C_1$ for SP-125 Eq.\ 4-23; Hatch and Papell 1959; SP-8087 ref.\ 60 & No & RW-S07-02, -08 \\
+L10 & Chart provenance & Rao 1960, \emph{ARS Journal} 30(6) & No & RW-S05-01, -03 \\
+L11 & Pintle blockage band & Escher 1996; Ryu et al.\ 2017; Kang et al.\ 2020 & No & RW-S13-03 \\
+L12 & MOC start line & Kliegel and Levine 1969 & Not found & RW-S06-04 \\
+L13 & Continuation & Keller 1977 & No & RW-S06-08 \\
+L14 & Pump hydraulics and structure & Due 1966; CR-72630; NACA Report 936; Katsanis TN D-2546, D-5044; Zangeneh 1991; flank-milling method; low-specific-speed design texts; SP-8109 figures and Eqs.\ (20)--(21) digitized & No & RW-S09-01, -08, -11 \\
+L15 & Tolerancing and process & ISO 286; ISO 22081:2021 (replaces the withdrawn ISO 2768-2); ASTM E606; a fastener family standard; NIST PMI cases; MMPDS; NASA/TM-2007-213740 & No (ASME Y14.5, Y14.41, Y14.24 held) & RW-S11-07, RW-S10-06 \\
+\bottomrule
+\end{longtable}
+}
+
+Some sources are already held and need extraction rather than acquisition: the validation reports of Rev.\ \S9.4 (RW-X06-05), SP-8110, SP-8081 and SP-8124 for other cycles, Chapter~V of SP-125 for a pressure-fed feed (RW-S09-11), and Huber 2009 for RP-1 properties (RW-S07-15).
+
+% ---------------------------------------------------------------------------
+\section{Validation and qualification path}\label{sec:rw-validation}
+
+The review grades evidence in four levels (Rev.\ \S9.1 p.\,28). V0 is mathematical verification against an exact or manufactured solution. V1 is agreement with an independent implementation of the same equations. V2 is agreement with an independent physical measurement. V3 is system-level validation from several coupled outputs of one physical configuration. No LREKit model holds V2 evidence from its own hardware, and V3 waits for the M4 and M5 articles. CFD and FEA are computational evidence and never count as validation on their own (Rev.\ \S8.2 p.\,26).
+
+\needspace{8\baselineskip}
+{\rwsmall
+\begin{longtable}{@{}P{1.9cm}P{6.8cm}P{4.6cm}P{2.6cm}@{}}
+\caption{The evidence ladders to build first (Rev.\ \S9.6 p.\,33), with the data they need.}\label{tab:rw-ladders}\\
+\toprule
+Ladder & Step & Data & Register \\
+\midrule
+\endfirsthead
+\toprule
+Ladder & Step & Data & Register \\
+\midrule
+\endhead
+Nozzle & N1: keep NASA/JHU parity (Oracle B passes on the bounded march) & Vendored reference outputs & RW-S06-04 \\
+Nozzle & N2: digitize the full Back--Cuffel--Massier transonic profiles & NTRS 19690063911 (held) & RW-X06-05 \\
+Nozzle & N3: $C_F$ and wall pressure against TP-2725 and TP-3576; shock-capturing CFD for the TOP internal shock & NTRS 19870015990, 19960042495 (held) & RW-S06-01, RW-X02-01 \\
+Thermal & T0: exact conduction and fin cases & Analytic & RW-S07-01 \\
+Thermal & T1: 1-D against quasi-2-D on the optimum, land hot spot as a signed delta & Existing \code{regenerative_cooling_2d} & RW-S07-01 \\
+Thermal & T2: coolant side against TM-106985; gas side against Back--Massier--Gier and Santoro--Pal & NTRS 19950024435, 19990025912 (held) & RW-X06-05 \\
+Thermal & T3: Betti-style CHT as a computational oracle & \code{betti2014.pdf} (held) & RW-S07-01 \\
+Chemistry & Held-out CEA gate (done for four pairs); re-evaluate the optimum; Cantera as V1 & Packaged tables; RP-1311 (held) & RW-S03-06 \\
+Materials & GRCop-84 and NARloy-Z property checks & TM-2005-213566, CR-134806 (held) & RW-S07-13 \\
+Injector & Water cold-flow $C_d$ with held-out runs (Plan Stages 0--5) & Pilot data to be located & RW-S08-01 \\
+Pump & Water bench: head, flow, power, speed; NPSH where measured & None yet & RW-S09-10 \\
+\bottomrule
+\end{longtable}
+}
+
+The simulation port of Stage 2 extends \code{raosim/openfoam}, which already pins OpenFOAM Foundation~13 and hashes every case file. Meshing from CAD, the FEA code and the CFD compute are not yet chosen (decision D-09), and every template must reproduce a published case before it judges new geometry (RW-X02-01, RW-X02-02). Table~\ref{tab:rw-release} maps the 17 release requirements to the activity that would produce each.
+
+{\rwsmall
+\begin{longtable}{@{}P{4.1cm}P{8.0cm}P{3.9cm}@{}}
+\caption{The 17 physical-release requirements of \texttt{release\_readiness.py} and what would produce them. All are missing today.}\label{tab:rw-release}\\
+\toprule
+Requirement & Produced by & Blocked on \\
+\midrule
+\endfirsthead
+\toprule
+Requirement & Produced by & Blocked on \\
+\midrule
+\endhead
+\code{engine.cfd_flow} & Shock-capturing chamber and nozzle CFD (N3, C3) & RW-X02-01 \\
+\code{engine.cht} & CHT with mesh and time-step independence (T3, C3) & RW-X02-01 \\
+\code{engine.structural_fea} & FEA of liner, closeout and flange with CHT loads (C3) & D-09 \\
+\code{engine.material_allowables} & Lot, process and temperature-dependent allowables & L15 (MMPDS) \\
+\code{engine.drawings_gdt} & Drawings and geometric dimensioning and tolerancing (C2) & RW-S11-07 \\
+\code{engine.manufacturing_review} & Process route and inspection plan with a shop profile & D-07 \\
+\code{engine.proof_test} & Proof and leak tests & A test facility \\
+\code{engine.cold_flow} & Integrated cold flow (H1, H2) & Stage 3 \\
+\code{engine.combustion_stability} & Ignition, stability and acoustic assessment & L7, L8 \\
+\code{engine.hot_fire} & Chamber and engine articles (H3, H4) & Facility approvals \\
+\code{injector.void_connectivity} & CAD fluid-volume and leak-path report (a circuit-separation audit exists, not as release evidence) & RW-S11-04 \\
+\code{injector.cold_flow_distribution} & Water cold-flow pintle (H1) & RW-S08-01 \\
+\code{regen.flow_distribution} & Regenerative CFD or a calibrated manifold network & RW-S07-14 \\
+\code{regen.hydroproof} & Hydroproof and leak test & A test facility \\
+\code{pump.fluid_volume} & Pump fluid-volume CAD or CFD report & RW-S09-08 \\
+\code{pump.rotordynamics} & Rotordynamics, bearing and seal report & L1 \\
+\code{pump.performance_map} & Pump water bench (H2) & Stage 3 \\
+\bottomrule
+\end{longtable}
+}
+
+\subsection{Test-suite status}\label{sec:test-status-forward}
+
+\textit{[Editor: insert the full test-suite result for the working tree of this guide here.]} Chapter~\ref{ch:builds} records the run of 5 November, in which the chart change broke the override test and the B\'ezier-chart tests (RW-X07-01). The last dated full non-slow record before that is in \code{docs/audits/RAO_B3_B5_HOST_EVIDENCE_2026-08-24.md}, while \code{README.md} still quotes the run of 11 July.
+
+% ---------------------------------------------------------------------------
+\section{Proposed roadmap: the next three milestones}\label{sec:rw-roadmap}
+
+\decision{\textbf{The owner's ordering, as recorded.} On 7 October the owner set five decisions (Rev.\ \S3 p.\,7): ``1.~Order of work: credibility first, then CAD, then hardware. 2.~A simulated article before any manufacturing \ldots\ Priority runs chamber and nozzle assembly first, then the injector, then the large pump components. 3.~First physical article: a water cold-flow pintle. 4.~Release: public eventually, personal use for now, with licensing and other legal work deferred. 5.~The 500\,N class must be explained before more is built on it.''\par\smallskip
+The plan of 3 November orders its own work as follows (Plan p.\,1). First, agree on what the pintle geometry, measurements, uncertainty and acceptance question mean. Then import real data, fit a model and show that it changes the engine calculation. Next, establish a small internal-flow CFD pipeline. After that, compare experiment-only and fused models, test a proposed geometry and extend the interface. The plan follows the ongoing CLI, validation and component-export work for full engine integration, and ``in parallel, we can define the evidence schema and run an isolated pintle pilot'' (Plan \S1.2 p.\,2).}
+
+The three milestones below are this chapter's inference, not the owner's. They divide the owner's Stage~1 so that both orders hold. The pintle pilot runs in parallel only as definition, data handling and modelling (Plan Stages 0--3), and no hardware is built before Stage~3, as the review's order requires. Decision D-04 can overturn this arrangement. Figure~\ref{fig:rw-roadmap} shows where the milestones sit.
+
+\begin{figure}[H]
+\centering
+\resizebox{\linewidth}{!}{%
+\begin{tikzpicture}[
+  font=\sffamily\small,
+  ph/.style={draw=teal, fill=pale, rounded corners=2pt, minimum height=9mm, minimum width=12mm, align=center},
+  st/.style={draw=ink, fill=white, rounded corners=2pt, minimum height=9mm, align=center, text width=33mm},
+  ms/.style={draw=warn, very thick, rounded corners=3pt},
+  lane/.style={draw=muted, dashed, fill=warnpale, rounded corners=2pt, minimum height=8mm, align=center, text width=30mm},
+  arr/.style={-{Stealth[length=2.2mm]}, thick, color=ink}]
+\node[ph] (p0) at (0,0) {P0\\hygiene};
+\node[ph, right=7mm of p0] (p1) {P1\\identity};
+\node[ph, right=2mm of p1] (p2) {P2\\sources};
+\node[ph, right=7mm of p2] (p3) {P3\\compare};
+\node[ph, right=2mm of p3] (p4) {P4\\oracles};
+\node[ph, right=7mm of p4] (p5) {P5\\cases};
+\node[ph, right=2mm of p5] (p6) {P6\\gate};
+\node[st, right=8mm of p6] (s23) {Then Stage 2 (C1--C4)\\and Stage 3 (H1--H4)};
+\draw[arr] (p6) -- (s23);
+\node[ms, fit=(p0), inner sep=2.2mm, label={[font=\sffamily\bfseries\small, text=warn]above:M-A}] {};
+\node[ms, fit=(p1)(p2), inner sep=2.2mm, label={[font=\sffamily\bfseries\small, text=warn]above:M-B}] {};
+\node[ms, fit=(p3)(p4), inner sep=2.2mm, label={[font=\sffamily\bfseries\small, text=warn]above:M-C}] {};
+\coordinate (m12) at ($(p1)!0.5!(p2)$);
+\coordinate (m34) at ($(p3)!0.5!(p4)$);
+\node[lane, below=10mm of m12] (l1) {Pintle pilot,\\Plan Stages 0--1};
+\node[lane, below=10mm of m34] (l2) {Pintle pilot,\\Plan Stages 2--4};
+\draw[arr, dashed, color=muted] (l1) -- (l2);
+\draw[arr, dashed, color=muted] (l2.east) -| node[pos=0.25, below, font=\sffamily\footnotesize, text=muted] {hardware only in Stage 3} (s23.south);
+\node[font=\sffamily\bfseries\small, text=teal, above=12mm of $(p0)!0.5!(p6)$] {Owner's Stage 1: credibility (Rev.\ \S8.1)};
+\end{tikzpicture}}
+\caption{Proposed milestones (amber) inside the owner's Stage 1. The dashed lane is the parallel pintle data pilot of the 3 November plan; it reaches hardware only in Stage 3.}\label{fig:rw-roadmap}
+\end{figure}
+
+{\rwsmall
+\begin{longtable}{@{}P{2.6cm}P{7.3cm}P{6.2cm}@{}}
+\caption{The next three milestones (inferred).}\label{tab:rw-milestones}\\
+\toprule
+Milestone & Scope (register identifiers) & Exit evidence \\
+\midrule
+\endfirsthead
+\toprule
+Milestone & Scope (register identifiers) & Exit evidence \\
+\midrule
+\endhead
+\textbf{M-A Trustworthy baseline} (review P0) & First the P0 items: RW-PRG-01 to -03, RW-S05-01, RW-S01-01, RW-S09-02, RW-S09-03, RW-S07-06, RW-S13-01, RW-X07-01. Then RW-S05-02, RW-X07-02, RW-X07-03, RW-X03-01, RW-S01-03, RW-S02-02, RW-X06-01, RW-X06-04. & A commit reproduces the CLI; the full suite is green; each robustness case (500\,N, 800\,N, 13\,kN, 130\,kN) ends in a written summary or a typed refusal; the shipped examples run or are refused with a reason; the README matches the code; the PDFs are untracked. \\
+\textbf{M-B One identifiable, provenance-closed design} (review P1 and P2; Plan Stages 0--1 in parallel) & RW-S14-01, RW-S11-01, RW-S13-02, RW-PRG-05, RW-S09-04, RW-S09-01, RW-S13-03, RW-S07-02, RW-S07-03, RW-S03-03, RW-S04-06, RW-S14-07, RW-X06-02, RW-X06-03, RW-S14-04. In parallel: RW-S08-01 and the import stage of RW-S14-02. & Every result and file names its \code{configuration_id}; analyzed and exported walls agree within a stated tolerance; the V1 domain is written down; no load-bearing \code{UNKNOWN_BASIS} remains on the promoted path; the 13\,kN optimum is re-established inside the chart domain; 500\,N ends in a sized design or a refusal with numbers; one pilot dataset imports reproducibly. \\
+\textbf{M-C Comparison layer and first oracle evidence} (review P3, start of P4; Plan Stages 2--4) & RW-S14-02, RW-S14-03, RW-S14-05, RW-X06-05, RW-S07-01, RW-S06-01, RW-X02-01, RW-S03-06. In parallel: RW-S13-06. & One validation case runs in CI from manifest to signed-delta report; nozzle N2/N3 and thermal T1/T2 deltas are reported with uncertainty; one OpenFOAM template reproduces a published case; a fitted pintle model is shown to change one engine calculation. \\
+\bottomrule
+\end{longtable}
+}
+
+After M-C the owner's order continues: P4 completion, the canonical cases of P5 (RW-S14-09), the credibility gate of P6 (RW-PRG-09), then Stage~2 (C1 priority CAD, C2 process and tolerances, C3 simulation port, C4 simulated-article review) and Stage~3 (H1 water cold-flow pintle, H2 pump bench, H3 chamber article, H4 integrated engine). Multipoint operation (RW-S13-05) returns after P5 (Rev.\ \S8.2), and the research track (RW-S06-08, RW-S13-08) runs on the gated tool.
+
+% ---------------------------------------------------------------------------
+\section{Decisions the owner still has to make}\label{sec:rw-decisions}
+
+The review listed nine owner decisions, of which two were settled on 7 October, one partly settled and one deferred (Rev.\ \S14 pp.\,49--52). Table~\ref{tab:rw-decisions} carries the seven that remain from that list and seven from other sources: five raised by later work (D-02, D-04, D-10, D-12, D-13), one open since the CEA host evidence of August (D-11) and one from the review's resource list (D-14). Each row names the work it blocks.
+
+{\rwsmall
+\begin{longtable}{@{}P{0.9cm}P{3.0cm}P{1.9cm}P{6.8cm}P{3.0cm}@{}}
+\caption{Decisions that remain with the owner.}\label{tab:rw-decisions}\\
+\toprule
+\# & Decision & Status & Options and recommendation on record & Blocks \\
+\midrule
+\endfirsthead
+\toprule
+\# & Decision & Status & Options and recommendation on record & Blocks \\
+\midrule
+\endhead
+D-01 & V1 declared domain & Open (Rev.\ row 3) & The review recommends one propellant pair and one thrust band around the 13\,kN LOX/RP-1 baseline; a band reaching 500\,N also needs D-03. & RW-PRG-05, RW-S07-15, RW-S14-04 \\
+D-02 & Chart domain below $\varepsilon = 5$ & New & Accept the SP-125 re-digitization and move the shipped examples to $\varepsilon \ge 5$; extend the chart from a second source (SP-8120 Fig.~5b differs by up to about $1.5^\circ$); or add explicit wall angles to the flag dialect. Re-baseline in every case. & RW-S05-01, -02, RW-S13-03 \\
+D-03 & Feed architecture and the 500\,N class & Open (Rev.\ row 6) & A pressure-fed route through the requirements layer; a lower chamber pressure for small engines; a sourced low-specific-speed pump family; or declare small classes out of domain. & RW-S09-01, -11 \\
+D-04 & Which pintle comes first, and when & New (C7, C8) & The water cold-flow pintle of the review, the conical metering valve of the plan, or the Son or fixed-slotted injector the engine sizes; pilot now (plan) or after Stage 2 (review). & RW-S08-01, RW-S13-06 \\
+D-05 & Public scope and exposure & Partly decided: private for now & The review recommends a private repository, deletion of both PyPI releases, removal of the PDFs from history, and a separable manufacturing layer pending an export-control determination. & RW-PRG-02, -03, -06 \\
+D-06 & License & Deferred & NOSA 1.3 sets conditions on the ported code; keep the port in its own module with its own license file. & RW-PRG-04 \\
+D-07 & Shop capability profile & Open & The shop that will cut the first article, recorded as data with its own provenance; needed by Stage 2. & RW-S11-06, RW-PRG-10 \\
+D-08 & Generated knowledge artifacts & Open & The review recommends keeping reviews and provenance in git and regenerating the rest. & RW-PRG-08, RW-X06-04 \\
+D-09 & Simulation stack & Open & Pin one FEA code (CalculiX, code\_aster or another) and its version; choose a workstation or cloud hours for CFD. & RW-X02-01, -02 \\
+D-10 & Default electric technology set & New & \code{repository_screening_v1} (outside held evidence) or the page-verified \code{lee2021_ijass_electric_pump} with its 600\,s burn basis. & RW-S09-04, RW-S13-03 \\
+D-11 & N2O/Ethanol oxidizer state & Open since 22 Aug & RocketCEA \code{N2O} or \code{N2O_nbp}. & RW-S03-04 \\
+D-12 & Legacy and orphan code & New & Freeze \code{main.py} with \code{rao}/\code{moc} failing closed, or retire them; a verdict per unreachable module. & RW-X03-02, -04, RW-X08-01 \\
+D-13 & Coolant correlation form & New & Adopt SP-125 Eq.\ 4-23 with coolant-specific $C_1$, or keep the classical form after acquiring Sieder and Tate 1936. & RW-S07-02 \\
+D-14 & External reviewer; export-control route & Open & A faculty or industry reviewer; a university export-control office. & RW-PRG-06, -10 \\
+\bottomrule
+\end{longtable}
+}

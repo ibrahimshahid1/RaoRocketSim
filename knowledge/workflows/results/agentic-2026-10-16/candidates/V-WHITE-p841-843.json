@@ -1,0 +1,2284 @@
+{
+ "packet": "V-WHITE-p841-843",
+ "kind": "verification",
+ "document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+ "source_pdf": "propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf",
+ "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+ "pages": [
+  841,
+  843
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 841,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/p0841.png",
+   "sha256": "48af1b617fd07398bdabdbef90df28ba4d1004f9c7d90fdcfec0c37f12c54787",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 842,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/p0842.png",
+   "sha256": "e78eafa5f3bdcd79401e87ea10a5d5daf4d75211e6495258faa27907ce3bca83",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 843,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/p0843.png",
+   "sha256": "363bb6343f401aab0da003a0fefd87a6cbc6c728e7feabc87d4dc6ee4b15b084",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_da82899ecd87eda6b2a58731",
+  "ENR_e86e8a556fd5853c8cfc36d3"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_1e3b214f2815115e277a2efa",
+   "kind": "formula",
+   "pages": [
+    840
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/7",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 413.0,
+     "t": 359.3333333333333,
+     "r": 440.0,
+     "b": 350.0,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "( 7 . 3 5 )",
+   "original_text": "(7.35)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "REJECTED",
+   "run_id": "ENR_da82899ecd87eda6b2a58731",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p840-842-74717fc6fa.json",
+   "raw_sha256": "0f3cebc482369df2a73b83b27a65105eced71dd504d75dc9f79ad8cbe523aa4c",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_4982b44a2b8a138ff247c135",
+   "kind": "formula",
+   "pages": [
+    840
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/9",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 175.33333333333334,
+     "t": 269.0,
+     "r": 460.0,
+     "b": 252.66666666666663,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\frac { } { u ^ { * } } \\equiv \\left ( \\frac { } { c _ { f } } \\right ) \\quad \\frac { } { v } \\equiv R e _ { \\delta } \\left ( \\frac { } { 2 } \\right )",
+   "original_text": "= & (7.36)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "REJECTED",
+   "run_id": "ENR_da82899ecd87eda6b2a58731",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p840-842-74717fc6fa.json",
+   "raw_sha256": "0f3cebc482369df2a73b83b27a65105eced71dd504d75dc9f79ad8cbe523aa4c",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_7eb1406fda92002975d07068",
+   "kind": "formula",
+   "pages": [
+    840
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/5",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 432.3333333333333,
+     "t": 449.3333333333333,
+     "r": 459.6666666666667,
+     "b": 440.0,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "( 7 . 3 4 )",
+   "original_text": "(7.34)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "REJECTED",
+   "run_id": "ENR_da82899ecd87eda6b2a58731",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p840-842-74717fc6fa.json",
+   "raw_sha256": "0f3cebc482369df2a73b83b27a65105eced71dd504d75dc9f79ad8cbe523aa4c",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_8a801f05041423226cde81bf",
+   "kind": "formula",
+   "pages": [
+    840
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/1",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 199.33333333333334,
+     "t": 671.6666666666666,
+     "r": 435.0,
+     "b": 646.0,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\tau _ { w } ( x ) = \\rho U ^ { 2 } \\frac { d \\theta } { d x }",
+   "original_text": "dé y= fpr 3 7,(x) = pU red (7.32)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "REJECTED",
+   "run_id": "ENR_da82899ecd87eda6b2a58731",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p840-842-74717fc6fa.json",
+   "raw_sha256": "0f3cebc482369df2a73b83b27a65105eced71dd504d75dc9f79ad8cbe523aa4c",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_cee201bd8f247cdf7b5f4102",
+   "kind": "formula",
+   "pages": [
+    840
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/3",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 400.0,
+     "t": 589.6666666666666,
+     "r": 427.0,
+     "b": 579.6666666666666,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "( 7 , 3 3 )",
+   "original_text": "(7.33)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "REJECTED",
+   "run_id": "ENR_da82899ecd87eda6b2a58731",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p840-842-74717fc6fa.json",
+   "raw_sha256": "0f3cebc482369df2a73b83b27a65105eced71dd504d75dc9f79ad8cbe523aa4c",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_d3865ba9d6c198697fb94fba",
+   "kind": "formula",
+   "pages": [
+    840
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/11",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 172.33333333333334,
+     "t": 204.0,
+     "r": 461.6666666666667,
+     "b": 172.66666666666663,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\left ( \\frac { 2 } { c _ { f } } \\right ) ^ { 1 / 2 } \\approx 2 . 4 4 \\ln \\left [ R e _ { \\delta } \\left ( \\frac { c _ { f } } { 2 } \\right ) ^ { 1 / 2 } \\right ] + 5 . 0",
+   "original_text": "5 172 c 1/2 (2) = 2.44 In Re, (2) +50 (7.37) Cr 2",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "REJECTED",
+   "run_id": "ENR_da82899ecd87eda6b2a58731",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p840-842-74717fc6fa.json",
+   "raw_sha256": "0f3cebc482369df2a73b83b27a65105eced71dd504d75dc9f79ad8cbe523aa4c",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_3893f9835ea622562d5f385f",
+   "kind": "figure",
+   "pages": [
+    841
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 167.2823028564453,
+     "t": 242.87994384765625,
+     "r": 465.6944580078125,
+     "b": 201.0391845703125,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "REJECTED",
+   "run_id": "ENR_da82899ecd87eda6b2a58731",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p840-842-74717fc6fa.json",
+   "raw_sha256": "0f3cebc482369df2a73b83b27a65105eced71dd504d75dc9f79ad8cbe523aa4c",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_0ec86fba2da85e7cebb94c58",
+   "kind": "formula",
+   "pages": [
+    841
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/19",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 119.33333333333333,
+     "t": 346.3333333333333,
+     "r": 514.0,
+     "b": 290.0,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "c _ { f } = 0 . 0 2 \\, \\text {Re} _ { \\delta } ^ { - \\frac { 1 / 6 } { 1 0 } = 2 \\frac { \\frac { 1 } { d } } { d x } \\left ( \\frac { 1 } { 7 2 } \\, \\delta \\right ) } \\\\ \\text {or} & & R e _ { \\delta } ^ { - 1 / 6 } = 9 . 7 2 \\, \\frac { d \\delta } { d x } = 9 . 7 2 \\, \\frac { d ( R e _ { \\delta } ) } { d ( R e _ { x } ) }",
+   "original_text": "or ¢; = 0.02 Res\" = 2 dé Re; ' = 9.72 — = 9.72 dx dx d(Re,) (7Al)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "REJECTED",
+   "run_id": "ENR_da82899ecd87eda6b2a58731",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p840-842-74717fc6fa.json",
+   "raw_sha256": "0f3cebc482369df2a73b83b27a65105eced71dd504d75dc9f79ad8cbe523aa4c",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_2a2e7697c13f4a8bd313f283",
+   "kind": "formula",
+   "pages": [
+    841
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/17",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 435.0,
+     "t": 439.0,
+     "r": 462.3333333333333,
+     "b": 429.3333333333333,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "( 7 . 4 0 )",
+   "original_text": "(7.40)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "REJECTED",
+   "run_id": "ENR_da82899ecd87eda6b2a58731",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p840-842-74717fc6fa.json",
+   "raw_sha256": "0f3cebc482369df2a73b83b27a65105eced71dd504d75dc9f79ad8cbe523aa4c",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_50c1cc57dfeeba94f6846629",
+   "kind": "formula",
+   "pages": [
+    841
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/13",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 198.33333333333334,
+     "t": 717.6666666666666,
+     "r": 435.66666666666663,
+     "b": 705.6666666666666,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "c _ { j } \\approx 0 . 0 2 \\, R e _ { \\delta } ^ { - 1 / 0 }",
+   "original_text": "cy = 0,02 Res (7.38)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "REJECTED",
+   "run_id": "ENR_da82899ecd87eda6b2a58731",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p840-842-74717fc6fa.json",
+   "raw_sha256": "0f3cebc482369df2a73b83b27a65105eced71dd504d75dc9f79ad8cbe523aa4c",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_99c08b1e58dac2f3dfee4d49",
+   "kind": "formula",
+   "pages": [
+    841
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/15",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 197.0,
+     "t": 576.0,
+     "r": 436.33333333333337,
+     "b": 548.6666666666666,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\left ( \\frac { u } { U } \\right ) _ { \\text {truth} } \\approx \\left ( \\frac { y } { \\delta } \\right ) ^ { 1 / 7 }",
+   "original_text": "ul (j (7.39)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "REJECTED",
+   "run_id": "ENR_da82899ecd87eda6b2a58731",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p840-842-74717fc6fa.json",
+   "raw_sha256": "0f3cebc482369df2a73b83b27a65105eced71dd504d75dc9f79ad8cbe523aa4c",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_e4a47e235e3166d85853e222",
+   "kind": "figure",
+   "pages": [
+    842
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/2",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 93.50055694580078,
+     "t": 558.0562286376953,
+     "r": 335.76983642578125,
+     "b": 524.8301086425781,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "REJECTED",
+   "run_id": "ENR_da82899ecd87eda6b2a58731",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p840-842-74717fc6fa.json",
+   "raw_sha256": "0f3cebc482369df2a73b83b27a65105eced71dd504d75dc9f79ad8cbe523aa4c",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_e7655e41226edc8a3cb0cb74",
+   "kind": "figure",
+   "pages": [
+    842
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/1",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 205.1676025390625,
+     "t": 719.4838790893555,
+     "r": 428.9779968261719,
+     "b": 679.7483825683594,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "REJECTED",
+   "run_id": "ENR_da82899ecd87eda6b2a58731",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p840-842-74717fc6fa.json",
+   "raw_sha256": "0f3cebc482369df2a73b83b27a65105eced71dd504d75dc9f79ad8cbe523aa4c",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_5dff5c04f79604ac232acacb",
+   "kind": "formula",
+   "pages": [
+    842
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/37",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 126.0,
+     "t": 493.3333333333333,
+     "r": 508.3333333333333,
+     "b": 384.33333333333337,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "D & = \\int _ { 0 } ^ { \\mu } \\tau _ { w } b \\, d x \\\\ C _ { D } & = \\frac { 2 D } { \\rho ^ { 2 } L } = \\int _ { 0 } ^ { 1 } c _ { J } d \\left ( \\frac { x } { L } \\right ) \\\\ C _ { D } & = \\frac { 0 . 0 3 1 } { R e _ { L } ^ { 1 / 7 } } = \\frac { 7 } { 6 } c _ { f } ( L )",
+   "original_text": "rh. D= TD dx or 0.031 7 Cp = Fr = eh 7.45 D Rel? gr) ( )",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "REJECTED",
+   "run_id": "ENR_da82899ecd87eda6b2a58731",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p840-842-74717fc6fa.json",
+   "raw_sha256": "0f3cebc482369df2a73b83b27a65105eced71dd504d75dc9f79ad8cbe523aa4c",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_6d67140e2444bfe1430b16ae",
+   "kind": "formula",
+   "pages": [
+    842
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/29",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 189.33333333333334,
+     "t": 633.6666666666666,
+     "r": 445.0,
+     "b": 607.6666666666666,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\tau _ { w , t u r b } \\approx \\frac { 0 . 0 1 3 5 \\mu ^ { 1 / 7 } \\rho ^ { 6 / 7 } U ^ { 1 3 / 7 } } { x ^ { 1 / 7 } }",
+   "original_text": "0.0135 p79? x Tau (7.44)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "REJECTED",
+   "run_id": "ENR_da82899ecd87eda6b2a58731",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p840-842-74717fc6fa.json",
+   "raw_sha256": "0f3cebc482369df2a73b83b27a65105eced71dd504d75dc9f79ad8cbe523aa4c",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_8f11f77dacb25b0dd8f580ad",
+   "kind": "formula",
+   "pages": [
+    842
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/42",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 212.33333333333334,
+     "t": 185.66666666666663,
+     "r": 435.0,
+     "b": 157.66666666666663,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "= \\frac { \\delta ^ { * } } { \\theta } = \\frac { \\frac { 1 } { 8 } } { \\frac { 7 } { 7 2 } } = 1 . 3",
+   "original_text": "(7.47) ili —velmie! lt &\\= I",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "REJECTED",
+   "run_id": "ENR_da82899ecd87eda6b2a58731",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p840-842-74717fc6fa.json",
+   "raw_sha256": "0f3cebc482369df2a73b83b27a65105eced71dd504d75dc9f79ad8cbe523aa4c",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_cb4c51c578874a0eeb852835",
+   "kind": "formula",
+   "pages": [
+    842
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/40",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 422.33333333333337,
+     "t": 253.0,
+     "r": 448.6666666666667,
+     "b": 243.33333333333337,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "( 7 . 4 6 )",
+   "original_text": "(7.46)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "REJECTED",
+   "run_id": "ENR_da82899ecd87eda6b2a58731",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p840-842-74717fc6fa.json",
+   "raw_sha256": "0f3cebc482369df2a73b83b27a65105eced71dd504d75dc9f79ad8cbe523aa4c",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_1f654c69d72ea568e49cfe1d",
+   "kind": "formula",
+   "pages": [
+    843
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/4",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 195.66666666666666,
+     "t": 394.0,
+     "r": 478.3333333333333,
+     "b": 338.0,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "& \\frac { 0 . 0 3 1 } { \\text {Re} _ { L } ^ { 1 / 7 } } - \\frac { 1 4 4 0 } { \\text {Re} _ { L } } \\quad \\text {Re} _ { \\text {trans} } = 5 \\times 1 0 ^ { 5 } \\\\ & \\frac { 0 . 0 3 1 } { \\text {Re} _ { L } ^ { 1 / 7 } } - \\frac { 8 7 0 0 } { \\text {Re} _ { L } } \\quad \\text {Re} _ { \\text {trans} } = 3 \\times 1 0 ^ { 6 }",
+   "original_text": "0.031 1440 | —_— 0.031 _ $700 ae\" Re, im SR \"ey",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_e86e8a556fd5853c8cfc36d3",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p843-843-5f0f5d514ca17049193c0dd24b5fa90986731733c2c62153aae94f764eafb2c1.json",
+   "raw_sha256": "175f28fe12b9555b31eb2e1d9245c2445f52e74521866fcd9751b012296665eb",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_3fee9761a07dd2f6e58cff53",
+   "kind": "formula",
+   "pages": [
+    843
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/1",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 189.66666666666666,
+     "t": 617.0,
+     "r": 445.0,
+     "b": 590.3333333333334,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "c _ { f } \\approx \\left ( 2 . 8 7 + 1 . 5 8 \\log \\frac { x } { \\epsilon } \\right ) ^ { - 2 . 5 }",
+   "original_text": "of (287 + 1.58 log *) (7.48a)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_e86e8a556fd5853c8cfc36d3",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p843-843-5f0f5d514ca17049193c0dd24b5fa90986731733c2c62153aae94f764eafb2c1.json",
+   "raw_sha256": "175f28fe12b9555b31eb2e1d9245c2445f52e74521866fcd9751b012296665eb",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_ad48f93ad1fc7526b8ce13b6",
+   "kind": "formula",
+   "pages": [
+    843
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/2",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 187.66666666666666,
+     "t": 560.3333333333334,
+     "r": 446.6666666666667,
+     "b": 533.3333333333333,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "C _ { D } \\approx \\left ( 1 , 8 9 + 1 , 6 2 \\log \\frac { L } { \\epsilon } \\right ) ^ { - 2 . 5 }",
+   "original_text": "25 - (7.48b) Cy = (1.89 + 1.62 loge",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_e86e8a556fd5853c8cfc36d3",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI/b09a7d3d559a-p843-843-5f0f5d514ca17049193c0dd24b5fa90986731733c2c62153aae94f764eafb2c1.json",
+   "raw_sha256": "175f28fe12b9555b31eb2e1d9245c2445f52e74521866fcd9751b012296665eb",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [
+  {
+   "id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_040B8DFE",
+   "store": "equations",
+   "type": "Equation",
+   "page": 841,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "White Eq. (7.40) one-seventh-power momentum thickness",
+   "equation_number": "7.40",
+   "form": "theta approx integral_0^delta [(y/delta)^(1/7)*(1-(y/delta)^(1/7))] dy = (7/72)*delta",
+   "statement": null,
+   "quote": "the time. With this simple approximation, the momentum thickness (7.28) can",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "theta",
+     "meaning": "momentum thickness",
+     "units": "m",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_BL_MOMENTUM"
+     ]
+    },
+    {
+     "symbol": "y",
+     "meaning": "distance normal to the plate",
+     "units": "m",
+     "role": "source_variable",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "delta",
+     "meaning": "boundary-layer thickness",
+     "units": "m",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_BL_THICKNESS"
+     ]
+    }
+   ],
+   "assumptions": [
+    "Uniform outer-stream velocity in the displayed flat-plate derivation"
+   ],
+   "validity": [
+    "Turbulent smooth flat-plate approximation"
+   ],
+   "extraction_note": "Docling 2.139.0 formula enrichment executed on PDF pp840-842. Equation images were partly missed, classified as figures, or transcribed with missing symbols. This form was corrected by direct visual comparison with the original PDF. Variables use dimensionally consistent SI interpretations; no numerical applicability bounds are invented. No implemented-model link is inherited. Approximation signs and rounded source coefficients are preserved; Eq7.45 coefficient0.031 and 7/6 relation are rounded approximations.",
+   "same_page_formula_candidates": [
+    "CAND_0ec86fba2da85e7cebb94c58",
+    "CAND_2a2e7697c13f4a8bd313f283",
+    "CAND_50c1cc57dfeeba94f6846629",
+    "CAND_99c08b1e58dac2f3dfee4d49"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 841
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "y"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_0CFD2A53",
+   "store": "equations",
+   "type": "Equation",
+   "page": 841,
+   "is_target": false,
+   "active": false,
+   "source_state": "SUPERSEDED_EXTRACTION",
+   "verification": null,
+   "label": "Eq. (7.42) turbulent boundary-layer thickness growth",
+   "equation_number": "7.42",
+   "form": "δ ∝ x^(6/7) (proportionality stated in prose; full Eq. (7.42) with coefficient and Re_x exponent NOT RENDERED)",
+   "statement": null,
+   "quote": "Thus the thickness of a turbulent boundary layer increases as _x_ <sup>6/7</sup>, far more",
+   "confidence": "low",
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "δ",
+     "meaning": "turbulent boundary layer thickness",
+     "units": "length",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": [],
+     "normalization_history": [
+      {
+       "resolution_state": "RESOLVED",
+       "quantity_candidates": [
+        "QTY_TW"
+       ]
+      }
+     ],
+     "normalization_basis": "SYSTEM_INFERS: symbol and exact canonical units; no source meaning or unit conversion inferred"
+    },
+    {
+     "symbol": "x",
+     "meaning": "distance from leading edge",
+     "units": "length",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [
+    "δ = 0 at x = 0 (leading edge)",
+    "one-seventh-power profile (7.39)",
+    "power-law skin-friction fit (7.38)"
+   ],
+   "validity": [],
+   "extraction_note": "Only the x^(6/7) scaling is recoverable from the prose.",
+   "same_page_formula_candidates": [
+    "CAND_0ec86fba2da85e7cebb94c58",
+    "CAND_2a2e7697c13f4a8bd313f283",
+    "CAND_50c1cc57dfeeba94f6846629",
+    "CAND_99c08b1e58dac2f3dfee4d49"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 841
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": [
+      "DAMAGE_OR_REPETITION_MARKER"
+     ]
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "δ",
+      "x"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_256B7CDB",
+   "store": "equations",
+   "type": "Equation",
+   "page": 841,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "White Eq. (7.41) turbulent thickness differential relation",
+   "equation_number": "7.41",
+   "form": "c_f = 0.02*Re_delta^(-1/6) = 2*d[(7/72)*delta]/dx; Re_delta^(-1/6) = 9.72*ddelta/dx = 9.72*dRe_delta/dRe_x",
+   "statement": null,
+   "quote": "We accept this result and substitute Eqs. (7.38) and (7.40) into Kármán’s momentum law (7.33):",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "c_f",
+     "meaning": "skin-friction coefficient",
+     "units": "1",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_CF_SKIN"
+     ]
+    },
+    {
+     "symbol": "Re_delta",
+     "meaning": "Reynolds number U*delta/nu",
+     "units": "1",
+     "role": "source_variable",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "delta",
+     "meaning": "boundary-layer thickness",
+     "units": "m",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_BL_THICKNESS"
+     ]
+    },
+    {
+     "symbol": "x",
+     "meaning": "distance from the flat-plate leading edge",
+     "units": "m",
+     "role": "source_variable",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "Re_x",
+     "meaning": "Reynolds number U*x/nu",
+     "units": "1",
+     "role": "source_variable",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [
+    "Uniform outer-stream velocity in the displayed flat-plate derivation"
+   ],
+   "validity": [
+    "Turbulent smooth flat-plate approximation"
+   ],
+   "extraction_note": "Docling 2.139.0 formula enrichment executed on PDF pp840-842. Equation images were partly missed, classified as figures, or transcribed with missing symbols. This form was corrected by direct visual comparison with the original PDF. Variables use dimensionally consistent SI interpretations; no numerical applicability bounds are invented. No implemented-model link is inherited. Approximation signs and rounded source coefficients are preserved; Eq7.45 coefficient0.031 and 7/6 relation are rounded approximations.",
+   "same_page_formula_candidates": [
+    "CAND_0ec86fba2da85e7cebb94c58",
+    "CAND_2a2e7697c13f4a8bd313f283",
+    "CAND_50c1cc57dfeeba94f6846629",
+    "CAND_99c08b1e58dac2f3dfee4d49"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 841
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "Re_delta",
+      "x",
+      "Re_x"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_29C06A43",
+   "store": "equations",
+   "type": "Equation",
+   "page": 842,
+   "is_target": false,
+   "active": false,
+   "source_state": "SUPERSEDED_EXTRACTION",
+   "verification": null,
+   "label": "Eq. (7.46) turbulent flat-plate displacement thickness",
+   "equation_number": "7.46",
+   "form": "NOT RENDERED IN MARKDOWN. Source introduces Eq. (7.46) as the displacement thickness delta* obtained by substituting the one-seventh-power turbulent profile (7.39) into the displacement-thickness definition (7.12). Coefficient and Re_x exponent not recoverable from this rendering.",
+   "statement": null,
+   "quote": "The displacement thickness can be estimated from the one-seventh-power",
+   "confidence": "low",
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "δ*",
+     "meaning": "displacement thickness of the boundary layer",
+     "units": "length",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "x",
+     "meaning": "distance along the flat plate from the leading edge",
+     "units": "length",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "Re_x",
+     "meaning": "local Reynolds number Ux/ν",
+     "units": "",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [
+    "one-seventh-power turbulent velocity profile (Eq. 7.39)",
+    "smooth sharp flat plate, turbulent flow from the leading edge",
+    "delta = 0 at x = 0"
+   ],
+   "validity": [
+    "turbulent flow formula applies for Re_x greater than approximately 10^6 (p. 822)"
+   ],
+   "extraction_note": "All displayed equations in this Markdown were images and did not convert; only the introductory sentence survives. The equation form is described, not transcribed.",
+   "same_page_formula_candidates": [
+    "CAND_5dff5c04f79604ac232acacb",
+    "CAND_6d67140e2444bfe1430b16ae",
+    "CAND_8f11f77dacb25b0dd8f580ad",
+    "CAND_cb4c51c578874a0eeb852835"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 842
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": [
+      "DAMAGE_OR_REPETITION_MARKER"
+     ]
+    },
+    {
+     "check": "variable_symbol_absent_from_form",
+     "symbols": [
+      "δ*"
+     ]
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "δ*",
+      "x",
+      "Re_x"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_3A6F0755",
+   "store": "equations",
+   "type": "Equation",
+   "page": 841,
+   "is_target": false,
+   "active": false,
+   "source_state": "SUPERSEDED_EXTRACTION",
+   "verification": null,
+   "label": "Eq. (7.40) momentum thickness from one-seventh-power law",
+   "equation_number": "7.40",
+   "form": "NOT RENDERED IN MARKDOWN. Momentum thickness θ evaluated from the definition (7.28) using the one-seventh-power profile.",
+   "statement": null,
+   "quote": "the time. With this simple approximation, the momentum thickness (7.28) can",
+   "confidence": "low",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "θ",
+     "meaning": "momentum thickness",
+     "units": "length",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "δ",
+     "meaning": "boundary layer thickness",
+     "units": "length",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": [],
+     "normalization_history": [
+      {
+       "resolution_state": "RESOLVED",
+       "quantity_candidates": [
+        "QTY_TW"
+       ]
+      }
+     ],
+     "normalization_basis": "SYSTEM_INFERS: symbol and exact canonical units; no source meaning or unit conversion inferred"
+    }
+   ],
+   "assumptions": [
+    "one-seventh-power profile (7.39)"
+   ],
+   "validity": [],
+   "extraction_note": "Equation not rendered.",
+   "same_page_formula_candidates": [
+    "CAND_0ec86fba2da85e7cebb94c58",
+    "CAND_2a2e7697c13f4a8bd313f283",
+    "CAND_50c1cc57dfeeba94f6846629",
+    "CAND_99c08b1e58dac2f3dfee4d49"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 841
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": [
+      "DAMAGE_OR_REPETITION_MARKER"
+     ]
+    },
+    {
+     "check": "variable_symbol_absent_from_form",
+     "symbols": [
+      "δ"
+     ]
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "θ",
+      "δ"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_3B81E9AC",
+   "store": "equations",
+   "type": "Equation",
+   "page": 842,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "White Eq. (7.44) dimensional turbulent wall shear",
+   "equation_number": "7.44",
+   "form": "tau_w approx 0.0135*mu^(1/7)*rho^(6/7)*U^(13/7)/x^(1/7)",
+   "statement": null,
+   "quote": "Turbulent plate friction drops slowly with _x_, increases nearly as _ρ_ and _U_",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "tau_w",
+     "meaning": "wall shear stress",
+     "units": "Pa",
+     "role": "source_variable",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "mu",
+     "meaning": "dynamic viscosity",
+     "units": "Pa.s",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_MU"
+     ]
+    },
+    {
+     "symbol": "rho",
+     "meaning": "density",
+     "units": "kg/m^3",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_RHO"
+     ]
+    },
+    {
+     "symbol": "U",
+     "meaning": "uniform outer-stream velocity",
+     "units": "m/s",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_FLOW_SPEED"
+     ],
+     "normalization_history": [
+      {
+       "resolution_state": "UNRESOLVED_ENTITY",
+       "quantity_candidates": []
+      }
+     ],
+     "normalization_basis": "SYSTEM_INFERS: symbol, exact canonical units and explicit meaning aliases; no unit conversion or physical validity inferred"
+    },
+    {
+     "symbol": "x",
+     "meaning": "distance from the flat-plate leading edge",
+     "units": "m",
+     "role": "source_variable",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [
+    "Uniform outer-stream velocity in the displayed flat-plate derivation"
+   ],
+   "validity": [
+    "Turbulent smooth flat-plate approximation"
+   ],
+   "extraction_note": "Docling 2.139.0 formula enrichment executed on PDF pp840-842. Equation images were partly missed, classified as figures, or transcribed with missing symbols. This form was corrected by direct visual comparison with the original PDF. Variables use dimensionally consistent SI interpretations; no numerical applicability bounds are invented. No implemented-model link is inherited. Approximation signs and rounded source coefficients are preserved; Eq7.45 coefficient0.031 and 7/6 relation are rounded approximations.",
+   "same_page_formula_candidates": [
+    "CAND_5dff5c04f79604ac232acacb",
+    "CAND_6d67140e2444bfe1430b16ae",
+    "CAND_8f11f77dacb25b0dd8f580ad",
+    "CAND_cb4c51c578874a0eeb852835"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 842
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "tau_w",
+      "x"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_8E0D073F",
+   "store": "equations",
+   "type": "Equation",
+   "page": 841,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "White Eq. (7.38) power-law fit to the friction law",
+   "equation_number": "7.38",
+   "form": "c_f approx 0.02*Re_delta^(-1/6)",
+   "statement": null,
+   "quote": "This we shall use as the left-hand side of Eq. (7.33). For the right-hand side,",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "c_f",
+     "meaning": "skin-friction coefficient",
+     "units": "1",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_CF_SKIN"
+     ]
+    },
+    {
+     "symbol": "Re_delta",
+     "meaning": "Reynolds number U*delta/nu",
+     "units": "1",
+     "role": "source_variable",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [
+    "Uniform outer-stream velocity in the displayed flat-plate derivation"
+   ],
+   "validity": [
+    "Turbulent smooth flat-plate approximation"
+   ],
+   "extraction_note": "Docling 2.139.0 formula enrichment executed on PDF pp840-842. Equation images were partly missed, classified as figures, or transcribed with missing symbols. This form was corrected by direct visual comparison with the original PDF. Variables use dimensionally consistent SI interpretations; no numerical applicability bounds are invented. No implemented-model link is inherited. Approximation signs and rounded source coefficients are preserved; Eq7.45 coefficient0.031 and 7/6 relation are rounded approximations.",
+   "same_page_formula_candidates": [
+    "CAND_0ec86fba2da85e7cebb94c58",
+    "CAND_2a2e7697c13f4a8bd313f283",
+    "CAND_50c1cc57dfeeba94f6846629",
+    "CAND_99c08b1e58dac2f3dfee4d49"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 841
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "Re_delta"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_9E7FA1A8",
+   "store": "equations",
+   "type": "Equation",
+   "page": 841,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "White Eq. (7.42) turbulent boundary-layer thickness growth",
+   "equation_number": "7.42",
+   "form": "Re_delta approx 0.16*Re_x^(6/7); delta/x approx 0.16*Re_x^(-1/7)",
+   "statement": null,
+   "quote": "Separate the variables and integrate, assuming _δ_ = 0 at _x_ = 0:",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "Re_delta",
+     "meaning": "Reynolds number U*delta/nu",
+     "units": "1",
+     "role": "source_variable",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "Re_x",
+     "meaning": "Reynolds number U*x/nu",
+     "units": "1",
+     "role": "source_variable",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "delta",
+     "meaning": "boundary-layer thickness",
+     "units": "m",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_BL_THICKNESS"
+     ]
+    },
+    {
+     "symbol": "x",
+     "meaning": "distance from the flat-plate leading edge",
+     "units": "m",
+     "role": "source_variable",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [
+    "Uniform outer-stream velocity in the displayed flat-plate derivation"
+   ],
+   "validity": [
+    "Turbulent smooth flat-plate approximation"
+   ],
+   "extraction_note": "Docling 2.139.0 formula enrichment executed on PDF pp840-842. Equation images were partly missed, classified as figures, or transcribed with missing symbols. This form was corrected by direct visual comparison with the original PDF. Variables use dimensionally consistent SI interpretations; no numerical applicability bounds are invented. No implemented-model link is inherited. Approximation signs and rounded source coefficients are preserved; Eq7.45 coefficient0.031 and 7/6 relation are rounded approximations.",
+   "same_page_formula_candidates": [
+    "CAND_0ec86fba2da85e7cebb94c58",
+    "CAND_2a2e7697c13f4a8bd313f283",
+    "CAND_50c1cc57dfeeba94f6846629",
+    "CAND_99c08b1e58dac2f3dfee4d49"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 841
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "Re_delta",
+      "Re_x",
+      "x"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_A35025AD",
+   "store": "equations",
+   "type": "Equation",
+   "page": 841,
+   "is_target": false,
+   "active": false,
+   "source_state": "SUPERSEDED_EXTRACTION",
+   "verification": null,
+   "label": "Eq. (7.39) one-seventh-power turbulent profile",
+   "equation_number": "7.39",
+   "form": "NOT RENDERED IN MARKDOWN. Prandtl's one-seventh-power law approximation to the turbulent flat-plate velocity profile u/U (dashed line in Fig. 7.5).",
+   "statement": null,
+   "quote": "pointed out that the turbulent profiles in Fig. 7.5 can be approximated by a oneseventh-power law:",
+   "confidence": "low",
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "u/U",
+     "meaning": "dimensionless velocity profile",
+     "units": "",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "y/δ",
+     "meaning": "dimensionless wall-normal coordinate",
+     "units": "",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [
+    "excellent fit to low-Reynolds-number turbulent data available to Prandtl"
+   ],
+   "validity": [],
+   "extraction_note": "Explicit expression not rendered; the source names it the one-seventh-power law.",
+   "same_page_formula_candidates": [
+    "CAND_0ec86fba2da85e7cebb94c58",
+    "CAND_2a2e7697c13f4a8bd313f283",
+    "CAND_50c1cc57dfeeba94f6846629",
+    "CAND_99c08b1e58dac2f3dfee4d49"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 841
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": [
+      "DAMAGE_OR_REPETITION_MARKER"
+     ]
+    },
+    {
+     "check": "variable_symbol_absent_from_form",
+     "symbols": [
+      "y/δ"
+     ]
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "u/U",
+      "y/δ"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_C4EE2076",
+   "store": "equations",
+   "type": "Equation",
+   "page": 842,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "White Eq. (7.46) turbulent displacement thickness",
+   "equation_number": "7.46",
+   "form": "delta_star approx integral_0^delta [1-(y/delta)^(1/7)] dy = delta/8",
+   "statement": null,
+   "quote": "The displacement thickness can be estimated from the one-seventh-power law and Eq. (7.12):",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "delta_star",
+     "meaning": "displacement thickness",
+     "units": "m",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_BL_DISPLACEMENT"
+     ]
+    },
+    {
+     "symbol": "delta",
+     "meaning": "boundary-layer thickness",
+     "units": "m",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_BL_THICKNESS"
+     ]
+    },
+    {
+     "symbol": "y",
+     "meaning": "distance normal to the plate",
+     "units": "m",
+     "role": "source_variable",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [
+    "Uniform outer-stream velocity in the displayed flat-plate derivation"
+   ],
+   "validity": [
+    "Turbulent smooth flat-plate approximation"
+   ],
+   "extraction_note": "Docling 2.139.0 formula enrichment executed on PDF pp840-842. Equation images were partly missed, classified as figures, or transcribed with missing symbols. This form was corrected by direct visual comparison with the original PDF. Variables use dimensionally consistent SI interpretations; no numerical applicability bounds are invented. No implemented-model link is inherited. Approximation signs and rounded source coefficients are preserved; Eq7.45 coefficient0.031 and 7/6 relation are rounded approximations.",
+   "same_page_formula_candidates": [
+    "CAND_5dff5c04f79604ac232acacb",
+    "CAND_6d67140e2444bfe1430b16ae",
+    "CAND_8f11f77dacb25b0dd8f580ad",
+    "CAND_cb4c51c578874a0eeb852835"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 842
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "y"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_C8C5EA63",
+   "store": "equations",
+   "type": "Equation",
+   "page": 842,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "White Eq. (7.47) turbulent shape factor",
+   "equation_number": "7.47",
+   "form": "H = delta_star/theta = (1/8)/(7/72) approx 1.3",
+   "statement": null,
+   "quote": "The turbulent flat-plate shape factor is approximately",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "H",
+     "meaning": "boundary-layer shape factor",
+     "units": "1",
+     "role": "source_variable",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "delta_star",
+     "meaning": "displacement thickness",
+     "units": "m",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_BL_DISPLACEMENT"
+     ]
+    },
+    {
+     "symbol": "theta",
+     "meaning": "momentum thickness",
+     "units": "m",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_BL_MOMENTUM"
+     ]
+    }
+   ],
+   "assumptions": [
+    "Uniform outer-stream velocity in the displayed flat-plate derivation"
+   ],
+   "validity": [
+    "Turbulent smooth flat-plate approximation"
+   ],
+   "extraction_note": "Docling 2.139.0 formula enrichment executed on PDF pp840-842. Equation images were partly missed, classified as figures, or transcribed with missing symbols. This form was corrected by direct visual comparison with the original PDF. Variables use dimensionally consistent SI interpretations; no numerical applicability bounds are invented. No implemented-model link is inherited. Approximation signs and rounded source coefficients are preserved; Eq7.45 coefficient0.031 and 7/6 relation are rounded approximations. The printed display ends =1.3; approx here preserves that this is a rounded value (9/7).",
+   "same_page_formula_candidates": [
+    "CAND_5dff5c04f79604ac232acacb",
+    "CAND_6d67140e2444bfe1430b16ae",
+    "CAND_8f11f77dacb25b0dd8f580ad",
+    "CAND_cb4c51c578874a0eeb852835"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 842
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "H"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_DD780E1E",
+   "store": "equations",
+   "type": "Equation",
+   "page": 842,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "White Eq. (7.43) local turbulent skin-friction coefficient",
+   "equation_number": "7.43",
+   "form": "c_f approx 0.027*Re_x^(-1/7)",
+   "statement": null,
+   "quote": "Writing this out in dimensional form, we have",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "c_f",
+     "meaning": "skin-friction coefficient",
+     "units": "1",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_CF_SKIN"
+     ]
+    },
+    {
+     "symbol": "Re_x",
+     "meaning": "Reynolds number U*x/nu",
+     "units": "1",
+     "role": "source_variable",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [
+    "Uniform outer-stream velocity in the displayed flat-plate derivation"
+   ],
+   "validity": [
+    "Turbulent smooth flat-plate approximation"
+   ],
+   "extraction_note": "Docling 2.139.0 formula enrichment executed on PDF pp840-842. Equation images were partly missed, classified as figures, or transcribed with missing symbols. This form was corrected by direct visual comparison with the original PDF. Variables use dimensionally consistent SI interpretations; no numerical applicability bounds are invented. No implemented-model link is inherited. Approximation signs and rounded source coefficients are preserved; Eq7.45 coefficient0.031 and 7/6 relation are rounded approximations.",
+   "same_page_formula_candidates": [
+    "CAND_5dff5c04f79604ac232acacb",
+    "CAND_6d67140e2444bfe1430b16ae",
+    "CAND_8f11f77dacb25b0dd8f580ad",
+    "CAND_cb4c51c578874a0eeb852835"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 842
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "Re_x"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_E14372C8",
+   "store": "equations",
+   "type": "Equation",
+   "page": 841,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "White Eq. (7.39) one-seventh-power turbulent velocity profile",
+   "equation_number": "7.39",
+   "form": "u/U approx (y/delta)^(1/7)",
+   "statement": null,
+   "quote": "pointed out that the turbulent profiles in Fig. 7.5 can be approximated by a oneseventh-power law:",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "u",
+     "meaning": "local mean streamwise velocity",
+     "units": "m/s",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_FLOW_SPEED"
+     ],
+     "normalization_history": [
+      {
+       "resolution_state": "UNRESOLVED_ENTITY",
+       "quantity_candidates": []
+      }
+     ],
+     "normalization_basis": "SYSTEM_INFERS: symbol, exact canonical units and explicit meaning aliases; no unit conversion or physical validity inferred"
+    },
+    {
+     "symbol": "U",
+     "meaning": "uniform outer-stream velocity",
+     "units": "m/s",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_FLOW_SPEED"
+     ],
+     "normalization_history": [
+      {
+       "resolution_state": "UNRESOLVED_ENTITY",
+       "quantity_candidates": []
+      }
+     ],
+     "normalization_basis": "SYSTEM_INFERS: symbol, exact canonical units and explicit meaning aliases; no unit conversion or physical validity inferred"
+    },
+    {
+     "symbol": "y",
+     "meaning": "distance normal to the plate",
+     "units": "m",
+     "role": "source_variable",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "delta",
+     "meaning": "boundary-layer thickness",
+     "units": "m",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_BL_THICKNESS"
+     ]
+    }
+   ],
+   "assumptions": [
+    "Uniform outer-stream velocity in the displayed flat-plate derivation"
+   ],
+   "validity": [
+    "Turbulent smooth flat-plate approximation"
+   ],
+   "extraction_note": "Docling 2.139.0 formula enrichment executed on PDF pp840-842. Equation images were partly missed, classified as figures, or transcribed with missing symbols. This form was corrected by direct visual comparison with the original PDF. Variables use dimensionally consistent SI interpretations; no numerical applicability bounds are invented. No implemented-model link is inherited. Approximation signs and rounded source coefficients are preserved; Eq7.45 coefficient0.031 and 7/6 relation are rounded approximations.",
+   "same_page_formula_candidates": [
+    "CAND_0ec86fba2da85e7cebb94c58",
+    "CAND_2a2e7697c13f4a8bd313f283",
+    "CAND_50c1cc57dfeeba94f6846629",
+    "CAND_99c08b1e58dac2f3dfee4d49"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 841
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "y"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_E51E8E76",
+   "store": "equations",
+   "type": "Equation",
+   "page": 842,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "White Eq. (7.45) integrated turbulent plate drag",
+   "equation_number": "7.45",
+   "form": "D = integral_0^L tau_w*b dx; C_D = 2*D/(rho*U^2*b*L) = integral_0^1 c_f d(x/L); C_D approx 0.031*Re_L^(-1/7) approx (7/6)*c_f(L)",
+   "statement": null,
+   "quote": "We can evaluate the drag coefficient by integrating the wall friction:",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "D",
+     "meaning": "flat-plate friction drag",
+     "units": "N",
+     "role": "source_variable",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "tau_w",
+     "meaning": "wall shear stress",
+     "units": "Pa",
+     "role": "source_variable",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "b",
+     "meaning": "plate width",
+     "units": "m",
+     "role": "source_variable",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "x",
+     "meaning": "distance from the flat-plate leading edge",
+     "units": "m",
+     "role": "source_variable",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "L",
+     "meaning": "plate length",
+     "units": "m",
+     "role": "source_variable",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "C_D",
+     "meaning": "drag coefficient",
+     "units": "1",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_CD_DRAG"
+     ]
+    },
+    {
+     "symbol": "rho",
+     "meaning": "density",
+     "units": "kg/m^3",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_RHO"
+     ]
+    },
+    {
+     "symbol": "U",
+     "meaning": "uniform outer-stream velocity",
+     "units": "m/s",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_FLOW_SPEED"
+     ],
+     "normalization_history": [
+      {
+       "resolution_state": "UNRESOLVED_ENTITY",
+       "quantity_candidates": []
+      }
+     ],
+     "normalization_basis": "SYSTEM_INFERS: symbol, exact canonical units and explicit meaning aliases; no unit conversion or physical validity inferred"
+    },
+    {
+     "symbol": "c_f",
+     "meaning": "skin-friction coefficient",
+     "units": "1",
+     "role": "source_variable",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_CF_SKIN"
+     ]
+    },
+    {
+     "symbol": "Re_L",
+     "meaning": "Reynolds number U*L/nu",
+     "units": "1",
+     "role": "source_variable",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [
+    "Uniform outer-stream velocity in the displayed flat-plate derivation"
+   ],
+   "validity": [
+    "Turbulent smooth flat-plate approximation"
+   ],
+   "extraction_note": "Docling 2.139.0 formula enrichment executed on PDF pp840-842. Equation images were partly missed, classified as figures, or transcribed with missing symbols. This form was corrected by direct visual comparison with the original PDF. Variables use dimensionally consistent SI interpretations; no numerical applicability bounds are invented. No implemented-model link is inherited. Approximation signs and rounded source coefficients are preserved; Eq7.45 coefficient0.031 and 7/6 relation are rounded approximations.",
+   "same_page_formula_candidates": [
+    "CAND_5dff5c04f79604ac232acacb",
+    "CAND_6d67140e2444bfe1430b16ae",
+    "CAND_8f11f77dacb25b0dd8f580ad",
+    "CAND_cb4c51c578874a0eeb852835"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 842
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "D",
+      "tau_w",
+      "b",
+      "x",
+      "L",
+      "Re_L"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_29B64E7A",
+   "store": "claims",
+   "type": "Claim",
+   "page": 842,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Turbulent plate friction drops slowly with x, increases nearly as ρ and U^2, and is rather insensitive to viscosity.",
+   "quote": "Turbulent plate friction drops slowly with _x_, increases nearly as _ρ_ and _U_ <sup>2</sup>,",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 842
+    }
+   ]
+  },
+  {
+   "id": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_3AD06B83",
+   "store": "claims",
+   "type": "Claim",
+   "page": 843,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "In the transition region 5 × 10^5 < Re_L < 8 × 10^7 the laminar drag at the leading edge is an appreciable fraction of the total drag.",
+   "quote": "figure also shows the behavior of the drag coefficient in the transition region 5 ×",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 843
+    }
+   ]
+  },
+  {
+   "id": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_54B451F2",
+   "store": "claims",
+   "type": "Claim",
+   "page": 841,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Prandtl's one-seventh-power law is an excellent fit to the low-Reynolds-number turbulent data that were available to Prandtl at the time.",
+   "quote": "This is shown as a dashed line in Fig. 7.5. It is an excellent fit to the lowReynolds-number turbulent data, which were all that were available to Prandtl at",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 841
+    }
+   ]
+  },
+  {
+   "id": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_83F43F0F",
+   "store": "claims",
+   "type": "Claim",
+   "page": 842,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "For turbulent flat-plate flow, C_D is only 16 percent greater than the trailing-edge skin friction coefficient.",
+   "quote": "Then _CD_ is only 16 percent greater than the trailing-edge skin friction",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 842
+    }
+   ]
+  },
+  {
+   "id": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_A35B343A",
+   "store": "claims",
+   "type": "Claim",
+   "page": 841,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The thickness of a turbulent boundary layer increases as x^(6/7), far more rapidly than the laminar increase x^(1/2).",
+   "quote": "Thus the thickness of a turbulent boundary layer increases as _x_ <sup>6/7</sup>, far more",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 841
+    }
+   ]
+  },
+  {
+   "id": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_AC6B3D60",
+   "store": "claims",
+   "type": "Claim",
+   "page": 842,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The effect of wall roughness on flat-plate drag is quite strong; the proper roughness parameter is x/ε or L/ε by analogy with pipe ε/d.",
+   "quote": "with the effect of wall roughness, which is quite strong. The proper roughness",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 842
+    }
+   ]
+  },
+  {
+   "id": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_B9167738",
+   "store": "claims",
+   "type": "Claim",
+   "page": 843,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "In the fully rough regime C_D is independent of the Reynolds number, so drag varies exactly as U^2 and is independent of μ.",
+   "quote": "rough regime, _CD_ is independent of the Reynolds number, so that the drag varies",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 843
+    }
+   ]
+  },
+  {
+   "id": "ASM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_114D350D",
+   "store": "entities",
+   "type": "Assumption",
+   "page": 842,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "The turbulent flat-plate relations (7.27), (7.45) and associated results are smooth-wall relations; roughness is treated separately.",
+   "equation_number": null,
+   "form": null,
+   "statement": "The turbulent flat-plate relations (7.27), (7.45) and associated results are smooth-wall relations; roughness is treated separately.",
+   "quote": "flow conditions. The smooth-wall relations (7.27) and (7.45) are shown, along",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 842
+    }
+   ]
+  },
+  {
+   "id": "ASM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_74A34544",
+   "store": "entities",
+   "type": "Assumption",
+   "page": 841,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "Integration of the momentum law assumes δ = 0 at x = 0 (turbulent flow from the leading edge).",
+   "equation_number": null,
+   "form": null,
+   "statement": "Integration of the momentum law assumes δ = 0 at x = 0 (turbulent flow from the leading edge).",
+   "quote": "Separate the variables and integrate, assuming _δ_ = 0 at _x_ = 0:",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 841
+    }
+   ]
+  },
+  {
+   "id": "ASM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_7DBE37B2",
+   "store": "entities",
+   "type": "Assumption",
+   "page": 841,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "The turbulent flat-plate thickness derivation integrates with delta = 0 at x = 0.",
+   "equation_number": null,
+   "form": null,
+   "statement": "The turbulent flat-plate thickness derivation integrates with delta = 0 at x = 0.",
+   "quote": "Separate the variables and integrate, assuming _δ_ = 0 at _x_ = 0:",
+   "confidence": null,
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 841
+    }
+   ]
+  },
+  {
+   "id": "ASM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_C56A6435",
+   "store": "entities",
+   "type": "Assumption",
+   "page": 841,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "Turbulent flat-plate velocity profiles are approximated by Prandtl's one-seventh-power law for evaluating momentum and displacement thickness.",
+   "equation_number": null,
+   "form": null,
+   "statement": "Turbulent flat-plate velocity profiles are approximated by Prandtl's one-seventh-power law for evaluating momentum and displacement thickness.",
+   "quote": "pointed out that the turbulent profiles in Fig. 7.5 can be approximated by a oneseventh-power law:",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 841
+    }
+   ]
+  },
+  {
+   "id": "ASM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_F7BCBE38",
+   "store": "entities",
+   "type": "Assumption",
+   "page": 841,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "The turbulent momentum and displacement thickness integrals use the one-seventh-power velocity-profile approximation.",
+   "equation_number": null,
+   "form": null,
+   "statement": "The turbulent momentum and displacement thickness integrals use the one-seventh-power velocity-profile approximation.",
+   "quote": "pointed out that the turbulent profiles in Fig. 7.5 can be approximated by a oneseventh-power law:",
+   "confidence": null,
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 841
+    }
+   ]
+  },
+  {
+   "id": "CONST_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_DC553A95",
+   "store": "entities",
+   "type": "EmpiricalConstant",
+   "page": 842,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "Turbulent C_D excess over trailing-edge c_f = 16 percent dimensionless",
+   "equation_number": null,
+   "form": null,
+   "statement": null,
+   "quote": "Then _CD_ is only 16 percent greater than the trailing-edge skin friction",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 842
+    }
+   ]
+  },
+  {
+   "id": "VAL_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_F308F01F",
+   "store": "validity",
+   "type": "ValidityEnvelope",
+   "page": 843,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Transition-region drag curve fits apply for 5 × 10^5 < Re_L < 8 × 10^7.",
+   "quote": "figure also shows the behavior of the drag coefficient in the transition region 5 ×",
+   "confidence": null,
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 843
+    }
+   ]
+  }
+ ],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01124",
+   "page_start": 841,
+   "page_end": 841,
+   "section": "**Turbulent Flow**",
+   "text": "This we shall use as the left-hand side of Eq. (7.33). For the right-hand side,\nwe need an estimate for _θ_ ( _x_ ) in terms of _δ_ ( _x_ ). If we use the logarithmic law\nprofile (7.34), we shall be up to our hips in logarithmic integrations for the\nmomentum thickness. Instead we follow another suggestion of Prandtl, who\npointed out that the turbulent profiles in Fig. 7.5 can be approximated by a oneseventh-power law:\n\nThis is shown as a dashed line in Fig. 7.5. It is an excellent fit to the lowReynolds-number turbulent data, which were all that were available to Prandtl at\nthe time. With this simple approximation, the momentum thickness (7.28) can\neasily be evaluated:\n\nWe accept this result and substitute Eqs. (7.38) and (7.40) into Kármán’s\nmomentum law (7.33):\n\nSeparate the variables and integrate, assuming _δ_ = 0 at _x_ = 0:\n\nThus the thickness of a turbulent boundary layer increases as _x_ <sup>6/7</sup>, far more\nrapidly than the laminar increase _x_ <sup>1/2</sup> . Equation (7.42) is the solution to the\nproblem, because all other parameters are now available. For example,\ncombining Eqs. (7.42) and (7.38), we obtain the friction variation"
+  },
+  {
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01125",
+   "page_start": 842,
+   "page_end": 842,
+   "section": "**Turbulent Flow**",
+   "text": "Writing this out in dimensional form, we have\n\nTurbulent plate friction drops slowly with _x_, increases nearly as _ρ_ and _U_ <sup>2</sup>,\nand is rather insensitive to viscosity.\n\nWe can evaluate the drag coefficient by integrating the wall friction:\n\nThen _CD_ is only 16 percent greater than the trailing-edge skin friction\ncoefficient [compare with Eq. (7.27) for laminar flow].\n\nThe displacement thickness can be estimated from the one-seventh-power\nlaw and Eq. (7.12):\n\nThe turbulent flat-plate shape factor is approximately\n\nThese are the basic results of turbulent flat-plate theory.\n\nFigure 7.6 shows flat-plate drag coefficients for both laminar and turbulent\nflow conditions. The smooth-wall relations (7.27) and (7.45) are shown, along\nwith the effect of wall roughness, which is quite strong. The proper roughness"
+  },
+  {
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01126",
+   "page_start": 843,
+   "page_end": 843,
+   "section": "**Turbulent Flow**",
+   "text": "parameter here is _x_ / _ϵ_ or _L_ / _ϵ_, by analogy with the pipe parameter _ϵ_ / _d_ . In the fully\nrough regime, _CD_ is independent of the Reynolds number, so that the drag varies\nexactly as _U_ <sup>2</sup> and is independent of _μ_ . Reference 2 presents a theory of rough\nflat-plate flow, and Ref. 1 gives a curve fit for skin friction and drag in the fully\nrough regime:\n\nEquation (7.48 _b_ ) is plotted to the right of the dashed line in Fig. 7.6. The\nfigure also shows the behavior of the drag coefficient in the transition region 5 ×\n10 <sup>5</sup> < Re _L_ < 8 × 10 <sup>7</sup>, where the laminar drag at the leading edge is an appreciable\nfraction of the total drag. Schlichting [1] suggests the following curve fits for\nthese transition drag curves, depending on the Reynolds number Retrans where\ntransition begins:"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "formula": 17,
+   "figure": 3
+  },
+  "flagged_candidates": 0,
+  "target_objects": 7,
+  "objects_with_anchor_problems": 0
+ }
+}

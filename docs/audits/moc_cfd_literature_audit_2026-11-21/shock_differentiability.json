@@ -1,0 +1,352 @@
+{
+  "scope": "Shock fitting and differentiability plan audit, after the full supplied-paper Docling/KG ingestion gate. No plan, physics, default or graph edits.",
+  "timestamp_utc": "2026-11-21T19:37:05.656095+00:00",
+  "findings": [
+    {
+      "id": "SA-01",
+      "severity": "P2",
+      "kind": "incorrect_generalization",
+      "title": "Distinguish a discrete AD derivative from convergence to the shock-sensitive continuum derivative",
+      "plan_locations": [
+        {
+          "file": "docs/subsystems/S06-rao-moc-bvp-contour/moc_extensions_plan_2026-11-21/sections/07_g4.tex",
+          "lines": [
+            23,
+            26,
+            43,
+            46
+          ]
+        }
+      ],
+      "code_locations": [],
+      "source_ids": [
+        "giles2010",
+        "giles2001"
+      ],
+      "evidence": "Giles-Ulbrich Part 2 proves convergence for a modified Lax-Friedrichs scalar convex-flux scheme with viscosity of order h^alpha, 2/3 < alpha < 1, which makes shock width in physical units vanish while points across the shock increase. PDF p5/printed909 explains this requirement; PDF p3/printed907 demonstrates an apparently grid-converged adjoint with the wrong value. Giles-Pierce PDF p6/printed332 explains that certain numerical discretizations can recover correct adjoint behavior without explicit enforcement of the internal shock condition.",
+      "problem": "The table says plain AD lacks shock-position terms as a general property. AD gives the derivative of the chosen finite-dimensional capturing algorithm; whether that derivative converges to the intended continuum shape/output derivative depends on the scheme, shock resolution, objective and limiting process. The supplied papers do not support a universal impossibility claim.",
+      "correction": "State that plain AD of a capturing discretization does not by itself establish a converged continuum shock sensitivity. Add a separate shocked scalar/Q1D derivative benchmark and mesh-plus-smoothing study before claiming derivatives through shocks; keep N1 initially scoped to the smooth attached branch. Do not transfer the scalar theorem to axisymmetric reacting Euler without new evidence.",
+      "confidence": "high"
+    },
+    {
+      "id": "SA-02",
+      "severity": "P2",
+      "kind": "unsupported_physical_location_claim",
+      "title": "A finite-grid fold is not yet a physical shock-onset bound",
+      "plan_locations": [
+        {
+          "file": "docs/subsystems/S06-rao-moc-bvp-contour/moc_extensions_plan_2026-11-21/sections/05_g2.tex",
+          "lines": [
+            44,
+            55,
+            61,
+            69,
+            79
+          ]
+        },
+        {
+          "file": "docs/subsystems/S06-rao-moc-bvp-contour/moc_extensions_plan_2026-11-21/sections/12_roadmap.tex",
+          "lines": [
+            23,
+            38
+          ]
+        }
+      ],
+      "code_locations": [
+        {
+          "file": "src/lrekit/components/nozzle/solvers/bounded.py",
+          "lines": [
+            393,
+            418,
+            441,
+            455
+          ],
+          "original_review_file": "src/raosim/components/nozzle/solvers/bounded.py"
+        }
+      ],
+      "source_ids": [
+        "salas",
+        "book"
+      ],
+      "evidence": "Salas PDF p3/printed585 explicitly describes his coalescence detector as empirical; he initiates a fitted front before mathematical coalescence, using an empirically chosen anticipation parameter. The book PDF p86/printed73 explicitly illustrates a fitted shock introduced upstream of the characteristic merging point. Current code detects a signed-cell-area reversal and stores the attempted node coordinate, rather than solving a conservative shock front.",
+      "problem": "The plan correctly reports E10 axial drift and no demonstrated convergence, but later says the first crossing bounds physical onset and S0a locates the envelope. Those later statements are stronger than the numerical evidence. A bound for a continuum simple-wave envelope does not automatically become a certified bound from a nonconverged axisymmetric discrete fold.",
+      "correction": "Call S0a a smooth-march refusal and candidate compression/coalescence locus. Require same-family identification, in-domain checks, refinement, upstream compression evidence and independent front/location comparison before an onset bound is claimed. Preserve the older roadmap distinction between fold, shock candidate and admissible solved shock. Never import Salas's anticipation threshold as a universal constant.",
+      "confidence": "high"
+    },
+    {
+      "id": "SA-03",
+      "severity": "P1",
+      "kind": "acceptance_gap",
+      "title": "S0 needs branch admissibility and model closure tests before its general-EOS result feeds S1",
+      "plan_locations": [
+        {
+          "file": "docs/subsystems/S06-rao-moc-bvp-contour/moc_extensions_plan_2026-11-21/sections/05_g2.tex",
+          "lines": [
+            26,
+            34,
+            69,
+            81
+          ]
+        }
+      ],
+      "code_locations": [],
+      "source_ids": [
+        "salas",
+        "book"
+      ],
+      "evidence": "The planned S0 acceptance lists only calorically perfect theta-beta-M and normal-shock limits. The superseded roadmap explicitly required a compressive entropy-admissible root, exclusion of the trivial unshocked root, dimensional upstream state and a named frozen/equilibrium/finite-rate gas mode. Salas PDF p4/printed586 computes the high-pressure side with both a downstream-reaching characteristic and Rankine-Hugoniot equations; the book Sec2.5 explains that jumps alone do not supply all interface information.",
+      "problem": "Agreement in a perfect-gas limiting test does not prove correct branch selection or thermodynamic closure on the general-EOS branch. In particular, the identical upstream/downstream state algebraically satisfies the conservation equalities; a Newton solver can return it unless a nontrivial compressive branch is selected. Taking the smallest beta above mu is a proposed weak-branch policy, not a general theorem for every EOS and downstream boundary condition.",
+      "correction": "Before S1, specify dimensional upstream p,T,velocity,composition, EOS/acoustic mode and front orientation; explicitly exclude the no-jump root, enforce compression and entropy admissibility, test weak/strong/attached-limit branches, and distinguish frozen jump plus relaxation from equilibrium jump. Retain conservation residuals and chemistry/element closure tests. Treat beta policy as conditional on the stated gas/topology and supporting downstream compatibility.",
+      "confidence": "high"
+    },
+    {
+      "id": "SA-04",
+      "severity": "P1",
+      "kind": "acceptance_gap",
+      "title": "N2 needs primal convergence and conditioning admission, even when topology flags stay fixed",
+      "plan_locations": [
+        {
+          "file": "docs/subsystems/S06-rao-moc-bvp-contour/moc_extensions_plan_2026-11-21/sections/07_g4.tex",
+          "lines": [
+            14,
+            16,
+            43,
+            56,
+            62,
+            63
+          ]
+        }
+      ],
+      "code_locations": [
+        {
+          "file": "src/lrekit/numerics/jax/bvp.py",
+          "lines": [
+            69,
+            97
+          ],
+          "original_review_file": "src/raosim/numerics/jax/bvp.py"
+        },
+        {
+          "file": "src/lrekit/numerics/jax/sensitivities.py",
+          "lines": [
+            20,
+            22,
+            141,
+            149
+          ],
+          "original_review_file": "src/raosim/numerics/jax/sensitivities.py"
+        }
+      ],
+      "source_ids": [],
+      "evidence": "The plan itself writes F_z z_x = -F_x with invertible F_z. The older differentiability roadmap required root convergence, conditioning checks, tolerance/grid refinement and enough primal accuracy for Taylor tests. The present N2 label depends on fixed flags and accounting for E12 jumps, which are necessary but not sufficient. Direct derivative-error reasoning: errors in residual or its derivatives are amplified by the inverse state Jacobian even without a topology event.",
+      "problem": "An event-free tape can contain an unconverged or ill-conditioned continuous unit process. Therefore unchanged flags cannot certify the derivative. There is a concrete preview-wrapper example: make_differentiable_solution uses throw=False and immediately returns readout(sol.value), ignoring sol.result.",
+      "correction": "Make valid require accepted primal residuals, solver success, usable Jacobian/adjoint conditioning and derivative-error/Taylor evidence under tolerance and grid refinement, in addition to stable topology. Failed or insufficiently resolved solves must return unavailable derivatives. Retain the older roadmap's distinction between root derivatives, nonzero-residual least-squares optimum derivatives and finite-iteration derivatives.",
+      "confidence": "high",
+      "small_probe": {
+        "command": "PYTHONPATH=src .venv-jax/bin/python: fn(z,p)=z-[p], initial0, p=2, make_differentiable_solution(max_steps=0)",
+        "observed": "unguarded readout 0.0; least_squares_solve reports success=False and residual[-2.0]",
+        "scope": "Tiny helper probe only; not a new MOC numerical solve. The helper is currently referenced only by its dedicated test, so this does not demonstrate an exposed production total-gradient bug."
+      }
+    },
+    {
+      "id": "SA-05",
+      "severity": "P2",
+      "kind": "missing_acceptance_detail",
+      "title": "A weak-shock entropy asymptotic does not justify marching through an arbitrary fold",
+      "plan_locations": [
+        {
+          "file": "docs/subsystems/S06-rao-moc-bvp-contour/moc_extensions_plan_2026-11-21/sections/05_g2.tex",
+          "lines": [
+            61,
+            62,
+            79
+          ]
+        },
+        {
+          "file": "docs/subsystems/S06-rao-moc-bvp-contour/moc_extensions_plan_2026-11-21/sections/07_g4.tex",
+          "lines": [
+            61,
+            63
+          ]
+        }
+      ],
+      "code_locations": [
+        {
+          "file": "src/lrekit/components/nozzle/solvers/bounded.py",
+          "lines": [
+            441,
+            455
+          ],
+          "original_review_file": "src/raosim/components/nozzle/solvers/bounded.py"
+        }
+      ],
+      "source_ids": [
+        "salas"
+      ],
+      "evidence": "The plan invokes third-order entropy loss in shock strength, but specifies no operational strength measure, conserved-flux reconstruction or output error budget for its weak-coalescence continuation. Salas PDF p4/printed586 deletes discontinuities below a chosen 1% Mach difference and explicitly says that feature is not required by the technique.",
+      "problem": "A small local entropy change does not alone control geometry, downstream pressure, accumulated wave error, thrust or sensitivity error. Signed-cell-area reversal does not even supply a shock strength. Salas's optional deletion rule is implementation evidence, not a validated transferable tolerance for this MOC nozzle.",
+      "correction": "Keep refusal as the default until the policy names its state-pair/strength definition, conserved quantities, loss budget, cumulative effect and tested output/derivative error versus a fitted or independently captured front. Preregister thresholds with the intended gas/domain; no automatic smoothing or fold bypass on the basis of entropy order alone.",
+      "confidence": "high"
+    }
+  ],
+  "sources": {
+    "salas": {
+      "title": "Shock Fitting Method for Complicated Two-Dimensional Supersonic Flows",
+      "authors": "Manuel D. Salas",
+      "year": 1976,
+      "doi": "10.2514/3.61399",
+      "pdf": "propulsion_texts/salas1976.pdf",
+      "pdf_pages": [
+        3,
+        4
+      ],
+      "printed_pages": [
+        585,
+        586
+      ],
+      "sections": [
+        "VI Shock Detection",
+        "VII Shock Computation",
+        "X Elimination of Weak Discontinuity"
+      ],
+      "visual_check": true
+    },
+    "book": {
+      "title": "Basic Elements of Unstructured Shock-Fitting: Results Achieved and Future Developments",
+      "authors": "Renato Paciorri and Aldo Bonfiglioli, in Onofri/Paciorri (eds.), Shock Fitting",
+      "year": 2017,
+      "doi": "10.1007/978-3-319-68427-7_3",
+      "pdf": "propulsion_texts/Shock Fitting _ Classical Techniques, Recent Developments, -- Marcello Onofri,Renato Paciorri (eds_) -- Shock Wave and High Pressure Phenomena, Shock -- isbn13 9783319684260 -- cac1acb5efe01602bc13ea2c7aca4465 -- Anna\u2019s Archive.pdf",
+      "pdf_pages": [
+        75,
+        78,
+        86
+      ],
+      "printed_pages": [
+        62,
+        65,
+        73
+      ],
+      "sections": [
+        "2 Unstructured Shock-Fitting: Algorithmic Features",
+        "2.5 Enforcement of the Jump Relations",
+        "4.2 Shock-wave formation example"
+      ],
+      "visual_check_pages": [
+        86
+      ],
+      "other_page_check": "Native text inspected for 75/78; those statements corroborate, not replace, visually checked Salas p4."
+    },
+    "giles2010": {
+      "title": "Convergence of Linearized and Adjoint Approximations for Discontinuous Solutions of Conservation Laws. Part 2: Adjoint Approximations and Extensions",
+      "authors": "Michael B. Giles and Stefan Ulbrich",
+      "year": 2010,
+      "doi": "10.1137/09078078X",
+      "pdf": "propulsion_texts/giles2010.pdf",
+      "pdf_pages": [
+        1,
+        3,
+        5,
+        6
+      ],
+      "printed_pages": [
+        905,
+        907,
+        909,
+        910
+      ],
+      "sections": [
+        "1 Introduction",
+        "1.1 Numerical experiments"
+      ],
+      "visual_check_pages": [
+        5
+      ]
+    },
+    "giles2001": {
+      "title": "Analytic adjoint solutions for the quasi-one-dimensional Euler equations",
+      "authors": "Michael B. Giles and Niles A. Pierce",
+      "year": 2001,
+      "doi": "10.1017/S0022112000002366",
+      "pdf": "propulsion_texts/giles2001.pdf",
+      "pdf_pages": [
+        5,
+        6
+      ],
+      "printed_pages": [
+        331,
+        332
+      ],
+      "sections": [
+        "2 Adjoint formulation"
+      ],
+      "visual_check_pages": [
+        6
+      ]
+    }
+  },
+  "reviewed_correct": [
+    "Stationary inviscid shock mass, normal momentum, normal energy plus continuous tangential velocity form is valid under stated conditions.",
+    "Separate rotational downstream streamline data are necessary; supersonic-only S1 and typed refusal of axis/wall interactions are reasonable bounded first scope.",
+    "The plan correctly distinguishes scalar one-dimensional sensitivity theory from axisymmetric full-system claims.",
+    "The explicit report that E10 has not converged and E12 remains FAIL should remain.",
+    "Shared-KL E07b parity is correctly identified as code-to-code evidence, not independent physical validation."
+  ],
+  "coverage_limits": [
+    "Book targeted chapters/sections selected from its contents and KG/corpus retrieval; not a cover-to-cover mathematical validation of every chapter.",
+    "Giles2010 supplied PDF is Part2; Part1 equation1.4 remains unverified from this supplied set.",
+    "No complete fitted-shock implementation exists in the inspected paths; acceptance gaps are plan defects, not demonstrated errors from a nonexistent solver.",
+    "Concurrent source-tree relocation during audit moved legacy raosim paths to src/lrekit; raosim is now a compatibility shim. Current inspected source paths and hashes are recorded; relocation itself is not a scientific defect.",
+    "No long MOC solves or CFD runs performed."
+  ],
+  "source_snapshots": [
+    {
+      "path": "docs/subsystems/S06-rao-moc-bvp-contour/moc_extensions_plan_2026-11-21/sections/05_g2.tex",
+      "sha256": "acf8a645ecdf4d4297cea1f940b6c53a888cd447e9923c3bb8a679c26ca85b63"
+    },
+    {
+      "path": "docs/subsystems/S06-rao-moc-bvp-contour/moc_extensions_plan_2026-11-21/sections/07_g4.tex",
+      "sha256": "3990caf462f1948b3be08bc80b453b6f849d44ddbc2b188fa375ab2054d2d515"
+    },
+    {
+      "path": "docs/subsystems/S06-rao-moc-bvp-contour/moc_extensions_plan_2026-11-21/sections/12_roadmap.tex",
+      "sha256": "6a3a1ebd64666606b36972798fe12c05fd7c7dd3d95d5af036c2a80ac33b949b"
+    },
+    {
+      "path": "docs/subsystems/S06-rao-moc-bvp-contour/default_solver_roadmap_2026-11-21/sections/03_shocks_and_viscosity.tex",
+      "sha256": "3819dec785620e4acf7e59395e5cbfc7217755284e188544df68fe3eaec7d7bb"
+    },
+    {
+      "path": "docs/subsystems/S06-rao-moc-bvp-contour/default_solver_roadmap_2026-11-21/sections/04_differentiability_and_mdo.tex",
+      "sha256": "f1e23bc884f6d817bfdc736c950cf991615377eac6ceae6cb1586bb69d5429ca"
+    },
+    {
+      "path": "src/lrekit/components/nozzle/solvers/bounded.py",
+      "sha256": "2043c341253a64884f82eb4c09edfa8e669caf1ae062d1256ee724a623025767",
+      "original_review_path": "src/raosim/components/nozzle/solvers/bounded.py",
+      "original_review_sha256": "0ee5ad7d5a53447bd2427e0edb32cbbdf221f156693b38ec669bc53a8c51e0ae"
+    },
+    {
+      "path": "src/lrekit/numerics/jax/bvp.py",
+      "sha256": "1c8429470a40e82b4d075314e363d9a398885588526d6ab785d732f865f48cc5",
+      "original_review_path": "src/raosim/numerics/jax/bvp.py",
+      "original_review_sha256": "ecc7d74965d47637bf8da2b6b56960bd68689daf68293aecea19ce68d1243b83"
+    },
+    {
+      "path": "src/lrekit/numerics/jax/sensitivities.py",
+      "sha256": "c3d6c640bcab854a7f4f4c5611ed0b60a584e23967ae5fa030087a0deb4441f0",
+      "original_review_path": "src/raosim/numerics/jax/sensitivities.py",
+      "original_review_sha256": "aa865b3ad296ffbbc72236105e9a126e825bd54436a0406a5fbbc822617aff3f"
+    }
+  ],
+  "searches": [
+    "knowledge/kg.sh --json context --task \"shock fitting rotational method characteristics weak shock onset adjoint discontinuous Giles Salas Onofri\"",
+    "Corpus Markdown/native PDF searches: shock formation, coalescence, entropy, jump relations, discrete adjoint convergence, fixed shock cells, shock-position equation",
+    "Current-code searches: signed-cell fold test; JAX sensitivity admission; implicit least-squares helper and call sites"
+  ],
+  "final_locator_refresh": {
+    "canonical_package": "src/lrekit",
+    "reviewer": "parent",
+    "scope": "Reread current cited operators and scope; retained prior locator fingerprints. No solver/default changes."
+  }
+}

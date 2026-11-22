@@ -1,0 +1,245 @@
+{
+  "schema_version": 1,
+  "profiles": [
+    {
+      "subsystem": "altitude",
+      "candidate_source_ids": [
+        "ntrs_19870015990",
+        "ntrs_19960042495"
+      ],
+      "proposed_method": "Verify pressure-thrust identities; assess matched-hardware ambient-pressure predictions before fitting any residual.",
+      "observables_or_checks": "thrust versus ambient state",
+      "remaining_evidence_gap": "No reviewed same-hardware multi-ambient measurement matrix.",
+      "state": "PLANNED_NOT_TRAINED",
+      "source_association_state": "CANDIDATE_ONLY_NOT_SOURCE_SUPPORT_REVIEW"
+    },
+    {
+      "subsystem": "cad",
+      "candidate_source_ids": [],
+      "proposed_method": "Analytic solids, Boolean/topology checks, neutral-file round trips and inspection; no learned physics.",
+      "observables_or_checks": "volume, topology, semantic geometry identity",
+      "remaining_evidence_gap": "As-built metrology and geometry identity must be assessed separately from software geometry.",
+      "state": "PLANNED_NOT_TRAINED",
+      "source_association_state": "CANDIDATE_ONLY_NOT_SOURCE_SUPPORT_REVIEW"
+    },
+    {
+      "subsystem": "chamber",
+      "candidate_source_ids": [
+        "mueller2000",
+        "gavitt2001",
+        "austin2005",
+        "sakaki2016",
+        "ntrs_19960042495"
+      ],
+      "proposed_method": "Verify geometry/volume identities; assess a separate source-specific combustion-efficiency model when losses are identifiable.",
+      "observables_or_checks": "chamber pressure, mass flow, throat geometry, cstar efficiency",
+      "remaining_evidence_gap": "No generic L-star or shoulder-fill performance law established by this collection.",
+      "state": "PLANNED_NOT_TRAINED",
+      "source_association_state": "CANDIDATE_ONLY_NOT_SOURCE_SUPPORT_REVIEW"
+    },
+    {
+      "subsystem": "flow",
+      "candidate_source_ids": [
+        "ntrs_19870015990",
+        "ntrs_19870015991",
+        "ntrs_19650010083"
+      ],
+      "proposed_method": "Reproduce a measured source case, then assess bounded pressure/performance-loss residuals.",
+      "observables_or_checks": "pressure and performance profiles",
+      "remaining_evidence_gap": "Boundary-layer displacement is not uniquely identified by wall-pressure observations alone.",
+      "state": "PLANNED_NOT_TRAINED",
+      "source_association_state": "CANDIDATE_ONLY_NOT_SOURCE_SUPPORT_REVIEW"
+    },
+    {
+      "subsystem": "injector",
+      "candidate_source_ids": [
+        "ntrs_20190030431",
+        "ntrs_19700005097",
+        "son2017",
+        "ninish2018",
+        "mueller2000",
+        "gavitt2001",
+        "austin2005",
+        "sakaki2016",
+        "sakaki2018",
+        "kang2022"
+      ],
+      "proposed_method": "Separate hydraulic flow fitting, atomization and combustion targets; distinct geometry and propellant families.",
+      "observables_or_checks": "flow, Cd, geometry, spray, cstar efficiency, time histories",
+      "remaining_evidence_gap": "No actual conical-seat-valve pilot measurement CSVs supplied; source papers are not a transferable exact-part Cd curve.",
+      "state": "PLANNED_NOT_TRAINED",
+      "source_association_state": "CANDIDATE_ONLY_NOT_SOURCE_SUPPORT_REVIEW"
+    },
+    {
+      "subsystem": "interface",
+      "candidate_source_ids": [],
+      "proposed_method": "Verify algebraic bolt/plate screens; later assess against measured loads/preload/strain/leakage and FEA.",
+      "observables_or_checks": "preload, load-displacement, strain, leakage",
+      "remaining_evidence_gap": "No compatible joint experiment acquired.",
+      "state": "PLANNED_NOT_TRAINED",
+      "source_association_state": "CANDIDATE_ONLY_NOT_SOURCE_SUPPORT_REVIEW"
+    },
+    {
+      "subsystem": "materials",
+      "candidate_source_ids": [
+        "ntrs_20050123582",
+        "ntrs_19750021165"
+      ],
+      "proposed_method": "Fit/interpolate temperature-dependent coupon properties with process and test mode retained.",
+      "observables_or_checks": "conductivity, strength, stress-strain, fatigue",
+      "remaining_evidence_gap": "As-built process variability and thermomechanical life not established.",
+      "state": "PLANNED_NOT_TRAINED",
+      "source_association_state": "CANDIDATE_ONLY_NOT_SOURCE_SUPPORT_REVIEW"
+    },
+    {
+      "subsystem": "nozzle",
+      "candidate_source_ids": [
+        "ntrs_19870015990",
+        "ntrs_19960042495",
+        "ntrs_19690063911",
+        "fixture_cuffel_anchors"
+      ],
+      "proposed_method": "Verify contour mathematics and numerical reference behavior; compare measured wall pressure/thrust before fitting bounded loss corrections.",
+      "observables_or_checks": "contour, pressure profiles, thrust coefficient",
+      "remaining_evidence_gap": "Cuffel paper acquired from a third-party host; full profile not yet digitized; current anchors are rounded; reacting/viscous/shocked regimes need distinct assessment.",
+      "state": "PLANNED_NOT_TRAINED",
+      "source_association_state": "CANDIDATE_ONLY_NOT_SOURCE_SUPPORT_REVIEW"
+    },
+    {
+      "subsystem": "performance",
+      "candidate_source_ids": [
+        "ntrs_19870015990",
+        "ntrs_19960042495"
+      ],
+      "proposed_method": "Keep ideal identities fixed; assess delivered-performance loss components and observation uncertainty.",
+      "observables_or_checks": "thrust coefficient, Isp, mass flow",
+      "remaining_evidence_gap": "Do not absorb several unidentifiable component losses into one efficiency.",
+      "state": "PLANNED_NOT_TRAINED",
+      "source_association_state": "CANDIDATE_ONLY_NOT_SOURCE_SUPPORT_REVIEW"
+    },
+    {
+      "subsystem": "pump",
+      "candidate_source_ids": [
+        "hong2012",
+        "ntrs_19780012674"
+      ],
+      "proposed_method": "Source-specific head/efficiency/NPSH maps with uncertainty, then justified speed-transfer comparisons.",
+      "observables_or_checks": "flow, speed, head, torque, power, inlet state, NPSH",
+      "remaining_evidence_gap": "Cryogenic and new-geometry transfer unestablished; no motor/inverter/battery maps or exact-part casing-joint data acquired.",
+      "state": "PLANNED_NOT_TRAINED",
+      "source_association_state": "CANDIDATE_ONLY_NOT_SOURCE_SUPPORT_REVIEW"
+    },
+    {
+      "subsystem": "separation",
+      "candidate_source_ids": [
+        "hagemann1998",
+        "frey2000"
+      ],
+      "proposed_method": "Locate original measurement campaigns behind reviews, then assess a source-specific onset model.",
+      "observables_or_checks": "separation location and onset versus chamber/ambient state",
+      "remaining_evidence_gap": "No new numeric onset extraction; do not infer side-load prediction or reuse shared campaigns as independent tests.",
+      "state": "PLANNED_NOT_TRAINED",
+      "source_association_state": "CANDIDATE_ONLY_NOT_SOURCE_SUPPORT_REVIEW"
+    },
+    {
+      "subsystem": "spray",
+      "candidate_source_ids": [
+        "radhakrishnan2018",
+        "radhakrishnan2021",
+        "ninish2018",
+        "fixture_radhakrishnan2018",
+        "fixture_radhakrishnan2021_water_air",
+        "fixture_radhakrishnan2021_simulation"
+      ],
+      "proposed_method": "Component target comparisons, then regime-specific residuals or assessed VOF/parcel models.",
+      "observables_or_checks": "spray angle, sheet dimensions, SMD, distribution at defined planes",
+      "remaining_evidence_gap": "Missing carrier fields, stochastic tracking inputs, raw droplet observations and limited independent campaigns block end-to-end validation.",
+      "state": "PLANNED_NOT_TRAINED",
+      "source_association_state": "CANDIDATE_ONLY_NOT_SOURCE_SUPPORT_REVIEW"
+    },
+    {
+      "subsystem": "structure",
+      "candidate_source_ids": [
+        "ntrs_19750021165",
+        "ntrs_20050123582"
+      ],
+      "proposed_method": "Verify elastic screens; assess FEA and fit compatible constitutive/fatigue response separately.",
+      "observables_or_checks": "strain, load, temperature, coupon cycles",
+      "remaining_evidence_gap": "Coupon data do not establish chamber ratcheting, creep or thermomechanical life.",
+      "state": "PLANNED_NOT_TRAINED",
+      "source_association_state": "CANDIDATE_ONLY_NOT_SOURCE_SUPPORT_REVIEW"
+    },
+    {
+      "subsystem": "thermal",
+      "candidate_source_ids": [
+        "ntrs_19650010083",
+        "ntrs_19950024435",
+        "ntrs_19990025912",
+        "ntrs_19870015991",
+        "ntrs_19960042495",
+        "carlile1992",
+        "betti2014",
+        "pizzarelli2011",
+        "kang2022",
+        "ntrs_19710011726"
+      ],
+      "proposed_method": "Separate gas heating, coolant HTC, friction and thermal response; fit identifiable correction terms, then consider CHT fusion.",
+      "observables_or_checks": "heat input, located wall temperature, coolant state, pressure loss",
+      "remaining_evidence_gap": "Mixed fluids/regimes and inverse/model-reduced observables; no universal heat-transfer, CHF or radiation calibration from these sources.",
+      "state": "PLANNED_NOT_TRAINED",
+      "source_association_state": "CANDIDATE_ONLY_NOT_SOURCE_SUPPORT_REVIEW"
+    },
+    {
+      "subsystem": "thermochemistry",
+      "candidate_source_ids": [
+        "ntrs_19960042495"
+      ],
+      "proposed_method": "Numerical solver/reference verification with held-out states; physical delivered-performance assessment is a separate task.",
+      "observables_or_checks": "thermochemical reference states, cstar with independent loss accounting",
+      "remaining_evidence_gap": "Measured cstar efficiency does not isolate equilibrium-chemistry error.",
+      "state": "PLANNED_NOT_TRAINED",
+      "source_association_state": "CANDIDATE_ONLY_NOT_SOURCE_SUPPORT_REVIEW"
+    },
+    {
+      "subsystem": "throat",
+      "candidate_source_ids": [
+        "ntrs_19690063911",
+        "fixture_cuffel_anchors"
+      ],
+      "proposed_method": "Verify start-line equations, then compare resolved measured pressure and discharge for matching geometry.",
+      "observables_or_checks": "transonic pressure, inferred Mach, discharge",
+      "remaining_evidence_gap": "Full paper acquired from a third-party host; only two rounded anchors presently numeric; no reviewed discharge dataset.",
+      "state": "PLANNED_NOT_TRAINED",
+      "source_association_state": "CANDIDATE_ONLY_NOT_SOURCE_SUPPORT_REVIEW"
+    },
+    {
+      "subsystem": "trajectory",
+      "candidate_source_ids": [],
+      "proposed_method": "Analytic/integration verification first; later a vehicle-specific flight observation model.",
+      "observables_or_checks": "kinematics, conservation, trajectory observations",
+      "remaining_evidence_gap": "No flight dataset acquired; engine test evidence is not trajectory validation.",
+      "state": "PLANNED_NOT_TRAINED",
+      "source_association_state": "CANDIDATE_ONLY_NOT_SOURCE_SUPPORT_REVIEW"
+    },
+    {
+      "subsystem": "feed_manifolds",
+      "candidate_source_ids": [],
+      "proposed_method": "Fit friction/local-loss and maldistribution response only for measured passage geometries.",
+      "observables_or_checks": "located pressure differences and branch flows",
+      "remaining_evidence_gap": "No geometry-specific manifold measurement set acquired; cross-cutting future component contract.",
+      "state": "PLANNED_NOT_TRAINED",
+      "source_association_state": "CANDIDATE_ONLY_NOT_SOURCE_SUPPORT_REVIEW"
+    },
+    {
+      "subsystem": "actuators_dynamics",
+      "candidate_source_ids": [
+        "sakaki2018"
+      ],
+      "proposed_method": "Grey-box/state-space identification from synchronized measured histories; keep friction/backlash separate.",
+      "observables_or_checks": "command, position, pressure, flow, load and bandwidth",
+      "remaining_evidence_gap": "No applicable actuator time series; a combustion-instability paper does not supply valve dynamics or universal n-tau calibration.",
+      "state": "PLANNED_NOT_TRAINED",
+      "source_association_state": "CANDIDATE_ONLY_NOT_SOURCE_SUPPORT_REVIEW"
+    }
+  ]
+}

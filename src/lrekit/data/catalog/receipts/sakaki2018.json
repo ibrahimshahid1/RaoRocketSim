@@ -1,0 +1,32 @@
+{
+  "source_id": "sakaki2018",
+  "acquired_at_utc": "2026-11-04T00:34:47.312149+00:00",
+  "evidence_kind": "published_experimental_report",
+  "status": "ACQUIRED",
+  "files": [
+    {
+      "path": "raw/sakaki2018/source.pdf",
+      "bytes": 5263200,
+      "sha256": "5d4cd47d63703550f01e75b6c46462bc4d1edec6318ac0677cffb83632c1d489",
+      "origin": "existing_local_literature_copy",
+      "original_path": "propulsion_texts/pintle_injector/sakaki2018.pdf"
+    },
+    {
+      "path": "derived/sakaki2018/source.txt",
+      "bytes": 95487,
+      "sha256": "0ed55f06fba0285467694fbc573bf3b430272fc06a384dedeacefd0068f39b5d",
+      "origin": "unreviewed_pdf_text_derivative"
+    }
+  ],
+  "review_state": "NOT_REVIEWED_FOR_TRAINING",
+  "training_eligible": false,
+  "hardware_qualified": false,
+  "limitations": [
+    "Dynamic fitting requires actual time histories, bandwidth and geometry; plotted statistics alone may be insufficient."
+  ],
+  "pdf_info": "Title:           Longitudinal combustion instability of a pintle injector for a liquid rocket engine combustor\nSubject:         Combustion and Flame, 194 (2018) 115-127. doi:10.1016/j.combustflame.2018.04.017\nKeywords:        Liquid rocket; Combustion instability; Pintle injector\nAuthor:          Kazuki Sakaki\nCreator:         Elsevier\nProducer:        Acrobat Distiller 10.1.10 (Windows)\nCreationDate:    Sat May 12 17:44:35 2018 EDT\nModDate:         Sat May 12 17:45:12 2018 EDT\nCustom Metadata: yes\nMetadata Stream: yes\nTagged:          yes\nUserProperties:  no\nSuspects:        no\nForm:            none\nJavaScript:      no\nPages:           13\nEncrypted:       no\nPage size:       595.245 x 793.92 pts\nPage rot:        0\nFile size:       5263200 bytes\nOptimized:       yes\nPDF version:     1.7\n",
+  "text_extraction": {
+    "status": "DERIVATIVE_TEXT_UNREVIEWED",
+    "warning_excerpt": ""
+  }
+}

@@ -1,0 +1,354 @@
+{
+ "packet": "V-SP8089-p049-050",
+ "kind": "verification",
+ "document_id": "DOC_NTRS_19760023196",
+ "source_pdf": "propulsion_texts/19760023196.pdf",
+ "source_sha256": "5e9db6a6f7860ee51acbf5cbe137005ef259ec3fd87ff0ed5f1ad466d6227c44",
+ "pages": [
+  49,
+  50
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 49,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19760023196/p0049.png",
+   "sha256": "384ed3ec5685313cf9f330fce257d954d13d869689f7e404c0401f23216f7674",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 50,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19760023196/p0050.png",
+   "sha256": "7cb24547f6c43a3500f7ee88ad3cd18f39b40c7c5b89cf203410ee7e773707ad",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_4379ee5bbb5c01b91cce8db7",
+  "ENR_8c05cfd1579826622846a435"
+ ],
+ "candidates": [],
+ "stored_objects": [
+  {
+   "id": "CLM_NTRS_19760023196_30153DE1",
+   "store": "claims",
+   "type": "Claim",
+   "page": 50,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The effect of cross velocity on orifice Cd is reduced considerably by using a large inlet contour, chamfer, or counterbore.",
+   "quote": "The effect of cross velocity on orifice C4 is reduced considerably by using a large inlet contour, chamfer, or counterbore.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 50
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_370D1757",
+   "store": "claims",
+   "type": "Claim",
+   "page": 49,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Reference 74 presents an L/d-based equation predicting the injector pressure drop at which a full-flowing orifice will separate when flowing into air at 1 atmosphere.",
+   "quote": "Reference 74 presents an equation using the L/d parameter for predicting the injector pressure drop at which a full-flowing orifice will separate when flowing into air at 1 atmosphere.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 49
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_4C3AC6A7",
+   "store": "claims",
+   "type": "Claim",
+   "page": 49,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Reducing the orifice flowrate until full flow is achieved, even with 1-atmosphere back pressure, has given excellent correlation with full-flow hot-firing Cd values.",
+   "quote": "Reducing the orifice flowrate until full flow was achieved, even with only I-atmosphere back pressure, has resulted in excellent correlation with full-flow, hot-firing Cy values.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 49
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_AB047B4B",
+   "store": "claims",
+   "type": "Claim",
+   "page": 49,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "When normally full-flowing orifices exhibit separated flow under cold-flow conditions with 1-atmosphere back pressure, neither the cold-flow pressure drop nor the mixing/atomization characteristics are meaningful.",
+   "quote": "When normally-full-flowing orifices exhibit separated flow under cold-flow test conditions with J-atmosphere back pressure, neither the cold-flow injector pressure drop nor the element mixing and atomization characteristics are meaningful.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 49
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_E83CCF61",
+   "store": "claims",
+   "type": "Claim",
+   "page": 49,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Because the back-pressurant gas and cross velocity significantly affect the hydraulic-flip point, the separated-flow equation of ref. 74 should be used only as a first estimate.",
+   "quote": "so the separated-flow equation (ref. 74) should be used only as a first estimate. Also, the cross velocity drastically affects the hydraulic-flip point (ref. 75).",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 49
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19760023196_F99D85AF",
+   "store": "claims",
+   "type": "Claim",
+   "page": 50,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Orifice L/d of about 4 was required to produce streams concentric with the orifice centerline, even with zero cross velocity (Apollo SPS study).",
+   "quote": "Orifice L/d’s of about 4 were required to produce streams concentric with the orifice centerline, even with zero cross velocity.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 50
+    }
+   ]
+  },
+  {
+   "id": "CONST_NTRS_19760023196_E6147C75",
+   "store": "entities",
+   "type": "EmpiricalConstant",
+   "page": 50,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "orifice L/d for concentric stream = ~4 dimensionless",
+   "equation_number": null,
+   "form": null,
+   "statement": null,
+   "quote": "Orifice L/d’s of about 4 were required to produce streams concentric with the orifice centerline, even with zero cross velocity.",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 50
+    }
+   ]
+  },
+  {
+   "id": "VAL_NTRS_19760023196_67F78A0E",
+   "store": "validity",
+   "type": "ValidityEnvelope",
+   "page": 49,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The separated-flow (hydraulic flip) equation of ref. 74 should be used only as a first estimate because back-pressurant gas and cross velocity strongly affect the flip point.",
+   "quote": "so the separated-flow equation (ref. 74) should be used only as a first estimate. Also, the cross velocity drastically affects the hydraulic-flip point (ref. 75).",
+   "confidence": null,
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 49
+    }
+   ]
+  },
+  {
+   "id": "VAL_NTRS_19760023196_A634D91A",
+   "store": "validity",
+   "type": "ValidityEnvelope",
+   "page": 49,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Cold-flow injector pressure drop is not meaningful when normally full-flowing orifices flow separated at 1-atmosphere back pressure.",
+   "quote": "When normally-full-flowing orifices exhibit separated flow under cold-flow test conditions with J-atmosphere back pressure, neither the cold-flow injector pressure drop nor the element mixing and atomization characteristics are meaningful.",
+   "confidence": null,
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 49
+    }
+   ]
+  }
+ ],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00079",
+   "page_start": 49,
+   "page_end": 49,
+   "section": "2.1.2.1 ORIFICE INLET",
+   "text": "achieved through the EDM process with rotating electrode. Drilling into cither salt or a low-melting-point alloy reduces the burr problem, but complete removal of the low-melting-point alloy without damaging the injector is troublesome and sometimes impossible.\n\nModification or repair of existing injectors with blind inlets often results in. orifice characteristics that are not the same as those of the original orifices. Overdrilling existing orifices or drilling new orifices from the outlet side can result in orifice inlet burrs. Operational characteristics of such modified injectors may be significantly different from the characteristics of the original injector if burr removal and orifice entrance geometry are different. Orifice modification techniques that are identical to the initial orifice installation method (e.¢.. orifices FDM’d from the face) can produce excellent and reproducible results."
+  },
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00080",
+   "page_start": 49,
+   "page_end": 49,
+   "section": "2.1.2.2 ORIFICE BORE",
+   "text": "The orifice bore dimensions such as the bore length, diameter (width for annular shapes), surface finish. and angle are key controlling features of the orifice. Improper orifice bore designs can result in (1) unstable or unpredictable flow, with concurrent performance or thrust dropoff. (2) misimpinging or poor quality streams that result in performance losses, or (3) misdirected streams that produce overheating.\n\nThe hydraulic-flip phenomenon (i.¢., detachment of the jet from the orifice wall) leading to unstable or unpredictable flow is normally and most easily controlled by the orifice L/d parameter. Reference 74 presents an equation using the L/d parameter for predicting the injector pressure drop at which a full-flowing orifice will separate when flowing into air at 1 atmosphere. Another investigation (ref. 75) showed that the particular gas used as the back pressurant also significantly affects the hydraulic-flip point, so the separated-flow equation (ref. 74) should be used only as a first estimate. Also, the cross velocity drastically affects the hydraulic-flip point (ref. 75). Chamfering or rounding the orifice inlet reduces or eliminates the separated-flow region and reduces the effect of cross velocity on the hydraulic-flip point.\n\nWhen normally-full-flowing orifices exhibit separated flow under cold-flow test conditions with J-atmosphere back pressure, neither the cold-flow injector pressure drop nor the element mixing and atomization characteristics are meaningful. Both water and gascous back pressure have been used successfully to force full flow during cold-flow testing. Air flow was used successfully on the J-2 concentric-tube injector to cold calibrate each individual oxidizer and fuel orifice. Reducing the orifice flowrate until full flow was achieved, even with only I-atmosphere back pressure, has resulted in excellent correlation with full-flow, hot-firing Cy values."
+  },
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00081",
+   "page_start": 50,
+   "page_end": 50,
+   "section": "2.1.2.2 ORIFICE BORE",
+   "text": "The Apollo Service Propulsion System study (refs. 69 through 71) showed that stream direction control is very poor with orifices having low L/d values. Orifice L/d’s of about 4 were required to produce streams concentric with the orifice centerline, even with zero cross velocity.\n\nCorrelation of the hydraulic-flip point with propellant cavitation characteristics under limited conditions has been attempted in several studies (refs. 69, 70,:71, 76, and 77). No general correlation that will account for the orifice and flow variables normally encountered in injectors has been established, but hydraulic-flip characteristics of a propellant have been demonstrated by means of an easily handled cold-flow fluid with a boiling point different from that of the propellant.\n\nThe Apollo Service Propulsion System study and other programs have shown the importance (relative to atomization and mixing) of the orifice orientation in relation to the propellant cross-velocity direction (fig. 14). Orifices oriented as in figure 14(a) (as in many self-impinging orifices in ring-type injectors) have a significantly higher flow through the orifice with the lower fluid turning angle. Orifices oriented as in figure 14(b) have reasonably consistent flow characteristics (if the cross velocity is kept constant through the use of tapered ring manifolds), as do the orifices of figure 14(c), but the characteristics of each set are different. With orifices arranged as in figure 14(d), the flow characteristics of the orifices to the right of the downcomer are different from those of the ones to the left; an arrangement as shown in figure 14(e) avoids this problem. The configuration of figure 14(f) results in different flowrates to the two orifices, whereas the configuration of figure 14(g) results in the same flowrates. The effect of cross velocity on orifice C4 is reduced considerably by using a large inlet contour, chamfer, or counterbore. The Cg of a fully flowing sharp-edged orifice varies with the L/d of the orifice, as shown in figure 15, but becomes constant at an L/d of around 3. Gradual decrease in Cy at higher L/d values as a result of friction is not significant for orifice L/d’s normally used in injectors. For micro-orifices and for annular orifices (concentric-tube type), frictional pressure drop can be significant, and thus a high degree of control on the surface finish is required."
+  },
+  {
+   "chunk_id": "DOC_NTRS_19760023196#c00082",
+   "page_start": 50,
+   "page_end": 50,
+   "section": "2.1.2.2 ORIFICE BORE",
+   "text": "Rectangular and square orifice bores have been used, both for improved fabricability and for better mixing characteristics. The flow characteristics of noncircular orifices have been studied by several investigators (refs. 5 and 78 through 82). Reference 83 is a review of the literature on pressure drop in noncircular ducts and annuli.\n\nOrifice plugging can result in orifice stream misdirection and subsequent wall streaking (overheating). Water (condensed combustion product) will tend to remain in small orifices (< 0.1 in. diam.). During chilldown on start, the water can freeze and block the orifice flow. Complex purge techniques may be required to prevent this problem.\n\nContaminants in the feed system such as machining chips, O-ring fragments, solid combustion products (from the propellants, hypergolic igniters, or solid-propellant turbine\n\n|"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {},
+  "flagged_candidates": 0,
+  "target_objects": 6,
+  "objects_with_anchor_problems": 0
+ }
+}

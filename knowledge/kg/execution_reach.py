@@ -10,6 +10,7 @@ from collections import defaultdict, deque
 import hashlib
 import importlib.util
 from pathlib import Path
+from .repository_layout import Layout
 
 
 MODEL_SYMBOLS = {
@@ -34,14 +35,16 @@ ROOTS = {
 class StaticReach:
     def __init__(self, repo_root: Path):
         self.repo_root = repo_root
+        layout = Layout(repo_root)
+        self.layout = layout
         self.definitions = {}
         self.edges = defaultdict(list)
         # Deliberately bounded to the cooling/optimizer and opt-in spray paths.
-        files = {repo_root / p for p in (
+        files = {repo_root / layout.path(p) for p in (
             "raosim/mdo/nlp.py", "raosim/mdo/engine.py", "raosim/mdo/cooling.py",
             "raosim/jax/thermal.py", "raosim/design.py", "raosim/injector.py", "raosim/physics.py",
             "raosim/spray_coupling.py")}
-        files.update((repo_root / "raosim/spray").glob("*.py"))
+        files.update((repo_root / layout.path("raosim/spray")).glob("*.py"))
         parsed = []
         for path in sorted(files):
             if not path.is_file():
@@ -51,20 +54,20 @@ class StaticReach:
                 tree = ast.parse(data)
             except SyntaxError:
                 continue
-            module = ".".join(path.relative_to(repo_root).with_suffix("").parts)
+            module = layout.module_for_file(path)
             aliases = {}
             # Function-local/dynamic imports are deliberately unresolved rather
             # than leaking an alias into unrelated function scopes.
             for node in tree.body:
                 if isinstance(node, ast.Import):
                     for item in node.names:
-                        aliases[item.asname or item.name.split(".")[0]] = item.name if item.asname else item.name.split(".")[0]
+                        aliases[item.asname or item.name.split(".")[0]] = layout.module(item.name) if item.asname else item.name.split(".")[0]
                 elif isinstance(node, ast.ImportFrom):
                     package = module.rsplit(".", 1)[0]
                     base = importlib.util.resolve_name("." * node.level + (node.module or ""), package) if node.level else (node.module or "")
                     for item in node.names:
                         if item.name != "*":
-                            aliases[item.asname or item.name] = base + "." + item.name
+                            aliases[item.asname or item.name] = layout.module(base + "." + item.name)
 
             def register(body, parents=()):
                 for node in body:
@@ -124,11 +127,12 @@ class StaticReach:
         return None
 
     def model(self, registry_id: str) -> dict:
-        targets = set(MODEL_SYMBOLS.get(registry_id, ()))
+        targets = {self.layout.module(s) for s in MODEL_SYMBOLS.get(registry_id, ())}
         available = targets & self.definitions.keys()
         routes = []
         for scope, roots in ROOTS.items():
             for root in roots:
+                root = self.layout.module(root)
                 path = self._path(root, available)
                 if path is not None:
                     routes.append({"scope": scope, "root": root, "root_locator": self.definitions[root],

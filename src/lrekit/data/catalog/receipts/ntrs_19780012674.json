@@ -1,0 +1,69 @@
+{
+  "source_id": "ntrs_19780012674",
+  "acquired_at_utc": "2026-11-04T00:34:03.204586+00:00",
+  "evidence_kind": "published_experimental_report",
+  "status": "ACQUIRED",
+  "files": [
+    {
+      "path": "raw/ntrs_19780012674/ntrs_metadata.json",
+      "bytes": 2631,
+      "sha256": "059a8bd3bf3da2518139c500ff7ae58b1b2d0be15de9cff81065b93d799c844f",
+      "origin": "publisher_metadata",
+      "requested_url": "https://ntrs.nasa.gov/api/citations/19780012674",
+      "resolved_url": "https://ntrs.nasa.gov/api/citations/19780012674",
+      "headers": {
+        "Content-Type": "application/json; charset=utf-8",
+        "ETag": "W/\"a47-efOCre/mcPKPqHOQAlz4X0IbCXY\"",
+        "Last-Modified": null
+      }
+    },
+    {
+      "path": "raw/ntrs_19780012674/source.pdf",
+      "bytes": 4090306,
+      "sha256": "ecf34dcf69b40422d2bc4f96b16365606af4bf79958c812d6d2c5f2be6e417e0",
+      "origin": "publisher_report_pdf",
+      "requested_url": "https://ntrs.nasa.gov/api/citations/19780012674/downloads/19780012674.pdf",
+      "resolved_url": "https://ntrs.nasa.gov/api/citations/19780012674/downloads/19780012674.pdf",
+      "headers": {
+        "Content-Type": "application/pdf",
+        "ETag": "\"85e1a7a55aeee08ca8baadbcb304ccb3\"",
+        "Last-Modified": "Thu, 06 Aug 2020 19:39:22 GMT"
+      }
+    },
+    {
+      "path": "derived/ntrs_19780012674/source.txt",
+      "bytes": 114740,
+      "sha256": "1fe6d4c1b9282b34bd7e4da0eafce4ca3847a155dfd270e828959534a66bd692",
+      "origin": "unreviewed_pdf_text_derivative"
+    }
+  ],
+  "review_state": "NOT_REVIEWED_FOR_TRAINING",
+  "training_eligible": false,
+  "hardware_qualified": false,
+  "limitations": [
+    "Small nonrocket liquid-transport pumps; methods and source-geometry map comparison only, no cryogenic or geometric-family transfer established."
+  ],
+  "publisher_title": "Pump/Control System Minimum Operating Cost Testing",
+  "publisher_copyright": {
+    "thirdPartyPermissionsProduced": false,
+    "disclosedToPublic": false,
+    "containsIndication": false,
+    "publisherPermissionOrRightsToDistribute": false,
+    "belongsToUsGov": false,
+    "determinationType": "GOV_PUBLIC_USE_PERMITTED",
+    "thirdPartyContentCondition": "NOT_SET",
+    "belongsToContractor": false,
+    "disclosedInvention": false,
+    "submissionId": 19780012674,
+    "containsThirdPartyMaterial": false,
+    "belongsToPublisher": false,
+    "id": "f0bcb65e9c1942b0842d8f91872ad84c",
+    "belongsToAuthors": false
+  },
+  "publisher_distribution": "PUBLIC",
+  "pdf_info": "Creator:         Envision OCR\nProducer:        www.adlibsoftware.com:AdTNG:Version:OS:TNG\nCreationDate:    Tue Mar 29 00:31:13 2011 EDT\nModDate:         Fri Apr  1 09:09:02 2011 EDT\nCustom Metadata: no\nMetadata Stream: yes\nTagged:          no\nUserProperties:  no\nSuspects:        no\nForm:            none\nJavaScript:      no\nPages:           73\nEncrypted:       no\nPage size:       612 x 792 pts (letter)\nPage rot:        0\nFile size:       4090306 bytes\nOptimized:       yes\nPDF version:     1.6\n",
+  "text_extraction": {
+    "status": "DERIVATIVE_TEXT_UNREVIEWED",
+    "warning_excerpt": ""
+  }
+}

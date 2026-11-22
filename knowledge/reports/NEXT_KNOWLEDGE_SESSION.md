@@ -250,4 +250,4 @@ These are non-blocking and recorded as gaps K10–K12:
 - R-2: check each review's `equation_links` against the links actually created.
 - R-3: flag records whose content changed after independent verification.
 - R-4: verify the objects F created in the repair round, for example the Kang p.6 caveat claim.
-- R-5: the owner must re-stage before committing (`git add .gitignore docs/LITERATURE_REQUESTS.md knowledge`), because the staged snapshot predates the repair round.
+- R-5: the owner must re-stage before committing (`git add .gitignore docs/literature/LITERATURE_REQUESTS.md knowledge`), because the staged snapshot predates the repair round.

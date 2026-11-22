@@ -1,0 +1,914 @@
+{
+  "schema_version": 1,
+  "queue": [
+    {
+      "source_id": "ntrs_19870015990",
+      "acquisition_state": "ACQUIRED",
+      "source_review_state": "NOT_REVIEWED_FOR_TRAINING",
+      "locator_candidates": [
+        {
+          "pdf_page_1_based": 6,
+          "unreviewed_text": "TABLE I.-TWO-DIMENSIONAL KINETICS (TDK) INPUT"
+        },
+        {
+          "pdf_page_1_based": 6,
+          "unreviewed_text": "TABLE 11.-EXPERIMENTAL RESULTS"
+        },
+        {
+          "pdf_page_1_based": 7,
+          "unreviewed_text": "TABLE III-TDK RESULTS"
+        },
+        {
+          "pdf_page_1_based": 23,
+          "unreviewed_text": "Table IV shows a sample calculation of the inviscid thrust"
+        }
+      ],
+      "locator_status": "TEXT_SEARCH_HINTS_NOT_VERIFIED_OR_COMPLETE",
+      "next_action": "Review one bounded original-page case, definitions, uncertainty and conditions before numeric extraction.",
+      "training_eligible": false
+    },
+    {
+      "source_id": "ntrs_19870015991",
+      "acquisition_state": "ACQUIRED",
+      "source_review_state": "NOT_REVIEWED_FOR_TRAINING",
+      "locator_candidates": [
+        {
+          "pdf_page_1_based": 7,
+          "unreviewed_text": "TABLE I -EXPERIMENTALLY            MEASURED NOZZLE TEMPERATURES"
+        },
+        {
+          "pdf_page_1_based": 8,
+          "unreviewed_text": "TABLE 11.-EXPERIMENTALLY           MEASURED RATES OF INCREASE IN NOZZLE TEMPERATURE"
+        },
+        {
+          "pdf_page_1_based": 9,
+          "unreviewed_text": "table V, were also used in the input files."
+        },
+        {
+          "pdf_page_1_based": 9,
+          "unreviewed_text": "TABLE 111,-TWO-DIMENSIONAL KINETICS (TDK)"
+        },
+        {
+          "pdf_page_1_based": 10,
+          "unreviewed_text": "TABLE 1V.-EXPERIMENTAL            RESULTS"
+        },
+        {
+          "pdf_page_1_based": 11,
+          "unreviewed_text": "TABLE V.-EXPERIMENTALLY DETERMINED NOZZLE TEMPERATURES"
+        },
+        {
+          "pdf_page_1_based": 11,
+          "unreviewed_text": "TABLE VI.-EXPERIMENTALLY             DETERMINED NOZZLE TEMPERATURES"
+        }
+      ],
+      "locator_status": "TEXT_SEARCH_HINTS_NOT_VERIFIED_OR_COMPLETE",
+      "next_action": "Review one bounded original-page case, definitions, uncertainty and conditions before numeric extraction.",
+      "training_eligible": false
+    },
+    {
+      "source_id": "ntrs_19960042495",
+      "acquisition_state": "ACQUIRED",
+      "source_review_state": "NOT_REVIEWED_FOR_TRAINING",
+      "locator_candidates": [
+        {
+          "pdf_page_1_based": 16,
+          "unreviewed_text": "TABLE I.-RESULTS OF ATMOSPHERIC PRESSURE TESTS"
+        },
+        {
+          "pdf_page_1_based": 17,
+          "unreviewed_text": "TABLE I.----Concluded."
+        },
+        {
+          "pdf_page_1_based": 18,
+          "unreviewed_text": "TABLE n . -RESULTS OF ALTITUDE PRESSURE TESTS"
+        },
+        {
+          "pdf_page_1_based": 19,
+          "unreviewed_text": "TABLE ll.--Concluded."
+        },
+        {
+          "pdf_page_1_based": 20,
+          "unreviewed_text": "TABLE ID.-NOZZLE WALL STATIC PRESSURES"
+        },
+        {
+          "pdf_page_1_based": 21,
+          "unreviewed_text": "TABLE ill.--Concluded."
+        },
+        {
+          "pdf_page_1_based": 22,
+          "unreviewed_text": "TABLEIV.-NOZZLE WALL TEMPERATURES"
+        },
+        {
+          "pdf_page_1_based": 23,
+          "unreviewed_text": "TABLE IV .-Concluded."
+        }
+      ],
+      "locator_status": "TEXT_SEARCH_HINTS_NOT_VERIFIED_OR_COMPLETE",
+      "next_action": "Review one bounded original-page case, definitions, uncertainty and conditions before numeric extraction.",
+      "training_eligible": false
+    },
+    {
+      "source_id": "ntrs_19650010083",
+      "acquisition_state": "ACQUIRED",
+      "source_review_state": "NOT_REVIEWED_FOR_TRAINING",
+      "locator_candidates": [
+        {
+          "pdf_page_1_based": 10,
+          "unreviewed_text": "table in Fig. 3, such that every third plug was located in"
+        },
+        {
+          "pdf_page_1_based": 35,
+          "unreviewed_text": "Table B-1 presents the ranges of operating conditions        stagnation pressures from 45 to 150 psia. As mentioned"
+        },
+        {
+          "pdf_page_1_based": 36,
+          "unreviewed_text": "Table El. Summary of tabulated tests, which appear in Tables 8-2 and E 3 in the order shown"
+        },
+        {
+          "pdf_page_1_based": 37,
+          "unreviewed_text": "Table B-2. Tabulation of static pressure data"
+        },
+        {
+          "pdf_page_1_based": 38,
+          "unreviewed_text": "Table 5 2 (continued)."
+        },
+        {
+          "pdf_page_1_based": 39,
+          "unreviewed_text": "Table B-2 (concluded)."
+        },
+        {
+          "pdf_page_1_based": 40,
+          "unreviewed_text": "Table 53. Tabulation of heat-transfer data"
+        },
+        {
+          "pdf_page_1_based": 42,
+          "unreviewed_text": "Table 8-3 (continued)."
+        },
+        {
+          "pdf_page_1_based": 43,
+          "unreviewed_text": "Table 8-3 (continued)."
+        },
+        {
+          "pdf_page_1_based": 44,
+          "unreviewed_text": "Table E 3 (continued)."
+        },
+        {
+          "pdf_page_1_based": 45,
+          "unreviewed_text": "Table 8-3 (continued)."
+        },
+        {
+          "pdf_page_1_based": 46,
+          "unreviewed_text": "Table 5 3 (continued)."
+        },
+        {
+          "pdf_page_1_based": 48,
+          "unreviewed_text": "Table k 3 (continued)."
+        },
+        {
+          "pdf_page_1_based": 49,
+          "unreviewed_text": "Table 5 3 (continued)."
+        },
+        {
+          "pdf_page_1_based": 50,
+          "unreviewed_text": "Table B-3 (continued)."
+        },
+        {
+          "pdf_page_1_based": 51,
+          "unreviewed_text": "Table 5 3 (continued)."
+        },
+        {
+          "pdf_page_1_based": 52,
+          "unreviewed_text": "Table B-3 (continued)."
+        },
+        {
+          "pdf_page_1_based": 53,
+          "unreviewed_text": "Table 5 3 (continued)."
+        },
+        {
+          "pdf_page_1_based": 54,
+          "unreviewed_text": "Table L 3 (continued)."
+        },
+        {
+          "pdf_page_1_based": 55,
+          "unreviewed_text": "Table k 3 (continued)."
+        }
+      ],
+      "locator_status": "TEXT_SEARCH_HINTS_NOT_VERIFIED_OR_COMPLETE",
+      "next_action": "Review one bounded original-page case, definitions, uncertainty and conditions before numeric extraction.",
+      "training_eligible": false
+    },
+    {
+      "source_id": "ntrs_19950024435",
+      "acquisition_state": "ACQUIRED",
+      "source_review_state": "NOT_REVIEWED_FOR_TRAINING",
+      "locator_candidates": [
+        {
+          "pdf_page_1_based": 9,
+          "unreviewed_text": "Table   1. Heat     Transfer        Coefficient     Models        For Straight,          Smooth-Walled          Tubes"
+        },
+        {
+          "pdf_page_1_based": 9,
+          "unreviewed_text": "Table   2. Test Section        Details"
+        },
+        {
+          "pdf_page_1_based": 9,
+          "unreviewed_text": "Table   3. Ranges      Of Operating          Conditions       For Each Test              Section"
+        }
+      ],
+      "locator_status": "TEXT_SEARCH_HINTS_NOT_VERIFIED_OR_COMPLETE",
+      "next_action": "Review one bounded original-page case, definitions, uncertainty and conditions before numeric extraction.",
+      "training_eligible": false
+    },
+    {
+      "source_id": "ntrs_19990025912",
+      "acquisition_state": "ACQUIRED",
+      "source_review_state": "NOT_REVIEWED_FOR_TRAINING",
+      "locator_candidates": [
+        {
+          "pdf_page_1_based": 2,
+          "unreviewed_text": "Table   of Contents"
+        },
+        {
+          "pdf_page_1_based": 10,
+          "unreviewed_text": "Table     1. Target          Flow     Conditions"
+        },
+        {
+          "pdf_page_1_based": 12,
+          "unreviewed_text": "Table   2. Summary       of Experimental       Measurements"
+        },
+        {
+          "pdf_page_1_based": 13,
+          "unreviewed_text": "Table        2.   Summary      of Experimental      Measurements       (continued)"
+        },
+        {
+          "pdf_page_1_based": 14,
+          "unreviewed_text": "Table   2.     Summary       of Experimental              Measurements         (continued)"
+        },
+        {
+          "pdf_page_1_based": 23,
+          "unreviewed_text": "Table 2.     Gq and       #q for the transport                equations          and a universal     temperature   profile 2° given by"
+        },
+        {
+          "pdf_page_1_based": 23,
+          "unreviewed_text": "Table    3. Reactions"
+        },
+        {
+          "pdf_page_1_based": 25,
+          "unreviewed_text": "Table 4. CEA Results              for Properties.                                   350"
+        }
+      ],
+      "locator_status": "TEXT_SEARCH_HINTS_NOT_VERIFIED_OR_COMPLETE",
+      "next_action": "Review one bounded original-page case, definitions, uncertainty and conditions before numeric extraction.",
+      "training_eligible": false
+    },
+    {
+      "source_id": "ntrs_20050123582",
+      "acquisition_state": "ACQUIRED",
+      "source_review_state": "NOT_REVIEWED_FOR_TRAINING",
+      "locator_candidates": [
+        {
+          "pdf_page_1_based": 22,
+          "unreviewed_text": "TABLE I.⎯ROOM TEMPERATURE TENSILE STRENGTH AND"
+        },
+        {
+          "pdf_page_1_based": 23,
+          "unreviewed_text": "TABLE II.⎯TENSILE STRENGTH OF METAL SPUN GRCop-84"
+        }
+      ],
+      "locator_status": "TEXT_SEARCH_HINTS_NOT_VERIFIED_OR_COMPLETE",
+      "next_action": "Review one bounded original-page case, definitions, uncertainty and conditions before numeric extraction.",
+      "training_eligible": false
+    },
+    {
+      "source_id": "ntrs_19750021165",
+      "acquisition_state": "ACQUIRED",
+      "source_review_state": "NOT_REVIEWED_FOR_TRAINING",
+      "locator_candidates": [
+        {
+          "pdf_page_1_based": 4,
+          "unreviewed_text": "TABLE        OF CONTENTS"
+        }
+      ],
+      "locator_status": "TEXT_SEARCH_HINTS_NOT_VERIFIED_OR_COMPLETE",
+      "next_action": "Review one bounded original-page case, definitions, uncertainty and conditions before numeric extraction.",
+      "training_eligible": false
+    },
+    {
+      "source_id": "ntrs_20190030431",
+      "acquisition_state": "ACQUIRED",
+      "source_review_state": "NOT_REVIEWED_FOR_TRAINING",
+      "locator_candidates": [
+        {
+          "pdf_page_1_based": 3,
+          "unreviewed_text": "Table 1: Test Article Design Dimensions"
+        },
+        {
+          "pdf_page_1_based": 5,
+          "unreviewed_text": "Table 2: Uncertainty Estimates for the Venturi Cd Data Reduction Equation"
+        },
+        {
+          "pdf_page_1_based": 10,
+          "unreviewed_text": "Table 3 shows a summary of the figures in Appendix B. Where results are separated by design variant and flow"
+        },
+        {
+          "pdf_page_1_based": 11,
+          "unreviewed_text": "Table 3: Statistical Analysis of Results by Design Variant"
+        },
+        {
+          "pdf_page_1_based": 12,
+          "unreviewed_text": "Table 4: Statistical Analysis of Results by Manufacturer"
+        },
+        {
+          "pdf_page_1_based": 14,
+          "unreviewed_text": "Table 5: Prediction Intervals for Design Variants"
+        }
+      ],
+      "locator_status": "TEXT_SEARCH_HINTS_NOT_VERIFIED_OR_COMPLETE",
+      "next_action": "Review one bounded original-page case, definitions, uncertainty and conditions before numeric extraction.",
+      "training_eligible": false
+    },
+    {
+      "source_id": "ntrs_19700005097",
+      "acquisition_state": "ACQUIRED",
+      "source_review_state": "NOT_REVIEWED_FOR_TRAINING",
+      "locator_candidates": [],
+      "locator_status": "TEXT_SEARCH_HINTS_NOT_VERIFIED_OR_COMPLETE",
+      "next_action": "Review one bounded original-page case, definitions, uncertainty and conditions before numeric extraction.",
+      "training_eligible": false
+    },
+    {
+      "source_id": "ntrs_19710011726",
+      "acquisition_state": "ACQUIRED",
+      "source_review_state": "NOT_REVIEWED_FOR_TRAINING",
+      "locator_candidates": [
+        {
+          "pdf_page_1_based": 5,
+          "unreviewed_text": "TABLE OF CONTENTS"
+        },
+        {
+          "pdf_page_1_based": 48,
+          "unreviewed_text": "Table 1.   Variation of Motor Characteristics to Achieve Different Chamber Pressures"
+        },
+        {
+          "pdf_page_1_based": 49,
+          "unreviewed_text": "Table 2. Exhaust Gas Properties"
+        }
+      ],
+      "locator_status": "TEXT_SEARCH_HINTS_NOT_VERIFIED_OR_COMPLETE",
+      "next_action": "Review one bounded original-page case, definitions, uncertainty and conditions before numeric extraction.",
+      "training_eligible": false
+    },
+    {
+      "source_id": "ntrs_19780012674",
+      "acquisition_state": "ACQUIRED",
+      "source_review_state": "NOT_REVIEWED_FOR_TRAINING",
+      "locator_candidates": [
+        {
+          "pdf_page_1_based": 4,
+          "unreviewed_text": "TABLE OF CONTENTS"
+        },
+        {
+          "pdf_page_1_based": 10,
+          "unreviewed_text": "Table 3.1. Example Centrifugal Pump Data"
+        },
+        {
+          "pdf_page_1_based": 10,
+          "unreviewed_text": "Table 3.2. Example Overall Efficiencies"
+        },
+        {
+          "pdf_page_1_based": 13,
+          "unreviewed_text": "Table 3.3. Representative Centrifugal"
+        },
+        {
+          "pdf_page_1_based": 13,
+          "unreviewed_text": "Table 3.7 presents these results. Although there are a number of exceptions,"
+        },
+        {
+          "pdf_page_1_based": 14,
+          "unreviewed_text": "Table 3.4. Overall Pumping, Efficiency Using"
+        },
+        {
+          "pdf_page_1_based": 14,
+          "unreviewed_text": "Table 3.5.     Overall Efficiency Estimates for"
+        },
+        {
+          "pdf_page_1_based": 15,
+          "unreviewed_text": "Table 3.6. Teel Centrifugal Pump Data"
+        },
+        {
+          "pdf_page_1_based": 15,
+          "unreviewed_text": "Table 3.7. Teel Gear Pump Data"
+        },
+        {
+          "pdf_page_1_based": 16,
+          "unreviewed_text": "Table 3.8. Pump Cost"
+        },
+        {
+          "pdf_page_1_based": 23,
+          "unreviewed_text": "Table 3.9. Summary of Pumps Tested in"
+        },
+        {
+          "pdf_page_1_based": 24,
+          "unreviewed_text": "Table 3.10• Electric Motor Efficiencies"
+        },
+        {
+          "pdf_page_1_based": 35,
+          "unreviewed_text": "Table 3.11. Tabulation of Pumps Tested in"
+        },
+        {
+          "pdf_page_1_based": 50,
+          "unreviewed_text": "Table 3.12. Summary of Peak Experimental Efficiencies for Bell"
+        },
+        {
+          "pdf_page_1_based": 51,
+          "unreviewed_text": "Table 3.13 presents the results of the experimentally-determined peak efficien-"
+        },
+        {
+          "pdf_page_1_based": 51,
+          "unreviewed_text": "Table 3.13. Comparison of Peak Efficiencies and"
+        },
+        {
+          "pdf_page_1_based": 70,
+          "unreviewed_text": "Table A.1."
+        },
+        {
+          "pdf_page_1_based": 70,
+          "unreviewed_text": "Table A.I. Permissible Noise Exposures"
+        }
+      ],
+      "locator_status": "TEXT_SEARCH_HINTS_NOT_VERIFIED_OR_COMPLETE",
+      "next_action": "Review one bounded original-page case, definitions, uncertainty and conditions before numeric extraction.",
+      "training_eligible": false
+    },
+    {
+      "source_id": "ntrs_19690063911",
+      "acquisition_state": "ACQUIRED",
+      "source_review_state": "NOT_REVIEWED_FOR_TRAINING",
+      "locator_candidates": [],
+      "locator_status": "TEXT_SEARCH_HINTS_NOT_VERIFIED_OR_COMPLETE",
+      "next_action": "Review one bounded original-page case, definitions, uncertainty and conditions before numeric extraction.",
+      "training_eligible": false
+    },
+    {
+      "source_id": "mueller2000",
+      "acquisition_state": "ACQUIRED",
+      "source_review_state": "NOT_REVIEWED_FOR_TRAINING",
+      "locator_candidates": [
+        {
+          "pdf_page_1_based": 3,
+          "unreviewed_text": "Table 1. Nominal Operating Conditions"
+        },
+        {
+          "pdf_page_1_based": 4,
+          "unreviewed_text": "Table 2. Pintle Tip Configurations Tested"
+        },
+        {
+          "pdf_page_1_based": 9,
+          "unreviewed_text": "Table 3."
+        },
+        {
+          "pdf_page_1_based": 10,
+          "unreviewed_text": "Table 3. Hot Fire Test Data Summary"
+        }
+      ],
+      "locator_status": "TEXT_SEARCH_HINTS_NOT_VERIFIED_OR_COMPLETE",
+      "next_action": "Review one bounded original-page case, definitions, uncertainty and conditions before numeric extraction.",
+      "training_eligible": false
+    },
+    {
+      "source_id": "gavitt2001",
+      "acquisition_state": "ACQUIRED",
+      "source_review_state": "NOT_REVIEWED_FOR_TRAINING",
+      "locator_candidates": [],
+      "locator_status": "TEXT_SEARCH_HINTS_NOT_VERIFIED_OR_COMPLETE",
+      "next_action": "Review one bounded original-page case, definitions, uncertainty and conditions before numeric extraction.",
+      "training_eligible": false
+    },
+    {
+      "source_id": "austin2005",
+      "acquisition_state": "ACQUIRED",
+      "source_review_state": "NOT_REVIEWED_FOR_TRAINING",
+      "locator_candidates": [
+        {
+          "pdf_page_1_based": 3,
+          "unreviewed_text": "Table 1   Baseline engine design"
+        }
+      ],
+      "locator_status": "TEXT_SEARCH_HINTS_NOT_VERIFIED_OR_COMPLETE",
+      "next_action": "Review one bounded original-page case, definitions, uncertainty and conditions before numeric extraction.",
+      "training_eligible": false
+    },
+    {
+      "source_id": "sakaki2016",
+      "acquisition_state": "ACQUIRED",
+      "source_review_state": "NOT_REVIEWED_FOR_TRAINING",
+      "locator_candidates": [
+        {
+          "pdf_page_1_based": 3,
+          "unreviewed_text": "Table 1 Composition of fuel (denatured ethanol)"
+        },
+        {
+          "pdf_page_1_based": 7,
+          "unreviewed_text": "Table 2 Combinations of injector slit height for the rectangular combustor"
+        },
+        {
+          "pdf_page_1_based": 7,
+          "unreviewed_text": "Table 3 Text matrix of the rectangular combustor"
+        },
+        {
+          "pdf_page_1_based": 8,
+          "unreviewed_text": "Table 4 Test matrix of the axisymmetric combustor"
+        }
+      ],
+      "locator_status": "TEXT_SEARCH_HINTS_NOT_VERIFIED_OR_COMPLETE",
+      "next_action": "Review one bounded original-page case, definitions, uncertainty and conditions before numeric extraction.",
+      "training_eligible": false
+    },
+    {
+      "source_id": "sakaki2018",
+      "acquisition_state": "ACQUIRED",
+      "source_review_state": "NOT_REVIEWED_FOR_TRAINING",
+      "locator_candidates": [
+        {
+          "pdf_page_1_based": 5,
+          "unreviewed_text": "Table 2                                                                             number of dimension. The POD can ﬁnd new basis along which"
+        },
+        {
+          "pdf_page_1_based": 6,
+          "unreviewed_text": "Table 3"
+        },
+        {
+          "pdf_page_1_based": 7,
+          "unreviewed_text": "Table 3, respectively. The PSDs are calculated using 4096 samples                      slightly higher than the non-optical experiment, and the purge"
+        },
+        {
+          "pdf_page_1_based": 9,
+          "unreviewed_text": "Table 3). Pc = 0.49 O/F = 1.60 LOX injection slit width = 0.7 mm.                     in the region could be different from the behaviors in an actual"
+        },
+        {
+          "pdf_page_1_based": 11,
+          "unreviewed_text": "Table 3). Pc = 0.47 O/F = 1.52 LOX injection slit width = 0.3 mm.                     the CH∗ ﬂuctuating time scale was close to the residence time"
+        }
+      ],
+      "locator_status": "TEXT_SEARCH_HINTS_NOT_VERIFIED_OR_COMPLETE",
+      "next_action": "Review one bounded original-page case, definitions, uncertainty and conditions before numeric extraction.",
+      "training_eligible": false
+    },
+    {
+      "source_id": "kang2022",
+      "acquisition_state": "ACQUIRED",
+      "source_review_state": "NOT_REVIEWED_FOR_TRAINING",
+      "locator_candidates": [
+        {
+          "pdf_page_1_based": 3,
+          "unreviewed_text": "Table 1                                                                                        ratio recirculation area on the combustion chamber head surface, which"
+        },
+        {
+          "pdf_page_1_based": 3,
+          "unreviewed_text": "Table 2                                                                                        performance. To enhance the flexibility of the tests, the cylinder and"
+        },
+        {
+          "pdf_page_1_based": 3,
+          "unreviewed_text": "Table 1.                                                                                       the run tank and propellant supply valve, and the propellant supplied to"
+        },
+        {
+          "pdf_page_1_based": 5,
+          "unreviewed_text": "Table 3"
+        },
+        {
+          "pdf_page_1_based": 6,
+          "unreviewed_text": "Table 4."
+        },
+        {
+          "pdf_page_1_based": 6,
+          "unreviewed_text": "Table 4                                                                                      Fig. 15 shows the streamline and flow velocity at the center plane of"
+        },
+        {
+          "pdf_page_1_based": 7,
+          "unreviewed_text": "Table 5"
+        },
+        {
+          "pdf_page_1_based": 9,
+          "unreviewed_text": "Table 6"
+        }
+      ],
+      "locator_status": "TEXT_SEARCH_HINTS_NOT_VERIFIED_OR_COMPLETE",
+      "next_action": "Review one bounded original-page case, definitions, uncertainty and conditions before numeric extraction.",
+      "training_eligible": false
+    },
+    {
+      "source_id": "ninish2018",
+      "acquisition_state": "ACQUIRED",
+      "source_review_state": "NOT_REVIEWED_FOR_TRAINING",
+      "locator_candidates": [
+        {
+          "pdf_page_1_based": 13,
+          "unreviewed_text": "Table 1 Injector Sizing"
+        },
+        {
+          "pdf_page_1_based": 18,
+          "unreviewed_text": "Table 3: Flow conditions of the Spray"
+        },
+        {
+          "pdf_page_1_based": 19,
+          "unreviewed_text": "Table 4: Spray Cone Angle"
+        },
+        {
+          "pdf_page_1_based": 19,
+          "unreviewed_text": "Table 5: Reynolds Number"
+        },
+        {
+          "pdf_page_1_based": 22,
+          "unreviewed_text": "Table 6 and Figure 7."
+        },
+        {
+          "pdf_page_1_based": 22,
+          "unreviewed_text": "Table 6: Probe Locations from Pintle tip"
+        },
+        {
+          "pdf_page_1_based": 23,
+          "unreviewed_text": "Table 7: Droplet statistics for =1 at location 2"
+        },
+        {
+          "pdf_page_1_based": 24,
+          "unreviewed_text": "Table 8: Droplet statistics for =1 at location 3"
+        },
+        {
+          "pdf_page_1_based": 25,
+          "unreviewed_text": "Table 9: Droplet statistics for =0.7 at location-4"
+        },
+        {
+          "pdf_page_1_based": 28,
+          "unreviewed_text": "Table 10: Non dimensional numbers of the spray under investigation"
+        },
+        {
+          "pdf_page_1_based": 30,
+          "unreviewed_text": "Table 2: Determined sheet thickness"
+        },
+        {
+          "pdf_page_1_based": 32,
+          "unreviewed_text": "Table 3, Flow specifications for Type-II injector with Ø800m radial nozzle at different"
+        },
+        {
+          "pdf_page_1_based": 32,
+          "unreviewed_text": "Table 4, Flow specifications for Type-II injector with Ø900m radial nozzle at different"
+        },
+        {
+          "pdf_page_1_based": 33,
+          "unreviewed_text": "Table 14, Flow specifications for Type-II injector with 250*1500m slit radial nozzle at"
+        },
+        {
+          "pdf_page_1_based": 33,
+          "unreviewed_text": "Table 15: Flow specification for the type-II injector under shadowgraphy investigation"
+        }
+      ],
+      "locator_status": "TEXT_SEARCH_HINTS_NOT_VERIFIED_OR_COMPLETE",
+      "next_action": "Review one bounded original-page case, definitions, uncertainty and conditions before numeric extraction.",
+      "training_eligible": false
+    },
+    {
+      "source_id": "radhakrishnan2018",
+      "acquisition_state": "ACQUIRED",
+      "source_review_state": "NOT_REVIEWED_FOR_TRAINING",
+      "locator_candidates": [
+        {
+          "pdf_page_1_based": 4,
+          "unreviewed_text": "TABLE 1: Geometrical dimensions of the pintle"
+        },
+        {
+          "pdf_page_1_based": 5,
+          "unreviewed_text": "TABLE 2: Boundary conditions"
+        },
+        {
+          "pdf_page_1_based": 11,
+          "unreviewed_text": "TABLE 3: Summary of the VOF simulation and wave model constants"
+        }
+      ],
+      "locator_status": "TEXT_SEARCH_HINTS_NOT_VERIFIED_OR_COMPLETE",
+      "next_action": "Review one bounded original-page case, definitions, uncertainty and conditions before numeric extraction.",
+      "training_eligible": false
+    },
+    {
+      "source_id": "radhakrishnan2021",
+      "acquisition_state": "ACQUIRED",
+      "source_review_state": "NOT_REVIEWED_FOR_TRAINING",
+      "locator_candidates": [
+        {
+          "pdf_page_1_based": 6,
+          "unreviewed_text": "Table 1. A short overview on numerical models used to model Mascotte A10 test case."
+        },
+        {
+          "pdf_page_1_based": 7,
+          "unreviewed_text": "Table 2.   Pintle injector dimensions."
+        },
+        {
+          "pdf_page_1_based": 7,
+          "unreviewed_text": "Table 2. The VOF approach was employed to simulate the sheet formation and primary"
+        },
+        {
+          "pdf_page_1_based": 8,
+          "unreviewed_text": "Table 3.   Designed boundary conditions."
+        },
+        {
+          "pdf_page_1_based": 14,
+          "unreviewed_text": "Table 4 and it is observed that the simulation results are in agreement with the experimental"
+        },
+        {
+          "pdf_page_1_based": 15,
+          "unreviewed_text": "Table 4. Comparison of VOF data with experimental data."
+        },
+        {
+          "pdf_page_1_based": 16,
+          "unreviewed_text": "Table 5.     Comparison of simulation data with experimental data."
+        },
+        {
+          "pdf_page_1_based": 20,
+          "unreviewed_text": "Table 6. Grid independence result for modelling-1."
+        },
+        {
+          "pdf_page_1_based": 21,
+          "unreviewed_text": "Table 3 to estimate the average initial sheet thickness and breakup length of the LOX"
+        },
+        {
+          "pdf_page_1_based": 22,
+          "unreviewed_text": "Table 7.   Summary of VOF simulation."
+        },
+        {
+          "pdf_page_1_based": 22,
+          "unreviewed_text": "Table 8 and the range of SMD was to be ± (4–8) µm. For the spray combustion, the Rosin–"
+        },
+        {
+          "pdf_page_1_based": 23,
+          "unreviewed_text": "Table 3 was performed using the simplified simulation model in Figure 2(c). The combus-"
+        },
+        {
+          "pdf_page_1_based": 25,
+          "unreviewed_text": "Table 8.   Summary of newly calculated WAVE model constants and SMDs."
+        }
+      ],
+      "locator_status": "TEXT_SEARCH_HINTS_NOT_VERIFIED_OR_COMPLETE",
+      "next_action": "Review one bounded original-page case, definitions, uncertainty and conditions before numeric extraction.",
+      "training_eligible": false
+    },
+    {
+      "source_id": "son2017",
+      "acquisition_state": "ACQUIRED",
+      "source_review_state": "NOT_REVIEWED_FOR_TRAINING",
+      "locator_candidates": [
+        {
+          "pdf_page_1_based": 3,
+          "unreviewed_text": "Table 2 Transition point due to                               As mentioned in the previous section, the pintle injector has"
+        },
+        {
+          "pdf_page_1_based": 9,
+          "unreviewed_text": "Table 5 Design results of the baseline                       velocities needed to be lower than the speed of sound and additional"
+        },
+        {
+          "pdf_page_1_based": 9,
+          "unreviewed_text": "Table 6    Cases for sensitivity analysis of                  procedure outlined previously. The target chamber pressure at the"
+        },
+        {
+          "pdf_page_1_based": 10,
+          "unreviewed_text": "Table 7   Summary of designed combustor with 5:1 throttling performance"
+        }
+      ],
+      "locator_status": "TEXT_SEARCH_HINTS_NOT_VERIFIED_OR_COMPLETE",
+      "next_action": "Review one bounded original-page case, definitions, uncertainty and conditions before numeric extraction.",
+      "training_eligible": false
+    },
+    {
+      "source_id": "hong2012",
+      "acquisition_state": "ACQUIRED",
+      "source_review_state": "NOT_REVIEWED_FOR_TRAINING",
+      "locator_candidates": [],
+      "locator_status": "TEXT_SEARCH_HINTS_NOT_VERIFIED_OR_COMPLETE",
+      "next_action": "Review one bounded original-page case, definitions, uncertainty and conditions before numeric extraction.",
+      "training_eligible": false
+    },
+    {
+      "source_id": "carlile1992",
+      "acquisition_state": "ACQUIRED",
+      "source_review_state": "NOT_REVIEWED_FOR_TRAINING",
+      "locator_candidates": [
+        {
+          "pdf_page_1_based": 7,
+          "unreviewed_text": "Table 1.-Coml            ition Chamber Configurati,         3"
+        }
+      ],
+      "locator_status": "TEXT_SEARCH_HINTS_NOT_VERIFIED_OR_COMPLETE",
+      "next_action": "Review one bounded original-page case, definitions, uncertainty and conditions before numeric extraction.",
+      "training_eligible": false
+    },
+    {
+      "source_id": "betti2014",
+      "acquisition_state": "ACQUIRED",
+      "source_review_state": "NOT_REVIEWED_FOR_TRAINING",
+      "locator_candidates": [],
+      "locator_status": "TEXT_SEARCH_HINTS_NOT_VERIFIED_OR_COMPLETE",
+      "next_action": "Review one bounded original-page case, definitions, uncertainty and conditions before numeric extraction.",
+      "training_eligible": false
+    },
+    {
+      "source_id": "pizzarelli2011",
+      "acquisition_state": "ACQUIRED",
+      "source_review_state": "NOT_REVIEWED_FOR_TRAINING",
+      "locator_candidates": [
+        {
+          "pdf_page_1_based": 15,
+          "unreviewed_text": "Table 1. Dimensions of the cooling channels"
+        },
+        {
+          "pdf_page_1_based": 18,
+          "unreviewed_text": "Table 2. Results show that good agreement is obtained in the case of HARCC."
+        },
+        {
+          "pdf_page_1_based": 18,
+          "unreviewed_text": "Table 2. Fluid temperature increase and pressure drop discrepancy between"
+        },
+        {
+          "pdf_page_1_based": 19,
+          "unreviewed_text": "Table 3. Vulcain engine data considered for the present test case [6]"
+        }
+      ],
+      "locator_status": "TEXT_SEARCH_HINTS_NOT_VERIFIED_OR_COMPLETE",
+      "next_action": "Review one bounded original-page case, definitions, uncertainty and conditions before numeric extraction.",
+      "training_eligible": false
+    },
+    {
+      "source_id": "hagemann1998",
+      "acquisition_state": "ACQUIRED",
+      "source_review_state": "NOT_REVIEWED_FOR_TRAINING",
+      "locator_candidates": [
+        {
+          "pdf_page_1_based": 2,
+          "unreviewed_text": "Table 1     Performance losses in conventional rocket nozzles"
+        },
+        {
+          "pdf_page_1_based": 9,
+          "unreviewed_text": "Table 2    Design parameters of toroidal plug nozzles"
+        },
+        {
+          "pdf_page_1_based": 10,
+          "unreviewed_text": "Table 3   Design parameters for linear and toroidal subscale plug nozzles"
+        },
+        {
+          "pdf_page_1_based": 13,
+          "unreviewed_text": "Table 4     Thrust chamber parameters for simulated dual-expander nozzles"
+        }
+      ],
+      "locator_status": "TEXT_SEARCH_HINTS_NOT_VERIFIED_OR_COMPLETE",
+      "next_action": "Review one bounded original-page case, definitions, uncertainty and conditions before numeric extraction.",
+      "training_eligible": false
+    },
+    {
+      "source_id": "frey2000",
+      "acquisition_state": "ACQUIRED",
+      "source_review_state": "NOT_REVIEWED_FOR_TRAINING",
+      "locator_candidates": [
+        {
+          "pdf_page_1_based": 3,
+          "unreviewed_text": "Table 1 Parameters of the Vulcain nozzle, together with data for"
+        }
+      ],
+      "locator_status": "TEXT_SEARCH_HINTS_NOT_VERIFIED_OR_COMPLETE",
+      "next_action": "Review one bounded original-page case, definitions, uncertainty and conditions before numeric extraction.",
+      "training_eligible": false
+    },
+    {
+      "source_id": "fixture_radhakrishnan2018",
+      "acquisition_state": "ACQUIRED",
+      "source_review_state": "NOT_REVIEWED_FOR_TRAINING",
+      "locator_candidates": [],
+      "locator_status": "TEXT_SEARCH_HINTS_NOT_VERIFIED_OR_COMPLETE",
+      "next_action": "Review one bounded original-page case, definitions, uncertainty and conditions before numeric extraction.",
+      "training_eligible": false
+    },
+    {
+      "source_id": "fixture_radhakrishnan2021_water_air",
+      "acquisition_state": "ACQUIRED",
+      "source_review_state": "NOT_REVIEWED_FOR_TRAINING",
+      "locator_candidates": [],
+      "locator_status": "TEXT_SEARCH_HINTS_NOT_VERIFIED_OR_COMPLETE",
+      "next_action": "Review one bounded original-page case, definitions, uncertainty and conditions before numeric extraction.",
+      "training_eligible": false
+    },
+    {
+      "source_id": "fixture_radhakrishnan2021_simulation",
+      "acquisition_state": "ACQUIRED",
+      "source_review_state": "NOT_REVIEWED_FOR_TRAINING",
+      "locator_candidates": [],
+      "locator_status": "TEXT_SEARCH_HINTS_NOT_VERIFIED_OR_COMPLETE",
+      "next_action": "Review one bounded original-page case, definitions, uncertainty and conditions before numeric extraction.",
+      "training_eligible": false
+    },
+    {
+      "source_id": "fixture_cuffel_anchors",
+      "acquisition_state": "ACQUIRED",
+      "source_review_state": "NOT_REVIEWED_FOR_TRAINING",
+      "locator_candidates": [],
+      "locator_status": "TEXT_SEARCH_HINTS_NOT_VERIFIED_OR_COMPLETE",
+      "next_action": "Review one bounded original-page case, definitions, uncertainty and conditions before numeric extraction.",
+      "training_eligible": false
+    }
+  ]
+}

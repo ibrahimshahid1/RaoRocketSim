@@ -1,0 +1,4 @@
+# Local research source payloads; metadata and receipts remain versionable.
+raw/
+derived/
+artifacts/

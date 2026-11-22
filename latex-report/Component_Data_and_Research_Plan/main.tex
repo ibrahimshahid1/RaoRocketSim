@@ -1,0 +1,53 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern,microtype}
+\usepackage[margin=0.82in,top=0.85in,bottom=0.85in,headheight=15pt,headsep=20pt,footskip=27pt]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs,tabularx,longtable,array}
+\usepackage[table]{xcolor}
+\usepackage{graphicx,tikz}
+\usetikzlibrary{arrows.meta,positioning}
+\usepackage{enumitem,needspace,titlesec,fancyhdr,lastpage}
+\usepackage{listings}
+\usepackage[unicode,colorlinks=true,linkcolor=ink,urlcolor=teal,citecolor=teal]{hyperref}
+\definecolor{ink}{HTML}{172A3A}
+\definecolor{teal}{HTML}{176B70}
+\definecolor{muted}{HTML}{55616B}
+\definecolor{pale}{HTML}{EDF4F4}
+\definecolor{rulegray}{HTML}{CBD5DA}
+\hypersetup{pdftitle={From Engine Design to Experimental Feedback},pdfauthor={Ibrahim Shahid},pdfsubject={LREKit component data, multi-fidelity models, and first implementation plan},pdfkeywords={LREKit, MDO, pintle, experimental data, OpenFOAM}}
+\titleformat{\section}{\Large\sffamily\bfseries\color{ink}}{\thesection}{0.65em}{}
+\titleformat{\subsection}{\large\sffamily\bfseries\color{teal}}{\thesubsection}{0.65em}{}
+\titlespacing*{\section}{0pt}{21pt}{9pt}
+\titlespacing*{\subsection}{0pt}{14pt}{6pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt plus 1pt}
+\linespread{1.03}
+\setlength{\emergencystretch}{2em}
+\setlist[itemize]{leftmargin=1.4em,itemsep=3pt,topsep=4pt}
+\setlist[enumerate]{leftmargin=1.7em,itemsep=4pt,topsep=4pt}
+\renewcommand{\arraystretch}{1.15}
+\setlength{\tabcolsep}{5pt}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcommand{\mdot}{\dot m}
+\newcommand{\Cd}{C_d}
+\newcommand{\Rey}{\mathrm{Re}}
+\newcommand{\code}[1]{\texttt{\small #1}}
+\newcommand{\lead}[1]{\par\noindent{\sffamily\bfseries\color{ink}#1}\par}
+\newcommand{\decision}[1]{\par\medskip\noindent\begingroup\setlength{\fboxsep}{10pt}\colorbox{pale}{\parbox{\dimexpr\linewidth-20pt\relax}{#1}}\endgroup\par\medskip}
+\lstset{basicstyle=\ttfamily\small,breaklines=true,columns=fullflexible,keepspaces=true,showstringspaces=false,backgroundcolor=\color{pale},frame=none,xleftmargin=8pt,xrightmargin=8pt,aboveskip=9pt,belowskip=9pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\footnotesize\sffamily\color{muted}LREKit \enspace / \enspace Development and research plan}
+\fancyhead[R]{\footnotesize\sffamily\color{muted}3 November 2026}
+\fancyfoot[L]{\footnotesize\sffamily\color{muted}Ibrahim Shahid}
+\fancyfoot[R]{\footnotesize\sffamily\color{muted}\thepage\enspace / \enspace\pageref*{LastPage}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+\widowpenalty=10000
+\clubpenalty=10000
+\begin{document}
+\input{plan.tex}
+\end{document}

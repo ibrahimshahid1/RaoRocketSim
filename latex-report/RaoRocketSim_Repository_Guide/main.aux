@@ -1,0 +1,1376 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\@writefile{toc}{\contentsline {chapter}{\numberline {1}Orientation}{12}{chapter.1}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{ch:orientation}{{1}{12}{Orientation}{chapter.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {1.1}What LREKit is}{12}{section.1.1}\protected@file@percent }
+\newlabel{sec:orient-what}{{1.1}{12}{What LREKit is}{section.1.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.1.1}Three names for one codebase}{12}{subsection.1.1.1}\protected@file@percent }
+\gdef \LT@i {\LT@entry 
+    {1}{109.58464pt}\LT@entry 
+    {1}{246.15796pt}\LT@entry 
+    {1}{112.43008pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.1.2}Package facts}{13}{subsection.1.1.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.1.3}How far along the project is}{13}{subsection.1.1.3}\protected@file@percent }
+\gdef \LT@ii {\LT@entry 
+    {1}{106.73918pt}\LT@entry 
+    {1}{106.73918pt}\LT@entry 
+    {1}{254.69386pt}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1.1}{\ignorespaces Typical package output: half-cutaway render of the wall.stl and jacket.stl meshes from the archived build tests/13kn\_sl\_fast (13 kN LOX/RP-1, chamber pressure 30 bar, GRCop-84 liner inside an Inconel 718 jacket, injector-end flange; recorded reliability label moc\_compatible). The run predates the cleanup and is kept under builds/\_archive\_2026-11-05/.}}{14}{figure.caption.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {1.2}Console entry points}{14}{section.1.2}\protected@file@percent }
+\newlabel{sec:orient-entry}{{1.2}{14}{Console entry points}{section.1.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {1.3}Engineering status}{15}{section.1.3}\protected@file@percent }
+\newlabel{sec:orient-status}{{1.3}{15}{Engineering status}{section.1.3}{}}
+\gdef \LT@iii {\LT@entry 
+    {1}{115.2751pt}\LT@entry 
+    {1}{342.89716pt}}
+\gdef \LT@iv {\LT@entry 
+    {1}{226.2411pt}\LT@entry 
+    {1}{101.04872pt}\LT@entry 
+    {1}{135.19194pt}}
+\@writefile{toc}{\contentsline {section}{\numberline {1.4}A reader's map of this guide}{16}{section.1.4}\protected@file@percent }
+\newlabel{sec:orient-map}{{1.4}{16}{A reader's map of this guide}{section.1.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {1.5}Repository layout after the cleanup}{17}{section.1.5}\protected@file@percent }
+\newlabel{sec:orient-layout}{{1.5}{17}{Repository layout after the cleanup}{section.1.5}{}}
+\gdef \LT@v {\LT@entry 
+    {1}{106.73918pt}\LT@entry 
+    {1}{203.47882pt}\LT@entry 
+    {1}{81.13188pt}\LT@entry 
+    {1}{83.97733pt}}
+\gdef \LT@vi {\LT@entry 
+    {1}{75.44142pt}\LT@entry 
+    {1}{75.44142pt}\LT@entry 
+    {1}{152.26378pt}\LT@entry 
+    {1}{175.02606pt}}
+\@writefile{toc}{\contentsline {section}{\numberline {1.6}Environments}{19}{section.1.6}\protected@file@percent }
+\newlabel{sec:orient-env}{{1.6}{19}{Environments}{section.1.6}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {1.7}Working conventions}{20}{section.1.7}\protected@file@percent }
+\newlabel{sec:orient-conventions}{{1.7}{20}{Working conventions}{section.1.7}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.7.1}Code wins over documents; PDFs win over both}{20}{subsection.1.7.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.7.2}STATUS heads are the project record}{20}{subsection.1.7.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.7.3}Numerics changes keep the pairing and oracle tests green}{21}{subsection.1.7.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.7.4}The knowledge system}{21}{subsection.1.7.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.7.5}Units and dialects}{21}{subsection.1.7.5}\protected@file@percent }
+\gdef \LT@vii {\LT@entry 
+    {1}{109.58464pt}\LT@entry 
+    {1}{129.50148pt}\LT@entry 
+    {1}{231.93158pt}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {2}CLI Surface and End-to-End Data Flow}{22}{chapter.2}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{ch:cli-dataflow}{{2}{22}{CLI Surface and End-to-End Data Flow}{chapter.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {2.1}Entry points}{22}{section.2.1}\protected@file@percent }
+\newlabel{sec:df-entry}{{2.1}{22}{Entry points}{section.2.1}{}}
+\gdef \LT@viii {\LT@entry 
+    {1}{140.88284pt}\LT@entry 
+    {1}{180.71652pt}\LT@entry 
+    {1}{149.41832pt}}
+\@writefile{toc}{\contentsline {section}{\numberline {2.2}CLI surface}{23}{section.2.2}\protected@file@percent }
+\newlabel{sec:df-surface}{{2.2}{23}{CLI surface}{section.2.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2.1}Job verbs and the OpenFOAM export verb}{23}{subsection.2.2.1}\protected@file@percent }
+\newlabel{sec:df-verbs}{{2.2.1}{23}{Job verbs and the OpenFOAM export verb}{subsection.2.2.1}{}}
+\gdef \LT@ix {\LT@entry 
+    {1}{103.89418pt}\LT@entry 
+    {1}{27.07182pt}\LT@entry 
+    {1}{243.3125pt}\LT@entry 
+    {1}{83.97733pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2.2}The flag runner: 330 flags by family}{24}{subsection.2.2.2}\protected@file@percent }
+\newlabel{sec:df-flags}{{2.2.2}{24}{The flag runner: 330 flags by family}{subsection.2.2.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {2.3}{\ignorespaces Runner flag families (AST count of \texttt  {add\_argument} calls in \texttt  {run\_nozzle.main}, working tree 2026-11-05).}}{24}{table.2.3}\protected@file@percent }
+\newlabel{tab:df-flag-families}{{2.3}{24}{Runner flag families (AST count of \texttt {add\_argument} calls in \texttt {run\_nozzle.main}, working tree 2026-11-05)}{table.2.3}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {2.3}Dispatch inside the runner}{27}{section.2.3}\protected@file@percent }
+\newlabel{sec:df-dispatch}{{2.3}{27}{Dispatch inside the runner}{section.2.3}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {2.4}The traditional pipeline, stage by stage}{27}{section.2.4}\protected@file@percent }
+\newlabel{sec:df-pipeline}{{2.4}{27}{The traditional pipeline, stage by stage}{section.2.4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.1}{\ignorespaces Execution order of the LREKit command line (working tree, 5 November 2026). Centre: the traditional pipeline of run\_nozzle.main, S01 to S14 top to bottom. Right: the export verb, the legacy toolbox and the early-exit MDO branch. Left: the job path of lrekit run with its run record, and the cross-cutting groups.}}{28}{figure.caption.3}\protected@file@percent }
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{fig:df-pipeline}{{2.1}{28}{Execution order of the LREKit command line (working tree, 5 November 2026). Centre: the traditional pipeline of run\_nozzle.main, S01 to S14 top to bottom. Right: the export verb, the legacy toolbox and the early-exit MDO branch. Left: the job path of lrekit run with its run record, and the cross-cutting groups}{figure.caption.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4.1}S01 and S02: defaults, cross-checks, release evidence and interview}{29}{subsection.2.4.1}\protected@file@percent }
+\newlabel{sec:df-s01s02}{{2.4.1}{29}{S01 and S02: defaults, cross-checks, release evidence and interview}{subsection.2.4.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4.2}S03: propellant and thermochemistry}{29}{subsection.2.4.2}\protected@file@percent }
+\newlabel{sec:df-s03}{{2.4.2}{29}{S03: propellant and thermochemistry}{subsection.2.4.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4.3}S04: throat sizing and performance}{30}{subsection.2.4.3}\protected@file@percent }
+\newlabel{sec:df-s04}{{2.4.3}{30}{S04: throat sizing and performance}{subsection.2.4.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4.4}S05 and S06: nozzle contour and chamber}{30}{subsection.2.4.4}\protected@file@percent }
+\newlabel{sec:df-s05s06}{{2.4.4}{30}{S05 and S06: nozzle contour and chamber}{subsection.2.4.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4.5}S12: early figures}{31}{subsection.2.4.5}\protected@file@percent }
+\newlabel{sec:df-s12early}{{2.4.5}{31}{S12: early figures}{subsection.2.4.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4.6}S07: regen wall sizing, cooling and wall structure}{31}{subsection.2.4.6}\protected@file@percent }
+\newlabel{sec:df-s07}{{2.4.6}{31}{S07: regen wall sizing, cooling and wall structure}{subsection.2.4.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4.7}S08: pintle injector and the optional spray/c* fixed point}{31}{subsection.2.4.7}\protected@file@percent }
+\newlabel{sec:df-s08}{{2.4.7}{31}{S08: pintle injector and the optional spray/c* fixed point}{subsection.2.4.7}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4.8}S09: electric pump feed}{32}{subsection.2.4.8}\protected@file@percent }
+\newlabel{sec:df-s09}{{2.4.8}{32}{S09: electric pump feed}{subsection.2.4.8}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4.9}S10 and S11: interface sync, throttle map and injector package}{32}{subsection.2.4.9}\protected@file@percent }
+\newlabel{sec:df-s10}{{2.4.9}{32}{S10 and S11: interface sync, throttle map and injector package}{subsection.2.4.9}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4.10}S11: core CAD}{33}{subsection.2.4.10}\protected@file@percent }
+\newlabel{sec:df-s11}{{2.4.10}{33}{S11: core CAD}{subsection.2.4.10}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4.11}S14: final write}{33}{subsection.2.4.11}\protected@file@percent }
+\newlabel{sec:df-s14final}{{2.4.11}{33}{S14: final write}{subsection.2.4.11}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {2.5}Early-exit MDO branches}{33}{section.2.5}\protected@file@percent }
+\newlabel{sec:df-mdo}{{2.5}{33}{Early-exit MDO branches}{section.2.5}{}}
+\gdef \LT@x {\LT@entry 
+    {1}{112.43008pt}\LT@entry 
+    {1}{38.45274pt}\LT@entry 
+    {1}{317.28984pt}}
+\@writefile{lot}{\contentsline {table}{\numberline {2.4}{\ignorespaces Exit codes of the early-exit branches. The enumeration WorkflowExitCode is defined in lines 28 to 35 of raosim/input\_validation.py; \_run\_requirements returns plain integers with the same meaning (run\_nozzle.py lines 2420 to 2476).}}{34}{table.2.4}\protected@file@percent }
+\newlabel{tab:df-exit}{{2.4}{34}{Exit codes of the early-exit branches. The enumeration WorkflowExitCode is defined in lines 28 to 35 of raosim/input\_validation.py; \_run\_requirements returns plain integers with the same meaning (run\_nozzle.py lines 2420 to 2476)}{table.2.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {2.6}The job path and its run record}{34}{section.2.6}\protected@file@percent }
+\newlabel{sec:df-job}{{2.6}{34}{The job path and its run record}{section.2.6}{}}
+\gdef \LT@xi {\LT@entry 
+    {1}{38.45274pt}\LT@entry 
+    {1}{160.79968pt}\LT@entry 
+    {1}{155.10922pt}\LT@entry 
+    {1}{112.43008pt}}
+\@writefile{toc}{\contentsline {section}{\numberline {2.7}Artifacts written per stage}{35}{section.2.7}\protected@file@percent }
+\newlabel{sec:df-artifacts}{{2.7}{35}{Artifacts written per stage}{section.2.7}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {2.5}{\ignorespaces Artifacts by stage (traditional runner unless stated). Lines refer to raosim/run\_nozzle.py.}}{35}{table.2.5}\protected@file@percent }
+\newlabel{tab:df-artifacts}{{2.5}{35}{Artifacts by stage (traditional runner unless stated). Lines refer to raosim/run\_nozzle.py}{table.2.5}{}}
+\gdef \LT@xii {\LT@entry 
+    {1}{123.81102pt}\LT@entry 
+    {1}{38.45274pt}\LT@entry 
+    {1}{305.90848pt}}
+\@writefile{toc}{\contentsline {section}{\numberline {2.8}Import closure}{37}{section.2.8}\protected@file@percent }
+\newlabel{sec:df-closure}{{2.8}{37}{Import closure}{section.2.8}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {2.6}{\ignorespaces Static reachability of the 161 modules from the console entry points.}}{37}{table.2.6}\protected@file@percent }
+\newlabel{tab:df-closure}{{2.6}{37}{Static reachability of the 161 modules from the console entry points}{table.2.6}{}}
+\gdef \LT@xiii {\LT@entry 
+    {1}{21.38092pt}\LT@entry 
+    {1}{106.73918pt}\LT@entry 
+    {1}{135.19194pt}\LT@entry 
+    {1}{155.10922pt}\LT@entry 
+    {1}{55.52458pt}}
+\@writefile{toc}{\contentsline {section}{\numberline {2.9}Where the documentation disagrees with the code}{38}{section.2.9}\protected@file@percent }
+\newlabel{sec:df-drift}{{2.9}{38}{Where the documentation disagrees with the code}{section.2.9}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {2.7}{\ignorespaces Documentation versus code, verified 2026-11-05. In every row the code is authoritative.}}{38}{table.2.7}\protected@file@percent }
+\newlabel{tab:df-drift}{{2.7}{38}{Documentation versus code, verified 2026-11-05. In every row the code is authoritative}{table.2.7}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {2.10}Finding things}{41}{section.2.10}\protected@file@percent }
+\newlabel{sec:df-find}{{2.10}{41}{Finding things}{section.2.10}{}}
+\gdef \LT@xiv {\LT@entry 
+    {1}{112.43008pt}\LT@entry 
+    {1}{132.34692pt}\LT@entry 
+    {1}{226.2411pt}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {3}Entry, Dispatch, Inputs and Job Contracts (S01--S02)}{42}{chapter.3}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{ch:s01-s02}{{3}{42}{Entry, Dispatch, Inputs and Job Contracts (S01--S02)}{chapter.3}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.1}S01: CLI entry points, argument parsing and workflow dispatch}{42}{section.3.1}\protected@file@percent }
+\newlabel{sec:s01}{{3.1}{42}{S01: CLI entry points, argument parsing and workflow dispatch}{section.3.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1.1}Role in the data flow and call sites}{42}{subsection.3.1.1}\protected@file@percent }
+\newlabel{sec:s01-role}{{3.1.1}{42}{Role in the data flow and call sites}{subsection.3.1.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.1}{\ignorespaces S01 dispatch tree as implemented in lrekit/cli.py, raosim/cli.py and raosim/run\_nozzle.py (line numbers from the 2026-11-05 working tree). Parser errors exit 2 at any step.}}{44}{figure.caption.4}\protected@file@percent }
+\newlabel{fig:s01-dispatch}{{3.1}{44}{S01 dispatch tree as implemented in lrekit/cli.py, raosim/cli.py and raosim/run\_nozzle.py (line numbers from the 2026-11-05 working tree). Parser errors exit 2 at any step}{figure.caption.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1.2}Inputs and outputs}{44}{subsection.3.1.2}\protected@file@percent }
+\newlabel{sec:s01-io}{{3.1.2}{44}{Inputs and outputs}{subsection.3.1.2}{}}
+\gdef \LT@xv {\LT@entry 
+    {1}{123.81102pt}\LT@entry 
+    {1}{38.45274pt}\LT@entry 
+    {1}{308.75394pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1.3}Modules}{45}{subsection.3.1.3}\protected@file@percent }
+\newlabel{sec:s01-modules}{{3.1.3}{45}{Modules}{subsection.3.1.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1.4}What the header comments establish}{45}{subsection.3.1.4}\protected@file@percent }
+\newlabel{sec:s01-headers}{{3.1.4}{45}{What the header comments establish}{subsection.3.1.4}{}}
+\gdef \LT@xvi {\LT@entry 
+    {1}{143.72786pt}\LT@entry 
+    {1}{61.21504pt}\LT@entry 
+    {1}{52.67912pt}\LT@entry 
+    {1}{220.55022pt}}
+\gdef \LT@xvii {\LT@entry 
+    {1}{192.09746pt}\LT@entry 
+    {1}{268.92024pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1.5}Governing documents}{46}{subsection.3.1.5}\protected@file@percent }
+\newlabel{sec:s01-docs}{{3.1.5}{46}{Governing documents}{subsection.3.1.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1.6}Verification}{46}{subsection.3.1.6}\protected@file@percent }
+\newlabel{sec:s01-tests}{{3.1.6}{46}{Verification}{subsection.3.1.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1.7}Maturity, limitations and known defects}{47}{subsection.3.1.7}\protected@file@percent }
+\newlabel{sec:s01-defects}{{3.1.7}{47}{Maturity, limitations and known defects}{subsection.3.1.7}{}}
+\gdef \LT@xviii {\LT@entry 
+    {1}{106.73918pt}\LT@entry 
+    {1}{354.27852pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1.8}Developer notes}{48}{subsection.3.1.8}\protected@file@percent }
+\newlabel{sec:s01-dev}{{3.1.8}{48}{Developer notes}{subsection.3.1.8}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.2}S02: Inputs, units, validation and job contracts}{48}{section.3.2}\protected@file@percent }
+\newlabel{sec:s02}{{3.2}{48}{S02: Inputs, units, validation and job contracts}{section.3.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.1}Role in the data flow and call sites}{48}{subsection.3.2.1}\protected@file@percent }
+\newlabel{sec:s02-role}{{3.2.1}{48}{Role in the data flow and call sites}{subsection.3.2.1}{}}
+\gdef \LT@xix {\LT@entry 
+    {1}{24.22636pt}\LT@entry 
+    {1}{160.79968pt}\LT@entry 
+    {1}{283.14662pt}}
+\gdef \LT@xx {\LT@entry 
+    {1}{132.34692pt}\LT@entry 
+    {1}{38.45274pt}\LT@entry 
+    {1}{300.21802pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.2}Inputs and outputs}{49}{subsection.3.2.2}\protected@file@percent }
+\newlabel{sec:s02-io}{{3.2.2}{49}{Inputs and outputs}{subsection.3.2.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.3}Modules}{49}{subsection.3.2.3}\protected@file@percent }
+\newlabel{sec:s02-modules}{{3.2.3}{49}{Modules}{subsection.3.2.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.4}What the header comments establish}{50}{subsection.3.2.4}\protected@file@percent }
+\newlabel{sec:s02-headers}{{3.2.4}{50}{What the header comments establish}{subsection.3.2.4}{}}
+\gdef \LT@xxi {\LT@entry 
+    {1}{143.72786pt}\LT@entry 
+    {1}{61.21504pt}\LT@entry 
+    {1}{52.67912pt}\LT@entry 
+    {1}{220.55022pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.5}Governing documents}{53}{subsection.3.2.5}\protected@file@percent }
+\newlabel{sec:s02-docs}{{3.2.5}{53}{Governing documents}{subsection.3.2.5}{}}
+\gdef \LT@xxii {\LT@entry 
+    {1}{123.81102pt}\LT@entry 
+    {1}{337.20668pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.6}Verification}{54}{subsection.3.2.6}\protected@file@percent }
+\newlabel{sec:s02-tests}{{3.2.6}{54}{Verification}{subsection.3.2.6}{}}
+\gdef \LT@xxiii {\LT@entry 
+    {1}{106.73918pt}\LT@entry 
+    {1}{354.27852pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.7}Maturity, limitations and known defects}{55}{subsection.3.2.7}\protected@file@percent }
+\newlabel{sec:s02-defects}{{3.2.7}{55}{Maturity, limitations and known defects}{subsection.3.2.7}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.8}Developer notes}{55}{subsection.3.2.8}\protected@file@percent }
+\newlabel{sec:s02-dev}{{3.2.8}{55}{Developer notes}{subsection.3.2.8}{}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {4}Propellant Thermochemistry, Performance and Off-Design Screens}{56}{chapter.4}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{ch:s03-s04}{{4}{56}{Propellant Thermochemistry, Performance and Off-Design Screens}{chapter.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.1}S03: Propellant identity and chamber thermochemistry}{56}{section.4.1}\protected@file@percent }
+\newlabel{sec:s03}{{4.1}{56}{S03: Propellant identity and chamber thermochemistry}{section.4.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.1}Role in the data flow and call site}{56}{subsection.4.1.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4.1}{\ignorespaces Order of operations for S03 and S04 inside raosim/run\_nozzle.py (line numbers in parentheses).}}{57}{figure.caption.5}\protected@file@percent }
+\newlabel{fig:s03s04-flow}{{4.1}{57}{Order of operations for S03 and S04 inside raosim/run\_nozzle.py (line numbers in parentheses)}{figure.caption.5}{}}
+\gdef \LT@xxiv {\LT@entry 
+    {1}{150.26443pt}\LT@entry 
+    {1}{82.62852pt}\LT@entry 
+    {1}{232.57922pt}}
+\gdef \LT@xxv {\LT@entry 
+    {1}{126.05246pt}\LT@entry 
+    {1}{43.89822pt}\LT@entry 
+    {1}{295.52888pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.2}Inputs and outputs}{58}{subsection.4.1.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4.2}{\ignorespaces S03 modules (line counts on 5 November 2026).}}{58}{table.4.2}\protected@file@percent }
+\newlabel{tab:s03-modules}{{4.2}{58}{S03 modules (line counts on 5 November 2026)}{table.4.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.3}What the header comments establish}{58}{subsection.4.1.3}\protected@file@percent }
+\gdef \LT@xxvi {\LT@entry 
+    {1}{72.78908pt}\LT@entry 
+    {1}{36.62799pt}\LT@entry 
+    {1}{41.47482pt}\LT@entry 
+    {1}{39.0514pt}\LT@entry 
+    {1}{34.21196pt}\LT@entry 
+    {1}{63.26338pt}\LT@entry 
+    {1}{184.15529pt}}
+\@writefile{lot}{\contentsline {table}{\numberline {4.3}{\ignorespaces Built-in constant-$\gamma $ table, raosim/propellants.py:124-182.}}{59}{table.4.3}\protected@file@percent }
+\newlabel{tab:s03-db}{{4.3}{59}{Built-in constant-$\gamma $ table, raosim/propellants.py:124-182}{table.4.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.4}Governing documents}{60}{subsection.4.1.4}\protected@file@percent }
+\gdef \LT@xxvii {\LT@entry 
+    {1}{164.79015pt}\LT@entry 
+    {1}{68.10281pt}\LT@entry 
+    {1}{58.42393pt}\LT@entry 
+    {1}{184.15529pt}}
+\gdef \LT@xxviii {\LT@entry 
+    {1}{145.4176pt}\LT@entry 
+    {1}{310.05458pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.5}Verification}{61}{subsection.4.1.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.6}Maturity, limitations and known defects}{62}{subsection.4.1.6}\protected@file@percent }
+\newlabel{sec:s03-maturity}{{4.1.6}{62}{Maturity, limitations and known defects}{subsection.4.1.6}{}}
+\gdef \LT@xxix {\LT@entry 
+    {1}{67.94965pt}\LT@entry 
+    {1}{34.21196pt}\LT@entry 
+    {1}{150.4176pt}\LT@entry 
+    {1}{208.36726pt}}
+\@writefile{lot}{\contentsline {table}{\numberline {4.6}{\ignorespaces Check run (5 Nov 2026, .venv-jax, RocketCEA 1.2.3): built-in table versus resolve\_thermochemistry in cea\_frozen mode, at $P_c$ = 1000 psia and the table's nominal O/F. Values are $\gamma $ / $\overline  {M}$ [g/mol] / $T_c$ [K] / $c^*$ [m/s].}}{63}{table.4.6}\protected@file@percent }
+\newlabel{tab:s03-check}{{4.6}{63}{Check run (5 Nov 2026, .venv-jax, RocketCEA 1.2.3): built-in table versus resolve\_thermochemistry in cea\_frozen mode, at $P_c$ = 1000 psia and the table's nominal O/F. Values are $\gamma $ / $\overline {M}$ [g/mol] / $T_c$ [K] / $c^*$ [m/s]}{table.4.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.7}Developer notes}{63}{subsection.4.1.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4.2}S04: Throat sizing, delivered performance and off-design screens}{64}{section.4.2}\protected@file@percent }
+\newlabel{sec:s04}{{4.2}{64}{S04: Throat sizing, delivered performance and off-design screens}{section.4.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.1}Role in the data flow and call site}{64}{subsection.4.2.1}\protected@file@percent }
+\gdef \LT@xxx {\LT@entry 
+    {1}{150.26443pt}\LT@entry 
+    {1}{305.20776pt}}
+\gdef \LT@xxxi {\LT@entry 
+    {1}{126.05246pt}\LT@entry 
+    {1}{43.89822pt}\LT@entry 
+    {1}{295.52888pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.2}Inputs and outputs}{65}{subsection.4.2.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4.7}{\ignorespaces summary.json performance and thrust-closure values from the fresh 13 kN run (scratchpad fresh\_run/13kn\_rao\_bvp\_flowfield).}}{65}{table.4.7}\protected@file@percent }
+\newlabel{tab:s04-example}{{4.7}{65}{summary.json performance and thrust-closure values from the fresh 13 kN run (scratchpad fresh\_run/13kn\_rao\_bvp\_flowfield)}{table.4.7}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4.8}{\ignorespaces S04 modules (line counts on 5 November 2026).}}{65}{table.4.8}\protected@file@percent }
+\newlabel{tab:s04-modules}{{4.8}{65}{S04 modules (line counts on 5 November 2026)}{table.4.8}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.3}What the header comments establish}{66}{subsection.4.2.3}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4.2}{\ignorespaces Separation screen written by the fresh 13 kN run (separation\_contour.png): Schmucker criterion, constant-gamma Q1D, Pc = 3.0 MPa; flowing full at Pa = 101, 50, 20 and 5 kPa. This is an attached-flow FSS onset screen only.}}{67}{figure.caption.6}\protected@file@percent }
+\newlabel{fig:s04-separation}{{4.2}{67}{Separation screen written by the fresh 13 kN run (separation\_contour.png): Schmucker criterion, constant-gamma Q1D, Pc = 3.0 MPa; flowing full at Pa = 101, 50, 20 and 5 kPa. This is an attached-flow FSS onset screen only}{figure.caption.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.4}Governing documents}{67}{subsection.4.2.4}\protected@file@percent }
+\gdef \LT@xxxii {\LT@entry 
+    {1}{164.79015pt}\LT@entry 
+    {1}{68.10281pt}\LT@entry 
+    {1}{58.42393pt}\LT@entry 
+    {1}{184.15529pt}}
+\gdef \LT@xxxiii {\LT@entry 
+    {1}{145.4176pt}\LT@entry 
+    {1}{310.05458pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.5}Verification}{68}{subsection.4.2.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.6}Maturity, limitations and known defects}{68}{subsection.4.2.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.7}Developer notes}{69}{subsection.4.2.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {5}Nozzle and Chamber Geometry (S05) and the Rao/MOC Contour Solver (S06)}{70}{chapter.5}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{ch:s05-s06}{{5}{70}{Nozzle and Chamber Geometry (S05) and the Rao/MOC Contour Solver (S06)}{chapter.5}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.1}S05: Default B\'ezier/TOP nozzle contour, throat and chamber geometry}{70}{section.5.1}\protected@file@percent }
+\newlabel{sec:s05}{{5.1}{70}{S05: Default B\'ezier/TOP nozzle contour, throat and chamber geometry}{section.5.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.1}Role in the data flow and call site}{70}{subsection.5.1.1}\protected@file@percent }
+\gdef \LT@xxxiv {\LT@entry 
+    {1}{169.62958pt}\LT@entry 
+    {1}{82.62852pt}\LT@entry 
+    {1}{218.05353pt}}
+\gdef \LT@xxxv {\LT@entry 
+    {1}{145.4176pt}\LT@entry 
+    {1}{39.0514pt}\LT@entry 
+    {1}{285.8426pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.2}Inputs and outputs}{71}{subsection.5.1.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.3}Modules}{72}{subsection.5.1.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.4}What the header comments establish}{72}{subsection.5.1.4}\protected@file@percent }
+\gdef \LT@xxxvi {\LT@entry 
+    {1}{198.68098pt}\LT@entry 
+    {1}{68.10281pt}\LT@entry 
+    {1}{48.73767pt}\LT@entry 
+    {1}{155.10388pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.5}Governing documents}{73}{subsection.5.1.5}\protected@file@percent }
+\gdef \LT@xxxvii {\LT@entry 
+    {1}{164.79015pt}\LT@entry 
+    {1}{310.05458pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.6}Verification}{74}{subsection.5.1.6}\protected@file@percent }
+\newlabel{sec:s05-verification}{{5.1.6}{74}{Verification}{subsection.5.1.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.7}Maturity, limitations and known defects}{74}{subsection.5.1.7}\protected@file@percent }
+\newlabel{sec:s05-maturity}{{5.1.7}{74}{Maturity, limitations and known defects}{subsection.5.1.7}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.8}Developer notes}{75}{subsection.5.1.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5.2}S06: Opt-in Rao variational / method-of-characteristics BVP contour}{75}{section.5.2}\protected@file@percent }
+\newlabel{sec:s06}{{5.2}{75}{S06: Opt-in Rao variational / method-of-characteristics BVP contour}{section.5.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.1}Role in the data flow and call site}{75}{subsection.5.2.1}\protected@file@percent }
+\gdef \LT@xxxviii {\LT@entry 
+    {1}{145.4176pt}\LT@entry 
+    {1}{39.0514pt}\LT@entry 
+    {1}{285.8426pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.2}Inputs and outputs}{76}{subsection.5.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.3}Modules}{76}{subsection.5.2.3}\protected@file@percent }
+\gdef \LT@xxxix {\LT@entry 
+    {1}{72.78908pt}\LT@entry 
+    {1}{135.8919pt}\LT@entry 
+    {1}{140.73872pt}\LT@entry 
+    {1}{126.05246pt}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5.1}{\ignorespaces Internal flow of solve\_rao\_bvp as called by the CLI. Line numbers refer to rao\_variational.py unless noted. Unshaded boxes are sub-steps or alternatives that the CLI does not select.}}{77}{figure.caption.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.4}Three ways the repository can produce a bell}{78}{subsection.5.2.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.5}What the header comments establish}{78}{subsection.5.2.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.6}The bounded MOC net fix and compression coalescence}{79}{subsection.5.2.6}\protected@file@percent }
+\newlabel{sec:s06-bounded}{{5.2.6}{79}{The bounded MOC net fix and compression coalescence}{subsection.5.2.6}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5.2}{\ignorespaces Rao B-D-E topology from the fresh 13 kN rao-bvp run of 5 November 2026 ($\varepsilon = 4.524$, $L_\% = 80$, $\gamma = 1.24$, $\theta _B = 22.58$ deg): throat arc to B, last kernel RRC through D, control surface DE, wall streamline B--E. BD and DE mass flows differ by a relative $4.1\times 10^{-9}$.}}{80}{figure.caption.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.7}Reliability ladder and export gates}{80}{subsection.5.2.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.8}NASA/JHU oracle suites, the Rao 1958 benchmark, B3/B5 and the chart sweep}{81}{subsection.5.2.8}\protected@file@percent }
+\gdef \LT@xl {\LT@entry 
+    {1}{198.68098pt}\LT@entry 
+    {1}{68.10281pt}\LT@entry 
+    {1}{48.73767pt}\LT@entry 
+    {1}{155.10388pt}}
+\gdef \LT@xli {\LT@entry 
+    {1}{164.79015pt}\LT@entry 
+    {1}{310.05458pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.9}Governing documents}{82}{subsection.5.2.9}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.10}Verification}{82}{subsection.5.2.10}\protected@file@percent }
+\newlabel{sec:s06-verification}{{5.2.10}{82}{Verification}{subsection.5.2.10}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.11}Maturity, limitations and known defects}{83}{subsection.5.2.11}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.12}Developer notes}{84}{subsection.5.2.12}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {6}Stage S07: Regenerative Cooling and Wall Structures}{85}{chapter.6}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{ch:s07}{{6}{85}{Stage S07: Regenerative Cooling and Wall Structures}{chapter.6}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6.1}Regenerative wall sizing, cooling analysis and wall structural screens}{85}{section.6.1}\protected@file@percent }
+\newlabel{sec:s07}{{6.1}{85}{Regenerative wall sizing, cooling analysis and wall structural screens}{section.6.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1.1}Role in the data flow and call site}{85}{subsection.6.1.1}\protected@file@percent }
+\newlabel{sec:s07-role}{{6.1.1}{85}{Role in the data flow and call site}{subsection.6.1.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.1}{\ignorespaces Internal flow of S07 in the traditional pipeline (run\_nozzle.py:4096-5616). Dashed boxes are mutually exclusive sizing branches; the upstream inputs and the material feed all of them and the analysis block.}}{86}{figure.caption.9}\protected@file@percent }
+\newlabel{fig:s07-flow}{{6.1}{86}{Internal flow of S07 in the traditional pipeline (run\_nozzle.py:4096-5616). Dashed boxes are mutually exclusive sizing branches; the upstream inputs and the material feed all of them and the analysis block}{figure.caption.9}{}}
+\gdef \LT@xlii {\LT@entry 
+    {1}{152.26378pt}\LT@entry 
+    {1}{83.97733pt}\LT@entry 
+    {1}{240.46748pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1.2}Inputs and outputs}{87}{subsection.6.1.2}\protected@file@percent }
+\newlabel{sec:s07-io}{{6.1.2}{87}{Inputs and outputs}{subsection.6.1.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {6.1}{\ignorespaces S07 command-line controls and parser defaults.}}{87}{table.6.1}\protected@file@percent }
+\newlabel{tab:s07-flags}{{6.1}{87}{S07 command-line controls and parser defaults}{table.6.1}{}}
+\gdef \LT@xliii {\LT@entry 
+    {1}{118.12054pt}\LT@entry 
+    {1}{92.51282pt}\LT@entry 
+    {1}{266.0748pt}}
+\@writefile{lot}{\contentsline {table}{\numberline {6.2}{\ignorespaces S07 outputs and their consumers.}}{88}{table.6.2}\protected@file@percent }
+\newlabel{tab:s07-out}{{6.2}{88}{S07 outputs and their consumers}{table.6.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {6.3}{\ignorespaces S07 values from builds/\_archive\_2026-11-05/tests/13kn\_sl\_fast/summary.json (13 kN LOX/RP-1, GRCop-84 liner, Inconel 718 jacket, 194 helical channels, 1.0 turn).}}{89}{table.caption.10}\protected@file@percent }
+\newlabel{tab:s07-ref}{{6.3}{89}{S07 values from builds/\_archive\_2026-11-05/tests/13kn\_sl\_fast/summary.json (13 kN LOX/RP-1, GRCop-84 liner, Inconel 718 jacket, 194 helical channels, 1.0 turn)}{table.caption.10}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.2}{\ignorespaces Archived 13kn\_sl\_fast run. Left, cooling\_profile.png: Bartz convective heat flux, gas-side and coolant-side wall temperature and coolant bulk temperature along the wall, with the 1000 K GRCop-84 limit and the 700 K RP-1 coking screen; peak gas-side wall 946 K (margin 1.057), coolant-side wall above the coking screen (margin 0.755, warning only). Right, structural\_life.png: SP-125 eq. 4-31 pressure, thermal and combined liner stress against the 186 MPa yield strength, the stress margin, and the strain-life cycles-to-failure profile against the 25-cycle requirement. The same run also wrote channel\_march.png and cross\_section.png (figures/builds/11 and 12).}}{89}{figure.caption.11}\protected@file@percent }
+\newlabel{fig:s07-run}{{6.2}{89}{Archived 13kn\_sl\_fast run. Left, cooling\_profile.png: Bartz convective heat flux, gas-side and coolant-side wall temperature and coolant bulk temperature along the wall, with the 1000 K GRCop-84 limit and the 700 K RP-1 coking screen; peak gas-side wall 946 K (margin 1.057), coolant-side wall above the coking screen (margin 0.755, warning only). Right, structural\_life.png: SP-125 eq. 4-31 pressure, thermal and combined liner stress against the 186 MPa yield strength, the stress margin, and the strain-life cycles-to-failure profile against the 25-cycle requirement. The same run also wrote channel\_march.png and cross\_section.png (figures/builds/11 and 12)}{figure.caption.11}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1.3}Modules}{89}{subsection.6.1.3}\protected@file@percent }
+\newlabel{sec:s07-modules}{{6.1.3}{89}{Modules}{subsection.6.1.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1.4}What the header comments establish}{89}{subsection.6.1.4}\protected@file@percent }
+\newlabel{sec:s07-headers}{{6.1.4}{89}{What the header comments establish}{subsection.6.1.4}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {6.4}{\ignorespaces S07 modules (line counts from the working tree on 2026-11-05).}}{90}{table.caption.12}\protected@file@percent }
+\newlabel{tab:s07-modules}{{6.4}{90}{S07 modules (line counts from the working tree on 2026-11-05)}{table.caption.12}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {6.5}{\ignorespaces materials.py catalog values (single representative points).}}{91}{table.caption.13}\protected@file@percent }
+\newlabel{tab:s07-materials}{{6.5}{91}{materials.py catalog values (single representative points)}{table.caption.13}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1.5}Governing documents}{94}{subsection.6.1.5}\protected@file@percent }
+\newlabel{sec:s07-docs}{{6.1.5}{94}{Governing documents}{subsection.6.1.5}{}}
+\gdef \LT@xliv {\LT@entry 
+    {1}{175.02606pt}\LT@entry 
+    {1}{66.9055pt}\LT@entry 
+    {1}{52.67912pt}\LT@entry 
+    {1}{186.407pt}}
+\@writefile{lot}{\contentsline {table}{\numberline {6.6}{\ignorespaces Header and docstring claims that the code does not bear out.}}{95}{table.caption.14}\protected@file@percent }
+\newlabel{tab:s07-claims}{{6.6}{95}{Header and docstring claims that the code does not bear out}{table.caption.14}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {6.7}{\ignorespaces Documents governing or recording S07.}}{95}{table.6.7}\protected@file@percent }
+\newlabel{tab:s07-docs}{{6.7}{95}{Documents governing or recording S07}{table.6.7}{}}
+\gdef \LT@xlv {\LT@entry 
+    {1}{135.19194pt}\LT@entry 
+    {1}{32.76228pt}\LT@entry 
+    {1}{305.90848pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1.6}Verification}{96}{subsection.6.1.6}\protected@file@percent }
+\newlabel{sec:s07-tests}{{6.1.6}{96}{Verification}{subsection.6.1.6}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {6.8}{\ignorespaces Tests covering S07.}}{96}{table.6.8}\protected@file@percent }
+\newlabel{tab:s07-tests}{{6.8}{96}{Tests covering S07}{table.6.8}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1.7}Maturity, limitations and known defects}{96}{subsection.6.1.7}\protected@file@percent }
+\newlabel{sec:s07-defects}{{6.1.7}{96}{Maturity, limitations and known defects}{subsection.6.1.7}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1.8}Developer notes}{98}{subsection.6.1.8}\protected@file@percent }
+\newlabel{sec:s07-dev}{{6.1.8}{98}{Developer notes}{subsection.6.1.8}{}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {7}Injector, Spray Coupling, Feed System and Electric Pumps}{100}{chapter.7}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{ch:s08-s09}{{7}{100}{Injector, Spray Coupling, Feed System and Electric Pumps}{chapter.7}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {7.1}S08 -- Pintle injector sizing and the optional spray/c-star fixed point}{100}{section.7.1}\protected@file@percent }
+\newlabel{sec:s08}{{7.1}{100}{S08 -- Pintle injector sizing and the optional spray/c-star fixed point}{section.7.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.1.1}Role in the data flow and call site}{100}{subsection.7.1.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {7.1}{\ignorespaces Internal flow of S08 (left) and S09 (right). The ledger arrow is taken only with -{}-electric-pump. Line numbers refer to the 2026-11-05 tree.}}{101}{figure.caption.15}\protected@file@percent }
+\newlabel{fig:s08-s09-flow}{{7.1}{101}{Internal flow of S08 (left) and S09 (right). The ledger arrow is taken only with -{}-electric-pump. Line numbers refer to the 2026-11-05 tree}{figure.caption.15}{}}
+\gdef \LT@xlvi {\LT@entry 
+    {1}{107.43008pt}\LT@entry 
+    {1}{363.5049pt}}
+\gdef \LT@xlvii {\LT@entry 
+    {1}{124.50148pt}\LT@entry 
+    {1}{38.45274pt}\LT@entry 
+    {1}{317.9803pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.1.2}Inputs and outputs}{102}{subsection.7.1.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.1.3}Modules}{102}{subsection.7.1.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.1.4}What the header comments establish}{103}{subsection.7.1.4}\protected@file@percent }
+\gdef \LT@xlviii {\LT@entry 
+    {1}{164.3356pt}\LT@entry 
+    {1}{306.59938pt}}
+\@writefile{lot}{\contentsline {table}{\numberline {7.3}{\ignorespaces S08 gate rules as implemented in raosim/injector.py.}}{105}{table.7.3}\protected@file@percent }
+\newlabel{tab:s08-gates}{{7.3}{105}{S08 gate rules as implemented in raosim/injector.py}{table.7.3}{}}
+\gdef \LT@xlix {\LT@entry 
+    {1}{175.71652pt}\LT@entry 
+    {1}{66.9055pt}\LT@entry 
+    {1}{238.3125pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.1.5}Governing documents}{106}{subsection.7.1.5}\protected@file@percent }
+\gdef \LT@l {\LT@entry 
+    {1}{118.81102pt}\LT@entry 
+    {1}{52.67912pt}\LT@entry 
+    {1}{309.4444pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.1.6}Verification}{107}{subsection.7.1.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.1.7}Maturity, limitations and known defects}{107}{subsection.7.1.7}\protected@file@percent }
+\gdef \LT@li {\LT@entry 
+    {1}{130.19194pt}\LT@entry 
+    {1}{340.7426pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.1.8}Developer notes}{108}{subsection.7.1.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {7.2}S09 -- Feed-pressure ledger to electric pump, motor, inverter and battery}{108}{section.7.2}\protected@file@percent }
+\newlabel{sec:s09}{{7.2}{108}{S09 -- Feed-pressure ledger to electric pump, motor, inverter and battery}{section.7.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.2.1}Role in the data flow and call site}{108}{subsection.7.2.1}\protected@file@percent }
+\gdef \LT@lii {\LT@entry 
+    {1}{124.50148pt}\LT@entry 
+    {1}{38.45274pt}\LT@entry 
+    {1}{317.9803pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.2.2}Inputs and outputs}{109}{subsection.7.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.2.3}Modules}{109}{subsection.7.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.2.4}What the header comments establish}{110}{subsection.7.2.4}\protected@file@percent }
+\gdef \LT@liii {\LT@entry 
+    {1}{147.26378pt}\LT@entry 
+    {1}{78.28644pt}\LT@entry 
+    {1}{78.28644pt}\LT@entry 
+    {1}{175.71652pt}}
+\gdef \LT@liv {\LT@entry 
+    {1}{175.71652pt}\LT@entry 
+    {1}{66.9055pt}\LT@entry 
+    {1}{238.3125pt}}
+\@writefile{lot}{\contentsline {table}{\numberline {7.8}{\ignorespaces Registered electric technology sets (raosim/electric\_technology.py:236-369).}}{111}{table.7.8}\protected@file@percent }
+\newlabel{tab:s09-tech}{{7.8}{111}{Registered electric technology sets (raosim/electric\_technology.py:236-369)}{table.7.8}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.2.5}Governing documents}{111}{subsection.7.2.5}\protected@file@percent }
+\gdef \LT@lv {\LT@entry 
+    {1}{118.81102pt}\LT@entry 
+    {1}{52.67912pt}\LT@entry 
+    {1}{309.4444pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.2.6}Verification}{112}{subsection.7.2.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.2.7}Maturity, limitations and known defects}{112}{subsection.7.2.7}\protected@file@percent }
+\gdef \LT@lvi {\LT@entry 
+    {1}{130.19194pt}\LT@entry 
+    {1}{340.7426pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.2.8}Developer notes}{113}{subsection.7.2.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {8}Interface, Mass Ledger, CAD Export and Figures}{114}{chapter.8}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{ch:s10-s12}{{8}{114}{Interface, Mass Ledger, CAD Export and Figures}{chapter.8}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {8.1}S10 Injector/chamber bolted interface and hardware mass ledger}{114}{section.8.1}\protected@file@percent }
+\newlabel{sec:s10}{{8.1}{114}{S10 Injector/chamber bolted interface and hardware mass ledger}{section.8.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.1.1}Role in the data flow and call sites}{114}{subsection.8.1.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {8.1}{\ignorespaces Execution order (top to bottom) of the S09 to S12 hand-off in run\_nozzle.main. Dashed: electric-pump block. Dotted: pintle block (guard at run\_nozzle.py:5623). The interface screen and core CAD run on every traditional run. The S12 contour, MOC and cooling figures run earlier, interleaved with S05 to S07 (Table~\ref {tab:s12-calls}).}}{115}{figure.caption.16}\protected@file@percent }
+\newlabel{fig:s10-s12-order}{{8.1}{115}{Execution order (top to bottom) of the S09 to S12 hand-off in run\_nozzle.main. Dashed: electric-pump block. Dotted: pintle block (guard at run\_nozzle.py:5623). The interface screen and core CAD run on every traditional run. The S12 contour, MOC and cooling figures run earlier, interleaved with S05 to S07 (Table~\ref {tab:s12-calls})}{figure.caption.16}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.1.2}Inputs and outputs}{115}{subsection.8.1.2}\protected@file@percent }
+\gdef \LT@lvii {\LT@entry 
+    {1}{113.12054pt}\LT@entry 
+    {1}{38.45274pt}\LT@entry 
+    {1}{329.36124pt}}
+\gdef \LT@lviii {\LT@entry 
+    {1}{73.28644pt}\LT@entry 
+    {1}{129.50148pt}\LT@entry 
+    {1}{95.35826pt}\LT@entry 
+    {1}{181.407pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.1.3}Modules}{116}{subsection.8.1.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.1.4}What the header comments establish}{116}{subsection.8.1.4}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {8.2}{\ignorespaces Interface checks in raosim/interface.py: basis named in the header and code detail.}}{116}{table.8.2}\protected@file@percent }
+\newlabel{tab:s10-checks}{{8.2}{116}{Interface checks in raosim/interface.py: basis named in the header and code detail}{table.8.2}{}}
+\gdef \LT@lix {\LT@entry 
+    {1}{215.55022pt}\LT@entry 
+    {1}{66.9055pt}\LT@entry 
+    {1}{198.47882pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.1.5}Governing documents}{117}{subsection.8.1.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.1.6}Verification}{117}{subsection.8.1.6}\protected@file@percent }
+\gdef \LT@lx {\LT@entry 
+    {1}{121.65646pt}\LT@entry 
+    {1}{27.07182pt}\LT@entry 
+    {1}{332.20668pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.1.7}Maturity, limitations and known defects}{118}{subsection.8.1.7}\protected@file@percent }
+\gdef \LT@lxi {\LT@entry 
+    {1}{90.35826pt}\LT@entry 
+    {1}{192.09746pt}\LT@entry 
+    {1}{192.78836pt}}
+\gdef \LT@lxii {\LT@entry 
+    {1}{130.19194pt}\LT@entry 
+    {1}{149.41832pt}\LT@entry 
+    {1}{192.78836pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.1.8}Developer notes}{119}{subsection.8.1.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {8.2}S11 CAD, mesh and geometry deliverables}{119}{section.8.2}\protected@file@percent }
+\newlabel{sec:s11}{{8.2}{119}{S11 CAD, mesh and geometry deliverables}{section.8.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.2.1}Role in the data flow and call sites}{119}{subsection.8.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.2.2}Inputs and outputs}{119}{subsection.8.2.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {8.6}{\ignorespaces S11 artifacts of the traditional CLI: writer, trigger and the gate applied before success.}}{119}{table.8.6}\protected@file@percent }
+\newlabel{tab:s11-artifacts}{{8.6}{119}{S11 artifacts of the traditional CLI: writer, trigger and the gate applied before success}{table.8.6}{}}
+\gdef \LT@lxiii {\LT@entry 
+    {1}{124.50148pt}\LT@entry 
+    {1}{38.45274pt}\LT@entry 
+    {1}{317.9803pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.2.3}Modules}{120}{subsection.8.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.2.4}What the header comments establish}{121}{subsection.8.2.4}\protected@file@percent }
+\gdef \LT@lxiv {\LT@entry 
+    {1}{215.55022pt}\LT@entry 
+    {1}{66.9055pt}\LT@entry 
+    {1}{198.47882pt}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8.2}{\ignorespaces Archived S11 output, all reference geometry with hardware\_qualified = False. Left: half-cutaway of wall.stl (GRCop-84 liner with flange) and jacket.stl (Inconel 718) from builds/tests/13kn\_sl\_fast (2026-07-08), rendered anew. Centre: true Y = 0 section of the five-part coaxial injector (coaxial\_injector\_13kn, slots; circuits\_sealed = true). Right: fuel-pump half-cutaway from the 13kn\_sl\_fast pump\_brep STLs, which predate the split volute casing.}}{122}{figure.caption.17}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.2.5}Governing documents}{122}{subsection.8.2.5}\protected@file@percent }
+\gdef \LT@lxv {\LT@entry 
+    {1}{121.65646pt}\LT@entry 
+    {1}{27.07182pt}\LT@entry 
+    {1}{332.20668pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.2.6}Verification}{123}{subsection.8.2.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.2.7}Maturity, limitations and known defects}{123}{subsection.8.2.7}\protected@file@percent }
+\gdef \LT@lxvi {\LT@entry 
+    {1}{90.35826pt}\LT@entry 
+    {1}{192.09746pt}\LT@entry 
+    {1}{192.78836pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.2.8}Developer notes}{124}{subsection.8.2.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {8.3}S12 Figures, MOC construction diagrams and flow animations}{124}{section.8.3}\protected@file@percent }
+\newlabel{sec:s12}{{8.3}{124}{S12 Figures, MOC construction diagrams and flow animations}{section.8.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.3.1}Role in the data flow and call sites}{124}{subsection.8.3.1}\protected@file@percent }
+\gdef \LT@lxvii {\LT@entry 
+    {1}{135.88284pt}\LT@entry 
+    {1}{152.26378pt}\LT@entry 
+    {1}{106.73918pt}\LT@entry 
+    {1}{78.97733pt}}
+\gdef \LT@lxviii {\LT@entry 
+    {1}{124.50148pt}\LT@entry 
+    {1}{38.45274pt}\LT@entry 
+    {1}{317.9803pt}}
+\@writefile{lot}{\contentsline {table}{\numberline {8.11}{\ignorespaces S12 figure calls in run\_nozzle.main.}}{125}{table.8.11}\protected@file@percent }
+\newlabel{tab:s12-calls}{{8.11}{125}{S12 figure calls in run\_nozzle.main}{table.8.11}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.3.2}Inputs and outputs}{125}{subsection.8.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.3.3}Modules}{125}{subsection.8.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.3.4}What the header comments establish}{126}{subsection.8.3.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.3.5}Governing documents}{126}{subsection.8.3.5}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {8.3}{\ignorespaces Fresh 2026-11-05 run of examples/cli/test\_13kn\_rao\_bvp\_flowfield.args: the coverage-gated field from flow\_viz.plot\_flowfield. The temperature panel uses -{}-chamber-temp (default 3500 K), not the resolved 3571 K in summary.json.}}{127}{figure.caption.18}\protected@file@percent }
+\newlabel{fig:s12-flowfield}{{8.3}{127}{Fresh 2026-11-05 run of examples/cli/test\_13kn\_rao\_bvp\_flowfield.args: the coverage-gated field from flow\_viz.plot\_flowfield. The temperature panel uses -{}-chamber-temp (default 3500 K), not the resolved 3571 K in summary.json}{figure.caption.18}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.3.6}Verification}{127}{subsection.8.3.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.3.7}Maturity, limitations and known defects}{127}{subsection.8.3.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.3.8}Developer notes}{127}{subsection.8.3.8}\protected@file@percent }
+\gdef \LT@lxix {\LT@entry 
+    {1}{87.51282pt}\LT@entry 
+    {1}{112.43008pt}\LT@entry 
+    {1}{172.18062pt}\LT@entry 
+    {1}{107.43008pt}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {9}Engine MDO, Requirements, Re-evaluation and Run Records (S13--S14)}{128}{chapter.9}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{ch:s13-s14}{{9}{128}{Engine MDO, Requirements, Re-evaluation and Run Records (S13--S14)}{chapter.9}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {9.1}S13: Differentiable whole-engine MDO, optimizer and requirement-driven design}{128}{section.9.1}\protected@file@percent }
+\newlabel{sec:s13}{{9.1}{128}{S13: Differentiable whole-engine MDO, optimizer and requirement-driven design}{section.9.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.1.1}Role in the data flow and call sites}{128}{subsection.9.1.1}\protected@file@percent }
+\newlabel{sec:s13-role}{{9.1.1}{128}{Role in the data flow and call sites}{subsection.9.1.1}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {9.1}{\ignorespaces S13 entry points.}}{128}{table.9.1}\protected@file@percent }
+\newlabel{tab:s13-entry}{{9.1}{128}{S13 entry points}{table.9.1}{}}
+\gdef \LT@lxx {\LT@entry 
+    {1}{107.43008pt}\LT@entry 
+    {1}{32.97224pt}\LT@entry 
+    {1}{323.67078pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.1.2}Inputs and outputs}{129}{subsection.9.1.2}\protected@file@percent }
+\newlabel{sec:s13-io}{{9.1.2}{129}{Inputs and outputs}{subsection.9.1.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.1.3}Modules}{129}{subsection.9.1.3}\protected@file@percent }
+\newlabel{sec:s13-modules}{{9.1.3}{129}{Modules}{subsection.9.1.3}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {9.2}{\ignorespaces S13 modules (25); paths relative to raosim/.}}{129}{table.9.2}\protected@file@percent }
+\newlabel{tab:s13-modules}{{9.2}{129}{S13 modules (25); paths relative to raosim/}{table.9.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.1.4}What the header comments establish}{130}{subsection.9.1.4}\protected@file@percent }
+\newlabel{sec:s13-comments}{{9.1.4}{130}{What the header comments establish}{subsection.9.1.4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9.1}{\ignorespaces Internal flow of S13 (shaded) and S14 (white) as implemented. The traditional pipeline enters S14 only at its final write (Section~\ref {sec:s14}).}}{131}{figure.caption.19}\protected@file@percent }
+\newlabel{fig:s13-s14-flow}{{9.1}{131}{Internal flow of S13 (shaded) and S14 (white) as implemented. The traditional pipeline enters S14 only at its final write (Section~\ref {sec:s14})}{figure.caption.19}{}}
+\gdef \LT@lxxi {\LT@entry 
+    {1}{107.43008pt}\LT@entry 
+    {1}{35.6073pt}\LT@entry 
+    {1}{75.44142pt}\LT@entry 
+    {1}{261.0748pt}}
+\@writefile{lot}{\contentsline {table}{\numberline {9.3}{\ignorespaces The constraint manifest (constraints.py, lines 173--346). Role: H hard SLSQP row, G final gate, R report only.}}{132}{table.9.3}\protected@file@percent }
+\newlabel{tab:s13-manifest}{{9.3}{132}{The constraint manifest (constraints.py, lines 173--346). Role: H hard SLSQP row, G final gate, R report only}{table.9.3}{}}
+\gdef \LT@lxxii {\LT@entry 
+    {1}{107.43008pt}\LT@entry 
+    {1}{95.35826pt}\LT@entry 
+    {1}{266.76526pt}}
+\@writefile{lot}{\contentsline {table}{\numberline {9.4}{\ignorespaces Coverage assigned by resolve\_requirement (requirements.py, lines 429--737).}}{134}{table.9.4}\protected@file@percent }
+\newlabel{tab:s13-coverage}{{9.4}{134}{Coverage assigned by resolve\_requirement (requirements.py, lines 429--737)}{table.9.4}{}}
+\gdef \LT@lxxiii {\LT@entry 
+    {1}{232.62204pt}\LT@entry 
+    {1}{61.21504pt}\LT@entry 
+    {1}{52.67912pt}\LT@entry 
+    {1}{127.34692pt}}
+\gdef \LT@lxxiv {\LT@entry 
+    {1}{187.09746pt}\LT@entry 
+    {1}{272.45572pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.1.5}Governing documents}{135}{subsection.9.1.5}\protected@file@percent }
+\newlabel{sec:s13-docs}{{9.1.5}{135}{Governing documents}{subsection.9.1.5}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {9.5}{\ignorespaces Documents governing S13.}}{135}{table.9.5}\protected@file@percent }
+\newlabel{tab:s13-docs}{{9.5}{135}{Documents governing S13}{table.9.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.1.6}Verification}{135}{subsection.9.1.6}\protected@file@percent }
+\newlabel{sec:s13-tests}{{9.1.6}{135}{Verification}{subsection.9.1.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.1.7}Maturity, limitations and known defects}{136}{subsection.9.1.7}\protected@file@percent }
+\newlabel{sec:s13-limits}{{9.1.7}{136}{Maturity, limitations and known defects}{subsection.9.1.7}{}}
+\gdef \LT@lxxv {\LT@entry 
+    {1}{164.3356pt}\LT@entry 
+    {1}{129.50148pt}\LT@entry 
+    {1}{175.71652pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.1.8}Developer notes}{137}{subsection.9.1.8}\protected@file@percent }
+\newlabel{sec:s13-dev}{{9.1.8}{137}{Developer notes}{subsection.9.1.8}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {9.2}S14: Authoritative re-evaluation, provenance, release gates and run records}{137}{section.9.2}\protected@file@percent }
+\newlabel{sec:s14}{{9.2}{137}{S14: Authoritative re-evaluation, provenance, release gates and run records}{section.9.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.2.1}Role in the data flow and call sites}{137}{subsection.9.2.1}\protected@file@percent }
+\newlabel{sec:s14-role}{{9.2.1}{137}{Role in the data flow and call sites}{subsection.9.2.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.2.2}Inputs and outputs, including artifacts}{137}{subsection.9.2.2}\protected@file@percent }
+\newlabel{sec:s14-io}{{9.2.2}{137}{Inputs and outputs, including artifacts}{subsection.9.2.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {9.7}{\ignorespaces Files written by S14.}}{137}{table.9.7}\protected@file@percent }
+\newlabel{tab:s14-artifacts}{{9.7}{137}{Files written by S14}{table.9.7}{}}
+\gdef \LT@lxxvi {\LT@entry 
+    {1}{115.96556pt}\LT@entry 
+    {1}{32.97224pt}\LT@entry 
+    {1}{315.13486pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.2.3}Modules}{138}{subsection.9.2.3}\protected@file@percent }
+\newlabel{sec:s14-modules}{{9.2.3}{138}{Modules}{subsection.9.2.3}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {9.8}{\ignorespaces S14 modules (10); paths relative to raosim/.}}{138}{table.9.8}\protected@file@percent }
+\newlabel{tab:s14-modules}{{9.8}{138}{S14 modules (10); paths relative to raosim/}{table.9.8}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.2.4}What the header comments establish}{138}{subsection.9.2.4}\protected@file@percent }
+\newlabel{sec:s14-comments}{{9.2.4}{138}{What the header comments establish}{subsection.9.2.4}{}}
+\gdef \LT@lxxvii {\LT@entry 
+    {1}{232.62204pt}\LT@entry 
+    {1}{61.21504pt}\LT@entry 
+    {1}{52.67912pt}\LT@entry 
+    {1}{127.34692pt}}
+\gdef \LT@lxxviii {\LT@entry 
+    {1}{187.09746pt}\LT@entry 
+    {1}{272.45572pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.2.5}Governing documents}{140}{subsection.9.2.5}\protected@file@percent }
+\newlabel{sec:s14-docs}{{9.2.5}{140}{Governing documents}{subsection.9.2.5}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {9.9}{\ignorespaces Documents governing S14.}}{140}{table.9.9}\protected@file@percent }
+\newlabel{tab:s14-docs}{{9.9}{140}{Documents governing S14}{table.9.9}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.2.6}Verification}{140}{subsection.9.2.6}\protected@file@percent }
+\newlabel{sec:s14-tests}{{9.2.6}{140}{Verification}{subsection.9.2.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.2.7}Maturity, limitations and known defects}{141}{subsection.9.2.7}\protected@file@percent }
+\newlabel{sec:s14-limits}{{9.2.7}{141}{Maturity, limitations and known defects}{subsection.9.2.7}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.2.8}Developer notes}{141}{subsection.9.2.8}\protected@file@percent }
+\newlabel{sec:s14-dev}{{9.2.8}{141}{Developer notes}{subsection.9.2.8}{}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {10}Cross-cutting groups I: differentiable core, spray handoff, legacy CLI, NASA reference, unreachable code}{143}{chapter.10}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{ch:crosscutting-a}{{10}{143}{Cross-cutting groups I: differentiable core, spray handoff, legacy CLI, NASA reference, unreachable code}{chapter.10}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {10.1}{\ignorespaces How the five groups attach to the CLI. Solid arrows are executed call paths; dashed arrows are imports or file reads that do not execute the group's physics. Sources: \texttt  {raosim/cli.py}, \texttt  {lrekit/cli.py}, \texttt  {rao\_variational.py:6021-6071}, \texttt  {spray\_coupling.py:19,32}, \texttt  {openfoam/case.py:470}, \texttt  {main.py:1265}.}}{143}{figure.caption.20}\protected@file@percent }
+\newlabel{fig:x-relations}{{10.1}{143}{How the five groups attach to the CLI. Solid arrows are executed call paths; dashed arrows are imports or file reads that do not execute the group's physics. Sources: \texttt {raosim/cli.py}, \texttt {lrekit/cli.py}, \texttt {rao\_variational.py:6021-6071}, \texttt {spray\_coupling.py:19,32}, \texttt {openfoam/case.py:470}, \texttt {main.py:1265}}{figure.caption.20}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {10.1}X01 Differentiable JAX core}{143}{section.10.1}\protected@file@percent }
+\newlabel{sec:x01-jax}{{10.1}{143}{X01 Differentiable JAX core}{section.10.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {10.1.1}Role in the data flow, call site, inputs and outputs}{144}{subsection.10.1.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {10.2}{\ignorespaces Internal flow of one X01 inner solve. \texttt  {sensitivities.rao\_sensitivities} re-uses \texttt  {assembly} after a solve but has no production caller.}}{144}{figure.caption.21}\protected@file@percent }
+\newlabel{fig:x01-flow}{{10.2}{144}{Internal flow of one X01 inner solve. \texttt {sensitivities.rao\_sensitivities} re-uses \texttt {assembly} after a solve but has no production caller}{figure.caption.21}{}}
+\gdef \LT@lxxix {\LT@entry 
+    {1}{123.50148pt}\LT@entry 
+    {1}{30.76228pt}\LT@entry 
+    {1}{328.36124pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {10.1.2}Modules}{145}{subsection.10.1.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {10.1}{\ignorespaces X01 modules reached from the CLI (the five unreached \texttt  {raosim/jax} files are in Section~\ref {sec:x08-unreachable}).}}{145}{table.10.1}\protected@file@percent }
+\newlabel{tab:x01-modules}{{10.1}{145}{X01 modules reached from the CLI (the five unreached \texttt {raosim/jax} files are in Section~\ref {sec:x08-unreachable})}{table.10.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {10.1.3}What the header comments establish}{145}{subsection.10.1.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {10.1.4}Governing documents}{146}{subsection.10.1.4}\protected@file@percent }
+\gdef \LT@lxxx {\LT@entry 
+    {1}{163.3356pt}\LT@entry 
+    {1}{56.36958pt}\LT@entry 
+    {1}{64.9055pt}\LT@entry 
+    {1}{197.47882pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {10.1.5}Verification}{147}{subsection.10.1.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {10.1.6}Maturity, limitations and known defects}{147}{subsection.10.1.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {10.1.7}Developer notes}{148}{subsection.10.1.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {10.2}X02 Spray-parcel mid-tier and OpenFOAM handoff}{148}{section.10.2}\protected@file@percent }
+\newlabel{sec:x02-spray}{{10.2}{148}{X02 Spray-parcel mid-tier and OpenFOAM handoff}{section.10.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {10.2.1}Role in the data flow, call site, inputs and outputs}{148}{subsection.10.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {10.2.2}Modules}{148}{subsection.10.2.2}\protected@file@percent }
+\gdef \LT@lxxxi {\LT@entry 
+    {1}{97.89418pt}\LT@entry 
+    {1}{27.91684pt}\LT@entry 
+    {1}{126.96556pt}\LT@entry 
+    {1}{97.89418pt}\LT@entry 
+    {1}{27.91684pt}\LT@entry 
+    {1}{103.58464pt}}
+\@writefile{lot}{\contentsline {table}{\numberline {10.3}{\ignorespaces X02 modules (two entries per row; paths relative to \texttt  {raosim/}).}}{149}{table.10.3}\protected@file@percent }
+\newlabel{tab:x02-modules}{{10.3}{149}{X02 modules (two entries per row; paths relative to \texttt {raosim/})}{table.10.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {10.2.3}What the header comments establish}{149}{subsection.10.2.3}\protected@file@percent }
+\gdef \LT@lxxxii {\LT@entry 
+    {1}{134.88284pt}\LT@entry 
+    {1}{59.21504pt}\LT@entry 
+    {1}{42.14322pt}\LT@entry 
+    {1}{245.84842pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {10.2.4}Governing documents}{150}{subsection.10.2.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {10.2.5}Verification}{150}{subsection.10.2.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {10.2.6}Maturity, limitations and known defects}{150}{subsection.10.2.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {10.2.7}Developer notes}{151}{subsection.10.2.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {10.3}X03 Legacy toolbox CLI}{151}{section.10.3}\protected@file@percent }
+\newlabel{sec:x03-legacy}{{10.3}{151}{X03 Legacy toolbox CLI}{section.10.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {10.3.1}Role in the data flow, call site, inputs and outputs}{151}{subsection.10.3.1}\protected@file@percent }
+\gdef \LT@lxxxiii {\LT@entry 
+    {1}{151.95424pt}\LT@entry 
+    {1}{30.76228pt}\LT@entry 
+    {1}{299.90848pt}}
+\gdef \LT@lxxxiv {\LT@entry 
+    {1}{163.3356pt}\LT@entry 
+    {1}{47.83368pt}\LT@entry 
+    {1}{59.21504pt}\LT@entry 
+    {1}{211.7052pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {10.3.2}Modules}{152}{subsection.10.3.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {10.5}{\ignorespaces X03 modules.}}{152}{table.10.5}\protected@file@percent }
+\newlabel{tab:x03-modules}{{10.5}{152}{X03 modules}{table.10.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {10.3.3}What the header comments establish}{152}{subsection.10.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {10.3.4}Governing documents}{152}{subsection.10.3.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {10.3.5}Verification}{153}{subsection.10.3.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {10.3.6}Maturity, limitations and known defects}{153}{subsection.10.3.6}\protected@file@percent }
+\gdef \LT@lxxxv {\LT@entry 
+    {1}{191.78836pt}\LT@entry 
+    {1}{44.98866pt}\LT@entry 
+    {1}{245.84842pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {10.3.7}Developer notes}{154}{subsection.10.3.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {10.4}X04 NASA/JHU reference port}{154}{section.10.4}\protected@file@percent }
+\newlabel{sec:x04-nasa}{{10.4}{154}{X04 NASA/JHU reference port}{section.10.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {10.4.1}Role in the data flow, call site, inputs and outputs}{154}{subsection.10.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {10.4.2}Modules}{154}{subsection.10.4.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {10.7}{\ignorespaces X04 files (principal C++ sources shown; \texttt  {...} is \texttt  {Three-Dimensional-Nozzle-Design-Code-master}).}}{154}{table.10.7}\protected@file@percent }
+\newlabel{tab:x04-modules}{{10.7}{154}{X04 files (principal C++ sources shown; \texttt {...} is \texttt {Three-Dimensional-Nozzle-Design-Code-master})}{table.10.7}{}}
+\gdef \LT@lxxxvi {\LT@entry 
+    {1}{174.71652pt}\LT@entry 
+    {1}{50.67912pt}\LT@entry 
+    {1}{59.21504pt}\LT@entry 
+    {1}{197.47882pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {10.4.3}What the header comments establish}{155}{subsection.10.4.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {10.4.4}Governing documents}{155}{subsection.10.4.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {10.4.5}Verification}{155}{subsection.10.4.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {10.4.6}Maturity, limitations and known defects}{156}{subsection.10.4.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {10.4.7}Developer notes}{156}{subsection.10.4.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {10.5}X08 Library code not reachable from the CLI}{156}{section.10.5}\protected@file@percent }
+\newlabel{sec:x08-unreachable}{{10.5}{156}{X08 Library code not reachable from the CLI}{section.10.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {10.5.1}Role, inputs and outputs}{156}{subsection.10.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {10.5.2}What the header comments establish}{156}{subsection.10.5.2}\protected@file@percent }
+\gdef \LT@lxxxvii {\LT@entry 
+    {1}{72.28644pt}\LT@entry 
+    {1}{81.97733pt}\LT@entry 
+    {1}{56.36958pt}\LT@entry 
+    {1}{271.45572pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {10.5.3}Evidence and recommendation per module}{157}{subsection.10.5.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {10.9}{\ignorespaces X08 modules: importers, verdict (wire, keep as library, retire) and evidence.}}{157}{table.10.9}\protected@file@percent }
+\newlabel{tab:x08-recs}{{10.9}{157}{X08 modules: importers, verdict (wire, keep as library, retire) and evidence}{table.10.9}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {10.5.4}Verification}{158}{subsection.10.5.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {10.5.5}Maturity, limitations and known defects}{158}{subsection.10.5.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {10.5.6}Developer notes}{158}{subsection.10.5.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {11}Cross-cutting groups B: research scripts, scientific memory and test harness}{159}{chapter.11}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{ch:crosscutting-b}{{11}{159}{Cross-cutting groups B: research scripts, scientific memory and test harness}{chapter.11}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {11.1}X05: Research and offline scripts}{159}{section.11.1}\protected@file@percent }
+\newlabel{sec:x05}{{11.1}{159}{X05: Research and offline scripts}{section.11.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {11.1.1}Role in the data flow and call sites}{159}{subsection.11.1.1}\protected@file@percent }
+\gdef \LT@lxxxviii {\LT@entry 
+    {1}{127.50148pt}\LT@entry 
+    {1}{29.25214pt}\LT@entry 
+    {1}{167.3356pt}\LT@entry 
+    {1}{158.79968pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {11.1.2}Inputs, outputs and modules}{160}{subsection.11.1.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {11.1.3}What the header comments establish}{160}{subsection.11.1.3}\protected@file@percent }
+\gdef \LT@lxxxix {\LT@entry 
+    {1}{187.25244pt}\LT@entry 
+    {1}{70.59596pt}\LT@entry 
+    {1}{215.7052pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {11.1.4}Governing documents}{162}{subsection.11.1.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {11.1.5}Verification}{162}{subsection.11.1.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {11.1.6}Maturity, limitations and known defects}{162}{subsection.11.1.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {11.1.7}Developer notes}{163}{subsection.11.1.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {11.2}X06: Knowledge system and source data}{163}{section.11.2}\protected@file@percent }
+\newlabel{sec:x06}{{11.2}{163}{X06: Knowledge system and source data}{section.11.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {11.2.1}Role in the data flow and entry points}{163}{subsection.11.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {11.2.2}Inputs and outputs}{163}{subsection.11.2.2}\protected@file@percent }
+\gdef \LT@xc {\LT@entry 
+    {1}{190.09746pt}\LT@entry 
+    {1}{56.36958pt}\LT@entry 
+    {1}{224.2411pt}}
+\@writefile{lof}{\contentsline {figure}{\numberline {11.1}{\ignorespaces Order of the deterministic rebuild in knowledge/kg/pipeline.py (function \_run, lines 51-127). Step 1 returns 1 if the corpus is absent or unsynchronized (unless the skip-sync flag is given). Stores extracted by a large language model (LLM) are preserved and re-linked, never regenerated.}}{164}{figure.caption.22}\protected@file@percent }
+\newlabel{fig:x06-rebuild}{{11.1}{164}{Order of the deterministic rebuild in knowledge/kg/pipeline.py (function \_run, lines 51-127). Step 1 returns 1 if the corpus is absent or unsynchronized (unless the skip-sync flag is given). Stores extracted by a large language model (LLM) are preserved and re-linked, never regenerated}{figure.caption.22}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {11.2.3}Modules}{164}{subsection.11.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {11.2.4}What the header comments establish}{165}{subsection.11.2.4}\protected@file@percent }
+\gdef \LT@xci {\LT@entry 
+    {1}{195.78836pt}\LT@entry 
+    {1}{67.75095pt}\LT@entry 
+    {1}{210.01474pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {11.2.5}Governing documents}{166}{subsection.11.2.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {11.2.6}Verification}{167}{subsection.11.2.6}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {11.5}{\ignorespaces Knowledge-system tests by what they pin (37 files).}}{167}{table.caption.23}\protected@file@percent }
+\newlabel{tab:kgtests}{{11.5}{167}{Knowledge-system tests by what they pin (37 files)}{table.caption.23}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {11.2.7}Maturity, limitations and known defects}{167}{subsection.11.2.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {11.2.8}Developer notes}{168}{subsection.11.2.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {11.3}X07: Test harness}{168}{section.11.3}\protected@file@percent }
+\newlabel{sec:x07}{{11.3}{168}{X07: Test harness}{section.11.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {11.3.1}Role in the data flow and call sites}{168}{subsection.11.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {11.3.2}Inputs and outputs}{168}{subsection.11.3.2}\protected@file@percent }
+\gdef \LT@xcii {\LT@entry 
+    {1}{30.1005pt}\LT@entry 
+    {1}{26.93964pt}\LT@entry 
+    {2}{31.125pt}\LT@entry 
+    {2}{26.5pt}\LT@entry 
+    {1}{30.71727pt}\LT@entry 
+    {1}{26.75705pt}\LT@entry 
+    {1}{23.03067pt}\LT@entry 
+    {1}{204.32384pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {11.3.3}Test counts by stage}{169}{subsection.11.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {11.3.4}What the header comments establish, by test family}{170}{subsection.11.3.4}\protected@file@percent }
+\gdef \LT@xciii {\LT@entry 
+    {1}{195.78836pt}\LT@entry 
+    {1}{67.75095pt}\LT@entry 
+    {1}{210.01474pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {11.3.5}Governing documents}{171}{subsection.11.3.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {11.3.6}Verification of the harness itself}{171}{subsection.11.3.6}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {11.8}{\ignorespaces Failures in the 5 November 2026 non-slow run, grouped by error evidence.}}{171}{table.caption.24}\protected@file@percent }
+\newlabel{tab:x07-failures}{{11.8}{171}{Failures in the 5 November 2026 non-slow run, grouped by error evidence}{table.caption.24}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {11.3.7}Maturity, limitations and known defects}{172}{subsection.11.3.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {11.3.8}Developer notes}{172}{subsection.11.3.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {12}Where the app stands today: the builds}{173}{chapter.12}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{ch:builds}{{12}{173}{Where the app stands today: the builds}{chapter.12}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {12.1}The builds archive}{173}{section.12.1}\protected@file@percent }
+\newlabel{sec:builds-archive}{{12.1}{173}{The builds archive}{section.12.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {12.1.1}What was archived}{173}{subsection.12.1.1}\protected@file@percent }
+\newlabel{sec:builds-archive-what}{{12.1.1}{173}{What was archived}{subsection.12.1.1}{}}
+\gdef \LT@xciv {\LT@entry 
+    {1}{102.47145pt}\LT@entry 
+    {1}{38.45274pt}\LT@entry 
+    {1}{32.76228pt}\LT@entry 
+    {1}{48.41139pt}\LT@entry 
+    {1}{68.32823pt}\LT@entry 
+    {1}{190.67517pt}}
+\@writefile{lot}{\contentsline {table}{\numberline {12.1}{\ignorespaces Build families in the archive. The figures are taken from \texttt  {BUILDS\_ARCHIVE\_INDEX.md} section 2. Dates are in 2026 and are the newest-file dates of each family's entries. The exception is tests-products, whose six sub-builds carry files dated 2 to 17 July.}}{174}{table.12.1}\protected@file@percent }
+\newlabel{tab:builds-families}{{12.1}{174}{Build families in the archive. The figures are taken from \texttt {BUILDS\_ARCHIVE\_INDEX.md} section 2. Dates are in 2026 and are the newest-file dates of each family's entries. The exception is tests-products, whose six sub-builds carry files dated 2 to 17 July}{table.12.1}{}}
+\gdef \LT@xcv {\LT@entry 
+    {1}{54.10185pt}\LT@entry 
+    {1}{42.72049pt}\LT@entry 
+    {1}{35.6073pt}\LT@entry 
+    {1}{52.67912pt}\LT@entry 
+    {1}{42.72049pt}\LT@entry 
+    {1}{253.27115pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {12.1.2}Timeline}{175}{subsection.12.1.2}\protected@file@percent }
+\newlabel{sec:builds-archive-timeline}{{12.1.2}{175}{Timeline}{subsection.12.1.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {12.2}{\ignorespaces Archive timeline by month (2026).}}{175}{table.12.2}\protected@file@percent }
+\newlabel{tab:builds-timeline}{{12.2}{175}{Archive timeline by month (2026)}{table.12.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {12.1.3}What stands out}{175}{subsection.12.1.3}\protected@file@percent }
+\newlabel{sec:builds-archive-notable}{{12.1.3}{175}{What stands out}{subsection.12.1.3}{}}
+\gdef \LT@xcvi {\LT@entry 
+    {1}{49.83368pt}\LT@entry 
+    {1}{38.45274pt}\LT@entry 
+    {1}{55.52458pt}\LT@entry 
+    {1}{55.52458pt}\LT@entry 
+    {1}{103.89418pt}\LT@entry 
+    {1}{176.44879pt}}
+\@writefile{lot}{\contentsline {table}{\numberline {12.3}{\ignorespaces The versioned \texttt  {vNNN} series by legacy \texttt  {main.py} contour method (index section 3). The output-identity columns ignore \texttt  {metadata.txt}.}}{176}{table.12.3}\protected@file@percent }
+\newlabel{tab:builds-vnnn}{{12.3}{176}{The versioned \texttt {vNNN} series by legacy \texttt {main.py} contour method (index section 3). The output-identity columns ignore \texttt {metadata.txt}}{table.12.3}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {12.2}The current state in pictures}{177}{section.12.2}\protected@file@percent }
+\newlabel{sec:builds-pictures}{{12.2}{177}{The current state in pictures}{section.12.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {12.2.1}Thrust chamber geometry}{177}{subsection.12.2.1}\protected@file@percent }
+\newlabel{sec:builds-pic-geometry}{{12.2.1}{177}{Thrust chamber geometry}{subsection.12.2.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12.1}{\ignorespaces Half-cutaway of the 13 kN LOX/RP-1 thrust chamber of build 13kn\_sl\_fast: GRCop-84 liner (orange, 0.6 mm hot wall) inside the Inconel 718 jacket (blue, 0.5 mm), with the injector-end flange (outer diameter 172.7 mm). Rendered for this guide from wall.stl and jacket.stl with matplotlib painter's-algorithm shading. wall.stl is the liner base only, so the 194 coolant channels are not drawn.}}{177}{figure.caption.25}\protected@file@percent }
+\newlabel{fig:b01}{{12.1}{177}{Half-cutaway of the 13 kN LOX/RP-1 thrust chamber of build 13kn\_sl\_fast: GRCop-84 liner (orange, 0.6 mm hot wall) inside the Inconel 718 jacket (blue, 0.5 mm), with the injector-end flange (outer diameter 172.7 mm). Rendered for this guide from wall.stl and jacket.stl with matplotlib painter's-algorithm shading. wall.stl is the liner base only, so the 194 coolant channels are not drawn}{figure.caption.25}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12.2}{\ignorespaces Thrust-chamber contour from the converged rao-bvp solve of 13kn\_rao\_bvp\_flowfield (17 July): $\varepsilon = 4.524$, 80\,\% bell, $C_F = 1.441$. Injector face at $x \approx -355$ mm, throat at $x = 0$, exit at $x \approx 104$ mm.}}{178}{figure.caption.26}\protected@file@percent }
+\newlabel{fig:b02}{{12.2}{178}{Thrust-chamber contour from the converged rao-bvp solve of 13kn\_rao\_bvp\_flowfield (17 July): $\varepsilon = 4.524$, 80\,\% bell, $C_F = 1.441$. Injector face at $x \approx -355$ mm, throat at $x = 0$, exit at $x \approx 104$ mm}{figure.caption.26}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {12.2.2}Supersonic flow field and the Rao construction}{178}{subsection.12.2.2}\protected@file@percent }
+\newlabel{sec:builds-pic-flow}{{12.2.2}{178}{Supersonic flow field and the Rao construction}{subsection.12.2.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12.3}{\ignorespaces Steady supersonic method-of-characteristics field over the converged bell: Mach number, $p/p_0$, flow angle and static temperature with streamlines. The design and the resolved area-averaged exit Mach numbers are both 2.78. The blank wedge at the throat is the transonic core upstream of the first supersonic characteristic, where no state is computed.}}{179}{figure.caption.27}\protected@file@percent }
+\newlabel{fig:b03}{{12.3}{179}{Steady supersonic method-of-characteristics field over the converged bell: Mach number, $p/p_0$, flow angle and static temperature with streamlines. The design and the resolved area-averaged exit Mach numbers are both 2.78. The blank wedge at the throat is the transonic core upstream of the first supersonic characteristic, where no state is computed}{figure.caption.27}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12.4}{\ignorespaces Rao B-D-E optimum-thrust topology: throat-arc wall 0--B; the last kernel right-running characteristic (RRC) from B to the axis, of which BD is the upper part; the DE control surface, a left-running characteristic (LRC); and the wall streamline B--E. The mass flows across BD and DE agree to a relative difference of $2.7\times 10^{-9}$.}}{179}{figure.caption.28}\protected@file@percent }
+\newlabel{fig:b04}{{12.4}{179}{Rao B-D-E optimum-thrust topology: throat-arc wall 0--B; the last kernel right-running characteristic (RRC) from B to the axis, of which BD is the upper part; the DE control surface, a left-running characteristic (LRC); and the wall streamline B--E. The mass flows across BD and DE agree to a relative difference of $2.7\times 10^{-9}$}{figure.caption.28}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12.5}{\ignorespaces Throat-kernel MOC expansion fan with 90 RRCs, $\theta _B \approx 22.58^\circ $, coloured by Mach number. The axis Mach number of about 4.2 is reached near $x \approx 0.22$ m, downstream of the 0.104 m exit plane, so that part of the kernel belongs to the construction and not to the nozzle flow.}}{180}{figure.caption.29}\protected@file@percent }
+\newlabel{fig:b05}{{12.5}{180}{Throat-kernel MOC expansion fan with 90 RRCs, $\theta _B \approx 22.58^\circ $, coloured by Mach number. The axis Mach number of about 4.2 is reached near $x \approx 0.22$ m, downstream of the 0.104 m exit plane, so that part of the kernel belongs to the construction and not to the nozzle flow}{figure.caption.29}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12.6}{\ignorespaces BDE characteristic net with 23 rows. Left: the physical B-D-E region, of which only the part below the wall streamline lies inside the nozzle. Right: the auxiliary post-DE continuation, stopped before a downstream caustic.}}{181}{figure.caption.30}\protected@file@percent }
+\newlabel{fig:b06}{{12.6}{181}{BDE characteristic net with 23 rows. Left: the physical B-D-E region, of which only the part below the wall streamline lies inside the nozzle. Right: the auxiliary post-DE continuation, stopped before a downstream caustic}{figure.caption.30}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12.7}{\ignorespaces BDE flow and conservation diagnostics. Top: Mach number, pressure and flow angle over the net. Bottom: characteristic compatibility residuals (RMS $2.0\times 10^{-5}$ deg on C$^-$, $2.7\times 10^{-4}$ deg on C$^+$), axial mass-flow error relative to the throat (maximum 0.14\,\%, negative at every cut) and the post-DE prefix, with no RRC or LRC crossings.}}{181}{figure.caption.31}\protected@file@percent }
+\newlabel{fig:b07}{{12.7}{181}{BDE flow and conservation diagnostics. Top: Mach number, pressure and flow angle over the net. Bottom: characteristic compatibility residuals (RMS $2.0\times 10^{-5}$ deg on C$^-$, $2.7\times 10^{-4}$ deg on C$^+$), axial mass-flow error relative to the throat (maximum 0.14\,\%, negative at every cut) and the post-DE prefix, with no RRC or LRC crossings}{figure.caption.31}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12.8}{\ignorespaces BDE numerical integrity audit: 100\,\% of characteristic links compatible to within 0.002 deg; 0 of 528 cells with zero or negative area; axis condition $\theta = 0$ on the kernel RRCs; 99th-percentile neighbour Mach jump 0.052 (maximum 0.062).}}{182}{figure.caption.32}\protected@file@percent }
+\newlabel{fig:b08}{{12.8}{182}{BDE numerical integrity audit: 100\,\% of characteristic links compatible to within 0.002 deg; 0 of 528 cells with zero or negative area; axis condition $\theta = 0$ on the kernel RRCs; 99th-percentile neighbour Mach jump 0.052 (maximum 0.062)}{figure.caption.32}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12.9}{\ignorespaces Schmucker flow-separation screen on the contour, using constant-$\gamma $ quasi-one-dimensional wall pressure at $P_c = 3.0$ MPa: the nozzle flows full at ambient pressures of 101, 50, 20 and 5 kPa.}}{182}{figure.caption.33}\protected@file@percent }
+\newlabel{fig:b09}{{12.9}{182}{Schmucker flow-separation screen on the contour, using constant-$\gamma $ quasi-one-dimensional wall pressure at $P_c = 3.0$ MPa: the nozzle flows full at ambient pressures of 101, 50, 20 and 5 kPa}{figure.caption.33}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {12.2.3}Regenerative cooling and liner structure}{182}{subsection.12.2.3}\protected@file@percent }
+\newlabel{sec:builds-pic-regen}{{12.2.3}{182}{Regenerative cooling and liner structure}{subsection.12.2.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12.10}{\ignorespaces Regenerative wall of 13kn\_sl\_fast: Bartz convective heat flux (peak 25.4 MW/m$^2$ at the throat) and the gas-side wall, coolant-side wall and coolant bulk temperatures, plotted against the 1000 K gas-side limit and the 700 K RP-1 coking line (SP-8087). The coolant enters at the nozzle exit and leaves at the injector end.}}{183}{figure.caption.34}\protected@file@percent }
+\newlabel{fig:b10}{{12.10}{183}{Regenerative wall of 13kn\_sl\_fast: Bartz convective heat flux (peak 25.4 MW/m$^2$ at the throat) and the gas-side wall, coolant-side wall and coolant bulk temperatures, plotted against the 1000 K gas-side limit and the 700 K RP-1 coking line (SP-8087). The coolant enters at the nozzle exit and leaves at the injector end}{figure.caption.34}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12.11}{\ignorespaces Coolant channel march with RP-1 entering at 293 K at the nozzle exit: bulk temperature rise 519 K; coolant pressure falling from 41.6 to 36.0 bar ($\Delta p = 5.6$ bar); channel velocity 8 to 10 m/s against the 61 m/s SP-8087 reference line.}}{183}{figure.caption.35}\protected@file@percent }
+\newlabel{fig:b11}{{12.11}{183}{Coolant channel march with RP-1 entering at 293 K at the nozzle exit: bulk temperature rise 519 K; coolant pressure falling from 41.6 to 36.0 bar ($\Delta p = 5.6$ bar); channel velocity 8 to 10 m/s against the 61 m/s SP-8087 reference line}{figure.caption.35}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12.12}{\ignorespaces Channel-land cross-section at $x = -354$ mm, the injector end and hottest station: hot-face temperature 948 K, land-to-channel $\Delta T = 1$ K, 0.5 mm channel above a 0.6 mm hot wall. The channel is drawn 3.3 mm deep, the grid-search height from the wall-sizing step.}}{184}{figure.caption.36}\protected@file@percent }
+\newlabel{fig:b12}{{12.12}{184}{Channel-land cross-section at $x = -354$ mm, the injector end and hottest station: hot-face temperature 948 K, land-to-channel $\Delta T = 1$ K, 0.5 mm channel above a 0.6 mm hot wall. The channel is drawn 3.3 mm deep, the grid-search height from the wall-sizing step}{figure.caption.36}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12.13}{\ignorespaces Three-dimensional view of the 194 helical regen channels (one turn), coloured by wall temperature from about 500 K at the exit to 945 K at the injector end. regen.stl has 900,432 triangles and is labelled visualization geometry, not a manufacturing solid.}}{184}{figure.caption.36}\protected@file@percent }
+\newlabel{fig:b14}{{12.13}{184}{Three-dimensional view of the 194 helical regen channels (one turn), coloured by wall temperature from about 500 K at the exit to 945 K at the injector end. regen.stl has 900,432 triangles and is labelled visualization geometry, not a manufacturing solid}{figure.caption.36}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12.14}{\ignorespaces Liner stress and life along the chamber (SP-125 eqs. 4-28, 4-29 and 4-31). Combined stress peaks at about 93 MPa at the throat against the 186 MPa yield strength (margin 2.0), and thermal stress makes up nearly all of it. Minimum cycles to failure are about $9.55\times 10^5$ against 25 required.}}{184}{figure.caption.37}\protected@file@percent }
+\newlabel{fig:b13}{{12.14}{184}{Liner stress and life along the chamber (SP-125 eqs. 4-28, 4-29 and 4-31). Combined stress peaks at about 93 MPa at the throat against the 186 MPa yield strength (margin 2.0), and thermal stress makes up nearly all of it. Minimum cycles to failure are about $9.55\times 10^5$ against 25 required}{figure.caption.37}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {12.2.4}Pintle injector}{185}{subsection.12.2.4}\protected@file@percent }
+\newlabel{sec:builds-pic-injector}{{12.2.4}{185}{Pintle injector}{subsection.12.2.4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12.15}{\ignorespaces Dimensioned meridional section of the 13kn\_sl\_fast pintle: post diameter 32.15 mm; 24 radial fuel slots, 1.74 mm square (web 2.46 mm, blockage 41\,\%); oxidizer annulus gap 1.324 mm; total momentum ratio (TMR) 0.52; spray half-angle 27.7 deg. The 96.5 mm protrusion is a schematic value ($3D_{pr}$), and the wall intercept at 161 mm from the face (53\,\% of $L_c$) depends on it.}}{185}{figure.caption.38}\protected@file@percent }
+\newlabel{fig:b15}{{12.15}{185}{Dimensioned meridional section of the 13kn\_sl\_fast pintle: post diameter 32.15 mm; 24 radial fuel slots, 1.74 mm square (web 2.46 mm, blockage 41\,\%); oxidizer annulus gap 1.324 mm; total momentum ratio (TMR) 0.52; spray half-angle 27.7 deg. The 96.5 mm protrusion is a schematic value ($3D_{pr}$), and the wall intercept at 161 mm from the face (53\,\% of $L_c$) depends on it}{figure.caption.38}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12.16}{\ignorespaces Spray envelope against the chamber wall: half-angle 28 deg, TMR 0.52, wall interception 71 mm downstream of the spray origin (24\,\% of the 302 mm chamber length). The pintle stub is drawn shorter here than in the dimensioned section.}}{186}{figure.caption.39}\protected@file@percent }
+\newlabel{fig:b16}{{12.16}{186}{Spray envelope against the chamber wall: half-angle 28 deg, TMR 0.52, wall interception 71 mm downstream of the spray origin (24\,\% of the 302 mm chamber length). The pintle stub is drawn shorter here than in the dimensioned section}{figure.caption.39}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12.17}{\ignorespaces Injector hydraulics, fuel slots against oxidizer annulus: flow area 73.1 and 139.2 mm$^2$; injection velocity 27 and 23 m/s; Reynolds number $2.4\times 10^4$ and $3.4\times 10^5$; Weber number $4.5\times 10^4$ and $1.2\times 10^5$.}}{186}{figure.caption.39}\protected@file@percent }
+\newlabel{fig:b17}{{12.17}{186}{Injector hydraulics, fuel slots against oxidizer annulus: flow area 73.1 and 139.2 mm$^2$; injection velocity 27 and 23 m/s; Reynolds number $2.4\times 10^4$ and $3.4\times 10^5$; Weber number $4.5\times 10^4$ and $1.2\times 10^5$}{figure.caption.39}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12.18}{\ignorespaces Injector and feed gate scorecard of 13kn\_sl\_fast: FEASIBLE, with 24 pass, 3 warn, 0 fail and 6 info. The warnings are combustion-development length (margin 0.33), validation status (cold flow and hot fire not performed) and regen/cycle fuel-flow closure (2.50\,\%).}}{186}{figure.caption.40}\protected@file@percent }
+\newlabel{fig:b18}{{12.18}{186}{Injector and feed gate scorecard of 13kn\_sl\_fast: FEASIBLE, with 24 pass, 3 warn, 0 fail and 6 info. The warnings are combustion-development length (margin 0.33), validation status (cold flow and hot fire not performed) and regen/cycle fuel-flow closure (2.50\,\%)}{figure.caption.40}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12.19}{\ignorespaces Atomization and vaporization screen: Sauter mean diameter (SMD) 186 $\mu $m for the fuel and 152 $\mu $m for the oxidizer (Hinze); combustion-development length of the limiting fuel stream 916 mm against the 302 mm chamber (margin 0.33, predicted $\eta _{c^*} \approx 0.58$).}}{187}{figure.caption.41}\protected@file@percent }
+\newlabel{fig:b19}{{12.19}{187}{Atomization and vaporization screen: Sauter mean diameter (SMD) 186 $\mu $m for the fuel and 152 $\mu $m for the oxidizer (Hinze); combustion-development length of the limiting fuel stream 916 mm against the 302 mm chamber (margin 0.33, predicted $\eta _{c^*} \approx 0.58$)}{figure.caption.41}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12.20}{\ignorespaces Movable-sleeve throttle map at 50, 75 and 100\,\% flow with $P_c \propto f$: injection velocities; TMR between 0.5240 and 0.5248; SMD rising to about 745 $\mu $m at 50\,\% flow; predicted $\eta _{c^*}$ falling from 0.58 to about 0.06 as the sleeve stroke drops to 0.71.}}{187}{figure.caption.42}\protected@file@percent }
+\newlabel{fig:b20}{{12.20}{187}{Movable-sleeve throttle map at 50, 75 and 100\,\% flow with $P_c \propto f$: injection velocities; TMR between 0.5240 and 0.5248; SMD rising to about 745 $\mu $m at 50\,\% flow; predicted $\eta _{c^*}$ falling from 0.58 to about 0.06 as the sleeve stroke drops to 0.71}{figure.caption.42}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12.21}{\ignorespaces Stability screen: chamber acoustic modes at $a = 1297$ m/s (L1 2149 Hz, L2 4297 Hz, T1 7090 Hz, R1 14755 Hz) and feed-system chug margin $\min \chi = 0.20$, on the 0.2 line that the screen labels good.}}{188}{figure.caption.43}\protected@file@percent }
+\newlabel{fig:b21}{{12.21}{188}{Stability screen: chamber acoustic modes at $a = 1297$ m/s (L1 2149 Hz, L2 4297 Hz, T1 7090 Hz, R1 14755 Hz) and feed-system chug margin $\min \chi = 0.20$, on the 0.2 line that the screen labels good}{figure.caption.43}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {12.2.5}Machined injector and pump CAD}{189}{subsection.12.2.5}\protected@file@percent }
+\newlabel{sec:builds-pic-cad}{{12.2.5}{189}{Machined injector and pump CAD}{subsection.12.2.5}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12.22}{\ignorespaces True section at $Y = 0$ of the five-part coaxial machined injector (slots variant of coaxial\_injector\_13kn): pintle body, tip, injector body, orifice plate and faceplate. Fuel rises through the bore and exits radially below the tip; LOX enters laterally, fills the plenum and passes through the orifice plate into the annulus. The CadQuery volume-intersection audit reports circuits\_sealed = true.}}{189}{figure.caption.44}\protected@file@percent }
+\newlabel{fig:b22}{{12.22}{189}{True section at $Y = 0$ of the five-part coaxial machined injector (slots variant of coaxial\_injector\_13kn): pintle body, tip, injector body, orifice plate and faceplate. Fuel rises through the bore and exits radially below the tip; LOX enters laterally, fills the plenum and passes through the orifice plate into the annulus. The CadQuery volume-intersection audit reports circuits\_sealed = true}{figure.caption.44}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12.23}{\ignorespaces Fuel electric pump hydraulic end, rendered for this guide from the pump\_brep STLs of 13kn\_sl\_fast. The volute casing and diffuser ring are cut in half; the impeller (red disc), inducer and shaft are shown whole. The impeller blades and the inducer cannot be made out at this resolution, and the build itself contains no pump image.}}{189}{figure.caption.44}\protected@file@percent }
+\newlabel{fig:b23}{{12.23}{189}{Fuel electric pump hydraulic end, rendered for this guide from the pump\_brep STLs of 13kn\_sl\_fast. The volute casing and diffuser ring are cut in half; the impeller (red disc), inducer and shaft are shown whole. The impeller blades and the inducer cannot be made out at this resolution, and the build itself contains no pump image}{figure.caption.44}{}}
+\gdef \LT@xcvii {\LT@entry 
+    {1}{103.89418pt}\LT@entry 
+    {1}{220.55022pt}\LT@entry 
+    {1}{159.37697pt}}
+\@writefile{toc}{\contentsline {section}{\numberline {12.3}Build cards}{190}{section.12.3}\protected@file@percent }
+\newlabel{sec:build-cards}{{12.3}{190}{Build cards}{section.12.3}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {12.4}{\ignorespaces Build cards for nine representative builds.}}{190}{table.12.4}\protected@file@percent }
+\newlabel{tab:build-cards}{{12.4}{190}{Build cards for nine representative builds}{table.12.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {12.4}Today's fresh run}{191}{section.12.4}\protected@file@percent }
+\newlabel{sec:fresh-run}{{12.4}{191}{Today's fresh run}{section.12.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {12.4.1}What was run}{191}{subsection.12.4.1}\protected@file@percent }
+\newlabel{sec:fresh-run-what}{{12.4.1}{191}{What was run}{subsection.12.4.1}{}}
+\gdef \LT@xcviii {\LT@entry 
+    {1}{55.52458pt}\LT@entry 
+    {1}{49.83368pt}\LT@entry 
+    {1}{140.88284pt}\LT@entry 
+    {1}{206.32384pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {12.4.2}Attempt 1: the shipped sea-level benchmark fails}{192}{subsection.12.4.2}\protected@file@percent }
+\newlabel{sec:fresh-run-fail}{{12.4.2}{192}{Attempt 1: the shipped sea-level benchmark fails}{subsection.12.4.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {12.5}{\ignorespaces Rao/TOP chart angles $\theta _n/\theta _e$ in degrees at 80\,\% length: the committed table (HEAD) against the working-tree table in \texttt  {raosim/rao\_top\_chart.py}.}}{192}{table.12.5}\protected@file@percent }
+\newlabel{tab:fresh-chart}{{12.5}{192}{Rao/TOP chart angles $\theta _n/\theta _e$ in degrees at 80\,\% length: the committed table (HEAD) against the working-tree table in \texttt {raosim/rao\_top\_chart.py}}{table.12.5}{}}
+\gdef \LT@xcix {\LT@entry 
+    {1}{192.09746pt}\LT@entry 
+    {1}{135.19194pt}\LT@entry 
+    {1}{135.19194pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {12.4.3}Attempt 2: the rao-bvp flow-field example succeeds}{194}{subsection.12.4.3}\protected@file@percent }
+\newlabel{sec:fresh-run-success}{{12.4.3}{194}{Attempt 2: the rao-bvp flow-field example succeeds}{subsection.12.4.3}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {12.6}{\ignorespaces The rao-bvp flow-field example: archived build of 17 July against the fresh run of 5 November (same \texttt  {.args} file).}}{194}{table.12.6}\protected@file@percent }
+\newlabel{tab:fresh-compare}{{12.6}{194}{The rao-bvp flow-field example: archived build of 17 July against the fresh run of 5 November (same \texttt {.args} file)}{table.12.6}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12.24}{\ignorespaces Fresh run (5 November): rao-bvp contour, $\varepsilon = 4.524$, 80\,\% bell, $C_F = 1.441$.}}{194}{figure.caption.45}\protected@file@percent }
+\newlabel{fig:fresh-a}{{12.24}{194}{Fresh run (5 November): rao-bvp contour, $\varepsilon = 4.524$, 80\,\% bell, $C_F = 1.441$}{figure.caption.45}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12.25}{\ignorespaces Fresh run: Schmucker separation screen, flowing full at 101, 50, 20 and 5 kPa.}}{194}{figure.caption.45}\protected@file@percent }
+\newlabel{fig:fresh-b}{{12.25}{194}{Fresh run: Schmucker separation screen, flowing full at 101, 50, 20 and 5 kPa}{figure.caption.45}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12.26}{\ignorespaces Fresh run: Rao B-D-E topology; BD/DE mass balance relative difference $4.1\times 10^{-9}$.}}{194}{figure.caption.45}\protected@file@percent }
+\newlabel{fig:fresh-c}{{12.26}{194}{Fresh run: Rao B-D-E topology; BD/DE mass balance relative difference $4.1\times 10^{-9}$}{figure.caption.45}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12.27}{\ignorespaces Fresh run: throat kernel with 180 RRCs (90 in July with the same arguments), $\theta _B \approx 22.58^\circ $.}}{195}{figure.caption.46}\protected@file@percent }
+\newlabel{fig:fresh-d}{{12.27}{195}{Fresh run: throat kernel with 180 RRCs (90 in July with the same arguments), $\theta _B \approx 22.58^\circ $}{figure.caption.46}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12.28}{\ignorespaces Fresh run: BDE net with 23 rows and one downstream caustic termination.}}{195}{figure.caption.46}\protected@file@percent }
+\newlabel{fig:fresh-f}{{12.28}{195}{Fresh run: BDE net with 23 rows and one downstream caustic termination}{figure.caption.46}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12.29}{\ignorespaces Fresh run: BDE diagnostics; compatibility RMS $1.49\times 10^{-5}$ deg (C$^-$) and $2.74\times 10^{-4}$ deg (C$^+$); axial mass error at most 0.15\,\%.}}{195}{figure.caption.46}\protected@file@percent }
+\newlabel{fig:fresh-g}{{12.29}{195}{Fresh run: BDE diagnostics; compatibility RMS $1.49\times 10^{-5}$ deg (C$^-$) and $2.74\times 10^{-4}$ deg (C$^+$); axial mass error at most 0.15\,\%}{figure.caption.46}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12.30}{\ignorespaces Fresh run: resolved MOC field (Mach number, $p/p_0$, flow angle, temperature); design and resolved exit Mach number 2.78.}}{195}{figure.caption.47}\protected@file@percent }
+\newlabel{fig:fresh-e}{{12.30}{195}{Fresh run: resolved MOC field (Mach number, $p/p_0$, flow angle, temperature); design and resolved exit Mach number 2.78}{figure.caption.47}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12.31}{\ignorespaces Fresh run: integrity audit; 0 of 660 cells degenerate; 99th-percentile neighbour Mach jump 0.042.}}{195}{figure.caption.47}\protected@file@percent }
+\newlabel{fig:fresh-h}{{12.31}{195}{Fresh run: integrity audit; 0 of 660 cells degenerate; 99th-percentile neighbour Mach jump 0.042}{figure.caption.47}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {12.4.4}What this says about the working tree}{195}{subsection.12.4.4}\protected@file@percent }
+\newlabel{sec:fresh-run-tree}{{12.4.4}{195}{What this says about the working tree}{subsection.12.4.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {12.5}Known defects visible in the builds}{196}{section.12.5}\protected@file@percent }
+\newlabel{sec:build-defects}{{12.5}{196}{Known defects visible in the builds}{section.12.5}{}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {13}Verification of the Cleanup}{198}{chapter.13}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{ch:verification}{{13}{198}{Verification of the Cleanup}{chapter.13}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {13.1}Test runs}{198}{section.13.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {13.2}Where the 24 failures come from}{198}{section.13.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {13.3}What the cleanup itself changed}{199}{section.13.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {13.4}What was not verified}{199}{section.13.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {14}Remaining Work and Program Goals}{200}{chapter.14}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{ch:remaining-work}{{14}{200}{Remaining Work and Program Goals}{chapter.14}{}}
+\gdef \LT@c {\LT@entry 
+    {1}{22.07182pt}\LT@entry 
+    {1}{95.35826pt}\LT@entry 
+    {1}{237.62204pt}\LT@entry 
+    {1}{127.34692pt}}
+\@writefile{toc}{\contentsline {section}{\numberline {14.1}Overall goals now}{201}{section.14.1}\protected@file@percent }
+\newlabel{sec:rw-goals}{{14.1}{201}{Overall goals now}{section.14.1}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {14.1}{\ignorespaces Program goals in the owner's order.}}{201}{table.14.1}\protected@file@percent }
+\newlabel{tab:rw-goals}{{14.1}{201}{Program goals in the owner's order}{table.14.1}{}}
+\gdef \LT@ci {\LT@entry 
+    {1}{147.26378pt}\LT@entry 
+    {1}{186.407pt}\LT@entry 
+    {1}{144.41832pt}}
+\gdef \LT@cii {\LT@entry 
+    {1}{41.98866pt}\LT@entry 
+    {1}{426.10086pt}}
+\@writefile{toc}{\contentsline {section}{\numberline {14.2}What changed since the October review}{202}{section.14.2}\protected@file@percent }
+\newlabel{sec:rw-closed}{{14.2}{202}{What changed since the October review}{section.14.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {14.2}{\ignorespaces Items closed since the 7 October review.}}{202}{table.14.2}\protected@file@percent }
+\newlabel{tab:rw-closed}{{14.2}{202}{Items closed since the 7 October review}{table.14.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {14.3}Open-work register}{202}{section.14.3}\protected@file@percent }
+\newlabel{sec:rw-register}{{14.3}{202}{Open-work register}{section.14.3}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {14.3}{\ignorespaces Short names used in the evidence column.}}{202}{table.14.3}\protected@file@percent }
+\newlabel{tab:rw-key}{{14.3}{202}{Short names used in the evidence column}{table.14.3}{}}
+\gdef \LT@ciii {\LT@entry 
+    {1}{55.63777pt}\LT@entry 
+    {1}{232.19931pt}\LT@entry 
+    {1}{114.12054pt}\LT@entry 
+    {1}{55.79231pt}\LT@entry 
+    {1}{17.22636pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {14.3.1}PRG: program, release and governance}{203}{subsection.14.3.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {14.4}{\ignorespaces Register: program, release and governance.}}{203}{table.14.4}\protected@file@percent }
+\newlabel{tab:rw-prg}{{14.4}{203}{Register: program, release and governance}{table.14.4}{}}
+\gdef \LT@civ {\LT@entry 
+    {1}{55.63777pt}\LT@entry 
+    {1}{232.19931pt}\LT@entry 
+    {1}{114.12054pt}\LT@entry 
+    {1}{55.79231pt}\LT@entry 
+    {1}{17.22636pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {14.3.2}S01--S02: entry, dispatch, inputs and contracts}{204}{subsection.14.3.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {14.5}{\ignorespaces Register: stages S01 and S02.}}{204}{table.14.5}\protected@file@percent }
+\newlabel{tab:rw-s01}{{14.5}{204}{Register: stages S01 and S02}{table.14.5}{}}
+\gdef \LT@cv {\LT@entry 
+    {1}{55.63777pt}\LT@entry 
+    {1}{232.19931pt}\LT@entry 
+    {1}{114.12054pt}\LT@entry 
+    {1}{55.79231pt}\LT@entry 
+    {1}{17.22636pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {14.3.3}S03--S04: thermochemistry, performance and off-design}{205}{subsection.14.3.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {14.6}{\ignorespaces Register: stages S03 and S04.}}{205}{table.14.6}\protected@file@percent }
+\newlabel{tab:rw-s03}{{14.6}{205}{Register: stages S03 and S04}{table.14.6}{}}
+\gdef \LT@cvi {\LT@entry 
+    {1}{55.63777pt}\LT@entry 
+    {1}{232.19931pt}\LT@entry 
+    {1}{114.12054pt}\LT@entry 
+    {1}{55.79231pt}\LT@entry 
+    {1}{17.22636pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {14.3.4}S05--S06: nozzle geometry and the Rao/MOC contour}{206}{subsection.14.3.4}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {14.7}{\ignorespaces Register: stages S05 and S06.}}{206}{table.14.7}\protected@file@percent }
+\newlabel{tab:rw-s05}{{14.7}{206}{Register: stages S05 and S06}{table.14.7}{}}
+\gdef \LT@cvii {\LT@entry 
+    {1}{55.63777pt}\LT@entry 
+    {1}{232.19931pt}\LT@entry 
+    {1}{114.12054pt}\LT@entry 
+    {1}{55.79231pt}\LT@entry 
+    {1}{17.22636pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {14.3.5}S07: regenerative wall, cooling and wall structures}{207}{subsection.14.3.5}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {14.8}{\ignorespaces Register: stage S07.}}{207}{table.14.8}\protected@file@percent }
+\newlabel{tab:rw-s07}{{14.8}{207}{Register: stage S07}{table.14.8}{}}
+\gdef \LT@cviii {\LT@entry 
+    {1}{55.63777pt}\LT@entry 
+    {1}{232.19931pt}\LT@entry 
+    {1}{114.12054pt}\LT@entry 
+    {1}{55.79231pt}\LT@entry 
+    {1}{17.22636pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {14.3.6}S08--S10: injector, pumps, interface and mass}{208}{subsection.14.3.6}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {14.9}{\ignorespaces Register: stages S08, S09 and S10.}}{208}{table.14.9}\protected@file@percent }
+\newlabel{tab:rw-s08}{{14.9}{208}{Register: stages S08, S09 and S10}{table.14.9}{}}
+\gdef \LT@cix {\LT@entry 
+    {1}{55.63777pt}\LT@entry 
+    {1}{232.19931pt}\LT@entry 
+    {1}{114.12054pt}\LT@entry 
+    {1}{55.79231pt}\LT@entry 
+    {1}{17.22636pt}}
+\gdef \LT@cx {\LT@entry 
+    {1}{55.63777pt}\LT@entry 
+    {1}{232.19931pt}\LT@entry 
+    {1}{114.12054pt}\LT@entry 
+    {1}{55.79231pt}\LT@entry 
+    {1}{17.22636pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {14.3.7}S11--S12: CAD deliverables and figures}{210}{subsection.14.3.7}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {14.10}{\ignorespaces Register: stages S11 and S12.}}{210}{table.14.10}\protected@file@percent }
+\newlabel{tab:rw-s11}{{14.10}{210}{Register: stages S11 and S12}{table.14.10}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {14.3.8}S13--S14: MDO, requirements, re-evaluation and provenance}{210}{subsection.14.3.8}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {14.11}{\ignorespaces Register: stages S13 and S14.}}{211}{table.14.11}\protected@file@percent }
+\newlabel{tab:rw-s13}{{14.11}{211}{Register: stages S13 and S14}{table.14.11}{}}
+\gdef \LT@cxi {\LT@entry 
+    {1}{55.63777pt}\LT@entry 
+    {1}{232.19931pt}\LT@entry 
+    {1}{114.12054pt}\LT@entry 
+    {1}{55.79231pt}\LT@entry 
+    {1}{17.22636pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {14.3.9}X01--X08: cross-cutting groups}{212}{subsection.14.3.9}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {14.12}{\ignorespaces Register: cross-cutting groups.}}{212}{table.14.12}\protected@file@percent }
+\newlabel{tab:rw-x}{{14.12}{212}{Register: cross-cutting groups}{table.14.12}{}}
+\gdef \LT@cxii {\LT@entry 
+    {1}{22.07182pt}\LT@entry 
+    {1}{69.75095pt}\LT@entry 
+    {1}{132.34692pt}\LT@entry 
+    {1}{132.34692pt}\LT@entry 
+    {1}{127.34692pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {14.3.10}Conflicts between sources}{213}{subsection.14.3.10}\protected@file@percent }
+\newlabel{sec:rw-conflicts}{{14.3.10}{213}{Conflicts between sources}{subsection.14.3.10}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {14.13}{\ignorespaces Conflicts between sources and how the register reads them.}}{213}{table.14.13}\protected@file@percent }
+\newlabel{tab:rw-conflicts}{{14.13}{213}{Conflicts between sources and how the register reads them}{table.14.13}{}}
+\gdef \LT@cxiii {\LT@entry 
+    {1}{23.49411pt}\LT@entry 
+    {1}{83.97733pt}\LT@entry 
+    {1}{237.62204pt}\LT@entry 
+    {1}{48.41139pt}\LT@entry 
+    {1}{90.35826pt}}
+\@writefile{toc}{\contentsline {section}{\numberline {14.4}Literature- and standards-blocked items}{214}{section.14.4}\protected@file@percent }
+\newlabel{sec:rw-literature}{{14.4}{214}{Literature- and standards-blocked items}{section.14.4}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {14.14}{\ignorespaces Sources the remaining work needs.}}{214}{table.14.14}\protected@file@percent }
+\newlabel{tab:rw-lit}{{14.14}{214}{Sources the remaining work needs}{table.14.14}{}}
+\gdef \LT@cxiv {\LT@entry 
+    {1}{59.06006pt}\LT@entry 
+    {1}{203.47882pt}\LT@entry 
+    {1}{140.88284pt}\LT@entry 
+    {1}{78.97733pt}}
+\@writefile{toc}{\contentsline {section}{\numberline {14.5}Validation and qualification path}{215}{section.14.5}\protected@file@percent }
+\newlabel{sec:rw-validation}{{14.5}{215}{Validation and qualification path}{section.14.5}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {14.15}{\ignorespaces The evidence ladders to build first (Rev.\ \S  9.6 p.\,33), with the data they need.}}{215}{table.14.15}\protected@file@percent }
+\newlabel{tab:rw-ladders}{{14.15}{215}{The evidence ladders to build first (Rev.\ \S 9.6 p.\,33), with the data they need}{table.14.15}{}}
+\gdef \LT@cxv {\LT@entry 
+    {1}{121.65646pt}\LT@entry 
+    {1}{237.62204pt}\LT@entry 
+    {1}{115.96556pt}}
+\@writefile{lot}{\contentsline {table}{\numberline {14.16}{\ignorespaces The 17 physical-release requirements of \texttt  {release\_readiness.py} and what would produce them. All are missing today.}}{216}{table.14.16}\protected@file@percent }
+\newlabel{tab:rw-release}{{14.16}{216}{The 17 physical-release requirements of \texttt {release\_readiness.py} and what would produce them. All are missing today}{table.14.16}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {14.5.1}Test-suite status}{216}{subsection.14.5.1}\protected@file@percent }
+\newlabel{sec:test-status-forward}{{14.5.1}{216}{Test-suite status}{subsection.14.5.1}{}}
+\gdef \LT@cxvi {\LT@entry 
+    {1}{78.97733pt}\LT@entry 
+    {1}{217.7052pt}\LT@entry 
+    {1}{181.407pt}}
+\@writefile{toc}{\contentsline {section}{\numberline {14.6}Proposed roadmap: the next three milestones}{217}{section.14.6}\protected@file@percent }
+\newlabel{sec:rw-roadmap}{{14.6}{217}{Proposed roadmap: the next three milestones}{section.14.6}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {14.1}{\ignorespaces Proposed milestones (amber) inside the owner's Stage 1. The dashed lane is the parallel pintle data pilot of the 3 November plan; it reaches hardware only in Stage 3.}}{217}{figure.caption.48}\protected@file@percent }
+\newlabel{fig:rw-roadmap}{{14.1}{217}{Proposed milestones (amber) inside the owner's Stage 1. The dashed lane is the parallel pintle data pilot of the 3 November plan; it reaches hardware only in Stage 3}{figure.caption.48}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {14.17}{\ignorespaces The next three milestones (inferred).}}{217}{table.14.17}\protected@file@percent }
+\newlabel{tab:rw-milestones}{{14.17}{217}{The next three milestones (inferred)}{table.14.17}{}}
+\gdef \LT@cxvii {\LT@entry 
+    {1}{30.6073pt}\LT@entry 
+    {1}{95.35826pt}\LT@entry 
+    {1}{64.06006pt}\LT@entry 
+    {1}{203.47882pt}\LT@entry 
+    {1}{90.35826pt}}
+\@writefile{toc}{\contentsline {section}{\numberline {14.7}Decisions the owner still has to make}{218}{section.14.7}\protected@file@percent }
+\newlabel{sec:rw-decisions}{{14.7}{218}{Decisions the owner still has to make}{section.14.7}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {14.18}{\ignorespaces Decisions that remain with the owner.}}{218}{table.14.18}\protected@file@percent }
+\newlabel{tab:rw-decisions}{{14.18}{218}{Decisions that remain with the owner}{table.14.18}{}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {15}Iterations on MOC Fixes: Literature, Decisions, and Evidence}{220}{chapter.15}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{ch:moc-iterations}{{15}{220}{Iterations on MOC Fixes: Literature, Decisions, and Evidence}{chapter.15}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {15.1}Baseline and evidence}{220}{section.15.1}\protected@file@percent }
+\gdef \LT@cxviii {\LT@entry 
+    {1}{155.10388pt}\LT@entry 
+    {1}{305.20776pt}}
+\@writefile{toc}{\contentsline {section}{\numberline {15.2}Implementation inventory and validation checks}{221}{section.15.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {15.3}Literature inventory and graph coverage}{221}{section.15.3}\protected@file@percent }
+\gdef \LT@cxix {\LT@entry 
+    {1}{140.57817pt}\LT@entry 
+    {1}{116.52676pt}\LT@entry 
+    {1}{213.2067pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {15.3.1}What the knowledge graph establishes}{223}{subsection.15.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {15.3.2}Reconciled equations and preserved disagreements}{223}{subsection.15.3.2}\protected@file@percent }
+\gdef \LT@cxx {\LT@entry 
+    {1}{63.10281pt}\LT@entry 
+    {1}{203.68098pt}\LT@entry 
+    {1}{198.68098pt}}
+\@writefile{toc}{\contentsline {section}{\numberline {15.4}Traceability and prioritized backlog}{224}{section.15.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {15.5}Iteration 01: Repair the identity of the test geometry}{227}{section.15.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {15.5.1}Issue and intended change}{227}{subsection.15.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {15.5.2}Change and validation}{228}{subsection.15.5.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {15.6}Iteration 02: Explain the nonlinear and topology failures separately}{228}{section.15.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {15.6.1}Measured baseline}{228}{subsection.15.6.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {15.6.2}Literature requirement and proposed investigation}{229}{subsection.15.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {15.7}Iteration 03: Restore downstream throat-radius propagation}{229}{section.15.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {15.7.1}Confirmed defect and specification}{229}{subsection.15.7.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {15.7.2}Change and validation}{229}{subsection.15.7.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {15.8}Iteration 04: Impose shared D boundary data exactly}{230}{section.15.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {15.8.1}Boundary parameterization}{230}{subsection.15.8.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {15.8.2}Status}{230}{subsection.15.8.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {15.9}Iteration 05: Report the actual failing gates}{230}{section.15.9}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {15.10}Iteration 06: Restore unit-process convergence failure handling}{231}{section.15.10}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {15.11}Iteration 07: Make benchmark assumptions explicit}{231}{section.15.11}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {15.12}Iteration 08: Correct unsupported coefficient provenance claims}{232}{section.15.12}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {15.13}Iteration 09: Require the same model in refinement comparisons}{232}{section.15.13}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {15.14}Iteration 10: Remove provably inactive optimizer columns}{232}{section.15.14}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {15.15}Iteration 11: Refuse unsupported reduced-coordinate sensitivities}{233}{section.15.15}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {15.15.1}Validation of Iterations 09--11}{233}{subsection.15.15.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {15.16}Iteration 12: Align the CLI and reports with the authoritative gates}{233}{section.15.16}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {15.17}Iteration 13: A passing Nozzle-B configuration}{234}{section.15.17}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {15.17.1}Reproducible numerical specification}{234}{subsection.15.17.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {15.17.2}Measured outcome and its limits}{234}{subsection.15.17.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {15.17.3}First refinement pair: retain the failed result}{234}{subsection.15.17.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {15.18}Iteration 14: Diagnose the finer-grid branch change}{235}{section.15.18}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {15.1}{\ignorespaces Two separate measured experiments. Left: the same 48-point starting line, 0.0625-degree turning limit and prescribed angle, with only the row capacity changed; the initial data line adds one stored row. Right: the original and repaired Nozzle-B numerical profiles, with their explicitly different controls and residual weights, against the unchanged local C+ threshold. The right panel is not an isolated mesh-order experiment or a proof of field convergence.}}{235}{figure.caption.49}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {15.18.1}Broad regression checkpoint before the row-budget repair}{236}{subsection.15.18.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {15.19}Iteration 15: Make kernel capacity explicit and reject partial seeds}{236}{section.15.19}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {15.20}Iteration 16: Separate seed-search accuracy from final closure}{236}{section.15.20}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {15.21}Iteration 17: Check the actual final live JAX kernel}{237}{section.15.21}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {15.22}Iteration 18: Exact fixed-exit boundary parameterization}{237}{section.15.22}\protected@file@percent }
+\gdef \LT@cxxi {\LT@entry 
+    {1}{116.3662pt}\LT@entry 
+    {1}{82.62852pt}\LT@entry 
+    {1}{97.15422pt}\LT@entry 
+    {1}{102.00105pt}\LT@entry 
+    {1}{72.78908pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {15.22.1}Three solved levels: endpoint fixed, field comparison still fails}{238}{subsection.15.22.1}\protected@file@percent }
+\gdef \LT@cxxii {\LT@entry 
+    {1}{232.57922pt}\LT@entry 
+    {1}{121.3662pt}\LT@entry 
+    {1}{101.84048pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {15.22.2}Actual JAX integration: retain an underresolved result}{239}{subsection.15.22.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {15.23}Iteration 19: Resolve the remaining field-angle gate}{239}{section.15.23}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {15.23.1}Additional refinement and unchanged limits}{239}{subsection.15.23.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {15.23.2}Completed result and independent review}{239}{subsection.15.23.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {15.2}{\ignorespaces Completed exact-boundary, accurate-seed comparisons. Each label gives the control/starting-point counts of two independent solves; the throat turning limit halves at each successive level. The earlier pairs retain their failed angle or coverage results. Only the final pair passes every declared metric. Connecting the measured points does not establish an asymptotic convergence order or a continuum-error bound.}}{240}{figure.caption.50}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {15.23.3}Post-freeze integration checkpoint}{241}{subsection.15.23.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {15.24}Final audit and remaining evidence}{241}{section.15.24}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {15.24.1}What is established, and what a green local gate means}{241}{subsection.15.24.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {15.24.2}Research questions requiring additional primary evidence}{241}{subsection.15.24.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {15.24.3}Implemented capabilities with incomplete validation}{242}{subsection.15.24.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {15.24.4}Architecture and scope boundaries}{242}{subsection.15.24.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {A}Documentation Inventory}{243}{appendix.A}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{ch:docs-inventory}{{A}{243}{Documentation Inventory}{appendix.A}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {A.1}How to read the inventory}{243}{section.A.1}\protected@file@percent }
+\newlabel{sec:inv-read}{{A.1}{243}{How to read the inventory}{section.A.1}{}}
+\gdef \LT@cxxiii {\LT@entry 
+    {1}{122.07875pt}\LT@entry 
+    {1}{57.79231pt}\LT@entry 
+    {1}{72.01869pt}\LT@entry 
+    {1}{32.18501pt}\LT@entry 
+    {1}{196.05609pt}}
+\@writefile{toc}{\contentsline {section}{\numberline {A.2}Inventory by folder}{244}{section.A.2}\protected@file@percent }
+\newlabel{sec:inv-table}{{A.2}{244}{Inventory by folder}{section.A.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {A.1}{\ignorespaces All 73 files of the pre-cleanup docs folder, grouped by their new folder. Names sort case-insensitively within a group.}}{244}{table.A.1}\protected@file@percent }
+\newlabel{tab:inv}{{A.1}{244}{All 73 files of the pre-cleanup docs folder, grouped by their new folder. Names sort case-insensitively within a group}{table.A.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {A.3}Files added on 5 November 2026}{249}{section.A.3}\protected@file@percent }
+\newlabel{sec:inv-added}{{A.3}{249}{Files added on 5 November 2026}{section.A.3}{}}
+\gdef \LT@cxxiv {\LT@entry 
+    {1}{181.407pt}\LT@entry 
+    {1}{278.14662pt}}
+\gdef \LT@cxxv {\LT@entry 
+    {1}{135.88284pt}\LT@entry 
+    {1}{55.52458pt}\LT@entry 
+    {1}{152.26378pt}\LT@entry 
+    {1}{130.19194pt}}
+\@writefile{toc}{\contentsline {section}{\numberline {A.4}Superseded and historical documents}{250}{section.A.4}\protected@file@percent }
+\newlabel{sec:inv-superseded}{{A.4}{250}{Superseded and historical documents}{section.A.4}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {A.2}{\ignorespaces Superseded, stub and historical documents, with what to read instead.}}{250}{table.A.2}\protected@file@percent }
+\newlabel{tab:inv-sup}{{A.2}{250}{Superseded, stub and historical documents, with what to read instead}{table.A.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {A.5}Filing notes and discrepancies}{252}{section.A.5}\protected@file@percent }
+\newlabel{sec:inv-notes}{{A.5}{252}{Filing notes and discrepancies}{section.A.5}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {A.6}Counts}{254}{section.A.6}\protected@file@percent }
+\newlabel{sec:inv-counts}{{A.6}{254}{Counts}{section.A.6}{}}
+\gdef \LT@cxxvi {\LT@entry 
+    {1}{81.13188pt}\LT@entry 
+    {1}{135.19194pt}\LT@entry 
+    {1}{138.0374pt}\LT@entry 
+    {1}{120.96556pt}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {B}Cleanup Record of 5 November 2026}{255}{appendix.B}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{app:cleanup}{{B}{255}{Cleanup Record of 5 November 2026}{appendix.B}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {B.1}Summary of actions}{255}{section.B.1}\protected@file@percent }
+\newlabel{sec:cl-summary}{{B.1}{255}{Summary of actions}{section.B.1}{}}
+\gdef \LT@cxxvii {\LT@entry 
+    {1}{103.89418pt}\LT@entry 
+    {1}{140.88284pt}\LT@entry 
+    {1}{32.76228pt}\LT@entry 
+    {1}{200.63338pt}}
+\@writefile{toc}{\contentsline {section}{\numberline {B.2}Documentation regrouped by stage}{256}{section.B.2}\protected@file@percent }
+\newlabel{sec:cl-docs}{{B.2}{256}{Documentation regrouped by stage}{section.B.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.2.1}Starting point}{256}{subsection.B.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.2.2}Placement rule}{256}{subsection.B.2.2}\protected@file@percent }
+\gdef \LT@cxxviii {\LT@entry 
+    {1}{189.25244pt}\LT@entry 
+    {1}{32.76228pt}\LT@entry 
+    {1}{246.15796pt}}
+\gdef \LT@cxxix {\LT@entry 
+    {1}{140.88284pt}\LT@entry 
+    {1}{317.28984pt}}
+\gdef \LT@cxxx {\LT@entry 
+    {1}{112.43008pt}\LT@entry 
+    {1}{35.6073pt}\LT@entry 
+    {1}{320.13486pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.2.3}How git sees the move}{259}{subsection.B.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {B.3}Reference rewrites}{259}{section.B.3}\protected@file@percent }
+\newlabel{sec:cl-refs}{{B.3}{259}{Reference rewrites}{section.B.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.3.1}Mechanism}{259}{subsection.B.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.3.2}Files rewritten outside docs}{259}{subsection.B.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.3.3}Rewrites that carry behaviour}{260}{subsection.B.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.3.4}References still pointing at old or missing paths}{261}{subsection.B.3.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {B.4}requirements.txt returned to the root}{261}{section.B.4}\protected@file@percent }
+\newlabel{sec:cl-req}{{B.4}{261}{requirements.txt returned to the root}{section.B.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {B.5}Build outputs archived}{261}{section.B.5}\protected@file@percent }
+\newlabel{sec:cl-builds}{{B.5}{261}{Build outputs archived}{section.B.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.5.1}What was moved}{261}{subsection.B.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.5.2}Keeping the version counter}{262}{subsection.B.5.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.5.3}Effect on the knowledge system}{262}{subsection.B.5.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {B.6}Scratch and regenerable files}{262}{section.B.6}\protected@file@percent }
+\newlabel{sec:cl-scratch}{{B.6}{262}{Scratch and regenerable files}{section.B.6}{}}
+\gdef \LT@cxxxi {\LT@entry 
+    {1}{103.89418pt}\LT@entry 
+    {1}{354.27852pt}}
+\@writefile{toc}{\contentsline {section}{\numberline {B.7}What was deliberately not moved}{263}{section.B.7}\protected@file@percent }
+\newlabel{sec:cl-notmoved}{{B.7}{263}{What was deliberately not moved}{section.B.7}{}}
+\gdef \LT@cxxxii {\LT@entry 
+    {1}{83.97733pt}\LT@entry 
+    {1}{41.2982pt}\LT@entry 
+    {1}{203.47882pt}\LT@entry 
+    {1}{149.41832pt}}
+\@writefile{toc}{\contentsline {section}{\numberline {B.8}Test run after the cleanup}{264}{section.B.8}\protected@file@percent }
+\newlabel{sec:cl-verify}{{B.8}{264}{Test run after the cleanup}{section.B.8}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {B.9}Proposed future package layout (not performed)}{264}{section.B.9}\protected@file@percent }
+\newlabel{sec:cl-proposal}{{B.9}{264}{Proposed future package layout (not performed)}{section.B.9}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.9.1}Risks}{265}{subsection.B.9.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {B.10}Follow-up actions}{266}{section.B.10}\protected@file@percent }
+\newlabel{sec:cl-followup}{{B.10}{266}{Follow-up actions}{section.B.10}{}}
+\newlabel{LastPage}{{B.10}{267}{Follow-up actions}{page.267}{}}
+\gdef\lastpage@lastpage{267}
+\gdef\lastpage@lastpageHy{267}
+\gdef \@abspage@last{268}
